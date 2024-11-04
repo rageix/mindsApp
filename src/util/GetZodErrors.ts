@@ -11,7 +11,7 @@ export function getZodErrors(result: SafeParseReturnType<any, any>): string[] {
 export function getZodErrorsObj(
   result: SafeParseReturnType<any, any>,
 ): Record<string | number, string[]> {
-  let out: Record<string | number, string[]> = {};
+  const out: Record<string | number, string[]> = {};
   if (!result.success) {
     result.error.issues.map((v) => {
       const path = v.path.join('.');

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import PasswordResetForm from '@/components/PasswordResetForm';
 import FormLink from '@/components/Link';
-import React from 'react';
 import FormWrapper from '@/components/FormWrapper';
 
 export const metadata: Metadata = {
