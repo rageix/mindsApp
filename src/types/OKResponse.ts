@@ -1,0 +1,1 @@
+export type OKResponse = Record<string, never>;
