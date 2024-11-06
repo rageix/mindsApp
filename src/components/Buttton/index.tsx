@@ -24,6 +24,7 @@ const colors: Record<TButtonVariant, string> = {
     'bg-green-700 hover:bg-green-600 active:bg-green-800 focus-visible:outline-green-700',
   yellow:
     'bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-800 focus-visible:outline-yellow-700',
+  white: 'bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white',
   link: 'text-blue-400 hover:text-blue-600 focus-visible:outline-blue-500',
   text: 'text-gray-400 hover:text-white focus-visible:outline-gray-400',
   custom: '',
@@ -36,6 +37,7 @@ const colorsDisabled: Record<TButtonVariant, string> = {
   purple: 'bg-purple-100 text-purple-400',
   green: 'bg-green-100 text-green-400',
   yellow: 'bg-yellow-100 text-yellow-400',
+  white: 'bg-gray-100 text-gray-400',
   link: 'text-gray-100',
   text: 'text-gray-500',
   custom: '',
@@ -57,7 +59,7 @@ export default function Button({
       type={type}
       className={cn(
         `flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 `,
-        disabled ? null : colors[variant],
+        disabled ? '!cursor-auto' : colors[variant],
         className ? className : null,
         disabled ? colorsDisabled[variant] : null,
         isInline ? 'inline' : 'w-full',

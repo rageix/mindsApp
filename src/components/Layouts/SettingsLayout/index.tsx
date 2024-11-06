@@ -20,7 +20,12 @@ export default function SettingsLayout({ children }: Props) {
     () => [
       { name: 'Team', href: `/dashboard/${teamId}/settings/team` },
       { name: 'Members', href: `/dashboard/${teamId}/settings/members` },
-      // { name: 'Billing', href: `/dashboard/${teamId}/settings/billing` },
+      { name: 'Plans', href: `/dashboard/${teamId}/settings/plans` },
+      {
+        name: 'Subscriptions',
+        href: `/dashboard/${teamId}/settings/subscriptions`,
+      },
+      { name: 'Invoices', href: `/dashboard/${teamId}/settings/invoices` },
     ],
     [teamId],
   );

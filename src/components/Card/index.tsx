@@ -4,9 +4,10 @@ import { cn } from '@/util/Cn';
 
 interface IProps extends PropsWithChildren {
   rounded?: TSizeVariant;
+  className?: string;
 }
 
-export default function Card({ rounded = 'lg', children }: IProps) {
+export default function Card({ rounded = 'lg', className, children }: IProps) {
   return (
     <div
       className={cn(
@@ -14,6 +15,7 @@ export default function Card({ rounded = 'lg', children }: IProps) {
         rounded === 'md' ? 'rounded-md' : null,
         rounded === 'lg' ? 'rounded-lg' : null,
         rounded === '2xl' ? 'rounded-2xl' : null,
+        className,
       )}
     >
       {children}
