@@ -1,27 +1,27 @@
-export enum EPlanFrequency {
-  Monthly = 'monthly',
-  Yearly = 'yearly',
+export enum EPlanInterval {
+  Monthly = 'month',
+  Yearly = 'year',
 }
 
-export interface IPlanFrequency {
-  value: EPlanFrequency;
+export interface IPlanPeriod {
+  value: EPlanInterval;
   label: string;
   priceSuffix: string;
 }
 
-export interface IPlanPrice {
-  monthly: string;
-  yearly: string;
+export interface IPlanPrice extends Record<EPlanInterval, string> {
+  [EPlanInterval.Monthly]: string;
+  [EPlanInterval.Yearly]: string;
 }
 
-export enum EPlanId {
-  Freelancer = 'freelancer',
-  Startup = 'startup',
+export enum EPlan {
+  Basic = 'basic',
+  Business = 'business',
   Enterprise = 'enterprise',
 }
 
 export interface IPlan {
-  id: EPlanId;
+  id: EPlan;
   name: string;
   price: IPlanPrice;
   description: string;

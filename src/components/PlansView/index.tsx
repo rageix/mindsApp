@@ -3,19 +3,22 @@ import { useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { cn } from '@/util/Cn';
 import { CheckIcon } from 'lucide-react';
-import { EPlanFrequency, EPlanId, IPlan, IPlanFrequency } from '@/types/IPlan';
+import { EPlan, EPlanInterval, IPlan, IPlanPeriod } from '@/types/IPlan';
 import Button from '@/components/Buttton';
 
-const frequencies: IPlanFrequency[] = [
-  { value: EPlanFrequency.Monthly, label: 'Monthly', priceSuffix: '/month' },
-  { value: EPlanFrequency.Yearly, label: 'Yearly', priceSuffix: '/year' },
+const periods: IPlanPeriod[] = [
+  { value: EPlanInterval.Monthly, label: 'Monthly', priceSuffix: '/month' },
+  { value: EPlanInterval.Yearly, label: 'Yearly', priceSuffix: '/year' },
 ];
 
 const plans: IPlan[] = [
   {
-    name: 'Freelancer',
-    id: EPlanId.Freelancer,
-    price: { monthly: '$19', yearly: '$190' },
+    name: 'Basic',
+    id: EPlan.Basic,
+    price: {
+      [EPlanInterval.Monthly]: '$19',
+      [EPlanInterval.Yearly]: '$190',
+    },
     description: 'The essentials.',
     features: [
       '1 team member',
@@ -26,9 +29,12 @@ const plans: IPlan[] = [
     mostPopular: false,
   },
   {
-    id: EPlanId.Startup,
+    id: EPlan.Business,
     name: 'Startup',
-    price: { monthly: '$59', yearly: '$590' },
+    price: {
+      [EPlanInterval.Monthly]: '$59',
+      [EPlanInterval.Yearly]: '$590',
+    },
     description: 'A plan that scales for your rapidly growing business.',
     features: [
       '25 team members',
@@ -39,9 +45,12 @@ const plans: IPlan[] = [
     mostPopular: true,
   },
   {
-    id: EPlanId.Enterprise,
+    id: EPlan.Enterprise,
     name: 'Enterprise',
-    price: { monthly: '$119', yearly: '$1,190' },
+    price: {
+      [EPlanInterval.Monthly]: '$119',
+      [EPlanInterval.Yearly]: '$1,190',
+    },
     description: 'Dedicated support and infrastructure for your company.',
     features: [
       'Unlimited team members',
@@ -54,12 +63,12 @@ const plans: IPlan[] = [
 ];
 
 interface IProps {
-  onClick?: (plan: EPlanId, length: EPlanFrequency) => void;
-  currentPlan?: EPlanId;
+  onClick?: (plan: EPlan, period: EPlanInterval) => void;
+  currentPlan?: EPlan;
 }
 
 export default function PlansView({ onClick, currentPlan }: IProps) {
-  const [frequency, setFrequency] = useState(frequencies[0]);
+  const [period, setPeriod] = useState(periods[0]);
 
   return (
     <div className="py-24 sm:py-32">
@@ -77,11 +86,11 @@ export default function PlansView({ onClick, currentPlan }: IProps) {
         <div className="mt-16 flex justify-center">
           <fieldset aria-label="Payment frequency">
             <RadioGroup
-              value={frequency}
-              onChange={setFrequency}
+              value={period}
+              onChange={setPeriod}
               className="grid grid-cols-2 gap-x-1 rounded-full bg-white/5 p-1 text-center text-xs/5 font-semibold text-white"
             >
-              {frequencies.map((option) => (
+              {periods.map((option) => (
                 <Radio
                   key={option.value}
                   value={option}
@@ -120,16 +129,16 @@ export default function PlansView({ onClick, currentPlan }: IProps) {
               <p className="mt-4 text-sm/6 text-gray-300">{plan.description}</p>
               <p className="mt-6 flex items-baseline gap-x-1">
                 <span className="text-4xl font-semibold tracking-tight text-white">
-                  {plan.price[frequency.value]}
+                  {plan.price[period.value]}
                 </span>
                 <span className="text-sm/6 font-semibold text-gray-300">
-                  {frequency.priceSuffix}
+                  {period.priceSuffix}
                 </span>
               </p>
               <Button
                 variant={plan.mostPopular ? 'blue' : 'white'}
                 onClick={() =>
-                  onClick ? onClick(plan.id, frequency.value) : null
+                  onClick ? onClick(plan.id, period.value) : null
                 }
                 aria-describedby={plan.id}
                 className="mt-6"

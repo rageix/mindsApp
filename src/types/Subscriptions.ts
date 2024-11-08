@@ -1,5 +1,5 @@
 import { MongoDocument, MongoId } from './MongoDocument';
-import { EPlanId } from './IPlan';
+import { EPlan } from './IPlan';
 
 export enum ESubscriptionLength {
   Month = 'month',
@@ -8,7 +8,7 @@ export enum ESubscriptionLength {
 
 export interface ISubscription extends MongoDocument {
   teamId: MongoId;
-  planId: EPlanId;
+  planId: EPlan;
   length: ESubscriptionLength;
   promoCode?: string;
   price: number;

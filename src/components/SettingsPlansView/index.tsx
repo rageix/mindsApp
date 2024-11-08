@@ -2,13 +2,27 @@
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import PlansView from '@/components/PlansView';
-import { EPlanId } from '@/types/IPlan';
+import { EPlan, EPlanInterval } from '@/types/IPlan';
+import { useRouter } from 'next/navigation';
+import useTeamId from '@/hooks/UseTeamId';
 
 export default function SettingsPlansView() {
+  const router = useRouter();
+  const teamId = useTeamId();
+
+  function onClick(plan: EPlan, period: EPlanInterval) {
+    router.push(
+      `/dashboard/${teamId}/settings/checkout?plan=${plan}&period=${period}`,
+    );
+  }
+
   return (
     <Card className="bg-gray-900">
       <CardBody>
-        <PlansView currentPlan={EPlanId.Freelancer} />
+        <PlansView
+          // currentPlan={EPlan.Basic}
+          onClick={onClick}
+        />
       </CardBody>
     </Card>
   );

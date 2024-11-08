@@ -149,8 +149,6 @@ export default function CardsList() {
     teamId: teamId,
   });
 
-  console.log(cards.data);
-
   function onEdit(item: IHasId<ICard>) {
     router.push(`/dashboard/${teamId}/cards/${item._id}`);
   }
