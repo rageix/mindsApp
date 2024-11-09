@@ -67,7 +67,7 @@ interface IProps {
   currentPlan?: EPlan;
 }
 
-export default function PlansView({ onClick, currentPlan }: IProps) {
+export default function Plans({ onClick, currentPlan }: IProps) {
   const [period, setPeriod] = useState(periods[0]);
 
   return (

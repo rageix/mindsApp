@@ -1,23 +1,32 @@
 import { DAYS_ABBR, MONTHS_ABBR } from '@/util/Time';
 import dayjs from 'dayjs';
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { useMemo } from 'react';
 
-interface Props
-  extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
+interface Props {
   value: Date | undefined;
+  time?: boolean;
+  year?: boolean;
 }
 
 export default function FormattedDate(props: Props) {
-  if (!props.value) {
+  const date = dayjs(props.value);
+  const output = useMemo(() => {
+    if (!props.value) {
+      return null;
+    }
+
+    const out = [DAYS_ABBR[date.day()], MONTHS_ABBR[date.month()], date.date()];
+
+    if (props.time !== false) {
+      out.push(date.format('h:mm A'));
+    }
+
+    return out.join(' ');
+  }, [props.value, props.time, props.year]);
+
+  if (!output) {
     return null;
   }
 
-  const date = dayjs(props.value);
-
-  return (
-    <span {...props}>
-      {DAYS_ABBR[date.day()]} {MONTHS_ABBR[date.month()]} {date.date()}{' '}
-      {date.format('h:mm A')}
-    </span>
-  );
+  return <span {...props}>{output}</span>;
 }

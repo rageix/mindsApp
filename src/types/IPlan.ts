@@ -20,6 +20,17 @@ export enum EPlan {
   Enterprise = 'enterprise',
 }
 
+export const PLANS: Record<EPlan, string> = {
+  [EPlan.Basic]: 'Basic',
+  [EPlan.Business]: 'Business',
+  [EPlan.Enterprise]: 'Enterprise',
+};
+
+export const PLAN_INTERVALS: Record<EPlanInterval, string> = {
+  [EPlanInterval.Monthly]: 'Monthly',
+  [EPlanInterval.Yearly]: 'Yearly',
+};
+
 export interface IPlan {
   id: EPlan;
   name: string;

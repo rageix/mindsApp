@@ -1,4 +1,4 @@
-import SettingsCheckoutView from '@/components/SettingsCheckoutView';
+import SettingsCheckoutView from '@/components/Settings/CheckoutView';
 
 export default function Page() {
   return <SettingsCheckoutView />;

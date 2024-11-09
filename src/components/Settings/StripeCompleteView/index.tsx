@@ -8,7 +8,7 @@ import Button from '@/components/Buttton';
 import Link from 'next/link';
 import useTeamId from '@/hooks/UseTeamId';
 
-export default function SettingsCheckoutStripeCompleteView() {
+export default function StripeCompleteView() {
   const teamId = useTeamId();
   const { sessionId } = useParams<{ sessionId: string }>();
   const checkoutStatus = useCheckoutStatus({ stripeSessionId: sessionId });

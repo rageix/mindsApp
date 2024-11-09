@@ -1,5 +1,5 @@
-import SettingsCheckoutStripeCompleteView from '@/components/SettingsCheckoutStripeCompleteView';
+import StripeCompleteView from '@/components/Settings/StripeCompleteView';
 
 export default function Page() {
-  return <SettingsCheckoutStripeCompleteView />;
+  return <StripeCompleteView />;
 }

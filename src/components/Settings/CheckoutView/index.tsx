@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import useTeamId from '@/hooks/UseTeamId';
 import { EPlan, EPlanInterval } from '@/types/IPlan';
-import Checkout from '@/components/SettingsCheckoutView/Checkout';
+import Checkout from './Checkout';
 
 export default function SettingsCheckoutView() {
   const router = useRouter();

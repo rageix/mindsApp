@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import useTeam from '@/hooks/UseTeam';
-import TeamFormController from '@/components/TeamForm/TeamFormController';
-import TeamForm from '@/components/TeamForm';
+import TeamFormController from '@/components/Settings/TeamView/TeamForm/TeamFormController';
+import TeamForm from './TeamForm';
 import useTeamId from '@/hooks/UseTeamId';
 import ImageUploader from '@/components/ImageUploader/ImageUploader';
 import { toast } from 'react-toastify';

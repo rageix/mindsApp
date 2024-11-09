@@ -1,6 +1,6 @@
 import { MongoId } from '@/types/MongoDocument';
 
-export interface ISubscriptionsCancelRequest {
+export interface ISubscriptionsResumeRequest {
   subscriptionId: MongoId;
   teamId: MongoId;
 }

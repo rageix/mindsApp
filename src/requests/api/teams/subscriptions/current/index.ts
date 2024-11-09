@@ -1,4 +1,4 @@
-import { postJson } from '@/util/Requests';
+import { getJson } from '@/util/Requests';
 import { IHasId } from '@/types/HasId';
 import { ITeamsSubscriptionsCurrentRequest } from './schema';
 import { ISubscription } from '@/types/Subscriptions';
@@ -6,11 +6,8 @@ import { ISubscription } from '@/types/Subscriptions';
 const url =
   process.env.NEXT_PUBLIC_API_HOST + '/api/teams/subscriptions/current';
 
-export async function postApiTeamsSubscriptionsCurrent(
+export async function getApiTeamsSubscriptionsCurrent(
   arg: ITeamsSubscriptionsCurrentRequest,
 ): Promise<IHasId<ISubscription> | null> {
-  return await postJson<
-    ITeamsSubscriptionsCurrentRequest,
-    IHasId<ISubscription>
-  >(url, arg);
+  return getJson<IHasId<ISubscription>>(url + '/' + arg.teamId);
 }

@@ -1,7 +1,7 @@
 'use client';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
-import PlansView from '@/components/PlansView';
+import Plans from '@/components/Plans';
 import { EPlan, EPlanInterval } from '@/types/IPlan';
 import { useRouter } from 'next/navigation';
 import useTeamId from '@/hooks/UseTeamId';
@@ -19,7 +19,7 @@ export default function SettingsPlansView() {
   return (
     <Card className="bg-gray-900">
       <CardBody>
-        <PlansView
+        <Plans
           // currentPlan={EPlan.Basic}
           onClick={onClick}
         />
