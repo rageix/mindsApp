@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import useTeamId from '@/hooks/UseTeamId';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
+import subscriptionService from '@/services/SubscriptionService';
 
 interface Navigation {
   name: string;
@@ -16,6 +17,7 @@ interface Props extends PropsWithChildren {}
 export default function SettingsLayout({ children }: Props) {
   const teamId = useTeamId();
   const path = usePathname();
+  subscriptionService.useController();
   const navigation: Navigation[] = useMemo(
     () => [
       { name: 'Team', href: `/dashboard/${teamId}/settings/team` },

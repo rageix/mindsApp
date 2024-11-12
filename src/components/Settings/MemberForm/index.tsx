@@ -1,10 +1,10 @@
-import FormErrors from '../FormErrors';
+import FormErrors from '../../FormErrors';
 import _ from 'lodash';
 import Form from '@/components/Form';
 import Button from '@/components/Buttton';
 import MemberFormController, {
   IForm,
-} from '@/components/MemberForm/MemberFormController';
+} from '@/components/Settings/MemberForm/MemberFormController';
 import { postApiMembers } from '@/requests/api/members';
 import Input from '@/components/Input';
 import Select from '@/components/Select';

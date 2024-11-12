@@ -8,12 +8,21 @@ import Button from '@/components/Buttton';
 import { PLAN_INTERVALS, PLANS } from '@/types/IPlan';
 import { formatAsMoney } from '@/util/FormatAsMoney';
 import { TUseCurrentSubscription } from '@/hooks/UseCurrentSubscription';
+import useSubscriptionPortal from '@/hooks/UseSubscriptionPortal';
+import useTeamId from '@/hooks/UseTeamId';
+import CardHeader from '@/components/Card/CardHeader';
+import CardTitle from '@/components/Card/CardTitle';
+import MenuItemButton from '@/components/MenuItemButton';
+import TableOptionsMenu from '@/components/TableOptionsMenu';
 
 interface IProps {
   useCurrentSubscription: TUseCurrentSubscription;
 }
 
 export default function Subscription({ useCurrentSubscription }: IProps) {
+  const teamId = useTeamId();
+  const portal = useSubscriptionPortal(teamId);
+
   if (!useCurrentSubscription.data) {
     return null;
   }
@@ -22,22 +31,46 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
 
   return (
     <Card>
-      <CardBody>
-        <div>
-          <div className="px-4 sm:px-0">
-            <h3 className="text-base/7 font-semibold text-white">
-              Active Subscription
-            </h3>
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle>Active Subscription</CardTitle>
             <p className="mt-1 max-w-2xl text-sm/6 text-gray-400">
               Details about your subscription.
             </p>
           </div>
-          <div className="mt-6 border-t border-white/10">
+          <div>
+            <TableOptionsMenu className="!w-36">
+              <a
+                href={portal.data?.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MenuItemButton onClick={() => null}>
+                  Update payment
+                </MenuItemButton>
+              </a>
+            </TableOptionsMenu>
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div>
+          {/*<div className="px-4 sm:px-0">*/}
+          {/*  <h3 className="text-base/7 font-semibold text-white">*/}
+          {/*    Active Subscription*/}
+          {/*  </h3>*/}
+          {/*  <p className="mt-1 max-w-2xl text-sm/6 text-gray-400">*/}
+          {/*    Details about your subscription.*/}
+          {/*  </p>*/}
+          {/*</div>*/}
+          <div className="border-t border-white/10">
             <dl className="divide-y divide-white/10">
               <TextBlock title="Started On">
                 <FormattedDate
                   value={subscription.createdAt}
                   time={false}
+                  year={true}
                 />
               </TextBlock>
               <TextBlock title="Plan">{PLANS[subscription.plan]}</TextBlock>

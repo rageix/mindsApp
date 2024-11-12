@@ -29,6 +29,7 @@ import { toast } from 'react-toastify';
 import { roleSelectOptions } from '@/common/SelectOptions';
 import Select from '@/components/Select';
 import WarningAlert from '@/components/Alert/WarningAlert';
+import useSubscription from '@/hooks/UseSubscription';
 
 const columnHelper = createColumnHelper<IHasId<IMember>>();
 
@@ -165,6 +166,7 @@ export default function MembersList({ id }: IProps) {
   // const [show, setShow] = useState(false);
   // const [formController] = useState(new MemberFormController());
   const teamId = useTeamId();
+  const subscription = useSubscription();
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -259,11 +261,11 @@ export default function MembersList({ id }: IProps) {
                   />
                 </div>
                 <p className="text-center font-bold text-2xl">No members</p>
-                <div>
-                  <p className="text-center text-gray-200">
-                    You can invite by using the form above.
-                  </p>
-                </div>
+                {/*<div>*/}
+                {/*  <p className="text-center text-gray-200">*/}
+                {/*    You can invite by using the form above.*/}
+                {/*  </p>*/}
+                {/*</div>*/}
               </div>
             </CardBody>
           </Card>
@@ -271,9 +273,11 @@ export default function MembersList({ id }: IProps) {
       )}
       {hasItems && (
         <div className="max-w-3xl w-full m-auto">
-          <WarningAlert className="mb-3">
-            You are at the maximum limit of members for your team.
-          </WarningAlert>
+          {!subscription.hasTeamPlan() && (
+            <WarningAlert className="mb-3">
+              You are at the maximum limit of members for your team.
+            </WarningAlert>
+          )}
           <Table<IHasId<IMember>>
             data={members.data?.data || []}
             pagination={pagination}

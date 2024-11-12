@@ -17,16 +17,16 @@ import useSize from '@/hooks/UseSize';
 
 interface Props<T> {
   data: T[];
-  pagination: PaginationState;
-  setPagination: Dispatch<SetStateAction<PaginationState>>;
-  sorting: SortingState;
-  setSorting: Dispatch<SetStateAction<SortingState>>;
-  rowSelection: RowSelectionState;
+  pagination?: PaginationState;
+  setPagination?: Dispatch<SetStateAction<PaginationState>>;
+  sorting?: SortingState;
+  setSorting?: Dispatch<SetStateAction<SortingState>>;
+  rowSelection?: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   columns: ColumnDef<T, any>[];
   dataFetchFn: () => T[];
   onClickEdit?: (item: T) => void;
-  count: number;
+  count?: number;
   hasCheckbox?: boolean;
 }
 
@@ -39,7 +39,9 @@ export default function Table<T>(props: Props<T>) {
     columns: props.columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    pageCount: Math.ceil(props.count / props.pagination.pageSize),
+    pageCount: Math.ceil(
+      (props.count || 0) / (props.pagination?.pageSize || 0),
+    ),
     state: {
       pagination: props.pagination,
       rowSelection: props.rowSelection,
@@ -56,8 +58,9 @@ export default function Table<T>(props: Props<T>) {
   const countStart =
     props.data.length === 0
       ? 0
-      : props.pagination.pageIndex * props.pagination.pageSize + 1;
-  const countEnd = countStart + props.pagination.pageSize - 1;
+      : (props.pagination?.pageIndex || 0) * (props.pagination?.pageSize || 0) +
+        1;
+  const countEnd = countStart + (props.pagination?.pageSize || 0) - 1;
 
   return (
     <div className="overflow-x-auto">
@@ -140,49 +143,51 @@ export default function Table<T>(props: Props<T>) {
           ))}
         </tbody>
       </table>
-      <nav
-        className="flex gap-x-6 items-center justify-between py-3 px-3 bg-gray-700 rounded-b-lg text-gray-400"
-        aria-label="Pagination"
-        style={{ width: size?.width }}
-      >
-        <div className="hidden shrink-0 sm:block">
-          <p className="text-sm">
-            Showing <span className="font-medium">{countStart}</span>
-            &nbsp;to{' '}
-            <span className="font-medium">
-              {Math.min(countEnd, props.count)}
-            </span>{' '}
-            of&nbsp;
-            <span className="font-medium">{props.count}</span> results
-          </p>
-        </div>
-        <div className="flex flex-1 gap-x-3 justify-between sm:justify-end">
-          <TableNavButton
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </TableNavButton>
-          <div>
-            <label
-              htmlFor="page"
-              className="sr-only"
-            >
-              Page
-            </label>
-            <PageNumberInput
-              value={props.pagination.pageIndex}
-              onChange={table.setPageIndex}
-            />
+      {props.pagination && (
+        <nav
+          className="flex gap-x-6 items-center justify-between py-3 px-3 bg-gray-700 rounded-b-lg text-gray-400"
+          aria-label="Pagination"
+          style={{ width: size?.width }}
+        >
+          <div className="hidden shrink-0 sm:block">
+            <p className="text-sm">
+              Showing <span className="font-medium">{countStart}</span>
+              &nbsp;to{' '}
+              <span className="font-medium">
+                {Math.min(countEnd, props?.count || 0)}
+              </span>{' '}
+              of&nbsp;
+              <span className="font-medium">{props.count}</span> results
+            </p>
           </div>
-          <TableNavButton
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </TableNavButton>
-        </div>
-      </nav>
+          <div className="flex flex-1 gap-x-3 justify-between sm:justify-end">
+            <TableNavButton
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </TableNavButton>
+            <div>
+              <label
+                htmlFor="page"
+                className="sr-only"
+              >
+                Page
+              </label>
+              <PageNumberInput
+                value={props.pagination?.pageIndex || 0}
+                onChange={table.setPageIndex}
+              />
+            </div>
+            <TableNavButton
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </TableNavButton>
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

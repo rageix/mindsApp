@@ -21,6 +21,10 @@ export default function FormattedDate(props: Props) {
       out.push(date.format('h:mm A'));
     }
 
+    if (props.year) {
+      out.push(date.format('YYYY'));
+    }
+
     return out.join(' ');
   }, [props.value, props.time, props.year]);
 
