@@ -96,6 +96,21 @@ export const MONTHS_ABBR: string[] = [
   'Dec',
 ];
 
+export const MONTHS_LONG: string[] = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export const DAYS_ABBR: string[] = [
   'Sun',
   'Mon',
@@ -104,4 +119,14 @@ export const DAYS_ABBR: string[] = [
   'Thu',
   'Fri',
   'Sat',
+];
+
+export const DAYS_LONG: string[] = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
