@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { copyToClipboard } from '@/util/CopyToClipboard';
 import WarningAlert from '@/components/Alert/WarningAlert';
+import useSubscription from '@/hooks/UseSubscription';
 
 const columnHelper = createColumnHelper<IHasId<ICard>>();
 
@@ -137,6 +138,7 @@ function getColumns(
 export default function CardsList() {
   const router = useRouter();
   const teamId = useTeamId();
+  const subscription = useSubscription();
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -148,6 +150,13 @@ export default function CardsList() {
     text: '',
     teamId: teamId,
   });
+
+  const canMakeNew: boolean = useMemo(() => {
+    return (
+      !subscription.data?.plan ||
+      (cards.data?.count || 0) < subscription.data.cards
+    );
+  }, [subscription.data, cards.data]);
 
   function onEdit(item: IHasId<ICard>) {
     router.push(`/dashboard/${teamId}/cards/${item._id}`);
@@ -228,25 +237,29 @@ export default function CardsList() {
       )}
       {hasItems && (
         <div className="max-w-3xl m-auto">
-          <WarningAlert>
-            You are at the maximum limit of cards for your team.
-            {/*<a*/}
-            {/*  href="#"*/}
-            {/*  className="font-medium text-yellow-800 underline hover:text-yellow-600"*/}
-            {/*>*/}
-            {/*  Upgrade your account to add more credits.*/}
-            {/*</a>*/}
-          </WarningAlert>
-          {/*<div className="flex justify-end">*/}
-          {/*  <Button*/}
-          {/*    variant="blue"*/}
-          {/*    onClick={onClickNew}*/}
-          {/*    isInline*/}
-          {/*  >*/}
-          {/*    <PlusIcon size={16} />*/}
-          {/*    <span className="ms-1">New Card</span>*/}
-          {/*  </Button>*/}
-          {/*</div>*/}
+          {!canMakeNew && (
+            <WarningAlert>
+              You are at the maximum limit of cards for your team.
+              {/*<a*/}
+              {/*  href="#"*/}
+              {/*  className="font-medium text-yellow-800 underline hover:text-yellow-600"*/}
+              {/*>*/}
+              {/*  Upgrade your account to add more credits.*/}
+              {/*</a>*/}
+            </WarningAlert>
+          )}
+          {canMakeNew && (
+            <div className="flex justify-end">
+              <Button
+                variant="blue"
+                onClick={onClickNew}
+                isInline
+              >
+                <PlusIcon size={16} />
+                <span className="ms-1">New Card</span>
+              </Button>
+            </div>
+          )}
           <div className="mt-3">
             <Table<IHasId<ICard>>
               data={cards.data?.data || []}

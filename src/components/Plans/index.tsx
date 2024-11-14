@@ -13,49 +13,38 @@ const periods: IPlanPeriod[] = [
 
 const plans: IPlan[] = [
   {
-    name: 'Basic',
-    id: EPlan.Basic,
+    name: 'Premium',
+    id: EPlan.Premium,
     price: {
       [EPlanInterval.Monthly]: '$19',
       [EPlanInterval.Yearly]: '$190',
     },
     description: 'The essentials.',
-    features: [
-      '1 team member',
-      'Up to 5 cards',
-      'Card customizability (when it launches)',
-      'Priority Support',
-    ],
+    features: ['1 team member', 'Up to 5 cards', 'Priority Support'],
     mostPopular: false,
   },
   {
     id: EPlan.Business,
-    name: 'Startup',
+    name: 'Business',
     price: {
-      [EPlanInterval.Monthly]: '$59',
-      [EPlanInterval.Yearly]: '$590',
+      [EPlanInterval.Monthly]: '$99',
+      [EPlanInterval.Yearly]: '$990',
     },
     description: 'A plan that scales for your rapidly growing business.',
-    features: [
-      '25 team members',
-      'Unlimited cards',
-      'Card customizability (when it launches)',
-      'Priority Support',
-    ],
+    features: ['10 team members', '50 cards', 'Priority Support'],
     mostPopular: true,
   },
   {
     id: EPlan.Enterprise,
     name: 'Enterprise',
     price: {
-      [EPlanInterval.Monthly]: '$119',
-      [EPlanInterval.Yearly]: '$1,190',
+      [EPlanInterval.Monthly]: 'Contact us for pricing.',
+      [EPlanInterval.Yearly]: 'Contact us for pricing.',
     },
     description: 'Dedicated support and infrastructure for your company.',
     features: [
-      'Unlimited team members',
+      'Custom number of team members',
       'Unlimited cards',
-      'Card customizability (when it launches)',
       'Priority Support',
     ],
     mostPopular: false,
@@ -64,10 +53,9 @@ const plans: IPlan[] = [
 
 interface IProps {
   onClick?: (plan: EPlan, period: EPlanInterval) => void;
-  currentPlan?: EPlan;
 }
 
-export default function Plans({ onClick, currentPlan }: IProps) {
+export default function Plans({ onClick }: IProps) {
   const [period, setPeriod] = useState(periods[0]);
 
   return (
@@ -128,12 +116,21 @@ export default function Plans({ onClick, currentPlan }: IProps) {
               </div>
               <p className="mt-4 text-sm/6 text-gray-300">{plan.description}</p>
               <p className="mt-6 flex items-baseline gap-x-1">
-                <span className="text-4xl font-semibold tracking-tight text-white">
-                  {plan.price[period.value]}
-                </span>
-                <span className="text-sm/6 font-semibold text-gray-300">
-                  {period.priceSuffix}
-                </span>
+                {plan.id !== EPlan.Enterprise && (
+                  <>
+                    <span className="text-4xl font-semibold tracking-tight text-white">
+                      {plan.price[period.value]}
+                    </span>
+                    <span className="text-sm/6 font-semibold text-gray-300">
+                      {period.priceSuffix}
+                    </span>
+                  </>
+                )}
+                {plan.id === EPlan.Enterprise && (
+                  <span className="text-xl font-semibold tracking-tight text-white">
+                    Contact support for pricing.
+                  </span>
+                )}
               </p>
               <Button
                 variant={plan.mostPopular ? 'blue' : 'white'}
@@ -142,15 +139,8 @@ export default function Plans({ onClick, currentPlan }: IProps) {
                 }
                 aria-describedby={plan.id}
                 className="mt-6"
-                disabled={currentPlan === plan.id}
-                // className={cn(
-                //   plan.mostPopular
-                //     ? 'bg-blue-500 text-white shadow-sm hover:bg-blue-400 focus-visible:outline-blue-500'
-                //     : 'bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white',
-                //   'mt-6 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
-                // )}
               >
-                {currentPlan === plan.id ? 'Your current plan' : 'Buy plan'}
+                Buy plan
               </Button>
               <ul
                 role="list"

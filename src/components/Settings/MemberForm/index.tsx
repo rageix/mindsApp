@@ -13,6 +13,7 @@ import FormLabel from '@/components/FormLabel';
 import { PlusIcon } from 'lucide-react';
 import useTeamId from '@/hooks/UseTeamId';
 import { roleSelectOptions } from '@/common/SelectOptions';
+import { toast } from 'react-toastify';
 
 interface IProps {
   onUpdated: () => void;
@@ -26,6 +27,7 @@ export default function MemberForm({ onUpdated }: IProps) {
     if (member) {
       onUpdated();
       controller.reset();
+      toast.success('Invite email sent.');
     }
   });
 
@@ -48,7 +50,6 @@ export default function MemberForm({ onUpdated }: IProps) {
           errors={state.errors}
           value={form.inviteEmail}
           onChange={controller.onChangeInviteEmail}
-          placeholder="Enter email..."
         />
 
         <FormErrors<IForm>

@@ -15,13 +15,13 @@ export interface IPlanPrice extends Record<EPlanInterval, string> {
 }
 
 export enum EPlan {
-  Basic = 'basic',
+  Premium = 'premium',
   Business = 'business',
   Enterprise = 'enterprise',
 }
 
 export const PLANS: Record<EPlan, string> = {
-  [EPlan.Basic]: 'Basic',
+  [EPlan.Premium]: 'Premium',
   [EPlan.Business]: 'Business',
   [EPlan.Enterprise]: 'Enterprise',
 };

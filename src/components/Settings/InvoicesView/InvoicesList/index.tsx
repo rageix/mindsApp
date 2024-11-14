@@ -12,6 +12,8 @@ import { IStripeInvoiceResponse } from '@/requests/api/teams/invoices/schema';
 import FormattedDate from '@/components/FormattedDate';
 import { formatAsMoney } from '@/util/FormatAsMoney';
 import useInvoices from '@/hooks/UseInvoices';
+import Link from 'next/link';
+import Button from '@/components/Buttton';
 
 const columnHelper = createColumnHelper<IStripeInvoiceResponse>();
 
@@ -39,13 +41,17 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
       id: 'url',
       header: () => '',
       cell: ({ row }) => (
-        <a
+        <Link
           href={row.original.url || ''}
           target="_blank"
-          rel="noreferrer"
         >
-          View
-        </a>
+          <Button
+            variant="link"
+            isInline
+          >
+            View
+          </Button>
+        </Link>
       ),
       enableSorting: false,
     }),
@@ -53,13 +59,17 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
       id: 'pdf',
       header: () => '',
       cell: ({ row }) => (
-        <a
+        <Link
           href={row.original.pdf || ''}
           target="_blank"
-          rel="noreferrer"
         >
-          Download PDF
-        </a>
+          <Button
+            variant="link"
+            isInline
+          >
+            Download PDF
+          </Button>
+        </Link>
       ),
       enableSorting: false,
     }),

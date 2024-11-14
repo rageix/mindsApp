@@ -13,4 +13,6 @@ export interface ISubscription extends MongoDocument {
   canceledAt: Date | null;
   expiresAt: Date | null;
   createdAt?: Date;
+  members: number;
+  cards: number;
 }

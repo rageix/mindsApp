@@ -12,10 +12,7 @@ export default async function Page() {
     <FormWrapper h2="Reset your password">
       <PasswordResetForm />
       <p className="mt-10 text-center text-sm text-gray-500">
-        <FormLink
-          href="/login"
-          className="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-        >
+        <FormLink href="/login">
           Remember your password? Log in instead.
         </FormLink>
       </p>

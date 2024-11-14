@@ -1,11 +1,14 @@
 'use client';
 
-import { PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import useTeamId from '@/hooks/UseTeamId';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 import subscriptionService from '@/services/SubscriptionService';
+import useCurrentUserMember from '@/hooks/UseCurrentUserMember';
+import Loading from '@/components/Loading';
+import { EMemberRole } from '@/types/Member';
 
 interface Navigation {
   name: string;
@@ -17,7 +20,18 @@ interface Props extends PropsWithChildren {}
 export default function SettingsLayout({ children }: Props) {
   const teamId = useTeamId();
   const path = usePathname();
+  const router = useRouter();
   subscriptionService.useController();
+  const currentUserMember = useCurrentUserMember();
+
+  useEffect(() => {
+    if (currentUserMember.isLoaded()) {
+      if (currentUserMember.state.data?.role === EMemberRole.Member) {
+        router.push(`/dashboard/${teamId}`);
+      }
+    }
+  }, [currentUserMember.isLoaded()]);
+
   const navigation: Navigation[] = useMemo(
     () => [
       { name: 'Team', href: `/dashboard/${teamId}/settings/team` },
@@ -30,6 +44,24 @@ export default function SettingsLayout({ children }: Props) {
     ],
     [teamId],
   );
+
+  if (!currentUserMember.isLoaded()) {
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <Loading
+          size="lg"
+          showAfter={2000}
+        />
+      </div>
+    );
+  }
+
+  if (
+    !currentUserMember.state.data?.role ||
+    currentUserMember.state.data?.role === EMemberRole.Member
+  ) {
+    return null;
+  }
 
   return (
     <div>

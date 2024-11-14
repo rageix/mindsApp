@@ -27,7 +27,7 @@ export default function LoginView() {
   return (
     <FormWrapper h2="Log in to your account">
       <LogInForm />
-      <p className="mt-10 text-center text-sm text-gray-500">
+      <p className="mt-10 text-center text-sm">
         <FormLink href="/register">Create a new account</FormLink>
       </p>
     </FormWrapper>

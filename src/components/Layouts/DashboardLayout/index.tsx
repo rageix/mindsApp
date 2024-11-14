@@ -10,10 +10,12 @@ import { BellIcon, MenuIcon, XIcon } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 import useAuthentication from '@/hooks/UseAuthentication';
+import subscriptionService from '@/services/SubscriptionService';
 
 interface Props extends PropsWithChildren {}
 
 export default function DashboardLayout({ children }: Props) {
+  subscriptionService.useController();
   const authController = useAuthentication();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

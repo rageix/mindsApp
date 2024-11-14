@@ -24,12 +24,14 @@ import TableOptionsMenu from '@/components/TableOptionsMenu';
 import { MenuItem } from '@headlessui/react';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
-import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
+import { CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
 import { toast } from 'react-toastify';
 import { roleSelectOptions } from '@/common/SelectOptions';
 import Select from '@/components/Select';
 import WarningAlert from '@/components/Alert/WarningAlert';
 import useSubscription from '@/hooks/UseSubscription';
+import MemberForm from '@/components/Settings/MemberForm';
+import { nanoid } from 'nanoid';
 
 const columnHelper = createColumnHelper<IHasId<IMember>>();
 
@@ -158,13 +160,10 @@ function getColumns(
   ];
 }
 
-interface IProps {
-  id?: string;
-}
-
-export default function MembersList({ id }: IProps) {
+export default function MembersList() {
   // const [show, setShow] = useState(false);
   // const [formController] = useState(new MemberFormController());
+  const [id, setId] = useState(nanoid());
   const teamId = useTeamId();
   const subscription = useSubscription();
   const [rowSelection, setRowSelection] = useState({});
@@ -181,6 +180,13 @@ export default function MembersList({ id }: IProps) {
     },
     id,
   );
+
+  const canMakeNew: boolean = useMemo(() => {
+    return (
+      !subscription.data?.plan ||
+      (members.data?.count || 0) < subscription.data.members
+    );
+  }, [subscription.data, members.data]);
 
   async function onClickDisableOne(_id: MongoId, enabled: boolean) {
     const response = await members.enableItem(_id, enabled);
@@ -199,7 +205,11 @@ export default function MembersList({ id }: IProps) {
   }
 
   async function onClickDeleteOne(_id: MongoId) {
-    if (confirm(CONFIRM_DELETE_ONE)) {
+    if (
+      confirm(
+        "Are you sure? This will also delete anything linked to the user like cards and profiles!\n\nIf you want to keep these things disable the user instead.\n\nThis can't be undone!",
+      )
+    ) {
       await members.deleteItems([_id], teamId);
       setRowSelection({});
     }
@@ -273,7 +283,16 @@ export default function MembersList({ id }: IProps) {
       )}
       {hasItems && (
         <div className="max-w-3xl w-full m-auto">
-          {!subscription.hasTeamPlan() && (
+          {canMakeNew && (
+            <Card className="mb-12">
+              <CardBody>
+                <div className="flex justify-center">
+                  <MemberForm onUpdated={() => setId(nanoid())} />
+                </div>
+              </CardBody>
+            </Card>
+          )}
+          {!canMakeNew && (
             <WarningAlert className="mb-3">
               You are at the maximum limit of members for your team.
             </WarningAlert>

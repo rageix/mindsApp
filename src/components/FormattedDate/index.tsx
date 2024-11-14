@@ -32,5 +32,5 @@ export default function FormattedDate(props: Props) {
     return null;
   }
 
-  return <span {...props}>{output}</span>;
+  return <span>{output}</span>;
 }

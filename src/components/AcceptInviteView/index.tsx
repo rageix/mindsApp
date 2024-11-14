@@ -73,7 +73,7 @@ export default function AcceptInviteView() {
               {userService.isLoaded() && !isLoggedIn && (
                 <div className="space-y-3 text-center">
                   <p>You must be logged in to accept this invite!</p>
-                  <p className="text-center text-sm text-gray-500">
+                  <p className="text-center text-sm">
                     <FormLink
                       href="/login"
                       target="_blank"
