@@ -23,7 +23,7 @@ interface Props<T> {
   setSorting?: Dispatch<SetStateAction<SortingState>>;
   rowSelection?: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
-  columns: ColumnDef<T, any>[];
+  columns: ColumnDef<T>[];
   dataFetchFn: () => T[];
   onClickEdit?: (item: T) => void;
   count?: number;

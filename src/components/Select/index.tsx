@@ -19,6 +19,8 @@ interface IProps<T, F> {
   onChange: (value: ISelectOption<T>) => void;
   disabled?: boolean;
   className?: string;
+  buttonClassName?: string;
+  portal?: boolean;
 }
 
 export default function Select<T, F>({
@@ -29,6 +31,8 @@ export default function Select<T, F>({
   onChange,
   disabled,
   className,
+  buttonClassName,
+  portal,
 }: IProps<T, F>) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -55,11 +59,18 @@ export default function Select<T, F>({
       disabled={disabled}
     >
       <div
-        ref={ref}
-        className={cn('relative mt-2', className)}
+        // ref={ref}
+        className={cn('relative', className)}
       >
-        <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6">
-          <span className="block truncate">{value?.label || ''}</span>
+        <ListboxButton
+          className={cn(
+            'relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6',
+            buttonClassName,
+          )}
+        >
+          <span className="block truncate font-semibold">
+            {value?.label || ''}
+          </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronDownIcon
               aria-hidden="true"
@@ -69,9 +80,10 @@ export default function Select<T, F>({
         </ListboxButton>
         <ListboxOptions
           transition
-          className="absolute z-10 mt-1 max-h-60  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+          className="absolute z-10 mt-1 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
           anchor={{ to: 'bottom' }}
           style={{ width: size?.width }}
+          portal={portal}
         >
           {options.map((option) => (
             <ListboxOption

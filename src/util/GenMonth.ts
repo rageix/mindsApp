@@ -4,23 +4,8 @@ import { IDay } from '@/types/Day';
 import { nanoid } from 'nanoid';
 import { MONTHS_LONG } from '@/util/Time';
 import utc from 'dayjs/plugin/utc';
+import { makeDay } from '@/util/MakeDay';
 dayjs.extend(utc);
-
-export function makeDay(day: dayjs.Dayjs, isCurrentMonth: boolean): IDay {
-  const today = dayjs();
-
-  return {
-    id: nanoid(),
-    dayOfWeek: day.day(),
-    dayOfMonth: day.date(),
-    year: day.year(),
-    isToday:
-      today.year() === day.year() &&
-      today.month() === day.month() &&
-      today.date() === day.date(),
-    isCurrentMonth,
-  };
-}
 
 export function genMonth(month: number, year: number): IMonth {
   const days: IDay[] = [];

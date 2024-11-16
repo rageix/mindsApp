@@ -1,7 +1,6 @@
 'use client';
 import {
   ColumnDef,
-  createColumnHelper,
   PaginationState,
   RowModel,
   SortingState,
@@ -33,21 +32,13 @@ import useSubscription from '@/hooks/UseSubscription';
 import MemberForm from '@/components/Settings/MemberForm';
 import { nanoid } from 'nanoid';
 
-const columnHelper = createColumnHelper<IHasId<IMember>>();
-
-// const ROLES: Record<EMemberRole, string> = {
-//   [EMemberRole.Member]: 'Member',
-//   [EMemberRole.Admin]: 'Admin',
-//   [EMemberRole.Owner]: 'Owner',
-// };
-
 function getColumns(
   onClickDeleteOne: (_id: MongoId) => void,
   onClickDeleteSelected: (arg: RowModel<IHasId<IMember>>) => void,
   onClickDisableOne: (_id: MongoId, enabled: boolean) => void,
   onClickResendInvite: (_id: MongoId) => void,
   onChangeRole: (_id: MongoId, role: EMemberRole) => void,
-): ColumnDef<IHasId<IMember>, any>[] {
+): ColumnDef<IHasId<IMember>>[] {
   return [
     {
       id: 'select',
@@ -79,7 +70,7 @@ function getColumns(
         </div>
       ),
     },
-    columnHelper.accessor('user', {
+    {
       id: 'user',
       header: () => 'User',
       cell: ({ row }) => {
@@ -95,14 +86,14 @@ function getColumns(
         return <UserInfo value={row.original.user} />;
       },
       enableSorting: false,
-    }),
-    columnHelper.accessor('enabled', {
+    },
+    {
       id: 'enabled',
       header: () => 'Enabled',
       cell: ({ row }) => <FormattedBoolean value={row.original.enabled} />,
       enableSorting: false,
-    }),
-    columnHelper.accessor('role', {
+    },
+    {
       id: 'role',
       header: () => 'Role',
       cell: ({ row }) => (
@@ -114,7 +105,7 @@ function getColumns(
         />
       ),
       enableSorting: false,
-    }),
+    },
     {
       id: 'options',
       header: ({ table }) => (

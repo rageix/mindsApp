@@ -1,7 +1,6 @@
 'use client';
 import {
   ColumnDef,
-  createColumnHelper,
   PaginationState,
   RowModel,
   SortingState,
@@ -32,13 +31,13 @@ import { copyToClipboard } from '@/util/CopyToClipboard';
 import WarningAlert from '@/components/Alert/WarningAlert';
 import useSubscription from '@/hooks/UseSubscription';
 
-const columnHelper = createColumnHelper<IHasId<ICard>>();
+// const columnHelper = createColumnHelper<IHasId<ICard>>();
 
 function getColumns(
   onClickEditOne: (_id: MongoId) => void,
   onClickDeleteOne: (_id: MongoId) => void,
   onClickDeleteSelected: (arg: RowModel<IHasId<ICard>>) => void,
-): ColumnDef<IHasId<ICard>, any>[] {
+): ColumnDef<IHasId<ICard>>[] {
   return [
     {
       id: 'select',
@@ -70,18 +69,18 @@ function getColumns(
         </div>
       ),
     },
-    columnHelper.accessor('name', {
+    {
       id: 'name',
       header: () => 'Name',
       cell: ({ row }) => row.original.name || 'unknown',
       enableSorting: false,
-    }),
-    columnHelper.accessor('updatedAt', {
+    },
+    {
       id: 'updatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => <FormattedDate value={row.original.updatedAt} />,
       enableSorting: false,
-    }),
+    },
     {
       id: 'view',
       header: () => <div></div>,

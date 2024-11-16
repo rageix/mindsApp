@@ -1,5 +1,5 @@
 'use client';
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import Table from '@/components/Table';
 import { useMemo, useState } from 'react';
 import useTeamId from '@/hooks/UseTeamId';
@@ -15,11 +15,9 @@ import useInvoices from '@/hooks/UseInvoices';
 import Link from 'next/link';
 import Button from '@/components/Buttton';
 
-const columnHelper = createColumnHelper<IStripeInvoiceResponse>();
-
-function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
+function getColumns(): ColumnDef<IStripeInvoiceResponse>[] {
   return [
-    columnHelper.accessor('created', {
+    {
       id: 'created',
       header: () => 'Date',
       cell: ({ row }) => (
@@ -30,14 +28,14 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
         />
       ),
       enableSorting: false,
-    }),
-    columnHelper.accessor('subtotal', {
+    },
+    {
       id: 'subtotal',
       header: () => 'Subtotal',
       cell: ({ row }) => formatAsMoney(row.original.subtotal / 100),
       enableSorting: false,
-    }),
-    columnHelper.accessor('url', {
+    },
+    {
       id: 'url',
       header: () => '',
       cell: ({ row }) => (
@@ -54,8 +52,8 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
         </Link>
       ),
       enableSorting: false,
-    }),
-    columnHelper.accessor('pdf', {
+    },
+    {
       id: 'pdf',
       header: () => '',
       cell: ({ row }) => (
@@ -72,7 +70,7 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse, any>[] {
         </Link>
       ),
       enableSorting: false,
-    }),
+    },
   ];
 }
 
