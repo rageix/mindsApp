@@ -25,6 +25,7 @@ export default class FormController<T> extends BasicController<IForm<T>> {
     super();
 
     if (arg) {
+      this.resetForm = arg;
       this.defaultForm = arg;
     }
   }

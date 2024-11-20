@@ -1,5 +1,6 @@
 import z from 'zod';
 import { MongoId } from '@/types/MongoDocument';
+import { ISelectOption } from '@/types/SelectOption';
 
 export const zMinMessage = 'Must not be empty';
 
@@ -22,3 +23,13 @@ export const passwordValidator = z.string().min(6);
 export interface IDeleteRequest {
   ids: MongoId[];
 }
+
+export const zSelectOptionValidator = z.object({
+  key: zStringRequiredValidator,
+  value: z.never(),
+  label: zStringRequiredValidator,
+}) satisfies z.ZodType<ISelectOption<unknown>>;
+
+export const zSelectOptionStringValidator = zSelectOptionValidator.extend({
+  value: zStringRequiredValidator,
+}) satisfies z.ZodType<ISelectOption<string>>;

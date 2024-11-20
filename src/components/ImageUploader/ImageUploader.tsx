@@ -1,4 +1,3 @@
-'use client';
 import { useDropzone } from 'react-dropzone';
 import { cn } from '@/util/Cn';
 import { postForm } from '@/util/Requests';
