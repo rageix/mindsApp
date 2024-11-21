@@ -96,13 +96,23 @@ export default class DynamicFormEditorController extends BasicController<IState>
     return controller;
   };
 
+  onClickNewSection = () => {
+    const controller = new SectionController();
+    this.setState({
+      sectionControllers: [...this.state.sectionControllers, controller],
+    });
+  };
+
   load = (arg: IDynamicForm) => {
+    console.log('load');
     const state = newDefaultState();
     state._id = arg._id;
 
-    // state.sectionControllers = (arg.sections || []).map((item) => {
-    //   return this.newItemController(item);
-    // });
+    state.sectionControllers = (arg.sections || []).map((section) => {
+      const controller = new SectionController();
+      controller.load(section);
+      return controller;
+    });
 
     state.initLoad = true;
 
@@ -110,7 +120,7 @@ export default class DynamicFormEditorController extends BasicController<IState>
   };
 
   onClickSave = () => {
-    const state = { ...this.state };
+    const state: IState = { ...this.state };
 
     // state.profileFieldsController.submit = true;
     // state.nameController.submit = true;

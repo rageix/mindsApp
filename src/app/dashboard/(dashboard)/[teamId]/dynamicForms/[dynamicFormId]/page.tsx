@@ -1,5 +1,5 @@
-import ProfileEditorView from '@/components/ProfileEditorView';
+import DynamicFormEditorView from '@/components/DynamicFormsView/DynamicFormEditorView';
 
 export default function Page() {
-  return <ProfileEditorView />;
+  return <DynamicFormEditorView />;
 }
