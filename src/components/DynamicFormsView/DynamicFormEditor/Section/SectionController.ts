@@ -45,6 +45,7 @@ export default class SectionController extends FormController<IForm> {
   onAddField = (type: EFieldType) => {
     const form = newIField(type);
     const controller = new FieldController(form);
+    controller.load(form);
     this.onChangeForm({
       fieldControllers: [...this.form.fieldControllers, controller],
     });

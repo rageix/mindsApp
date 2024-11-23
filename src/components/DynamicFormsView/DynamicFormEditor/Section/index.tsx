@@ -5,79 +5,96 @@ import { cn } from '@/util/Cn';
 import MenuItemButton from '@/components/MenuItemButton';
 import { EFieldType } from '@/types/DynamicForm';
 import Field from '@/components/DynamicFormsView/DynamicFormEditor/Field';
+import { PlusIcon } from 'lucide-react';
+import TableOptionsMenu from "@/components/TableOptionsMenu";
 
 interface IProps {
   controller: SectionController;
+  onClickEdit: () =>void;
+  onClickDelete: () => void;
 }
 
-export default function Section({ controller }: IProps) {
+export default function Section({ controller, onClickEdit, onClickDelete }: IProps) {
   controller.useController();
 
   return (
-    <div className="overflow-hidden bg-white px-4 py-4 shadow sm:rounded-md sm:px-6">
-      <div className="overflow-hidden rounded-md bg-white shadow">
-        <div>
-          <Menu
-            as="div"
-            className="flex justify-end"
-          >
-            <MenuButton className="-m-2.5 block p-2.5 text-gray-400 hover:text-white">
-              <span className="sr-only">Open options</span>
-              <Button variant="blue">Add Field</Button>
-            </MenuButton>
-            <MenuItems
-              transition
-              className={cn(
-                'absolute z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in',
-              )}
-              anchor={{ to: 'bottom' }}
-            >
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.Input)}
-              >
-                Input
-              </MenuItemButton>
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.Text)}
-              >
-                Text
-              </MenuItemButton>
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.File)}
-              >
-                File
-              </MenuItemButton>
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.Date)}
-              >
-                Date
-              </MenuItemButton>
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.Select)}
-              >
-                Select
-              </MenuItemButton>
-              <MenuItemButton
-                onClick={() => controller.onAddField(EFieldType.Rating)}
-              >
-                Rating
-              </MenuItemButton>
-            </MenuItems>
-          </Menu>
+    <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6">
+      <div className="flex items-center">
+        <div className="grow block text-sm font-medium leading-6">
+          Section
         </div>
+        <TableOptionsMenu className="shrink-0">
+          <MenuItemButton onClick={onClickEdit}>
+            Edit
+          </MenuItemButton>
+          <MenuItemButton onClick={onClickDelete}>
+            Delete
+          </MenuItemButton>
+        </TableOptionsMenu>
+      </div>
+      <div>
         <ul
           role="list"
-          className="divide-y divide-gray-200 py-6"
+          className="py-6 space-y-3"
         >
-          {controller.form.fieldControllers.map((v) => (
+          {controller.form.fieldControllers.map((v, i) => (
             <li
               key={v.id}
-              className="px-6 py-4"
+              className="px-6 py-4 overflow-hidden rounded-md bg-gray-800 shadow"
             >
-              <Field controller={v} />
+              <Field controller={v} onClickDelete={() => controller.onRemoveField(i)} />
             </li>
           ))}
         </ul>
+        <Menu
+          as="div"
+          className="flex justify-end"
+        >
+          <MenuButton>
+            <span className="sr-only">Open options</span>
+            <Button variant="blue">
+              <PlusIcon className="me-1" /><span>Add Field</span>
+            </Button>
+          </MenuButton>
+          <MenuItems
+            transition
+            className={cn(
+              'absolute z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in',
+            )}
+            anchor={{ to: 'bottom' }}
+          >
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.Input)}
+            >
+              Input
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.Text)}
+            >
+              Text
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.File)}
+            >
+              File
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.Date)}
+            >
+              Date
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.Select)}
+            >
+              Select
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => controller.onAddField(EFieldType.Rating)}
+            >
+              Rating
+            </MenuItemButton>
+          </MenuItems>
+        </Menu>
       </div>
     </div>
   );

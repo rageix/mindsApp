@@ -40,10 +40,13 @@ export interface ISection {
   fields: IField[];
 }
 
-export interface IDynamicForm extends MongoDocument {
+export interface IDynamicFormSettings {
   isActive: boolean;
-  teamId: MongoId;
   name: string;
+}
+
+export interface IDynamicForm extends MongoDocument, IDynamicFormSettings {
+  teamId: MongoId;
   sections: ISection[];
   updatedAt?: Date;
 }
@@ -52,7 +55,7 @@ export function newIDynamicForm(teamId: MongoId): IDynamicForm {
   return {
     isActive: true,
     teamId: teamId,
-    name: '',
+    name: 'New Form',
     sections: [],
   };
 }

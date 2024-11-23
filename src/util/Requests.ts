@@ -8,6 +8,21 @@ export async function processResponse<T>(
 ): Promise<T | null> {
   let responseJson: T;
 
+  switch (response.status) {
+    case HttpStatusCodes.NOT_FOUND:
+      toast.error(`Error 404. Route not found: ${response.url}`);
+      return null;
+    case HttpStatusCodes.BAD_GATEWAY:
+      toast.error("Error 502: Bad gateway. Please try again.");
+      return null;
+    case HttpStatusCodes.SERVICE_UNAVAILABLE:
+      toast.error("Error 503: Service Unavailable. Please try again.");
+      return null;
+    case HttpStatusCodes.GATEWAY_TIMEOUT:
+      toast.error("Error 504: Gateway timeout. Please try again.");
+      return null;
+  }
+
   try {
     responseJson = await response.json();
   } catch (e) {
@@ -25,9 +40,7 @@ export async function processResponse<T>(
         toast.error(error);
       }
       break;
-    case HttpStatusCodes.NOT_FOUND:
-      toast.error(`Request error. Route not found: ${response.url}`);
-      break;
+
     case HttpStatusCodes.INTERNAL_SERVER_ERROR:
       for (const error of (responseJson as IErrorResponse).errors || []) {
         toast.error(error);

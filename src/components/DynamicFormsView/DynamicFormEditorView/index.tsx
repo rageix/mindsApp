@@ -3,8 +3,6 @@ import { useState } from 'react';
 import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
 import { useParams, useRouter } from 'next/navigation';
-import Card from '@/components/Card';
-import CardBody from '@/components/Card/CardBody';
 import BackButton from '@/components/BackButton';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 import DynamicFormEditorController from '@/components/DynamicFormsView/DynamicFormEditor/DynamicFormEditorController';
@@ -69,14 +67,10 @@ export default function DynamicFormEditorView() {
     <>
       <DashboardPageHeader title="Dynamic Form Editor" />
       <BackButton onClick={onClickCancel} />
-      <Card>
-        <CardBody className="space-y-12">
-          <DynamicFormEditor
-            controller={controller}
-            onUpdated={() => null}
-          />
-        </CardBody>
-      </Card>
+      <DynamicFormEditor
+        controller={controller}
+        onUpdated={() => null}
+      />
     </>
   );
 }
