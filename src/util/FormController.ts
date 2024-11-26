@@ -36,7 +36,7 @@ export default class FormController<T> extends BasicController<IForm<T>> {
     [this.form, this.updateForm] = useState<T>(this.defaultForm);
   };
 
-  useController = (onSubmit?: (form: T) => void) => {
+    useController = (onSubmit?: (form: T) => void) => {
     this._useController(onSubmit);
   };
 

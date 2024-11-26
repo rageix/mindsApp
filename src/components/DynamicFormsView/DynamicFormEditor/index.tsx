@@ -3,7 +3,6 @@ import Section from '@/components/DynamicFormsView/DynamicFormEditor/Section';
 import Button from '@/components/Buttton';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
-import Form from '@/components/Form';
 import FormBlock from '@/components/FormBlock';
 import FormBlockBody from '@/components/FormBlock/FormBlockBody';
 import _ from 'lodash';
@@ -55,9 +54,8 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
     <>
       <Card>
         <CardBody className="space-y-12">
-          <Form
-            onSubmit={controller.onSubmitForm}
-            className="mt-3 space-y-12"
+          <div
+           className="mt-3 space-y-12"
           >
             <FormBlock
               heading="Settings"
@@ -82,7 +80,7 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
                       <Section
                         key={v.id}
                         controller={v}
-                        onClickEdit={() => null}
+                        // onClickEdit={() => controller.onEditSection(i)}
                         onClickDelete={() => controller.onClickDeleteSection(i)}
                       />
                     ))}
@@ -124,7 +122,7 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
                 </Button>
               </div>
             </div>
-          </Form>
+          </div>
         </CardBody>
       </Card>
     </>

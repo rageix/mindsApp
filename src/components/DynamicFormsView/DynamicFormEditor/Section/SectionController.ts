@@ -1,77 +1,80 @@
-import FormController from '@/util/FormController';
-import { z } from 'zod';
-import { ChangeEvent } from 'react';
-import { EFieldType, ISection, newIField } from '@/types/DynamicForm';
+import {
+  EFieldType,
+  ISection,
+  newIField,
+  newISection,
+} from '@/types/DynamicForm';
 import { nanoid } from 'nanoid';
-import { sectionSchema } from '@/common/DynamicForms';
 import FieldController from '@/components/DynamicFormsView/DynamicFormEditor/Field/FieldController';
+import BasicController from '@/util/BasicController';
+import SectionFormController from '@/components/DynamicFormsView/DynamicFormEditor/SectionForm/SectionFormController';
 
-export interface IForm extends ISection {
+export interface IState {
+  key: string;
+  section: ISection;
+  showEditor: boolean;
+  sectionFormController: SectionFormController;
   fieldControllers: FieldController[];
 }
 
-export function defaultForm(): IForm {
+export function defaultState(): IState {
   return {
     key: nanoid(),
-    heading: '',
-    description: '',
-    fields: [],
+    section: newISection(),
+    showEditor: false,
+    sectionFormController: new SectionFormController(),
     fieldControllers: [],
   };
 }
 
-const formValidator = () =>
-  sectionSchema.extend({
-    fieldControllers: z.array(z.never()),
-  }) satisfies z.ZodType<IForm>;
+export default class SectionController extends BasicController<IState> {
+  defaultState = defaultState();
+  state = this.defaultState;
 
-export default class SectionController extends FormController<IForm> {
-  resetForm = defaultForm();
-  defaultForm = this.resetForm;
-  formValidator = formValidator;
-
-  onChangeHeading = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    this.onChangeForm({ heading: e.target.value });
+  onClickEdit = () => {
+    this.state.sectionFormController.defaultForm = this.state.section;
+    this.setState({ showEditor: true });
   };
 
-  onChangeDescription = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    this.onChangeForm({ description: e.target.value });
+  onCloseEditor = () => {
+    this.setState({
+      showEditor: false,
+      section: this.state.sectionFormController.form,
+    });
   };
 
   onAddField = (type: EFieldType) => {
     const form = newIField(type);
     const controller = new FieldController(form);
     controller.load(form);
-    this.onChangeForm({
-      fieldControllers: [...this.form.fieldControllers, controller],
+    this.setState({
+      fieldControllers: [...this.state.fieldControllers, controller],
     });
   };
 
   onRemoveField = (index: number) => {
-    this.onChangeForm({
-      fieldControllers: this.form.fieldControllers.toSpliced(index, 1),
+    this.setState({
+      fieldControllers: this.state.fieldControllers.toSpliced(index, 1),
     });
   };
 
   load = (section: ISection) => {
-    const fieldControllers = (section.fields || []).map((v) => {
+    const newState = defaultState();
+    newState.sectionFormController.reset(section);
+    newState.fieldControllers = (section.fields || []).map((v) => {
       const fieldController = new FieldController();
       fieldController.load(v);
       return fieldController;
     });
-    this.reset({ ...section, fieldControllers });
+    this.setState(newState);
   };
 
   getValue = (): ISection => {
     return {
-      key: this.form.key,
-      heading: this.form.heading,
-      description: this.form.description,
-      fields: this.form.fields,
+      key: this.state.key,
+      heading: this.state.section.heading,
+      description: this.state.section.description,
+      fields: this.state.fieldControllers.map((v) => v.getValue()),
     };
   };
 }

@@ -14,6 +14,7 @@ interface IState {
   initLoad: boolean;
   settingsController: SettingsFormController;
   sectionControllers: SectionController[];
+  sectionController: SectionController | null;
 }
 
 export function newDefaultState(): IState {
@@ -23,6 +24,7 @@ export function newDefaultState(): IState {
     initLoad: false,
     settingsController: new SettingsFormController(),
     sectionControllers: [],
+    sectionController: null,
   };
 }
 
@@ -36,9 +38,9 @@ export default class DynamicFormEditorController extends BasicController<IState>
     // this.reset();
   }
 
-  useController = (onUpdate: (form: IDynamicForm) => void) => {
+  useController = () => {
     this._useController();
-    this.onUpdate = onUpdate;
+    // this.onUpdate = onUpdate;
   };
 
   onClickDeleteSection = (index: number) => {
@@ -77,6 +79,7 @@ export default class DynamicFormEditorController extends BasicController<IState>
 
   onSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('DynamicFormEditorController', 'onSubmitForm');
     const state: IState = { ...this.state };
 
     let hasErrors = false;
@@ -85,11 +88,11 @@ export default class DynamicFormEditorController extends BasicController<IState>
       hasErrors = true;
     }
 
-    for (const controller of state.sectionControllers) {
-      if (!controller.onValidateForm()) {
-        hasErrors = true;
-      }
-    }
+    // for (const controller of state.sectionControllers) {
+    //   if (!controller.onValidateForm()) {
+    //     hasErrors = true;
+    //   }
+    // }
 
     state.hasErrors = hasErrors;
 
@@ -107,7 +110,7 @@ export default class DynamicFormEditorController extends BasicController<IState>
       _id: this.state._id,
       ...this.state.settingsController.form,
       teamId: '',
-      sections: this.state.sectionControllers.map((v) => v.form),
+      sections: this.state.sectionControllers.map((v) => v.state.sectionFormController.form),
     };
   };
 
@@ -123,4 +126,16 @@ export default class DynamicFormEditorController extends BasicController<IState>
       this.load(dynamicForm);
     }
   };
+
+  onEditSection = (index: number) => {
+    const state = { ...this.state };
+    state.sectionController = this.state.sectionControllers[index];
+    this.setState(state);
+  };
+
+  onDoneEditingSection = () => {
+    const state = { ...this.state };
+    state.sectionController = null;
+    this.setState(state);
+  }
 }

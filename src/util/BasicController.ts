@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { nanoid } from "nanoid";
 
 export default class BasicController<T> {
   defaultState: T = undefined as T;
   state: T = this.defaultState;
   updateState: Dispatch<SetStateAction<T>> | undefined;
+  id = nanoid();
 
   _useController = () => {
     [this.state, this.updateState] = useState<T>(this.defaultState);

@@ -40,6 +40,15 @@ export interface ISection {
   fields: IField[];
 }
 
+export function newISection(): ISection {
+  return {
+    key: nanoid(),
+    heading: 'New Section',
+    description: '',
+    fields: []
+  }
+}
+
 export interface IDynamicFormSettings {
   isActive: boolean;
   name: string;

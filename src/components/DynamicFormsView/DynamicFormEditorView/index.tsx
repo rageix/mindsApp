@@ -7,7 +7,6 @@ import BackButton from '@/components/BackButton';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 import DynamicFormEditorController from '@/components/DynamicFormsView/DynamicFormEditor/DynamicFormEditorController';
 import DynamicFormEditor from '@/components/DynamicFormsView/DynamicFormEditor';
-import { postApiDynamicForms } from '@/requests/api/dynamicForms';
 
 export default function DynamicFormEditorView() {
   const teamId = useTeamId();
@@ -17,12 +16,14 @@ export default function DynamicFormEditorView() {
     new DynamicFormEditorController(dynamicFormId, teamId),
   );
 
-  controller.useController(async (form) => {
-    const item = await postApiDynamicForms(form);
-    if (item) {
-      console.log('item');
-    }
-  });
+  controller.useController();
+
+  //   async (form) => {
+  //   const item = await postApiDynamicForms(form);
+  //   if (item) {
+  //     console.log('item');
+  //   }
+  // }
 
   // controller.useController(async (form) => {
   //   const item = await postApiCards({ ...form, teamId: teamId });

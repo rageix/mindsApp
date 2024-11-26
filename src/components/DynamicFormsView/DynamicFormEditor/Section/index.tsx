@@ -6,30 +6,29 @@ import MenuItemButton from '@/components/MenuItemButton';
 import { EFieldType } from '@/types/DynamicForm';
 import Field from '@/components/DynamicFormsView/DynamicFormEditor/Field';
 import { PlusIcon } from 'lucide-react';
-import TableOptionsMenu from "@/components/TableOptionsMenu";
+import TableOptionsMenu from '@/components/TableOptionsMenu';
+import SectionEditor from '@/components/DynamicFormsView/DynamicFormEditor/SectionEditor';
 
 interface IProps {
   controller: SectionController;
-  onClickEdit: () =>void;
   onClickDelete: () => void;
 }
 
-export default function Section({ controller, onClickEdit, onClickDelete }: IProps) {
+export default function Section({
+  controller,
+  onClickDelete,
+}: IProps) {
   controller.useController();
+
+  const {state} = controller;
 
   return (
     <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6">
       <div className="flex items-center">
-        <div className="grow block text-sm font-medium leading-6">
-          Section
-        </div>
+        <div className="grow block text-sm font-medium leading-6">{state.section.heading}</div>
         <TableOptionsMenu className="shrink-0">
-          <MenuItemButton onClick={onClickEdit}>
-            Edit
-          </MenuItemButton>
-          <MenuItemButton onClick={onClickDelete}>
-            Delete
-          </MenuItemButton>
+          <MenuItemButton onClick={controller.onClickEdit}>Edit</MenuItemButton>
+          <MenuItemButton onClick={onClickDelete}>Delete</MenuItemButton>
         </TableOptionsMenu>
       </div>
       <div>
@@ -37,12 +36,15 @@ export default function Section({ controller, onClickEdit, onClickDelete }: IPro
           role="list"
           className="py-6 space-y-3"
         >
-          {controller.form.fieldControllers.map((v, i) => (
+          {controller.state.fieldControllers.map((v, i) => (
             <li
               key={v.id}
               className="px-6 py-4 overflow-hidden rounded-md bg-gray-800 shadow"
             >
-              <Field controller={v} onClickDelete={() => controller.onRemoveField(i)} />
+              <Field
+                controller={v}
+                onClickDelete={() => controller.onRemoveField(i)}
+              />
             </li>
           ))}
         </ul>
@@ -53,7 +55,8 @@ export default function Section({ controller, onClickEdit, onClickDelete }: IPro
           <MenuButton>
             <span className="sr-only">Open options</span>
             <Button variant="blue">
-              <PlusIcon className="me-1" /><span>Add Field</span>
+              <PlusIcon className="me-1" />
+              <span>Add Field</span>
             </Button>
           </MenuButton>
           <MenuItems
@@ -96,6 +99,11 @@ export default function Section({ controller, onClickEdit, onClickDelete }: IPro
           </MenuItems>
         </Menu>
       </div>
+      <SectionEditor
+        controller={controller.state.sectionFormController}
+        open={controller.state.showEditor}
+        onClose={controller.onCloseEditor}
+      />
     </div>
   );
 }

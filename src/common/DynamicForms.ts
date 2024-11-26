@@ -20,6 +20,6 @@ export const fieldSchema = z.object({
 export const sectionSchema = z.object({
   key: zStringRequiredValidator,
   heading: zStringRequiredValidator,
-  description: zStringRequiredValidator,
+  description: z.string(),
   fields: z.array(fieldSchema),
 }) satisfies z.ZodType<ISection>;
