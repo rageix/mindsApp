@@ -1,5 +1,4 @@
 import { MongoDocument, MongoId } from './MongoDocument';
-import { ISelectOption } from './SelectOption';
 import { nanoid } from 'nanoid';
 
 export enum EFieldType {
@@ -11,12 +10,33 @@ export enum EFieldType {
   Rating = 'rating',
 }
 
+export const fieldRecord: Record<EFieldType, string> = {
+  [EFieldType.Input]: 'Input',
+  [EFieldType.Text]: 'Text',
+  [EFieldType.File]: 'File',
+  [EFieldType.Date]: 'Date',
+  [EFieldType.Select]: 'Select',
+  [EFieldType.Rating]: 'Rating',
+}
+
+export interface IFieldOption {
+  key: string,
+  value: string,
+}
+
+export function newIFieldOption(): IFieldOption {
+  return {
+    key: nanoid(),
+    value: 'New Option',
+  };
+}
+
 export interface IField {
   key: string;
   type: EFieldType;
   label: string;
   isRequired: boolean;
-  selectOptions: ISelectOption<string>[];
+  selectOptions: IFieldOption[];
   minLength?: number;
   maxLength?: number;
   isEmail?: boolean;
@@ -27,9 +47,13 @@ export function newIField(type: EFieldType): IField {
   return {
     key: nanoid(),
     type: type,
-    label: '',
+    label: `New ${fieldRecord[type]} Field`,
     isRequired: true,
     selectOptions: [],
+    isEmail: false,
+    minLength: 0,
+    maxLength: 0,
+    placeholder: ''
   };
 }
 

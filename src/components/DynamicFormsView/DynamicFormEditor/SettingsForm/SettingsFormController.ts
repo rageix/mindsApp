@@ -8,7 +8,7 @@ export interface IForm extends IDynamicFormSettings {}
 
 export function defaultForm(): IForm {
   return {
-    name: 'New Card',
+    name: 'New Form',
     isActive: true
   };
 }

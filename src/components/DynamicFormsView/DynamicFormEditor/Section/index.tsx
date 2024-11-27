@@ -7,27 +7,36 @@ import { EFieldType } from '@/types/DynamicForm';
 import Field from '@/components/DynamicFormsView/DynamicFormEditor/Field';
 import { PlusIcon } from 'lucide-react';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
-import SectionEditor from '@/components/DynamicFormsView/DynamicFormEditor/SectionEditor';
+import FormDrawer from '@/components/FormDrawer';
+import SectionForm from '@/components/DynamicFormsView/DynamicFormEditor/SectionForm';
 
 interface IProps {
+  onClickMoveUp: () => void;
+  onClickMoveDown: () => void;
   controller: SectionController;
   onClickDelete: () => void;
 }
 
 export default function Section({
+  onClickMoveUp,
+  onClickMoveDown,
   controller,
   onClickDelete,
 }: IProps) {
   controller.useController();
 
-  const {state} = controller;
+  const { state } = controller;
 
   return (
     <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6">
       <div className="flex items-center">
-        <div className="grow block text-sm font-medium leading-6">{state.section.heading}</div>
+        <div className="grow block text-sm font-medium leading-6">
+          {state.section.heading}
+        </div>
         <TableOptionsMenu className="shrink-0">
           <MenuItemButton onClick={controller.onClickEdit}>Edit</MenuItemButton>
+          <MenuItemButton onClick={onClickMoveUp}>Move Up</MenuItemButton>
+          <MenuItemButton onClick={onClickMoveDown}>Move Down</MenuItemButton>
           <MenuItemButton onClick={onClickDelete}>Delete</MenuItemButton>
         </TableOptionsMenu>
       </div>
@@ -44,6 +53,8 @@ export default function Section({
               <Field
                 controller={v}
                 onClickDelete={() => controller.onRemoveField(i)}
+                onClickMoveUp={() => controller.onClickMoveFieldUp(i)}
+                onClickMoveDown={() => controller.onClickMoveFieldDown(i)}
               />
             </li>
           ))}
@@ -52,7 +63,7 @@ export default function Section({
           as="div"
           className="flex justify-end"
         >
-          <MenuButton>
+          <MenuButton as="div">
             <span className="sr-only">Open options</span>
             <Button variant="blue">
               <PlusIcon className="me-1" />
@@ -99,11 +110,16 @@ export default function Section({
           </MenuItems>
         </Menu>
       </div>
-      <SectionEditor
-        controller={controller.state.sectionFormController}
+      <FormDrawer
         open={controller.state.showEditor}
-        onClose={controller.onCloseEditor}
-      />
+        onClose={() => null}
+        title="Edit Section"
+      >
+        <SectionForm
+          controller={controller.state.sectionFormController}
+          onUpdate={controller.onCloseEditor}
+        />
+      </FormDrawer>
     </div>
   );
 }

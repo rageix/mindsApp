@@ -1,73 +1,53 @@
-import FormController from '@/util/FormController';
-import { z } from 'zod';
-import { ChangeEvent } from 'react';
-import { EFieldType, IField } from '@/types/DynamicForm';
-import { nanoid } from 'nanoid';
-import { fieldSchema } from '@/common/DynamicForms';
-import { ISelectOption } from '@/types/SelectOption';
+import { EFieldType, IField, newIField } from '@/types/DynamicForm';
+import FieldFormController from '@/components/DynamicFormsView/DynamicFormEditor/FieldForm/FieldFormController';
+import BasicController from '@/util/BasicController';
 
-export interface IForm extends IField {}
+export interface IState {
+  field: IField;
+  showEditor: boolean;
+  formController: FieldFormController;
+}
 
-export function defaultForm(): IForm {
+export function defaultState(): IState {
   return {
-    key: nanoid(),
-    type: EFieldType.Input,
-    label: '',
-    isRequired: true,
-    selectOptions: [],
+    field: newIField(EFieldType.Text),
+    showEditor: false,
+    formController: new FieldFormController(),
   };
 }
 
-const formValidator = () => fieldSchema satisfies z.ZodType<IForm>;
+export default class FieldController extends BasicController<IState> {
+  defaultState = defaultState();
 
-export default class FieldController extends FormController<IForm> {
-  resetForm = defaultForm();
-  defaultForm = this.resetForm;
-  formValidator = formValidator;
-
-  onChangeType = (type: EFieldType) => {
-    this.onChangeForm({ type });
+  onClickEdit = () => {
+    this.state.formController.defaultForm = this.state.field;
+    this.setState({ showEditor: true });
   };
 
-  onChangeLabel = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    this.onChangeForm({ label: e.target.value });
-  };
-
-  onChangeIsRequired = () => {
-    this.onChangeForm({ isRequired: !this.form.isRequired });
-  };
-
-  onChangeSelectOptions = (options: ISelectOption<string>[]) => {
-    this.onChangeForm({ selectOptions: options });
-  };
-
-  onChangeOptionsMinLength = (value: number) => {
-    this.onChangeForm({ minLength: value });
-  };
-
-  onChangeOptionsMaxLength = (value: number) => {
-    this.onChangeForm({ maxLength: value });
-  };
-
-  onChangeOptionsIsEmail = () => {
-    this.onChangeForm({
-      isEmail: !this.form.isEmail,
-    });
-  };
-
-  onChangeOptionsPlaceholder = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    this.onChangeForm({
-      placeholder: e.target.value,
+  onCloseEditor = () => {
+    this.setState({
+      showEditor: false,
+      field: this.state.formController.form,
     });
   };
 
   load = (field: IField) => {
-    this.reset(field);
+    const state = defaultState();
+    state.field = field;
+    state.formController = new FieldFormController();
+    const form = {
+      ...newIField(field.type),
+      ...field,
+    };
+    state.formController.defaultForm = form;
+    state.formController.form = form;
+    this.setState(state);
   };
 
   getValue = (): IField => {
-    return this.form;
+    return {
+      ...this.state.field,
+    };
   };
+
 }

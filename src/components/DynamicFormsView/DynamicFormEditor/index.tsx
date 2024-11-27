@@ -15,15 +15,12 @@ import { PlusIcon } from 'lucide-react';
 
 interface IProps {
   controller: DynamicFormEditorController;
-  onUpdated: () => void;
 }
 
-export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
+export default function DynamicFormEditor({ controller }: IProps) {
   const router = useRouter();
   const { state } = controller;
   const teamId = useTeamId();
-
-  console.log(onUpdated);
 
   function back() {
     router.push(`/dashboard/${teamId}/cards`);
@@ -54,9 +51,7 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
     <>
       <Card>
         <CardBody className="space-y-12">
-          <div
-           className="mt-3 space-y-12"
-          >
+          <div className="mt-3 space-y-12">
             <FormBlock
               heading="Settings"
               description="Basic settings that belong to this dynamic form."
@@ -79,8 +74,11 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
                     {state.sectionControllers.map((v, i) => (
                       <Section
                         key={v.id}
+                        onClickMoveUp={() => controller.onClickMoveSectionUp(i)}
+                        onClickMoveDown={() =>
+                          controller.onClickMoveSectionDown(i)
+                        }
                         controller={v}
-                        // onClickEdit={() => controller.onEditSection(i)}
                         onClickDelete={() => controller.onClickDeleteSection(i)}
                       />
                     ))}
@@ -113,10 +111,11 @@ export default function DynamicFormEditor({ controller, onUpdated }: IProps) {
                   Cancel
                 </Button>
                 <Button
-                  type="submit"
+                  type="button"
                   variant="blue"
                   disabled={!_.isEmpty(state.hasErrors)}
                   isInline
+                  onClick={controller.onClickSave}
                 >
                   Save
                 </Button>

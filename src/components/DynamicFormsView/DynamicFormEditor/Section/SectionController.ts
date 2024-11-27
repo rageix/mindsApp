@@ -44,8 +44,22 @@ export default class SectionController extends BasicController<IState> {
   };
 
   onAddField = (type: EFieldType) => {
+    let key: string;
+
+    while (true) {
+      key = nanoid();
+      if (
+        this.state.fieldControllers.findIndex(
+          (v) => v.state.field.key === key,
+        ) === -1
+      ) {
+        break;
+      }
+    }
+
     const form = newIField(type);
-    const controller = new FieldController(form);
+    form.key = key;
+    const controller = new FieldController();
     controller.load(form);
     this.setState({
       fieldControllers: [...this.state.fieldControllers, controller],
@@ -60,7 +74,8 @@ export default class SectionController extends BasicController<IState> {
 
   load = (section: ISection) => {
     const newState = defaultState();
-    newState.sectionFormController.reset(section);
+    newState.section = section;
+    newState.sectionFormController.setForm(section);
     newState.fieldControllers = (section.fields || []).map((v) => {
       const fieldController = new FieldController();
       fieldController.load(v);
@@ -76,5 +91,27 @@ export default class SectionController extends BasicController<IState> {
       description: this.state.section.description,
       fields: this.state.fieldControllers.map((v) => v.getValue()),
     };
+  };
+
+  onClickMoveFieldUp = (index: number) => {
+    if (index === 0) {
+      return;
+    }
+
+    const fields = [...this.state.fieldControllers];
+    const spliced = fields.splice(index, 1);
+    fields.splice(index - 1, 0, spliced[0]);
+    this.setState({ fieldControllers: fields });
+  };
+
+  onClickMoveFieldDown = (index: number) => {
+    if (index >= this.state.fieldControllers.length -1) {
+      return;
+    }
+
+    const fields = [...this.state.fieldControllers];
+    const spliced = fields.splice(index, 1);
+    fields.splice(index + 1, 0, spliced[0]);
+    this.setState({ fieldControllers: fields });
   };
 }

@@ -11,7 +11,7 @@ export default function TableOptionsMenu({ className, children }: IProps) {
   return (
     <Menu
       as="div"
-      className="flex justify-end"
+      className="flex justify-end ms-3"
     >
       <MenuButton className="-m-2.5 block p-2.5 text-gray-400 hover:text-white">
         <span className="sr-only">Open options</span>

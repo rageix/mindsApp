@@ -7,6 +7,8 @@ import BackButton from '@/components/BackButton';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 import DynamicFormEditorController from '@/components/DynamicFormsView/DynamicFormEditor/DynamicFormEditorController';
 import DynamicFormEditor from '@/components/DynamicFormsView/DynamicFormEditor';
+import { postApiDynamicForms } from '@/requests/api/dynamicForms';
+import { toast } from 'react-toastify';
 
 export default function DynamicFormEditorView() {
   const teamId = useTeamId();
@@ -16,7 +18,14 @@ export default function DynamicFormEditorView() {
     new DynamicFormEditorController(dynamicFormId, teamId),
   );
 
-  controller.useController();
+  controller.useController(async (form) => {
+    const item = await postApiDynamicForms({ ...form, teamId: teamId });
+
+    if (item) {
+      router.replace(`/dashboard/${teamId}/dynamicForms/${item._id}`);
+      toast.success('Form saved.');
+    }
+  });
 
   //   async (form) => {
   //   const item = await postApiDynamicForms(form);
@@ -70,7 +79,6 @@ export default function DynamicFormEditorView() {
       <BackButton onClick={onClickCancel} />
       <DynamicFormEditor
         controller={controller}
-        onUpdated={() => null}
       />
     </>
   );

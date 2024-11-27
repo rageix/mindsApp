@@ -2,24 +2,21 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  DialogTitle
+  DialogTitle,
 } from '@headlessui/react';
-import SectionForm from '@/components/DynamicFormsView/DynamicFormEditor/SectionForm';
-import SectionFormController
-  from "@/components/DynamicFormsView/DynamicFormEditor/SectionForm/SectionFormController";
+import { PropsWithChildren } from 'react';
 
-interface IProps {
-  controller: SectionFormController;
+interface IProps extends PropsWithChildren {
   open: boolean;
   onClose: () => void;
+  title: string;
 }
 
-export default function SectionEditor({ controller, open, onClose }: IProps) {
-
+export default function FormDrawer({ open, onClose, title, children }: IProps) {
   return (
     <Dialog
       open={open}
-      onClose={() => null}
+      onClose={onClose}
       className="relative z-50"
     >
       <DialogBackdrop
@@ -38,7 +35,7 @@ export default function SectionEditor({ controller, open, onClose }: IProps) {
                 <div className="px-4 sm:px-6">
                   <div className="flex items-start justify-between">
                     <DialogTitle className="text-base font-semibold text-white">
-                      Edit Section
+                      {title}
                     </DialogTitle>
                     {/*<div className="ml-3 flex h-7 items-center">*/}
                     {/*  <button*/}
@@ -57,10 +54,7 @@ export default function SectionEditor({ controller, open, onClose }: IProps) {
                   </div>
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  <SectionForm
-                    controller={controller}
-                    onUpdate={onClose}
-                  />
+                  {children}
                 </div>
               </div>
             </DialogPanel>

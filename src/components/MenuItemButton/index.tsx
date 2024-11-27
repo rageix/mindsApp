@@ -1,5 +1,6 @@
 import { cn } from '@/util/Cn';
 import { ForwardedRef, forwardRef, PropsWithChildren } from 'react';
+import { MenuItem } from "@headlessui/react";
 
 interface IProps extends PropsWithChildren {
   className?: string;
@@ -13,6 +14,7 @@ const MenuItemButton = forwardRef(function MenuItemButton(
 ) {
   const { className, disabled, onClick, children } = props;
   return (
+    <MenuItem>
     <button
       ref={ref}
       type="button"
@@ -25,6 +27,7 @@ const MenuItemButton = forwardRef(function MenuItemButton(
     >
       {children}
     </button>
+    </MenuItem>
   );
 });
 

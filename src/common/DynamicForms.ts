@@ -1,16 +1,23 @@
 import z from 'zod';
+import { zStringRequiredValidator } from '@/util/Validators';
 import {
-  zSelectOptionStringValidator,
-  zStringRequiredValidator,
-} from '@/util/Validators';
-import { EFieldType, IField, ISection } from '@/types/DynamicForm';
+  EFieldType,
+  IField,
+  IFieldOption,
+  ISection,
+} from '@/types/DynamicForm';
+
+export const zFieldOptionSchema = z.object({
+  key: zStringRequiredValidator,
+  value: z.string(),
+}) satisfies z.ZodType<IFieldOption>;
 
 export const fieldSchema = z.object({
   key: zStringRequiredValidator,
   type: z.nativeEnum(EFieldType),
   label: zStringRequiredValidator,
   isRequired: z.boolean(),
-  selectOptions: z.array(zSelectOptionStringValidator),
+  selectOptions: z.array(zFieldOptionSchema),
   minLength: z.number(),
   maxLength: z.number(),
   isEmail: z.boolean(),
