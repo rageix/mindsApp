@@ -1,5 +1,5 @@
-import DynamicFormEditorView from '@/components/DynamicFormsView/DynamicFormEditorView';
+import FormEditorView from '@/components/FormsView/FormEditorView';
 
 export default function Page() {
-  return <DynamicFormEditorView />;
+  return <FormEditorView />;
 }

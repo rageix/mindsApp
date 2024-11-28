@@ -5,7 +5,7 @@ import {
   IField,
   IFieldOption,
   ISection,
-} from '@/types/DynamicForm';
+} from '@/types/Form';
 
 export const zFieldOptionSchema = z.object({
   key: zStringRequiredValidator,

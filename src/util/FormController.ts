@@ -1,12 +1,12 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { z } from 'zod';
-import { IForm, newIForm } from '@/types/Form';
 import _ from 'lodash';
 import { getZodErrorsObj } from './GetZodErrors';
 import { nanoid } from 'nanoid';
 import BasicController from '@/util/BasicController';
+import { IHtmlForm, newIHtmlForm } from "@/types/HtmlForm";
 
-export default class FormController<T> extends BasicController<IForm<T>> {
+export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   resetForm: T = null as T;
   defaultForm: T = null as T;
   form: T = this.defaultForm;
@@ -18,7 +18,7 @@ export default class FormController<T> extends BasicController<IForm<T>> {
   onSubmit: ((form: T) => void) | undefined;
   name?: string;
   id = nanoid();
-  defaultState = newIForm<T>();
+  defaultState = newIHtmlForm<T>();
   lastUpdate: Date | undefined;
 
   constructor(arg?: T) {
@@ -32,7 +32,7 @@ export default class FormController<T> extends BasicController<IForm<T>> {
 
   _useController = (onSubmit?: (form: T) => void) => {
     this.onSubmit = onSubmit;
-    [this.state, this.updateState] = useState<IForm<T>>(this.defaultState);
+    [this.state, this.updateState] = useState<IHtmlForm<T>>(this.defaultState);
     [this.form, this.updateForm] = useState<T>(this.defaultForm);
   };
 
@@ -152,7 +152,7 @@ export default class FormController<T> extends BasicController<IForm<T>> {
     const data = form || this.form;
     const result = this.formValidator(data).safeParse(data);
 
-    const state: IForm<T> = { ...this.state };
+    const state: IHtmlForm<T> = { ...this.state };
 
     // this might show a warning depending on typescript config
     // this is the best way to do it no matter the config
