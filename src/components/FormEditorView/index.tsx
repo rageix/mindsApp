@@ -14,16 +14,16 @@ import FormEditorController
 export default function FormEditorView() {
   const teamId = useTeamId();
   const router = useRouter();
-  const { dynamicFormId } = useParams<{ dynamicFormId: string }>();
+  const { formId } = useParams<{ formId: string }>();
   const [controller] = useState(
-    new FormEditorController(dynamicFormId, teamId),
+    new FormEditorController(formId, teamId),
   );
 
   controller.useController(async (form) => {
     const item = await postApiForms({ ...form, teamId: teamId });
 
     if (item) {
-      router.replace(`/dashboard/${teamId}/dynamicForms/${item._id}`);
+      router.replace(`/dashboard/${teamId}/forms/${item._id}`);
       toast.success('Form saved.');
     }
   });

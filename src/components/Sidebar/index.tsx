@@ -25,7 +25,6 @@ export default function Sidebar(props: IProps) {
           className="flex items-baseline"
         >
           <Logo className="h-8 w-auto" />
-          <span className="ms-2 text-sm">Early Access</span>
         </Link>
       </div>
       <SidebarNav />

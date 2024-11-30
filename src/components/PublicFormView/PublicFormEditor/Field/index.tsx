@@ -13,6 +13,7 @@ interface IProps {
 
 export default function Field({controller}: IProps) {
   controller.useController();
+  const {state} = controller;
 
   const input = useMemo(() => {
 
@@ -41,8 +42,9 @@ export default function Field({controller}: IProps) {
 
   }, [controller.field.key])
 
+  console.log(input);
 
-  const {state} = controller;
+
 
   return (
       <div>

@@ -10,12 +10,12 @@ interface IProps {
 export default function Section({ controller }: IProps) {
   controller.useController();
 
-  const { state } = controller;
+  const { state, section } = controller;
 
   return (
     <FormBlock
-      heading="Settings"
-      description="Basic settings that belong to this card."
+      heading={section.heading}
+      description={section.description}
     >
       <FormBlockBody>
         {state.fieldControllers.map((v) => (

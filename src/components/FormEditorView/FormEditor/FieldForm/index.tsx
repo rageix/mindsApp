@@ -26,6 +26,8 @@ export default function FieldForm({ controller, onUpdate }: IProps) {
 
   const { form, state } = controller;
 
+  console.log(state.errors);
+
   return (
     <Form onSubmit={controller.onSubmitForm}>
       <div>

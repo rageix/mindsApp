@@ -25,6 +25,7 @@ import TableOptionsMenu from '@/components/TableOptionsMenu';
 import { MenuItem } from '@headlessui/react';
 import { IForm } from '@/types/Form';
 import useForms from '@/hooks/UseForms';
+import Link from "next/link";
 
 function getColumns(
   onClickEditOne: (_id: MongoId) => void,
@@ -73,6 +74,20 @@ function getColumns(
       header: () => 'Updated At',
       cell: ({ row }) => <FormattedDate value={row.original.updatedAt} />,
       enableSorting: false,
+    },
+    {
+      id: 'view',
+      header: () => <div></div>,
+      cell: ({ row }) => (
+        <Link href={`/form/${row.original._id}`}>
+          <Button
+            variant="link"
+            isInline
+          >
+            View
+          </Button>
+        </Link>
+      ),
     },
     {
       id: 'options',
@@ -141,7 +156,7 @@ export default function FormsList() {
   }
 
   function onClickNew() {
-    router.push(`/dashboard/${teamId}/dynamicForms/new`);
+    router.push(`/dashboard/${teamId}/forms/new`);
   }
 
   const columns = useMemo(
@@ -177,7 +192,7 @@ export default function FormsList() {
                 </div>
                 <div>
                   <p className="text-center font-bold text-2xl">
-                    No Dynamic Forms
+                    No Forms
                   </p>
                   <div className="flex justify-center mt-6">
                     <Button
@@ -185,7 +200,7 @@ export default function FormsList() {
                       onClick={() => onClickNew()}
                       isInline
                     >
-                      <PlusIcon className="me-1" /> New Dynamic Form
+                      <PlusIcon className="me-1" /> New Form
                     </Button>
                   </div>
                 </div>

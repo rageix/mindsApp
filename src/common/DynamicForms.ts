@@ -20,7 +20,6 @@ export const fieldSchema = z.object({
   selectOptions: z.array(zFieldOptionSchema),
   minLength: z.number(),
   maxLength: z.number(),
-  isEmail: z.boolean(),
   placeholder: z.string(),
 }) satisfies z.ZodType<IField>;
 

@@ -51,7 +51,7 @@ export default class PublicFormEditorController extends BasicController<IState> 
   onClickSave = () => {
     const state: IState = { ...this.state };
 
-    let hasErrors = false;
+    const hasErrors = false;
 
     // if (!state.settingsController.onValidateForm()) {
     //   hasErrors = true;

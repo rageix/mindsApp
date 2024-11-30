@@ -24,8 +24,8 @@ export default function SidebarNav() {
       //   icon: SquareUserRound,
       // },
       {
-        name: 'Dynamic Forms',
-        href: `/dashboard/${teamId}/dynamicForms`,
+        name: 'Forms',
+        href: `/dashboard/${teamId}/forms`,
         icon: FileIcon,
       },
       {
