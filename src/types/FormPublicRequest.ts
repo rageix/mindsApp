@@ -1,8 +1,14 @@
 import { MongoId } from '@/types/MongoDocument';
 
+export interface IResponseValue {
+  key?: string,
+  value: string | number,
+  label?: string,
+}
+
 export interface IResponseField {
   key: string;
-  value: string[];
+  values: IResponseValue[];
 }
 
 export interface IResponseSection {
@@ -10,7 +16,7 @@ export interface IResponseSection {
   fields: IResponseField[];
 }
 
-export interface IFormResponse {
+export interface IFormPublicRequest {
   formId: MongoId;
   sections: IResponseSection[];
 }

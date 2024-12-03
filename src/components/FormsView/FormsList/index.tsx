@@ -125,23 +125,23 @@ export default function FormsList() {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const dynamicForms = useForms({
+  const forms = useForms({
     ...pagination,
     text: '',
     teamId: teamId,
   });
 
   function onEdit(item: IHasId<IForm>) {
-    router.push(`/dashboard/${teamId}/dynamicForms/${item._id}`);
+    router.push(`/dashboard/${teamId}/forms/${item._id}`);
   }
 
   function onClickEditOne(_id: MongoId) {
-    router.push(`/dashboard/${teamId}/dynamicForms/${_id}`);
+    router.push(`/dashboard/${teamId}/forms/${_id}`);
   }
 
   async function onClickDeleteOne(_id: MongoId) {
     if (confirm(CONFIRM_DELETE_ONE)) {
-      await dynamicForms.deleteItems([_id], teamId);
+      await forms.deleteItems([_id], teamId);
       setRowSelection({});
     }
   }
@@ -150,7 +150,7 @@ export default function FormsList() {
     const ids = arg.rows.map((v) => v.original._id);
 
     if (ids.length > 0 && confirm(CONFIRM_DELETE_SELECTED)) {
-      await dynamicForms.deleteItems(ids, teamId);
+      await forms.deleteItems(ids, teamId);
       setRowSelection({});
     }
   }
@@ -164,7 +164,7 @@ export default function FormsList() {
     [],
   );
 
-  if (!dynamicForms.initLoad) {
+  if (!forms.initLoad) {
     return (
       <div className="flex justify-center items-center mt-16">
         <Loading
@@ -175,7 +175,7 @@ export default function FormsList() {
     );
   }
 
-  const hasItems = (dynamicForms.data?.data || []).length > 0;
+  const hasItems = (forms.data?.data || []).length > 0;
 
   return (
     <>
@@ -223,7 +223,7 @@ export default function FormsList() {
           </div>
           <div className="mt-3">
             <Table<IHasId<IForm>>
-              data={dynamicForms.data?.data || []}
+              data={forms.data?.data || []}
               pagination={pagination}
               setPagination={setPagination}
               sorting={sorting}
@@ -232,7 +232,7 @@ export default function FormsList() {
               dataFetchFn={() => []}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
-              count={dynamicForms.data?.count || 0}
+              count={forms.data?.count || 0}
               onClickEdit={(item) => onEdit(item)}
               hasCheckbox
             />

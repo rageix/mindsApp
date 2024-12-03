@@ -18,12 +18,14 @@ export default function Section({ controller }: IProps) {
       description={section.description}
     >
       <FormBlockBody>
+        <div className="space-y-3">
         {state.fieldControllers.map((v) => (
           <Field
             key={v.field.key}
             controller={v}
           />
         ))}
+        </div>
       </FormBlockBody>
     </FormBlock>
   );

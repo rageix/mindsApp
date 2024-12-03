@@ -50,7 +50,7 @@ export default function FormEditorView() {
   // }, [controller.state.initLoad]);
 
   function back() {
-    router.push(`/dashboard/${teamId}/dynamicForms`);
+    router.push(`/dashboard/${teamId}/forms`);
   }
 
   function onClickCancel() {

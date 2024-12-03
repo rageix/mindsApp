@@ -59,7 +59,7 @@ export default function Select<T, F>({
       disabled={disabled}
     >
       <div
-        // ref={ref}
+        ref={ref}
         className={cn('relative', className)}
       >
         <ListboxButton

@@ -2,7 +2,7 @@ import { ISection } from '@/types/Form';
 import FieldController
   from "@/components/PublicFormView/PublicFormEditor/Field/FieldController";
 import BasicController from "@/util/BasicController";
-import { IResponseSection } from "@/types/FormResponse";
+import { IResponseSection } from "@/types/FormPublicRequest";
 
 export interface IState {
   fieldControllers: FieldController[];
@@ -25,6 +25,19 @@ export default class SectionController extends BasicController<IState> {
     this.defaultState = {
       fieldControllers: section.fields.map((v) => new FieldController(v))
     }
+  }
+
+  onValidateForm = (): boolean => {
+    let result = true;
+
+    for(const controller of this.state.fieldControllers) {
+      controller.submit = true;
+      if(!controller.onValidateForm()) {
+       result = false;
+      }
+    }
+
+    return result;
   }
 
   getValue = (): IResponseSection => {

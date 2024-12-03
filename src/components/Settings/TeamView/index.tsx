@@ -4,7 +4,7 @@ import useTeam from '@/hooks/UseTeam';
 import TeamFormController from '@/components/Settings/TeamView/TeamForm/TeamFormController';
 import TeamForm from './TeamForm';
 import useTeamId from '@/hooks/UseTeamId';
-import ImageUploader from '@/components/ImageUploader/ImageUploader';
+import ImageUploader from '@/components/ImageUploader';
 import { toast } from 'react-toastify';
 import CardBody from '@/components/Card/CardBody';
 import FormBlock from '@/components/FormBlock';

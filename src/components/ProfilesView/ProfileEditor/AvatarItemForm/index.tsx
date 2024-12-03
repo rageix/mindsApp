@@ -1,5 +1,5 @@
 import { IForm } from '@/components/ProfilesView/ProfileEditor/TextItemForm/TextItemFormController';
-import ImageUploader from '@/components/ImageUploader/ImageUploader';
+import ImageUploader from '@/components/ImageUploader';
 import useTeamId from '@/hooks/UseTeamId';
 import AvatarItemFormController from '@/components/ProfilesView/ProfileEditor/AvatarItemForm/AvatarItemFormController';
 import FormErrors from '@/components/FormErrors';

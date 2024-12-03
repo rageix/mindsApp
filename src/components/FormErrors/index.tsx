@@ -27,7 +27,7 @@ export default function FormErrors<T>(props: Props<T>) {
       {errors.map((v, i) => (
         <p
           key={i}
-          className="mt-2 text-red-400"
+          className="text-red-400"
         >
           {v}
         </p>

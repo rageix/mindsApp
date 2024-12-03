@@ -19,7 +19,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html
       lang="en"
-      className="min-h-screen h-full bg-gray-900 text-white"
+      className="min-h-screen h-full bg-gray-900 text-white dark:[color-scheme:dark]"
     >
       <head>
         <meta charSet="UTF-8" />

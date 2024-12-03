@@ -4,15 +4,17 @@ import { IField } from '@/types/Form';
 import { ISelectOption } from '@/types/SelectOption';
 import z from 'zod';
 import { zStringRequiredValidator } from '@/util/Validators';
-import { IResponseField } from '@/types/FormResponse';
+import { IResponseField, IResponseValue } from '@/types/FormPublicRequest';
+import { IFileUpload } from '@/types/FileUpload';
+import dayjs from 'dayjs';
 
 export interface IForm {
-  value: string[];
+  values: IResponseValue[];
 }
 
 export function defaultForm(): IForm {
   return {
-    value: [],
+    values: [],
   };
 }
 
@@ -28,43 +30,71 @@ export default class FieldController extends FormController<IForm> {
     if (field.isRequired) {
       this.formValidator = () =>
         z.object({
-          value: z.array(zStringRequiredValidator),
+          values: z.array(z.object({ value: zStringRequiredValidator })).min(1, {message: 'Is required.'}),
         });
     }
   }
 
   onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ value: [e.target.value] });
+    this.onChangeForm({ values: [{ value: e.target.value }] });
   };
 
   onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    this.onChangeForm({ value: [e.target.value] });
+    this.onChangeForm({ values: [{ value: e.target.value }] });
   };
 
   onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ value: [e.target.value] });
+    this.onChangeForm({ values: [{ value: e.target.value }] });
   };
 
-  onChangeFile = (value: string) => {
-    this.onChangeForm({ value: [value] });
+  onUploadFile = (files: IFileUpload[]) => {
+    this.onChangeForm({
+      values: (files || []).map((v) => {
+        return {
+          value: String(v._id),
+          label: v.name,
+        };
+      }),
+    });
   };
 
-  onChangeDate = (value: Date) => {
-    this.onChangeForm({ value: [String(value)] });
+  onClickRemoveFile = (index: number) => {
+    this.onChangeForm({
+      values: this.form.values.toSpliced(index, 1),
+    });
+  };
+
+  onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({
+      values: [
+        {
+          value: dayjs(e.target.valueAsDate).unix(),
+          label: e.target.value,
+        },
+      ],
+    });
   };
 
   onChangeSelect = (value: ISelectOption<string>) => {
-    this.onChangeForm({ value: [value.value] });
+    this.onChangeForm({
+      values: [
+        {
+          key: value.key,
+          value: value.value,
+          label: String(value.label),
+        },
+      ],
+    });
   };
 
   onChangeRating = (value: number) => {
-    this.onChangeForm({ value: [String(value)] });
+    this.onChangeForm({ values: [{ value: value }] });
   };
 
   getValue = (): IResponseField => {
     return {
       key: this.field.key,
-      value: this.form.value
+      values: this.form.values,
     };
   };
 }

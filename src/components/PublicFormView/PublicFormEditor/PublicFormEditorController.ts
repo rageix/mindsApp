@@ -4,7 +4,7 @@ import { IForm } from '@/types/Form';
 
 import { getApiFormsPublic } from '@/requests/api/forms/public';
 import SectionController from '@/components/PublicFormView/PublicFormEditor/Section/SectionController';
-import { IFormResponse } from "@/types/FormResponse";
+import { IFormPublicRequest } from "@/types/FormPublicRequest";
 
 interface IState {
   hasErrors: boolean;
@@ -24,14 +24,14 @@ export function newDefaultState(): IState {
 
 export default class PublicFormEditorController extends BasicController<IState> {
   defaultState = newDefaultState();
-  onUpdate: ((response: IFormResponse) => void) | undefined;
+  onUpdate: ((response: IFormPublicRequest) => void) | undefined;
 
   constructor(_id: MongoId) {
     super();
     this.loadId(_id);
   }
 
-  useController = (onUpdate: (response: IFormResponse) => void) => {
+  useController = (onUpdate: (response: IFormPublicRequest) => void) => {
     this._useController();
     this.onUpdate = onUpdate;
   };
@@ -51,17 +51,17 @@ export default class PublicFormEditorController extends BasicController<IState> 
   onClickSave = () => {
     const state: IState = { ...this.state };
 
-    const hasErrors = false;
+    let hasErrors = false;
 
     // if (!state.settingsController.onValidateForm()) {
     //   hasErrors = true;
     // }
 
-    // for (const controller of state.sectionControllers) {
-    //   if (!controller.onValidateForm()) {
-    //     hasErrors = true;
-    //   }
-    // }
+    for (const controller of state.sectionControllers) {
+      if (!controller.onValidateForm()) {
+        hasErrors = true;
+      }
+    }
 
     state.hasErrors = hasErrors;
 
@@ -74,7 +74,7 @@ export default class PublicFormEditorController extends BasicController<IState> 
     }
   };
 
-  getValue = (): IFormResponse => {
+  getValue = (): IFormPublicRequest => {
     return {
       formId: this.state.form?._id || '',
       sections: this.state.sectionControllers.map((v) => v.getValue()),

@@ -54,17 +54,18 @@ export default function PublicFormView() {
                 />
               ))}
               <div className="mt-6 flex flex-col space-y-3">
-                {!_.isEmpty(state.hasErrors) && (
+                {state.hasErrors && (
                   <Alert variant="red">
-                    The form has errors. Please fix them and try to save again.
+                    The form has errors. Please fix them and try to submit again.
                   </Alert>
                 )}
                 <div className="flex items-center justify-end gap-x-6">
                   <Button
                     type="button"
                     variant="blue"
-                    disabled={!_.isEmpty(state.hasErrors)}
+                    // disabled={state.hasErrors}
                     isInline
+                    onClick={controller.onClickSave}
                   >
                     Submit
                   </Button>

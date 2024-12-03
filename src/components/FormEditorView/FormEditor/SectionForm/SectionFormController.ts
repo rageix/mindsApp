@@ -18,7 +18,7 @@ export function defaultForm(): IForm {
 
 const formValidator = () =>
   sectionSchema.extend({
-    fields: z.array(z.never()),
+    fields: z.array(z.any()),
   }) satisfies z.ZodType<IForm>;
 
 export default class SectionFormController extends FormController<IForm> {

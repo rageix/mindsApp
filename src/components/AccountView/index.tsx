@@ -1,5 +1,5 @@
 'use client';
-import ImageUploader from '@/components/ImageUploader/ImageUploader';
+import ImageUploader from '@/components/ImageUploader';
 import userService from '@/services/UserService';
 import UserAccountForm from '@/components/UserAccountForm';
 import UserProfilePasswordForm from '@/components/UserProfilePasswordForm';
