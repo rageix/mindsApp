@@ -89,7 +89,7 @@ export default class SectionController extends BasicController<IState> {
   getValue = (): ISection => {
     return {
       key: this.state.key,
-      heading: this.state.section.heading,
+      title: this.state.section.title,
       description: this.state.section.description,
       fields: this.state.fieldControllers.map((v) => v.getValue()),
     };

@@ -11,12 +11,17 @@ import _ from 'lodash';
 import Alert from '@/components/Alert';
 import Button from '@/components/Buttton';
 import Section from '@/components/PublicFormView/PublicFormEditor/Section';
+import { postApiFormsPublic } from "@/requests/api/forms/public";
 
 export default function PublicFormView() {
   const { formId } = useParams<{ formId: string }>();
   const [controller] = useState(new PublicFormEditorController(formId));
-  controller.useController((response) => {
-    console.log(response);
+  controller.useController(async(formResponse) => {
+    const response = await postApiFormsPublic(formResponse);
+
+    if(response !== null) {
+      alert('Thanks your response was recorded.');
+    }
   });
   const router = useRouter();
 

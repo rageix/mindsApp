@@ -24,15 +24,15 @@ export default function SectionForm({ controller, onUpdate }: IProps) {
   return (
     <Form onSubmit={controller.onSubmitForm}>
       <div>
-        <FormLabel<IForm> field="heading">Heading</FormLabel>
+        <FormLabel<IForm> field="title">Heading</FormLabel>
         <Input<IForm>
-          field="heading"
+          field="title"
           errors={state.errors}
-          value={form.heading}
-          onChange={controller.onChangeHeading}
+          value={form.title}
+          onChange={controller.onChangeTitle}
         />
         <FormErrors<IForm>
-          field="heading"
+          field="title"
           errors={state.errors}
         />
       </div>

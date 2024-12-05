@@ -3,7 +3,6 @@ import { usePathname } from 'next/navigation';
 import {
   ArrowLeftRightIcon,
   FileIcon,
-  IdCardIcon,
   SettingsIcon,
 } from 'lucide-react';
 import useTeamId from '@/hooks/UseTeamId';
@@ -18,26 +17,16 @@ export default function SidebarNav() {
 
   const mainNav: INavItem[] = useMemo(
     () => [
-      // {
-      //   name: 'Profiles',
-      //   href: `/dashboard/${teamId}/profiles`,
-      //   icon: SquareUserRound,
-      // },
       {
         name: 'Forms',
         href: `/dashboard/${teamId}/forms`,
         icon: FileIcon,
       },
       {
-        name: 'Cards',
-        href: `/dashboard/${teamId}/cards`,
-        icon: IdCardIcon,
+        name: 'Form Responses',
+        href: `/dashboard/${teamId}/formResponses`,
+        icon: FileIcon,
       },
-      // {
-      //   name: 'Calendars',
-      //   href: `/dashboard/${teamId}/calendars`,
-      //   icon: CalendarIcon,
-      // },
     ],
     [teamId],
   );

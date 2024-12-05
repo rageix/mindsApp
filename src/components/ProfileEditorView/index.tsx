@@ -69,7 +69,7 @@ export default function ProfileEditorView() {
         <Card>
           <CardBody className="space-y-12">
             <FormBlock
-              heading="Settings"
+              title="Settings"
               description="Basic settings that belong to this profile."
             >
               <FormBlockBody className="flex flex-col gap-y-6">
@@ -79,7 +79,7 @@ export default function ProfileEditorView() {
               </FormBlockBody>
             </FormBlock>
             <FormBlock
-              heading="Profile Basics"
+              title="Profile Basics"
               description="Basic information about you."
             >
               <FormBlockBody className="flex flex-col gap-y-6">
@@ -94,7 +94,7 @@ export default function ProfileEditorView() {
               </FormBlockBody>
             </FormBlock>
             <FormBlock
-              heading="Bio"
+              title="Bio"
               description="A short blurb about yourself and what you do, or whatever usefull text you think would be great on the front of your card."
             >
               <FormBlockBody>
@@ -102,7 +102,7 @@ export default function ProfileEditorView() {
               </FormBlockBody>
             </FormBlock>
             <FormBlock
-              heading="Images"
+              title="Images"
               description="Images that will be displayed."
             >
               <FormBlockBody>
@@ -116,7 +116,7 @@ export default function ProfileEditorView() {
             </FormBlock>
 
             <FormBlock
-              heading="Socials"
+              title="Socials"
               description="Links to your various social accounts."
             >
               <FormBlockBody className="flex flex-col gap-y-6">

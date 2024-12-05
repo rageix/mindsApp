@@ -54,7 +54,7 @@ export default function FormEditor({ controller }: IProps) {
         <CardBody className="space-y-12">
           <div className="mt-3 space-y-12">
             <FormBlock
-              heading="Settings"
+              title="Settings"
               description="Basic settings that belong to this dynamic form."
             >
               <FormBlockBody>
@@ -66,7 +66,7 @@ export default function FormEditor({ controller }: IProps) {
               </FormBlockBody>
             </FormBlock>
             <FormBlock
-              heading="Form Builder"
+              title="Form Builder"
               description="Build your form"
             >
               <FormBlockBody>

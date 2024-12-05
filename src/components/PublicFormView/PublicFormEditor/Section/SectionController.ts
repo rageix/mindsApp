@@ -31,8 +31,10 @@ export default class SectionController extends BasicController<IState> {
     let result = true;
 
     for(const controller of this.state.fieldControllers) {
+      console.log(controller.field.type);
       controller.submit = true;
       if(!controller.onValidateForm()) {
+        console.log('FALSE');
        result = false;
       }
     }

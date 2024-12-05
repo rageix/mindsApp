@@ -10,7 +10,7 @@ export interface IForm extends ISection {}
 export function defaultForm(): IForm {
   return {
     key: nanoid(),
-    heading: '',
+    title: '',
     description: '',
     fields: [],
   };
@@ -26,10 +26,10 @@ export default class SectionFormController extends FormController<IForm> {
   defaultForm = this.resetForm;
   formValidator = formValidator;
 
-  onChangeHeading = (
+  onChangeTitle = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    this.onChangeForm({ heading: e.target.value });
+    this.onChangeForm({ title: e.target.value });
   };
 
   onChangeDescription = (

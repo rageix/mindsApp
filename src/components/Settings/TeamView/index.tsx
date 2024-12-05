@@ -31,7 +31,7 @@ export default function TeamView() {
     <Card>
       <CardBody className="space-y-12">
         <FormBlock
-          heading="Avatar"
+          title="Avatar"
           description="Your team avatar."
         >
           <FormBlockBody className="flex flex-col gap-6">
@@ -49,7 +49,7 @@ export default function TeamView() {
           </FormBlockBody>
         </FormBlock>
         <FormBlock
-          heading="Team Information"
+          title="Team Information"
           description="Basic information about your team."
         >
           <FormBlockBody>

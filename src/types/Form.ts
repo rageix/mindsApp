@@ -59,7 +59,7 @@ export function newIField(type: EFieldType): IField {
 
 export interface ISection {
   key: string;
-  heading: string;
+  title: string;
   description: string;
   fields: IField[];
 }
@@ -67,7 +67,7 @@ export interface ISection {
 export function newISection(): ISection {
   return {
     key: nanoid(),
-    heading: 'New Section',
+    title: 'New Section',
     description: '',
     fields: []
   }

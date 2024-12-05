@@ -32,7 +32,7 @@ export default function Section({
     <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6">
       <div className="flex items-center">
         <div className="grow block text-sm font-medium leading-6">
-          {state.section.heading}
+          {state.section.title}
         </div>
         <TableOptionsMenu className="shrink-0">
           <MenuItemButton onClick={controller.onClickEdit}>Edit</MenuItemButton>

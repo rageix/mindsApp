@@ -86,7 +86,7 @@ export default function CardEditorView() {
             className="mt-3 space-y-12"
           >
             <FormBlock
-              heading="Settings"
+              title="Settings"
               description="Basic settings that belong to this card."
             >
               <FormBlockBody>
@@ -106,7 +106,7 @@ export default function CardEditorView() {
               </FormBlockBody>
             </FormBlock>
             <FormBlock
-              heading="Card Settings"
+              title="Card Settings"
               description="Basic settings for the card."
             >
               <FormBlockBody>

@@ -1,4 +1,4 @@
-import { MongoId } from '@/types/MongoDocument';
+import { MongoId } from './MongoDocument';
 
 export interface IResponseValue {
   key?: string,

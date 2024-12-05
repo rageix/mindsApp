@@ -42,7 +42,7 @@ export default function Input<T>(props: Props<T>) {
       {...internal}
       {...newProps}
       className={cn(
-        'block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 mt-2 placeholder:text-gray-400 bg-gray-900/80',
+        'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6 border-none',
         props.className,
       )}
     />

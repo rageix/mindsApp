@@ -14,7 +14,7 @@ export default function Section({ controller }: IProps) {
 
   return (
     <FormBlock
-      heading={section.heading}
+      title={section.title}
       description={section.description}
     >
       <FormBlockBody>

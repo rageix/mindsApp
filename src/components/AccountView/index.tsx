@@ -19,7 +19,7 @@ export default function AccountView() {
     <Card>
       <CardBody className="space-y-12">
         <FormBlock
-          heading="Avatar"
+          title="Avatar"
           description="Change your avatar."
         >
           <FormBlockBody className="flex flex-col gap-6">
@@ -37,7 +37,7 @@ export default function AccountView() {
           </FormBlockBody>
         </FormBlock>
         <FormBlock
-          heading="Account Details"
+          title="Account Details"
           description="Basic information about you."
         >
           <FormBlockBody>
@@ -45,7 +45,7 @@ export default function AccountView() {
           </FormBlockBody>
         </FormBlock>
         <FormBlock
-          heading="Password"
+          title="Password"
           description="Change your password."
         >
           <FormBlockBody>
@@ -53,7 +53,7 @@ export default function AccountView() {
           </FormBlockBody>
         </FormBlock>
         <FormBlock
-          heading="Sessions"
+          title="Sessions"
           description="These are all your active sessions. You can disable any or all of them."
         >
           <FormBlockBody>

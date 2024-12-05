@@ -30,7 +30,7 @@ export default class FieldController extends FormController<IForm> {
     if (field.isRequired) {
       this.formValidator = () =>
         z.object({
-          values: z.array(z.object({ value: zStringRequiredValidator })).min(1, {message: 'Is required.'}),
+          values: z.array(z.object({ value: zStringRequiredValidator.or(z.number()) })).min(1, {message: 'Is required.'}),
         });
     }
   }
