@@ -20,5 +20,7 @@ export interface IFormResponse extends MongoDocument{
   formName: string,
   sections: IFormResponseSection[],
   ip: string,
+  thumbsUp?: number,
+  thumbsDown?: number,
   createdAt?: Date
 }

@@ -13,7 +13,7 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   updateForm: Dispatch<SetStateAction<T>> = null as unknown as Dispatch<
     SetStateAction<T>
   >;
-  formValidator: ((form: T) => z.ZodType<T>) | undefined;
+  formValidator: ((form: T) => z.ZodType<Partial<T>>) | undefined;
   submit = false;
   onSubmit: ((form: T) => void) | undefined;
   name?: string;

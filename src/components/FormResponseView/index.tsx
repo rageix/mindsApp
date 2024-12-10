@@ -8,12 +8,18 @@ import BackButton from '@/components/BackButton';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 import useFormResponse from '@/hooks/UseFormResponse';
 import FormResponseSection from '@/components/FormResponseView/Section';
+import ResponseRatingsList from '@/components/ResponseRatingsList';
+import ResponseRatingForm from "@/components/ResponseRatingForm";
+import { useState } from "react";
+import ResponseRatingFormController
+  from "@/components/ResponseRatingForm/ResponseRatingFormController";
 
 export default function FormResponseView() {
   const teamId = useTeamId();
-  const { id } = useParams<{ id: string }>();
-  const formResponse = useFormResponse(id, teamId);
+  const { formResponseId } = useParams<{ formResponseId: string }>();
+  const formResponse = useFormResponse(formResponseId, teamId);
   const router = useRouter();
+  const [formController] = useState(new ResponseRatingFormController(formResponseId, teamId));
 
   function back() {
     router.push(`/dashboard/${teamId}/formResponses`);
@@ -63,6 +69,12 @@ export default function FormResponseView() {
           </div>
         </CardBody>
       </Card>
+      <h2 className="text-xl font-bold tracking-tight text-white">
+        Your Rating
+      </h2>
+      <ResponseRatingForm controller={formController} />
+      <h2 className="text-xl font-bold tracking-tight text-white">Ratings</h2>
+      <ResponseRatingsList />
     </>
   );
 }
