@@ -16,7 +16,7 @@ import Container from '@/components/Container';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import Button from '@/components/Buttton';
-import { PlusIcon, SquareUserRound } from 'lucide-react';
+import { PlusIcon, SquareUserRound, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
@@ -81,6 +81,18 @@ function getColumns(
       id: 'createdAt',
       header: () => 'Created At',
       cell: ({ row }) => <FormattedDate value={row.original.createdAt} />,
+      enableSorting: false,
+    },
+    {
+      id: 'thumbsUp',
+      header: () => <ThumbsUp/>,
+      cell: ({ row }) => row.original.thumbsUp || 0,
+      enableSorting: false,
+    },
+    {
+      id: 'thumbsDown',
+      header: () => <ThumbsDown/>,
+      cell: ({ row }) => row.original.thumbsDown || 0,
       enableSorting: false,
     },
     // {

@@ -10,12 +10,13 @@ import { postApiResponseRatings } from '@/requests/api/responseRatings';
 import { toast } from 'react-toastify';
 import Textarea from '@/components/Textarea';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
+import { cn } from '@/util/Cn';
 
 interface IProps {
-  controller: ResponseRatingFormController
+  controller: ResponseRatingFormController;
 }
 
-export default function ResponseRatingForm({controller}: IProps) {
+export default function ResponseRatingForm({ controller }: IProps) {
   // const { formResponseId } = useParams<{ formResponseId: string }>();
   // const [controller] = useState(new ResponseRatingFormController());
 
@@ -23,7 +24,7 @@ export default function ResponseRatingForm({controller}: IProps) {
     const response = await postApiResponseRatings(form);
 
     if (response) {
-      toast.success('Changes saved.');
+      toast.success('Rating saved.');
     }
   });
 
@@ -32,7 +33,7 @@ export default function ResponseRatingForm({controller}: IProps) {
   return (
     <Form onSubmit={controller.onSubmitForm}>
       <div>
-        <FormLabel<IForm> field="comment">Comment</FormLabel>
+        <FormLabel<IForm> field="comment">Comments</FormLabel>
         <Textarea<IForm>
           field="comment"
           errors={state.errors}
@@ -45,31 +46,33 @@ export default function ResponseRatingForm({controller}: IProps) {
           errors={state.errors}
         />
       </div>
-      <div className="flex justify-center">
+      <div className="flex gap-x-3 justify-center">
         <Button
           variant="blue"
           isInline
-          className={form.thumbsUp ? '!bg-blue-400' : ''}
+          className={cn('w-[5.25rem]', form.thumbsUp ? '!bg-blue-500' : null)}
           onClick={() => controller.onChangeThumbs(true)}
         >
-          <ThumbsUp /> Yes
+          <ThumbsUp />
+          <span className="ms-2">Yes</span>
         </Button>
         <Button
           variant="blue"
           isInline
-          className={!form.thumbsUp ? '!bg-blue-400' : ''}
+          className={cn('w-[5.25rem]', !form.thumbsUp ? '!bg-blue-500' : null)}
           onClick={() => controller.onChangeThumbs(false)}
         >
-          <ThumbsDown /> No
+          <ThumbsDown />
+          <span className="ms-2">No</span>
         </Button>
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"
           data-testid="submitButton"
-          className="w-full"
           disabled={!_.isEmpty(state.errors)}
+          isInline
         >
           Save
         </Button>

@@ -3,12 +3,10 @@ import { z } from 'zod';
 import { zStringRequiredValidator } from '@/util/Validators';
 import { ChangeEvent } from 'react';
 import { IResponseRatingRequest } from '@/requests/api/responseRatings/schema';
-import {
-  postApiResponseRatingsFindMine
-} from "@/requests/api/responseRatings/findMine";
-import { isEmpty } from "lodash";
-import { IHasId } from "@/types/HasId";
-import { IResponseRating } from "@/types/ResponseRating";
+import { postApiResponseRatingsFindMine } from '@/requests/api/responseRatings/findMine';
+import { isEmpty } from 'lodash';
+import { IHasId } from '@/types/HasId';
+import { IResponseRating, newIResponseRating } from '@/types/ResponseRating';
 
 export interface IForm extends IResponseRatingRequest {}
 
@@ -44,10 +42,16 @@ export default class ResponseRatingFormController extends FormController<IForm> 
   };
 
   load = async (formResponseId: string, teamId: string) => {
-    const response = await postApiResponseRatingsFindMine({ _id: formResponseId, teamId });
+    const response = await postApiResponseRatingsFindMine({
+      _id: formResponseId,
+      teamId,
+    });
 
-    if(!isEmpty(response)) {
-      this.setForm(response as IHasId<IResponseRating>);
+    if (!isEmpty(response)) {
+      this.setForm({...newIResponseRating(), ...response as IHasId<IResponseRating>});
+      return;
     }
-  }
+
+    this.setForm({ ...newIResponseRating(), formResponseId, teamId });
+  };
 }

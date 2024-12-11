@@ -14,7 +14,7 @@ export default function FormResponseSection({ section }: IProps) {
       title={section.title}
       description={section.description}
     >
-      <FormBlockBody>
+      <FormBlockBody className="space-y-3">
         {section.fields.map((v, i) => (
           <IFormResponseField
             key={i}
