@@ -31,6 +31,9 @@ import WarningAlert from '@/components/Alert/WarningAlert';
 import useSubscription from '@/hooks/UseSubscription';
 import MemberForm from '@/components/Settings/MemberForm';
 import { nanoid } from 'nanoid';
+import FilterPopover from '@/components/FilterPopover';
+import MembersFiltersForm from '@/components/Settings/MembersList/MembersFiltersForm';
+import MembersFiltersController, {IForm} from '@/components/Settings/MembersList/MembersFiltersForm/MembersFiltersController';
 
 function getColumns(
   onClickDeleteOne: (_id: MongoId) => void,
@@ -157,6 +160,11 @@ export default function MembersList() {
   const [id, setId] = useState(nanoid());
   const teamId = useTeamId();
   const subscription = useSubscription();
+  const [filterController] = useState(new MembersFiltersController());
+  const [filter, setFilter] = useState<IForm>(
+    filterController.defaultForm,
+  );
+  const [showFilters, setShowFilters] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -166,8 +174,8 @@ export default function MembersList() {
   const members = useMembers(
     {
       ...pagination,
-      text: '',
       teamId: teamId,
+      ...filter,
     },
     id,
   );
@@ -249,7 +257,7 @@ export default function MembersList() {
   const hasItems = (members.data?.data || []).length > 0;
 
   return (
-    <>
+    <div className="space-y-3">
       {!hasItems && (
         <Container size="md">
           <Card>
@@ -261,7 +269,7 @@ export default function MembersList() {
                     size="48"
                   />
                 </div>
-                <p className="text-center font-bold text-2xl">No members</p>
+                <p className="text-center font-bold text-2xl">No members found</p>
                 {/*<div>*/}
                 {/*  <p className="text-center text-gray-200">*/}
                 {/*    You can invite by using the form above.*/}
@@ -273,12 +281,12 @@ export default function MembersList() {
         </Container>
       )}
       {hasItems && (
-        <div className="max-w-3xl w-full m-auto">
+        <div className="space-y-3">
           {canMakeNew && (
             <Card className="mb-12">
               <CardBody>
                 <div className="flex justify-center">
-                  <MemberForm onUpdated={() => setId(nanoid())} />
+                  <MemberForm onUpdated={() => setId(nanoid())}/>
                 </div>
               </CardBody>
             </Card>
@@ -288,6 +296,25 @@ export default function MembersList() {
               You are at the maximum limit of members for your team.
             </WarningAlert>
           )}
+          <div className="">
+            <FilterPopover
+              show={showFilters}
+              onClickButton={() => {
+                if (showFilters) {
+                  setFilter(filterController.form);
+                }
+                setShowFilters(!showFilters);
+              }}
+            >
+              <MembersFiltersForm
+                controller={filterController}
+                onUpdate={() => {
+                  setFilter(filterController.form);
+                  setShowFilters(false);
+                }}
+              />
+            </FilterPopover>
+          </div>
           <Table<IHasId<IMember>>
             data={members.data?.data || []}
             pagination={pagination}
@@ -304,6 +331,6 @@ export default function MembersList() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

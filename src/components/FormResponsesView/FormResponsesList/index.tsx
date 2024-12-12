@@ -12,11 +12,9 @@ import { IHasId } from '@/types/HasId';
 import FormattedDate from '@/components/FormattedDate';
 import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
-import Container from '@/components/Container';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
-import Button from '@/components/Buttton';
-import { PlusIcon, SquareUserRound, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { MessageSquare, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
@@ -24,10 +22,13 @@ import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
 import { MenuItem } from '@headlessui/react';
 import Link from 'next/link';
-import WarningAlert from '@/components/Alert/WarningAlert';
-import useSubscription from '@/hooks/UseSubscription';
 import useFormResponses from '@/hooks/UseFormResponses';
 import { IFormResponse } from '@/types/FormResponse';
+import FormResponsesFilterForm from '@/components/FormResponsesView/FormResponsesFilterForm';
+import FilterPopover from '@/components/FilterPopover';
+import FormResponsesFilterController, {
+  IForm,
+} from '@/components/FormResponsesView/FormResponsesFilterForm/FormResponsesFilterController';
 
 function getColumns(
   onClickEditOne: (_id: MongoId) => void,
@@ -85,13 +86,13 @@ function getColumns(
     },
     {
       id: 'thumbsUp',
-      header: () => <ThumbsUp/>,
+      header: () => <ThumbsUp />,
       cell: ({ row }) => row.original.thumbsUp || 0,
       enableSorting: false,
     },
     {
       id: 'thumbsDown',
-      header: () => <ThumbsDown/>,
+      header: () => <ThumbsDown />,
       cell: ({ row }) => row.original.thumbsDown || 0,
       enableSorting: false,
     },
@@ -139,7 +140,9 @@ function getColumns(
 export default function FormResponsesList() {
   const router = useRouter();
   const teamId = useTeamId();
-  const subscription = useSubscription();
+  const [filterController] = useState(new FormResponsesFilterController());
+  const [filter, setFilter] = useState<IForm>(filterController.defaultForm);
+  const [showFilters, setShowFilters] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -148,16 +151,9 @@ export default function FormResponsesList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const formResponses = useFormResponses({
     ...pagination,
-    text: '',
     teamId: teamId,
+    ...filter,
   });
-
-  const canMakeNew: boolean = useMemo(() => {
-    return (
-      !subscription.data?.plan ||
-      (formResponses.data?.count || 0) < subscription.data.cards
-    );
-  }, [subscription.data, formResponses.data]);
 
   function onEdit(item: IHasId<IFormResponse>) {
     router.push(`/dashboard/${teamId}/formResponses/${item._id}`);
@@ -183,14 +179,15 @@ export default function FormResponsesList() {
     }
   }
 
-  function onClickNew() {
-    router.push(`/dashboard/${teamId}/cards/new`);
-  }
-
   const columns = useMemo(
     () => getColumns(onClickEditOne, onClickDeleteOne, onClickDeleteSelected),
     [],
   );
+
+  // filterController.useController(async (form) => {
+  //   close();
+  //   setFilter(form);
+  // });
 
   if (!formResponses.initLoad) {
     return (
@@ -206,79 +203,61 @@ export default function FormResponsesList() {
   const hasItems = (formResponses.data?.data || []).length > 0;
 
   return (
-    <>
+    <div className="space-y-3">
+      <FilterPopover
+        show={showFilters}
+        onClickButton={() => {
+          if (showFilters) {
+            setFilter(filterController.form);
+          }
+          setShowFilters(!showFilters);
+        }}
+      >
+        <FormResponsesFilterForm
+          controller={filterController}
+          onUpdate={() => {
+            setFilter(filterController.form);
+            setShowFilters(false);
+          }}
+        />
+      </FilterPopover>
       {!hasItems && (
-        <Container size="md">
-          <Card>
-            <CardBody>
-              <div className="flex flex-col space-y-3">
-                <div className="flex justify-center">
-                  <SquareUserRound
-                    className="text-gray-400"
-                    size="48"
-                  />
-                </div>
-                <div>
-                  <p className="text-center font-bold text-2xl">No Cards</p>
-                  <div className="flex justify-center mt-6">
-                    <Button
-                      variant="blue"
-                      onClick={() => onClickNew()}
-                      isInline
-                    >
-                      <PlusIcon />
-                      <span className="st-1">New Card</span>
-                    </Button>
-                  </div>
-                </div>
+        <Card>
+          <CardBody>
+            <div className="flex flex-col space-y-3">
+              <div className="flex justify-center">
+                <MessageSquare
+                  className="text-gray-400"
+                  size="48"
+                />
               </div>
-            </CardBody>
-          </Card>
-        </Container>
+              <div>
+                <p className="text-center font-bold text-2xl">
+                  No Form Responses Found
+                </p>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       )}
       {hasItems && (
-        <div className="max-w-3xl m-auto">
-          {!canMakeNew && (
-            <WarningAlert>
-              You are at the maximum limit of cards for your team.
-              {/*<a*/}
-              {/*  href="#"*/}
-              {/*  className="font-medium text-yellow-800 underline hover:text-yellow-600"*/}
-              {/*>*/}
-              {/*  Upgrade your account to add more credits.*/}
-              {/*</a>*/}
-            </WarningAlert>
-          )}
-          {canMakeNew && (
-            <div className="flex justify-end">
-              <Button
-                variant="blue"
-                onClick={onClickNew}
-                isInline
-              >
-                <PlusIcon size={16} />
-                <span className="ms-1">New Card</span>
-              </Button>
-            </div>
-          )}
-          <div className="mt-3">
-            <Table<IHasId<IFormResponse>>
-              data={formResponses.data?.data || []}
-              pagination={pagination}
-              setPagination={setPagination}
-              sorting={sorting}
-              setSorting={setSorting}
-              columns={columns}
-              dataFetchFn={() => []}
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-              count={formResponses.data?.count || 0}
-              onClickEdit={(item) => onEdit(item)}
-              hasCheckbox
-            />
-          </div>
+        <div className="mt-3">
+          <Table<IHasId<IFormResponse>>
+            data={formResponses.data?.data || []}
+            pagination={pagination}
+            setPagination={setPagination}
+            sorting={sorting}
+            setSorting={setSorting}
+            columns={columns}
+            dataFetchFn={() => []}
+            rowSelection={rowSelection}
+            setRowSelection={setRowSelection}
+            count={formResponses.data?.count || 0}
+            onClickEdit={(item) => onEdit(item)}
+            hasCheckbox
+          />
         </div>
       )}
-    </>
+    </div>
   );
 }

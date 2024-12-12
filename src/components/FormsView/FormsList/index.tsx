@@ -12,7 +12,6 @@ import { IHasId } from '@/types/HasId';
 import FormattedDate from '@/components/FormattedDate';
 import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
-import Container from '@/components/Container';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import Button from '@/components/Buttton';
@@ -25,7 +24,12 @@ import TableOptionsMenu from '@/components/TableOptionsMenu';
 import { MenuItem } from '@headlessui/react';
 import { IForm } from '@/types/Form';
 import useForms from '@/hooks/UseForms';
-import Link from "next/link";
+import Link from 'next/link';
+import FilterPopover from '@/components/FilterPopover';
+import FormFiltersController, {
+  IForm as IControllerForm,
+} from '@/components/FormsView/FormFiltersForm/FormFiltersController';
+import FormFiltersForm from '@/components/FormsView/FormFiltersForm';
 
 function getColumns(
   onClickEditOne: (_id: MongoId) => void,
@@ -119,6 +123,11 @@ function getColumns(
 export default function FormsList() {
   const router = useRouter();
   const teamId = useTeamId();
+  const [filterController] = useState(new FormFiltersController());
+  const [filter, setFilter] = useState<IControllerForm>(
+    filterController.defaultForm,
+  );
+  const [showFilters, setShowFilters] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -127,8 +136,8 @@ export default function FormsList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const forms = useForms({
     ...pagination,
-    text: '',
     teamId: teamId,
+    ...filter,
   });
 
   function onEdit(item: IHasId<IForm>) {
@@ -178,49 +187,62 @@ export default function FormsList() {
   const hasItems = (forms.data?.data || []).length > 0;
 
   return (
-    <>
+    <div className="space-y-3">
+      <div className="flex justify-between">
+        <FilterPopover
+          show={showFilters}
+          onClickButton={() => {
+            if (showFilters) {
+              setFilter(filterController.form);
+            }
+            setShowFilters(!showFilters);
+          }}
+        >
+          <FormFiltersForm
+            controller={filterController}
+            onUpdate={() => {
+              setFilter(filterController.form);
+              setShowFilters(false);
+            }}
+          />
+        </FilterPopover>
+        <Button
+          variant="blue"
+          onClick={onClickNew}
+          isInline
+        >
+          <PlusIcon size={16} />
+          <span className="ms-1">New Form</span>
+        </Button>
+      </div>
       {!hasItems && (
-        <Container size="md">
-          <Card>
-            <CardBody>
-              <div className="flex flex-col space-y-3">
-                <div className="flex justify-center">
-                  <FileIcon
-                    className="text-gray-400"
-                    size="48"
-                  />
-                </div>
-                <div>
-                  <p className="text-center font-bold text-2xl">
-                    No Forms
-                  </p>
-                  <div className="flex justify-center mt-6">
-                    <Button
-                      variant="blue"
-                      onClick={() => onClickNew()}
-                      isInline
-                    >
-                      <PlusIcon className="me-1" /> New Form
-                    </Button>
-                  </div>
-                </div>
+        <Card>
+          <CardBody>
+            <div className="flex flex-col space-y-3">
+              <div className="flex justify-center">
+                <FileIcon
+                  className="text-gray-400"
+                  size="48"
+                />
               </div>
-            </CardBody>
-          </Card>
-        </Container>
+              <div>
+                <p className="text-center font-bold text-2xl">No Forms Found</p>
+                {/*<div className="flex justify-center mt-6">*/}
+                {/*  <Button*/}
+                {/*    variant="blue"*/}
+                {/*    onClick={() => onClickNew()}*/}
+                {/*    isInline*/}
+                {/*  >*/}
+                {/*    <PlusIcon className="me-1" /> New Form*/}
+                {/*  </Button>*/}
+                {/*</div>*/}
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       )}
       {hasItems && (
         <div className="max-w-3xl m-auto">
-          <div className="flex justify-end">
-            <Button
-              variant="blue"
-              onClick={onClickNew}
-              isInline
-            >
-              <PlusIcon size={16} />
-              <span className="ms-1">New Profile</span>
-            </Button>
-          </div>
           <div className="mt-3">
             <Table<IHasId<IForm>>
               data={forms.data?.data || []}
@@ -239,6 +261,6 @@ export default function FormsList() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

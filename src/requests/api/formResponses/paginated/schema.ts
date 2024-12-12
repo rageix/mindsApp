@@ -3,5 +3,6 @@ import { MongoId } from '@/types/MongoDocument';
 
 export interface IFormResponsesFilter extends IPagination {
   text?: string;
+  formId?: MongoId | null;
   teamId: MongoId;
 }

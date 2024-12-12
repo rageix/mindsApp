@@ -69,7 +69,7 @@ export default function MemberForm({ onUpdated }: IProps) {
       <div className="sm:shrink-0">
         <FormLabel<IForm>
           field="role"
-          className="mb-2 hidden sm:block"
+          className="hidden sm:block"
         >
           &nbsp;
         </FormLabel>

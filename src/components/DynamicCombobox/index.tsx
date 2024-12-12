@@ -29,6 +29,7 @@ interface IProps<T, F> {
   clearable?: boolean;
   onClickClear?: () => void;
   placeholder?: string;
+  immediate?: boolean;
 }
 
 export default function DynamicCombobox<T, F>({
@@ -44,7 +45,8 @@ export default function DynamicCombobox<T, F>({
   comparison,
   clearable,
   onClickClear,
-  placeholder = 'Select a value',
+  placeholder = 'Select a value...',
+  immediate
 }: IProps<T, F>) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -69,13 +71,14 @@ export default function DynamicCombobox<T, F>({
       value={value || null}
       onChange={onChange}
       disabled={disabled}
+      immediate={immediate}
     >
       <div
         ref={ref}
         className="relative mt-2"
       >
         <ComboboxInput<ISelectOption<T>>
-          className="w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 placeholder:text-gray-400 bg-gray-900/80"
+          className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 placeholder:text-gray-400 bg-white"
           value={inputValue}
           onChange={onInputChange}
           onBlur={onInputBlur}
@@ -84,7 +87,7 @@ export default function DynamicCombobox<T, F>({
         <div className="absolute inset-y-0 right-0 flex">
           {clearable && (
             <div
-              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-white cursor-pointer"
+              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer"
               onClick={() => (onClickClear ? onClickClear() : undefined)}
             >
               <XIcon
@@ -93,7 +96,7 @@ export default function DynamicCombobox<T, F>({
               />
             </div>
           )}
-          <ComboboxButton className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-white">
+          <ComboboxButton className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300">
             <ChevronDownIcon
               className="h-5 w-5"
               aria-hidden="true"

@@ -66,7 +66,7 @@ export default function SettingsLayout({ children }: Props) {
   return (
     <div>
       <DashboardPageHeader title="Team Settings" />
-      <nav className="mt-6 flex overflow-x-auto border-b-2 border-blue-600 py-4 px-3 bg-gray-500/10">
+      <nav className="mt-6 flex overflow-x-auto border-b-2 border-blue-600 py-4 px-3 bg-gray-800">
         <ul
           role="list"
           className="flex min-w-full flex-none gap-x-6 text-sm font-semibold leading-6 text-gray-400"

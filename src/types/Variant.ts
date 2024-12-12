@@ -7,6 +7,7 @@ export type TButtonVariant =
   | 'yellow'
   | 'link'
   | 'white'
+  | 'gray'
   | 'text'
   | 'custom';
 
