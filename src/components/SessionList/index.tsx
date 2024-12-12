@@ -33,13 +33,15 @@ export default function SessionList({ items, onClickDelete }: IProps) {
               label="Last Seen"
               value={<FormattedDate value={item.lastSeen} />}
             />
-            <Button
-              variant="red"
-              onClick={() => onClickDelete(String(item._id))}
-              isInline
-            >
-              Log Out
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                variant="red"
+                onClick={() => onClickDelete(String(item._id))}
+                isInline
+              >
+                Log Out
+              </Button>
+            </div>
           </div>
         </li>
       ))}

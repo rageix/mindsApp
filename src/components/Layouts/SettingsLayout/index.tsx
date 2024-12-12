@@ -64,7 +64,7 @@ export default function SettingsLayout({ children }: Props) {
   }
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto">
       <DashboardPageHeader title="Team Settings" />
       <nav className="mt-6 flex overflow-x-auto border-b-2 border-blue-600 py-4 px-3 bg-gray-800">
         <ul

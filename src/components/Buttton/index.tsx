@@ -27,7 +27,7 @@ const colors: Record<TButtonVariant, string> = {
   white: 'bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white',
   gray: 'bg-gray-700 hover:bg-gray-600 active:bg-gray-800 focus-visible:outline-gray-700 text-white',
   link: 'text-blue-400 hover:text-blue-300 focus-visible:outline-blue-500',
-  text: 'text-gray-400 hover:text-gray-300 focus-visible:outline-gray-400 shadow-none',
+  text: 'text-gray-400 hover:text-gray-300 focus-visible:outline-gray-400 !shadow-none',
   custom: '',
 };
 

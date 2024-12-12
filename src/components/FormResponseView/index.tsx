@@ -41,7 +41,7 @@ export default function FormResponseView() {
   }
 
   return (
-    <div className="max-w-2xl w-full mx-auto">
+    <div className="max-w-3xl w-full mx-auto">
       <DashboardPageHeader title="Form Response" />
       <BackButton onClick={back} />
       <div className="space-y-3">

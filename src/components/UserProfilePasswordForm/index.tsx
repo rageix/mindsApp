@@ -45,7 +45,7 @@ export default function UserProfilePasswordForm() {
           errors={state.errors}
         />
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"

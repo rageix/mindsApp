@@ -117,7 +117,7 @@ export default function FieldForm({ controller, onUpdate }: IProps) {
           </div>
         </div>
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"

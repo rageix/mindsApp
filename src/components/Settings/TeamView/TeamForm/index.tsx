@@ -43,7 +43,7 @@ export default function TeamForm({ controller, onUpdated }: IProps) {
           errors={state.errors}
         />
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"

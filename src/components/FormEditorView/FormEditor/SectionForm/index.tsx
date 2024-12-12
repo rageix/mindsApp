@@ -49,7 +49,7 @@ export default function SectionForm({ controller, onUpdate }: IProps) {
           errors={state.errors}
         />
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"

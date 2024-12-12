@@ -16,7 +16,6 @@ import useMembers from '@/hooks/UseMembers';
 import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
 import Card from '@/components/Card';
-import Container from '@/components/Container';
 import CardBody from '@/components/Card/CardBody';
 import { UsersRoundIcon } from 'lucide-react';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
@@ -33,7 +32,9 @@ import MemberForm from '@/components/Settings/MemberForm';
 import { nanoid } from 'nanoid';
 import FilterPopover from '@/components/FilterPopover';
 import MembersFiltersForm from '@/components/Settings/MembersList/MembersFiltersForm';
-import MembersFiltersController, {IForm} from '@/components/Settings/MembersList/MembersFiltersForm/MembersFiltersController';
+import MembersFiltersController, {
+  IForm,
+} from '@/components/Settings/MembersList/MembersFiltersForm/MembersFiltersController';
 
 function getColumns(
   onClickDeleteOne: (_id: MongoId) => void,
@@ -161,9 +162,7 @@ export default function MembersList() {
   const teamId = useTeamId();
   const subscription = useSubscription();
   const [filterController] = useState(new MembersFiltersController());
-  const [filter, setFilter] = useState<IForm>(
-    filterController.defaultForm,
-  );
+  const [filter, setFilter] = useState<IForm>(filterController.defaultForm);
   const [showFilters, setShowFilters] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -258,35 +257,12 @@ export default function MembersList() {
 
   return (
     <div className="space-y-3">
-      {!hasItems && (
-        <Container size="md">
-          <Card>
-            <CardBody>
-              <div className="flex flex-col space-y-3">
-                <div className="flex justify-center">
-                  <UsersRoundIcon
-                    className="text-gray-400"
-                    size="48"
-                  />
-                </div>
-                <p className="text-center font-bold text-2xl">No members found</p>
-                {/*<div>*/}
-                {/*  <p className="text-center text-gray-200">*/}
-                {/*    You can invite by using the form above.*/}
-                {/*  </p>*/}
-                {/*</div>*/}
-              </div>
-            </CardBody>
-          </Card>
-        </Container>
-      )}
-      {hasItems && (
         <div className="space-y-3">
           {canMakeNew && (
             <Card className="mb-12">
               <CardBody>
                 <div className="flex justify-center">
-                  <MemberForm onUpdated={() => setId(nanoid())}/>
+                  <MemberForm onUpdated={() => setId(nanoid())} />
                 </div>
               </CardBody>
             </Card>
@@ -296,7 +272,7 @@ export default function MembersList() {
               You are at the maximum limit of members for your team.
             </WarningAlert>
           )}
-          <div className="">
+          <div>
             <FilterPopover
               show={showFilters}
               onClickButton={() => {
@@ -315,22 +291,45 @@ export default function MembersList() {
               />
             </FilterPopover>
           </div>
-          <Table<IHasId<IMember>>
-            data={members.data?.data || []}
-            pagination={pagination}
-            setPagination={setPagination}
-            sorting={sorting}
-            setSorting={setSorting}
-            columns={columns}
-            dataFetchFn={() => []}
-            rowSelection={rowSelection}
-            setRowSelection={setRowSelection}
-            count={members.data?.count || 0}
-            onClickEdit={() => null}
-            hasCheckbox
-          />
+          {!hasItems && (
+              <Card>
+                <CardBody>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex justify-center">
+                      <UsersRoundIcon
+                        className="text-gray-400"
+                        size="48"
+                      />
+                    </div>
+                    <p className="text-center font-bold text-2xl">
+                      No members found
+                    </p>
+                    {/*<div>*/}
+                    {/*  <p className="text-center text-gray-200">*/}
+                    {/*    You can invite by using the form above.*/}
+                    {/*  </p>*/}
+                    {/*</div>*/}
+                  </div>
+                </CardBody>
+              </Card>
+          )}
+          {hasItems && (
+            <Table<IHasId<IMember>>
+              data={members.data?.data || []}
+              pagination={pagination}
+              setPagination={setPagination}
+              sorting={sorting}
+              setSorting={setSorting}
+              columns={columns}
+              dataFetchFn={() => []}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
+              count={members.data?.count || 0}
+              onClickEdit={() => null}
+              hasCheckbox
+            />
+          )}
         </div>
-      )}
     </div>
   );
 }

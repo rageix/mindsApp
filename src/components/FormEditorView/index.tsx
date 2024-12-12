@@ -75,12 +75,12 @@ export default function FormEditorView() {
   }
 
   return (
-    <>
-      <DashboardPageHeader title="Dynamic Form Editor" />
+    <div className="max-w-3xl mx-auto">
+      <DashboardPageHeader title="Form Editor" />
       <BackButton onClick={onClickCancel} />
       <FormEditor
         controller={controller}
       />
-    </>
+    </div>
   );
 }

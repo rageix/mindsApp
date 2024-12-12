@@ -66,7 +66,7 @@ export default function UserAccountForm() {
           errors={state.errors}
         />
       </div>
-      <div>
+      <div className="flex justify-end">
         <Button
           type="submit"
           variant="blue"
