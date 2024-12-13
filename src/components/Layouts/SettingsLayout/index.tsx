@@ -9,6 +9,9 @@ import subscriptionService from '@/services/SubscriptionService';
 import useCurrentUserMember from '@/hooks/UseCurrentUserMember';
 import Loading from '@/components/Loading';
 import { EMemberRole } from '@/types/Member';
+import useTheme from '@/hooks/UseTheme';
+import { cn } from '@/util/Cn';
+import { ETheme } from '@/common/Theme';
 
 interface Navigation {
   name: string;
@@ -21,6 +24,7 @@ export default function SettingsLayout({ children }: Props) {
   const teamId = useTeamId();
   const path = usePathname();
   const router = useRouter();
+  const theme = useTheme();
   subscriptionService.useController();
   const currentUserMember = useCurrentUserMember();
 
@@ -66,21 +70,36 @@ export default function SettingsLayout({ children }: Props) {
   return (
     <div className="max-w-3xl mx-auto">
       <DashboardPageHeader title="Team Settings" />
-      <nav className="mt-6 flex overflow-x-auto border-b-2 border-blue-600 py-4 px-3 bg-gray-800">
+      <nav
+        className={cn(
+          'mt-6 flex overflow-x-auto border-b-2 border-blue-600 py-4 px-3',
+          theme === ETheme.light ? 'bg-white' : null,
+          theme === ETheme.dark ? 'bg-gray-800' : null,
+        )}
+      >
         <ul
           role="list"
-          className="flex min-w-full flex-none gap-x-6 text-sm font-semibold leading-6 text-gray-400"
+          className={cn(
+            'flex min-w-full flex-none gap-x-6 text-sm font-semibold leading-6',
+            theme === ETheme.light ? 'text-gray-500' : null,
+            theme === ETheme.dark ? 'text-gray-400' : null,
+          )}
         >
           {navigation.map((item) => (
             <li
               key={item.name}
-              className="hover:text-white"
+              className={cn(
+                theme === ETheme.light ? 'hover:text-gray-400' : null,
+                theme === ETheme.dark ? 'hover:text-white' : null,
+              )}
             >
               <Link
                 href={item.href}
                 className={
                   path.indexOf(item.href) === 0
-                    ? 'text-blue-300 hover:text-white'
+                    ? theme === ETheme.light
+                      ? 'text-blue-600 hover:text-blue-500'
+                      : 'text-blue-300 hover:text-white'
                     : ''
                 }
               >

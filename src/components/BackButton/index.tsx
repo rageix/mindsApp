@@ -9,7 +9,7 @@ interface IProps {
 export default function BackButton({ onClick, label = 'Back' }: IProps) {
   return (
     <Button
-      variant="text"
+      variant="link"
       onClick={onClick}
       isInline
     >

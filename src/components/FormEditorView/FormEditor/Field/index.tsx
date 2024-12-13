@@ -16,7 +16,7 @@ export default function Field({ controller, onClickDelete, onClickMoveUp, onClic
   controller.useController();
 
   return (
-    <div className="flex items-center text-white">
+    <div className="flex items-center">
       <div className="grow block text-sm font-medium leading-6">
         {controller.state.field.label}
       </div>

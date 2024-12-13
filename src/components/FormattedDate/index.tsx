@@ -6,6 +6,7 @@ interface Props {
   value: Date | undefined;
   time?: boolean;
   year?: boolean;
+  className?: string;
 }
 
 export default function FormattedDate(props: Props) {
@@ -32,5 +33,5 @@ export default function FormattedDate(props: Props) {
     return null;
   }
 
-  return <span>{output}</span>;
+  return <span className={props.className}>{output}</span>;
 }

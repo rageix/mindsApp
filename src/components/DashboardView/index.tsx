@@ -10,11 +10,15 @@ import CardHeader from '@/components/Card/CardHeader';
 import CardTitle from '@/components/Card/CardTitle';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/Loading';
+import { cn } from "@/util/Cn";
+import { ETheme } from "@/common/Theme";
+import useTheme from "@/hooks/UseTheme";
 
 export default function DashboardView() {
   const [loading, setLoading] = useState(true);
   const teams = useCurrentUserTeams();
   const router = useRouter();
+  const theme = useTheme();
 
   useEffect(() => {
     if (teams.query.isFetched && teams.data) {
@@ -52,7 +56,11 @@ export default function DashboardView() {
                   key={String(item._id)}
                   href={`/dashboard/${item._id}`}
                 >
-                  <li className="relative flex py-5 px-4 w-full border border-gray-500 rounded-xl shadow text-gray-400 hover:bg-gray-800 hover:text-white bg-gray-900 hover:border-white">
+                  <li
+                      className={cn('relative flex py-5 px-4 w-full border rounded-xl shadow',
+                        theme === ETheme.light ? 'text-gray-900 bg-gray-200 hover:bg-gray-100' : null,
+                        theme === ETheme.dark ? 'border-gray-500 text-gray-400 hover:bg-gray-800 hover:text-white bg-gray-900 hover:border-white' : null,
+                      )}>
                     <div className="flex gap-x-4 pr-6 grow">
                       <div className="h-12 w-12 flex-none overflow-hidden rounded-full bg-gray-500 text-black">
                         <UsersRoundIcon className="w-full h-full" />

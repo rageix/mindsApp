@@ -1,4 +1,7 @@
 import { ReactElement } from 'react';
+import useTheme from '@/hooks/UseTheme';
+import { ETheme } from '@/common/Theme';
+import { cn } from '@/util/Cn';
 
 interface IProps {
   label: string;
@@ -6,10 +9,28 @@ interface IProps {
 }
 
 export default function SessionListItem({ label, value }: IProps) {
+  const theme = useTheme();
+
   return (
     <div className="text-sm">
-      <label className="font-medium text-blue-300">{label}</label>
-      <p className="mt-1 text-white">{value}</p>
+      <label
+        className={cn(
+          'font-medium',
+          theme === ETheme.light ? 'text-gray-500' : null,
+          theme === ETheme.dark ? 'text-gray-200' : null,
+        )}
+      >
+        {label}
+      </label>
+      <p
+        className={cn(
+          'mt-1',
+          theme === ETheme.light ? 'text-gray-900' : null,
+          theme === ETheme.dark ? 'text-white' : null,
+        )}
+      >
+        {value}
+      </p>
     </div>
   );
 }

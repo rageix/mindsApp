@@ -6,6 +6,8 @@ import { useState } from 'react';
 import Loading from '@/components/Loading';
 import { MongoId } from '@/types/MongoDocument';
 import { IdsResponse } from '@/types/IdsResponse';
+import useTheme from '@/hooks/UseTheme';
+import { ETheme } from '@/common/Theme';
 
 export async function uploadFiles(
   route: string,
@@ -36,6 +38,8 @@ export default function ImageUploader({
   maxFiles = 1,
   maxFileSize,
 }: Props) {
+  const theme = useTheme();
+
   async function onDrop(acceptedFiles: File[]) {
     if (acceptedFiles.length === 0) {
       alert(
@@ -91,7 +95,9 @@ export default function ImageUploader({
   return (
     <div
       className={cn(
-        'p-10 rounded-lg flex justify-center items-center bg-gray-900 shadow hover:shadow-none hover:bg-gray-700 cursor-pointer',
+        'p-10 rounded-lg flex justify-center items-center cursor-pointer',
+        theme === ETheme.light ? 'bg-gray-200 hover:bg-gray-100' : null,
+        theme === ETheme.dark ? 'bg-gray-900 hover:bg-gray-700' : null,
       )}
       {...getRootProps()}
     >
@@ -104,25 +110,42 @@ export default function ImageUploader({
       {!loading && (
         <div className="flex flex-col space-y-6 text-center">
           <div className="flex justify-center items-center">
-            <div className="w-12 h-12 text-gray-400">
+            <div
+              className={cn(
+                'size-12',
+                theme === ETheme.light ? 'text-gray-900' : null,
+                theme === ETheme.dark ? 'text-gray-400' : null,
+              )}
+            >
               <ImageUpIcon className="w-full h-full" />
             </div>
           </div>
           <div>
-            <div className="text-sm leading-6 text-gray-400">
-              <span className="text-white">
-                Drag &apos;n&apos; drop some files here
-              </span>{' '}
-              or click to select files.
+            <div
+              className={cn(
+                'text-sm leading-6',
+                theme === ETheme.light ? 'text-gray-900' : null,
+                theme === ETheme.dark ? 'text-white' : null,
+              )}
+            >
+              <span>Drag &apos;n&apos; drop some files here</span> or click to
+              select files.
             </div>
-            <div className="text-sm leading-6 text-gray-400">
-              PNG, JPG, WEBP, TIFF up to 2MB
-            </div>
-            {maxFiles && (
-              <div className="text-sm leading-6 text-gray-400">
-                Maximum number of files: {maxFiles}
+            <div
+              className={cn(
+                theme === ETheme.light ? 'text-gray-500' : null,
+                theme === ETheme.dark ? 'text-gray-400' : null,
+              )}
+            >
+              <div className="text-sm leading-6">
+                PNG, JPG, WEBP, TIFF up to 2MB
               </div>
-            )}
+              {maxFiles && (
+                <div className="text-sm leading-6">
+                  Maximum number of files: {maxFiles}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

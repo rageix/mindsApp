@@ -12,8 +12,12 @@ import Alert from '@/components/Alert';
 import Button from '@/components/Buttton';
 import Section from '@/components/PublicFormView/PublicFormEditor/Section';
 import { postApiFormsPublic } from "@/requests/api/forms/public";
+import useTheme from "@/hooks/UseTheme";
+import { cn } from "@/util/Cn";
+import { ETheme } from "@/common/Theme";
 
 export default function PublicFormView() {
+  const theme = useTheme();
   const { formId } = useParams<{ formId: string }>();
   const [controller] = useState(new PublicFormEditorController(formId));
   controller.useController(async(formResponse) => {
@@ -44,7 +48,10 @@ export default function PublicFormView() {
   }
 
   return (
-    <div className="min-h-screen h-full flex items-center">
+    <div className={cn('min-h-screen h-full flex items-center',
+      theme === ETheme.light ? 'bg-gray-200 text-gray-900' : null,
+      theme === ETheme.dark ? 'bg-gray-900 text-white' : null,
+      )}>
       <Container size="3xl">
         <Card rounded="2xl">
           <CardBody className="space-y-12">
@@ -61,7 +68,8 @@ export default function PublicFormView() {
               <div className="mt-6 flex flex-col space-y-3">
                 {state.hasErrors && (
                   <Alert variant="red">
-                    The form has errors. Please fix them and try to submit again.
+                    The form has errors. Please fix them and try to submit
+                    again.
                   </Alert>
                 )}
                 <div className="flex items-center justify-end gap-x-6">

@@ -14,12 +14,16 @@ import CardHeader from '@/components/Card/CardHeader';
 import CardTitle from '@/components/Card/CardTitle';
 import MenuItemButton from '@/components/MenuItemButton';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
+import useTheme from '@/hooks/UseTheme';
+import { cn } from '@/util/Cn';
+import { ETheme } from '@/common/Theme';
 
 interface IProps {
   useCurrentSubscription: TUseCurrentSubscription;
 }
 
 export default function Subscription({ useCurrentSubscription }: IProps) {
+  const theme = useTheme();
   const teamId = useTeamId();
   const portal = useSubscriptionPortal(teamId);
 
@@ -35,7 +39,13 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
         <div className="flex justify-between items-center">
           <div>
             <CardTitle>Active Subscription</CardTitle>
-            <p className="mt-1 max-w-2xl text-sm/6 text-gray-400">
+            <p
+              className={cn(
+                'mt-1 max-w-2xl text-sm/6 ',
+                theme === ETheme.light ? 'text-gray-500' : null,
+                theme === ETheme.dark ? 'text-gray-400' : null,
+              )}
+            >
               Details about your subscription.
             </p>
           </div>
@@ -65,7 +75,10 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
           {/*  </p>*/}
           {/*</div>*/}
           <div className="border-t border-white/10">
-            <dl className="divide-y divide-white/10">
+            <dl className={cn('divide-y ',
+              theme === ETheme.light ? 'divide-gray-200' : null,
+              theme === ETheme.dark ? 'divide-white/10' : null,
+              )}>
               <TextBlock title="Started On">
                 <FormattedDate
                   value={subscription.createdAt}

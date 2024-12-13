@@ -3,6 +3,8 @@ import { PropsWithChildren } from 'react';
 import Button from '@/components/Buttton';
 import { Filter } from 'lucide-react';
 import { cn } from '@/util/Cn';
+import { ETheme } from "@/common/Theme";
+import useTheme from "@/hooks/UseTheme";
 
 interface IProps extends PropsWithChildren {
   show: boolean;
@@ -14,6 +16,8 @@ export default function FilterPopover({
   show,
   onClickButton,
 }: IProps) {
+  const theme = useTheme();
+
   return (
     <Popover className="relative">
       <PopoverButton as="div" >
@@ -30,8 +34,10 @@ export default function FilterPopover({
       <PopoverPanel
         anchor="bottom start"
         className={cn(
-          'flex flex-col rounded-md bg-white p-3 shadow-sm border-2 border-gray-900 mt-3',
+          'flex flex-col rounded-md bg-white p-3 shadow-sm  mt-3',
           !show ? 'hidden' : null,
+          theme === ETheme.light ? 'border border-gray-200' : null,
+          theme === ETheme.dark ? 'border-2 border-gray-900' : null,
         )}
         unmount={false}
         static={true}

@@ -26,7 +26,7 @@ export default async function Page() {
     >
       <p className="mt-6 mx-auto max-w-sm">
         <Link href="/">
-          <Button variant="indigo">Go Home</Button>
+          <Button variant="blue">Go Home</Button>
         </Link>
       </p>
     </SuccessView>

@@ -13,6 +13,9 @@ import FieldFormController, {
   IForm,
 } from '@/components/FormEditorView/FormEditor/FieldForm/FieldFormController';
 import FieldOption from '@/components/FormEditorView/FormEditor/FieldForm/FieldOption';
+import useTheme from '@/hooks/UseTheme';
+import { cn } from '@/util/Cn';
+import { ETheme } from '@/common/Theme';
 
 interface IProps {
   controller: FieldFormController;
@@ -20,19 +23,25 @@ interface IProps {
 }
 
 export default function FieldForm({ controller, onUpdate }: IProps) {
+  const theme = useTheme();
   controller.useController(() => {
     onUpdate();
   });
 
   const { form, state } = controller;
 
-  console.log(state.errors);
-
   return (
     <Form onSubmit={controller.onSubmitForm}>
       <div>
         <FormLabel<IForm> field="type">Type</FormLabel>
-        <div className="text-gray-400">{fieldRecord[form.type]}</div>
+        <div
+          className={cn(
+            theme === ETheme.light ? 'text-gray-500' : null,
+            theme === ETheme.dark ? 'text-gray-400' : null,
+          )}
+        >
+          {fieldRecord[form.type]}
+        </div>
       </div>
       <div>
         <FormLabel<IForm> field="label">Label</FormLabel>
@@ -76,7 +85,13 @@ export default function FieldForm({ controller, onUpdate }: IProps) {
       </div>
       <div>
         <FormLabel<IForm> field="selectOptions">Options</FormLabel>
-        <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6 space-y-3">
+        <div
+          className={cn(
+            'overflow-hidden px-4 py-4 shadow rounded-md sm:px-6 space-y-3',
+            theme === ETheme.light ? 'bg-gray-200' : null,
+            theme === ETheme.dark ? 'bg-gray-700' : null,
+          )}
+        >
           {controller.form.selectOptions.length === 0 && (
             <Alert variant="blue">No options found.</Alert>
           )}
@@ -88,7 +103,12 @@ export default function FieldForm({ controller, onUpdate }: IProps) {
               {controller.form.selectOptions.map((v, i) => (
                 <li
                   key={v.key}
-                  className="px-3 py-4 overflow-hidden rounded-md bg-gray-800 shadow"
+                  className={
+                    cn('px-3 py-4 overflow-hidden rounded-md  shadow',
+                      theme === ETheme.light ? 'bg-gray-300' : null,
+                      theme === ETheme.dark ? 'bg-gray-800' : null,
+                    )
+                  }
                 >
                   <FieldOption
                     option={v}

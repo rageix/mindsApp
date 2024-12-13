@@ -22,7 +22,7 @@ export default async function Page() {
     >
       <p className="mt-6 mx-auto max-w-sm">
         <Link href="/login">
-          <Button variant="indigo">Log in</Button>
+          <Button variant="blue">Log in</Button>
         </Link>
       </p>
     </SuccessView>

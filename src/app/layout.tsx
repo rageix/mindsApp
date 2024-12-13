@@ -6,6 +6,7 @@ import { cn } from '@/util/Cn';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProviderWrapper from '@/components/ProviderWrapper';
+import OuterPageWrapper from '@/components/OuterPageWrapper';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html
       lang="en"
-      className="min-h-screen h-full bg-gray-900 text-white dark:[color-scheme:dark]"
+      className="min-h-screen h-full"
     >
       <head>
         <meta charSet="UTF-8" />
@@ -28,13 +29,10 @@ export default function RootLayout({ children }: Props) {
           content="width=device-width, initial-scale=1.0"
         />
       </head>
-      <body
-        className={cn(
-          'min-h-screen bg-intersecting-circles',
-          GeistSans.className,
-        )}
-      >
-        <ProviderWrapper>{children}</ProviderWrapper>
+      <body className={cn('min-h-screen', GeistSans.className)}>
+        <ProviderWrapper>
+          <OuterPageWrapper>{children}</OuterPageWrapper>
+        </ProviderWrapper>
         <ToastContainer />
       </body>
     </html>

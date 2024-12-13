@@ -5,6 +5,9 @@ import {
   DialogTitle,
 } from '@headlessui/react';
 import { PropsWithChildren } from 'react';
+import useTheme from "@/hooks/UseTheme";
+import { cn } from "@/util/Cn";
+import { ETheme } from "@/common/Theme";
 
 interface IProps extends PropsWithChildren {
   open: boolean;
@@ -13,6 +16,8 @@ interface IProps extends PropsWithChildren {
 }
 
 export default function FormDrawer({ open, onClose, title, children }: IProps) {
+  const theme = useTheme();
+
   return (
     <Dialog
       open={open}
@@ -31,10 +36,16 @@ export default function FormDrawer({ open, onClose, title, children }: IProps) {
               transition
               className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
             >
-              <div className="flex h-full flex-col overflow-y-scroll bg-gray-800 py-6 shadow-xl">
+              <div
+                className={
+                  cn('flex h-full flex-col overflow-y-scroll py-6 shadow-xl',
+                    theme === ETheme.light ? 'bg-white text-gray-900' : null,
+                    theme === ETheme.dark ? 'bg-gray-800' : null,)
+                }
+              >
                 <div className="px-4 sm:px-6">
                   <div className="flex items-start justify-between">
-                    <DialogTitle className="text-base font-semibold text-white">
+                    <DialogTitle className="text-base font-semibold">
                       {title}
                     </DialogTitle>
                     {/*<div className="ml-3 flex h-7 items-center">*/}

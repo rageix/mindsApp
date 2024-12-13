@@ -1,6 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { TSizeVariant } from '@/types/Variant';
 import { cn } from '@/util/Cn';
+import useTheme from "@/hooks/UseTheme";
+import { ETheme } from "@/common/Theme";
 
 interface IProps extends PropsWithChildren {
   rounded?: TSizeVariant;
@@ -8,10 +10,14 @@ interface IProps extends PropsWithChildren {
 }
 
 export default function Card({ rounded = 'lg', className, children }: IProps) {
+  const theme = useTheme();
+
   return (
     <div
       className={cn(
-        'divide-y divide-gray-500 overflow-hidden bg-gray-800 shadow',
+        'divide-y overflow-hidden shadow',
+        theme === ETheme.light ? 'divide-gray-200 bg-white' : null,
+        theme === ETheme.dark ? 'divide-gray-500 bg-gray-800' : null,
         rounded === 'md' ? 'rounded-md' : null,
         rounded === 'lg' ? 'rounded-lg' : null,
         rounded === '2xl' ? 'rounded-2xl' : null,

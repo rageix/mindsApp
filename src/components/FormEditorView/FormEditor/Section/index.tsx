@@ -10,6 +10,8 @@ import SectionController
   from "@/components/FormEditorView/FormEditor/Section/SectionController";
 import Field from "@/components/FormEditorView/FormEditor/Field";
 import SectionForm from "@/components/FormEditorView/FormEditor/SectionForm";
+import useTheme from "@/hooks/UseTheme";
+import { ETheme } from "@/common/Theme";
 
 interface IProps {
   onClickMoveUp: () => void;
@@ -24,12 +26,19 @@ export default function Section({
   controller,
   onClickDelete,
 }: IProps) {
+  const theme = useTheme();
   controller.useController();
 
   const { state } = controller;
 
   return (
-    <div className="overflow-hidden bg-gray-700 px-4 py-4 shadow rounded-md sm:px-6">
+    <div
+      className={cn(
+        'overflow-hidden  px-4 py-4 shadow rounded-md sm:rounded-lg sm:px-6',
+        theme === ETheme.light ? 'bg-gray-200 ring-1 shadow ring-black/5' : null,
+        theme === ETheme.dark ? 'bg-gray-700' : null,
+      )}
+    >
       <div className="flex items-center">
         <div className="grow block text-sm font-medium leading-6">
           {state.section.title}
@@ -49,7 +58,12 @@ export default function Section({
           {controller.state.fieldControllers.map((v, i) => (
             <li
               key={v.id}
-              className="px-6 py-4 overflow-hidden rounded-md bg-gray-800 shadow"
+              className={
+                cn('px-6 py-4 overflow-hidden rounded-md shadow',
+                  theme === ETheme.light ? 'bg-gray-300 text-gray-900 ring-1 shadow ring-black/5' : null,
+                  theme === ETheme.dark ? 'bg-gray-800 text-white' : null,
+                )
+              }
             >
               <Field
                 controller={v}

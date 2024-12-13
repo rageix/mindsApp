@@ -14,9 +14,13 @@ import { useState } from 'react';
 import ResponseRatingFormController from '@/components/ResponseRatingForm/ResponseRatingFormController';
 import CardHeader from '@/components/Card/CardHeader';
 import FormattedDate from '@/components/FormattedDate';
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { ThumbsDown, ThumbsUp } from 'lucide-react';
+import { cn } from '@/util/Cn';
+import { ETheme } from '@/common/Theme';
+import useTheme from '@/hooks/UseTheme';
 
 export default function FormResponseView() {
+  const theme = useTheme();
   const teamId = useTeamId();
   const { formResponseId } = useParams<{ formResponseId: string }>();
   const formResponse = useFormResponse(formResponseId, teamId);
@@ -75,16 +79,28 @@ export default function FormResponseView() {
             <div className="mt-3 flex justify-between">
               <div className="flex gap-x-5">
                 <div className="flex gap-x-3">
-                  <ThumbsUp />
+                  <ThumbsUp   className={cn(
+                    theme === ETheme.light ? 'text-gray-500' : null,
+                    theme === ETheme.dark ? 'text-gray-400' : null,
+                  )} />
                   <span>{formResponse.data?.thumbsUp || 0}</span>
                 </div>
                 <div className="flex gap-x-3">
-                  <ThumbsDown />
+                  <ThumbsDown  className={cn(
+                    theme === ETheme.light ? 'text-gray-500' : null,
+                    theme === ETheme.dark ? 'text-gray-400' : null,
+                  )} />
                   <span>{formResponse.data?.thumbsDown || 0}</span>
                 </div>
               </div>
               <div>
-                <FormattedDate value={formResponse.data?.createdAt} />
+                <FormattedDate
+                  className={cn(
+                    theme === ETheme.light ? 'text-gray-500' : null,
+                    theme === ETheme.dark ? 'text-gray-400' : null,
+                  )}
+                  value={formResponse.data?.createdAt}
+                />
               </div>
             </div>
           </CardBody>
@@ -99,9 +115,7 @@ export default function FormResponseView() {
           </CardBody>
         </Card>
         <div className="space-y-3">
-          <h2 className="text-xl font-bold tracking-tight text-white">
-            Ratings
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight">Ratings</h2>
           <ResponseRatingsList />
         </div>
       </div>

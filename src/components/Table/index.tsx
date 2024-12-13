@@ -14,6 +14,8 @@ import TableNavButton from '@/components/Table/TableNavButton';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { cn } from '@/util/Cn';
 import useSize from '@/hooks/UseSize';
+import useTheme from '@/hooks/UseTheme';
+import { ETheme } from '@/common/Theme';
 
 interface Props<T> {
   data: T[];
@@ -33,6 +35,7 @@ interface Props<T> {
 export default function Table<T>(props: Props<T>) {
   const ref = useRef(null);
   const size = useSize(ref);
+  const theme = useTheme();
 
   const table = useReactTable<T>({
     data: props.data,
@@ -64,130 +67,157 @@ export default function Table<T>(props: Props<T>) {
 
   return (
     <div className="overflow-x-auto">
-      <table
-        ref={ref}
-        className="relative min-w-full rounded-t-lg bg-gray-800"
+      <div className={cn(
+             'rounded-lg overflow-hidden shadow-sm',
+             theme === ETheme.light ? 'border border-gray-200' : null,
+             theme === ETheme.dark ? '' : null,
+           )}
       >
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className="border-b-2 border-gray-700"
-            >
-              {headerGroup.headers.map((header, i) => {
-                return (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    scope="col"
-                    className={cn(
-                      'py-3.5 text-left text-sm font-semibold text-gray-400',
-                      props.hasCheckbox && i === 0
-                        ? 'w-10 text-center'
-                        : 'px-3',
-                    )}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? 'flex items-center cursor-pointer select-none'
-                            : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        <span>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                        </span>
-                        {{
-                          asc: (
-                            <span className="ml-1">
-                              <ChevronUpIcon className="h-4 w-4" />
-                            </span>
-                          ),
-                          desc: (
-                            <span className="ml-1">
-                              <ChevronDownIcon className="h-4 w-4" />
-                            </span>
-                          ),
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="">
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="cursor-pointer border-t border-gray-700"
-              onDoubleClick={() =>
-                props.onClickEdit ? props.onClickEdit(row.original) : null
-              }
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="whitespace-nowrap px-3 py-4 text-sm"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {props.pagination && (
-        <nav
-          className="flex gap-x-6 items-center justify-between py-3 px-3 bg-gray-700 rounded-b-lg text-gray-400"
-          aria-label="Pagination"
-          style={{ width: size?.width }}
+        <table
+          ref={ref}
+          className={cn(
+            'relative min-w-full',
+            theme === ETheme.light ? 'bg-white' : null,
+            theme === ETheme.dark ? 'bg-gray-800' : null,
+          )}
         >
-          <div className="hidden shrink-0 sm:block">
-            <p className="text-sm">
-              Showing <span className="font-medium">{countStart}</span>
-              &nbsp;to{' '}
-              <span className="font-medium">
-                {Math.min(countEnd, props?.count || 0)}
-              </span>{' '}
-              of&nbsp;
-              <span className="font-medium">{props.count}</span> results
-            </p>
-          </div>
-          <div className="flex flex-1 gap-x-3 justify-between sm:justify-end">
-            <TableNavButton
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </TableNavButton>
-            <div>
-              <label
-                htmlFor="page"
-                className="sr-only"
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr
+                key={headerGroup.id}
+                className={cn(
+                  'border-b',
+                  theme === ETheme.light ? 'bg-white border-gray-200' : null,
+                  theme === ETheme.dark ? 'border-gray-700' : null,
+                )}
               >
-                Page
-              </label>
-              <PageNumberInput
-                value={props.pagination?.pageIndex || 0}
-                onChange={table.setPageIndex}
-              />
+                {headerGroup.headers.map((header, i) => {
+                  return (
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      scope="col"
+                      className={cn(
+                        'py-3.5 text-left text-sm font-semibold ',
+                        theme === ETheme.light ? 'text-gray-500' : null,
+                        theme === ETheme.dark ? 'text-gray-400' : null,
+                        props.hasCheckbox && i === 0
+                          ? 'w-10 text-center'
+                          : 'px-3',
+                      )}
+                    >
+                      {header.isPlaceholder ? null : (
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? 'flex items-center cursor-pointer select-none'
+                              : '',
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          <span>
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                          </span>
+                          {{
+                            asc: (
+                              <span className="ml-1">
+                                <ChevronUpIcon className="h-4 w-4" />
+                              </span>
+                            ),
+                            desc: (
+                              <span className="ml-1">
+                                <ChevronDownIcon className="h-4 w-4" />
+                              </span>
+                            ),
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
+                      )}
+                    </th>
+                  );
+                })}
+              </tr>
+            ))}
+          </thead>
+          <tbody className="">
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className={cn(
+                  'cursor-pointer border-t ',
+                  theme === ETheme.light ? 'border-gray-200' : null,
+                  theme === ETheme.dark ? 'border-gray-700' : null,
+                )}
+                onDoubleClick={() =>
+                  props.onClickEdit ? props.onClickEdit(row.original) : null
+                }
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className="whitespace-nowrap px-3 py-4 text-sm"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {props.pagination && (
+          <nav
+            className={cn(
+              'flex gap-x-6 items-center justify-between py-3 px-3',
+              theme === ETheme.light
+                ? 'bg-gray-50 text-gray-900 border-t border-gray-200'
+                : null,
+              theme === ETheme.dark ? 'bg-gray-700 text-gray-400' : null,
+            )}
+            aria-label="Pagination"
+            style={{ width: size?.width }}
+          >
+            <div className="hidden shrink-0 sm:block">
+              <p className="text-sm">
+                Showing <span className="font-medium">{countStart}</span>
+                &nbsp;to{' '}
+                <span className="font-medium">
+                  {Math.min(countEnd, props?.count || 0)}
+                </span>{' '}
+                of&nbsp;
+                <span className="font-medium">{props.count}</span> results
+              </p>
             </div>
-            <TableNavButton
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </TableNavButton>
-          </div>
-        </nav>
-      )}
+            <div className="flex flex-1 gap-x-3 justify-between sm:justify-end">
+              <TableNavButton
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </TableNavButton>
+              <div>
+                <label
+                  htmlFor="page"
+                  className="sr-only"
+                >
+                  Page
+                </label>
+                <PageNumberInput
+                  value={props.pagination?.pageIndex || 0}
+                  onChange={table.setPageIndex}
+                />
+              </div>
+              <TableNavButton
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </TableNavButton>
+            </div>
+          </nav>
+        )}
+      </div>
     </div>
   );
 }

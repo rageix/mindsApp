@@ -5,12 +5,16 @@ import { useMemo } from 'react';
 import { EFieldType } from '@/types/Form';
 import DownloadableFile from '@/components/FormResponseView/Field/DownloadableFile';
 import FormattedDate from "@/components/FormattedDate";
+import useTheme from "@/hooks/UseTheme";
+import { cn } from "@/util/Cn";
+import { ETheme } from "@/common/Theme";
 
 interface IProps {
   field: IFormResponseField;
 }
 
 export default function FormResponseField({ field }: IProps) {
+  const theme = useTheme();
   const values = useMemo(() => {
     switch (field.type) {
       case EFieldType.Input:
@@ -36,7 +40,8 @@ export default function FormResponseField({ field }: IProps) {
 
   return (
     <div>
-      <FormLabel className="!text-gray-400">{field.label}</FormLabel>
+      <FormLabel className={cn(theme === ETheme.light ? 'text-gray-500' : null,
+        theme === ETheme.dark ? '!text-gray-400' : null)}>{field.label}</FormLabel>
       <div>{values}</div>
     </div>
   );

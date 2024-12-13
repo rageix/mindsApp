@@ -3,6 +3,9 @@ import Button from '@/components/Buttton';
 import SessionListItem from '@/components/SessionList/SessionListItem';
 import FormattedDate from '@/components/FormattedDate';
 import { MongoId } from '@/types/MongoDocument';
+import useTheme from "@/hooks/UseTheme";
+import { cn } from "@/util/Cn";
+import { ETheme } from "@/common/Theme";
 
 interface IProps {
   items: ISession[];
@@ -10,15 +13,20 @@ interface IProps {
 }
 
 export default function SessionList({ items, onClickDelete }: IProps) {
+  const theme = useTheme();
+
   return (
     <ul
       role="list"
-      className="divide-y divide-gray-700 space-y-6"
+      className="space-y-6"
     >
       {items.map((item) => (
         <li
           key={String(item._id)}
-          className="py-6 rounded bg-gray-700 px-4"
+          className={cn('py-6 rounded px-4',
+            theme === ETheme.light ? 'bg-gray-200' : null,
+            theme === ETheme.dark ? 'bg-gray-700' : null,
+          )}
         >
           <div className="space-y-6">
             <SessionListItem

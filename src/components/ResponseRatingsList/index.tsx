@@ -14,8 +14,12 @@ import MenuItemButton from '@/components/MenuItemButton';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
 import Button from '@/components/Buttton';
 import FormattedDate from '@/components/FormattedDate';
+import { ETheme } from '@/common/Theme';
+import { cn } from '@/util/Cn';
+import useTheme from '@/hooks/UseTheme';
 
 export default function ResponseRatingsList() {
+  const theme = useTheme();
   const teamId = useTeamId();
   const { formResponseId } = useParams<{ formResponseId: string }>();
   const pagination = usePagination(0, 10);
@@ -94,11 +98,18 @@ export default function ResponseRatingsList() {
                           </div>
                           <div className="flex gap-x-1">
                             {v.user?.name && (
-                              <div className="font-semibold text-white">
+                              <div className={'font-semibold'}>
                                 {v.user?.name}
                               </div>
                             )}
-                            <div className="text-gray-200">{v.user?.email}</div>
+                            <div
+                              className={cn(
+                                theme === ETheme.light ? 'text-gray-500' : null,
+                                theme === ETheme.dark ? 'text-gray-200' : null,
+                              )}
+                            >
+                              {v.user?.email}
+                            </div>
                           </div>
                         </div>
                         <div className="shrink-0">
@@ -111,9 +122,7 @@ export default function ResponseRatingsList() {
                           </TableOptionsMenu>
                         </div>
                       </div>
-                      <div>
-                        {v.comment}
-                      </div>
+                      <div>{v.comment}</div>
                       <div className="flex justify-between items-baseline">
                         {v.thumbsUp && (
                           <Button
@@ -135,7 +144,13 @@ export default function ResponseRatingsList() {
                             <span className="ms-2">No</span>
                           </Button>
                         )}
-                        <FormattedDate value={v.updatedAt} />
+                        <FormattedDate
+                          className={cn(
+                            theme === ETheme.light ? 'text-gray-500' : null,
+                            theme === ETheme.dark ? 'text-gray-400' : null,
+                          )}
+                          value={v.updatedAt}
+                        />
                       </div>
                     </div>
                   </div>

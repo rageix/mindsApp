@@ -2,18 +2,27 @@ import { PropsWithChildren } from 'react';
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { cn } from '@/util/Cn';
+import useTheme from "@/hooks/UseTheme";
+import { ETheme } from "@/common/Theme";
 
 interface IProps extends PropsWithChildren {
   className?: string;
 }
 
 export default function TableOptionsMenu({ className, children }: IProps) {
+  const theme = useTheme();
+
   return (
     <Menu
       as="div"
       className="flex justify-end ms-3"
     >
-      <MenuButton className="-m-2.5 block p-2.5 text-gray-400 hover:text-white">
+      <MenuButton
+        className={cn('-m-2.5 block p-2.5 ',
+          theme === ETheme.light ? 'text-gray-500 hover:text-gray-400' : null,
+          theme === ETheme.dark ? 'text-gray-400 hover:text-white' : null,
+          )}
+      >
         <span className="sr-only">Open options</span>
         <EllipsisVerticalIcon
           aria-hidden="true"

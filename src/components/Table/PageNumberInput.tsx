@@ -43,7 +43,7 @@ export default function PageNumberInput(props: Props) {
           <input
             name="page"
             id="page"
-            className="block w-20 rounded-none rounded-l-md border-0 py-1.5  ring-1 ring-inset ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-gray-900/80 text-white"
+            className="block w-20 rounded-none rounded-l-md bg-white text-gray-900 px-3 py-1.5 text-base text-gray-900 ring-1 ring-gray-300 focus:ring-2 focus:ring-inset ring-inset placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6 !border-none"
             type="number"
             value={value}
             onChange={onChange}
