@@ -14,6 +14,7 @@ import subscriptionService from '@/services/SubscriptionService';
 import useTheme from '@/hooks/UseTheme';
 import { cn } from '@/util/Cn';
 import { ETheme } from '@/common/Theme';
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 interface Props extends PropsWithChildren {}
 
@@ -103,6 +104,7 @@ export default function DashboardLayout({ children }: Props) {
           <div className="flex flex-1 gap-x-4 justify-end lg:gap-x-6">
             {/*<SearchBar />*/}
             <div className="flex items-center gap-x-4 lg:gap-x-6">
+              <ThemeSwitcher/>
               <button
                 type="button"
                 className={cn(
