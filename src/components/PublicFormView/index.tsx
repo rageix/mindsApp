@@ -7,27 +7,31 @@ import Loading from '@/components/Loading';
 import { useState } from 'react';
 import PublicFormEditorController from '@/components/PublicFormView/PublicFormEditor/PublicFormEditorController';
 import Form from '@/components/Form';
-import _ from 'lodash';
 import Alert from '@/components/Alert';
 import Button from '@/components/Buttton';
 import Section from '@/components/PublicFormView/PublicFormEditor/Section';
-import { postApiFormsPublic } from "@/requests/api/forms/public";
-import useTheme from "@/hooks/UseTheme";
-import { cn } from "@/util/Cn";
-import { ETheme } from "@/common/Theme";
+import { postApiFormsPublic } from '@/requests/api/forms/public';
+import useTheme from '@/hooks/UseTheme';
+import { cn } from '@/util/Cn';
+import { ETheme } from '@/common/Theme';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default function PublicFormView() {
   const theme = useTheme();
   const { formId } = useParams<{ formId: string }>();
+  const router = useRouter();
   const [controller] = useState(new PublicFormEditorController(formId));
-  controller.useController(async(formResponse) => {
+  controller.useController(async (formResponse) => {
     const response = await postApiFormsPublic(formResponse);
 
-    if(response !== null) {
-      alert('Thanks your response was recorded.');
+    if (response !== null) {
+      if (controller.state.form?.settings?.completionUrl) {
+        window.location.href = controller.state.form?.settings?.completionUrl;
+        return;
+      }
+      router.push('/form/success');
     }
   });
-  const router = useRouter();
 
   if (!controller.state.initLoad) {
     return (
@@ -48,10 +52,13 @@ export default function PublicFormView() {
   }
 
   return (
-    <div className={cn('min-h-screen h-full flex items-center',
-      theme === ETheme.light ? 'bg-gray-200 text-gray-900' : null,
-      theme === ETheme.dark ? 'bg-gray-900 text-white' : null,
-      )}>
+    <div
+      className={cn(
+        'min-h-screen h-full flex items-center',
+        theme === ETheme.light ? 'bg-gray-200 text-gray-900' : null,
+        theme === ETheme.dark ? 'bg-gray-900 text-white' : null,
+      )}
+    >
       <Container size="3xl">
         <Card rounded="2xl">
           <CardBody className="space-y-12">
@@ -88,6 +95,9 @@ export default function PublicFormView() {
           </CardBody>
         </Card>
       </Container>
+      {controller.state.form?.settings?.googleAnalyticsId && (
+        <GoogleAnalytics gaId="G-DQFYW924BM" />
+      )}
     </div>
   );
 }

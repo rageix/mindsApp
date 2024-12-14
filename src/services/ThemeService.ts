@@ -1,9 +1,10 @@
+'use client';
 import { ETheme } from '@/common/Theme';
 import themeStore from "@/stores/ThemeStore";
 
 const NAME = 'theme';
 const DEFAULT =
-  window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  typeof window !== 'undefined' && window?.matchMedia && window?.matchMedia('(prefers-color-scheme: dark)').matches
     ? ETheme.dark
     : ETheme.light;
 
@@ -21,6 +22,10 @@ class ThemeService {
   };
 
   get = (): string => {
+    if(typeof window === 'undefined') {
+      return DEFAULT;
+    }
+
     return (
       sessionStorage.getItem(NAME) || localStorage.getItem(NAME) || DEFAULT
     );

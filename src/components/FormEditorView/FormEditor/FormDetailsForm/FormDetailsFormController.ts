@@ -2,9 +2,9 @@ import FormController from '@/util/FormController';
 import { z } from 'zod';
 import { ChangeEvent } from 'react';
 import { zStringRequiredValidator } from '@/util/Validators';
-import { IFormSettings } from "@/types/Form";
+import { IFormDetails } from "@/types/Form";
 
-export interface IForm extends IFormSettings {}
+export interface IForm extends IFormDetails {}
 
 export function defaultForm(): IForm {
   return {
@@ -19,7 +19,7 @@ const formValidator = () =>
     isActive: z.boolean(),
   }) satisfies z.ZodType<IForm>;
 
-export default class SettingsFormController extends FormController<IForm> {
+export default class FormDetailsFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
   formValidator = formValidator;

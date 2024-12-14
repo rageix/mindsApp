@@ -9,10 +9,11 @@ import Loading from '@/components/Loading';
 import { useRouter } from 'next/navigation';
 import useTeamId from '@/hooks/UseTeamId';
 import { PlusIcon } from 'lucide-react';
-import FormEditorController
-  from "@/components/FormEditorView/FormEditor/FormEditorController";
-import SettingsForm from "@/components/FormEditorView/FormEditor/SettingsForm";
-import Section from "@/components/FormEditorView/FormEditor/Section";
+import FormEditorController from '@/components/FormEditorView/FormEditor/FormEditorController';
+import Section from '@/components/FormEditorView/FormEditor/Section';
+import FormDetailsForm from '@/components/FormEditorView/FormEditor/FormDetailsForm';
+import FormDrawer from '@/components/FormDrawer';
+import FormSettingsForm from '@/components/FormEditorView/FormEditor/FormSettingsForm';
 
 interface IProps {
   controller: FormEditorController;
@@ -58,11 +59,19 @@ export default function FormEditor({ controller }: IProps) {
               description="Basic settings that belong to this dynamic form."
             >
               <FormBlockBody>
-                {controller.state.settingsController && (
-                  <SettingsForm
-                    controller={controller.state.settingsController}
+                {controller.state.detailsController && (
+                  <FormDetailsForm
+                    controller={controller.state.detailsController}
                   />
                 )}
+                <div className="mt-6">
+                  <Button
+                    variant="yellow"
+                    onClick={controller.onClickShowSettings}
+                  >
+                    Advanced Settings
+                  </Button>
+                </div>
               </FormBlockBody>
             </FormBlock>
             <FormBlock
@@ -125,6 +134,16 @@ export default function FormEditor({ controller }: IProps) {
           </div>
         </CardBody>
       </Card>
+      <FormDrawer
+        open={controller.state.showSettings}
+        onClose={() => null}
+        title="Advanced Settings"
+      >
+        <FormSettingsForm
+          controller={controller.state.settingsController}
+          onUpdate={controller.onHideSettings}
+        />
+      </FormDrawer>
     </>
   );
 }

@@ -13,6 +13,7 @@ export function defaultForm(): IForm {
     key: nanoid(),
     type: EFieldType.Input,
     label: '',
+    description: '',
     isRequired: true,
     selectOptions: [],
     placeholder: '',
@@ -32,6 +33,10 @@ export default class FieldFormController extends FormController<IForm> {
 
   onChangeLabel = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     this.onChangeForm({ label: e.target.value });
+  };
+
+  onChangeDescription = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    this.onChangeForm({ description: e.target.value });
   };
 
   onChangeIsRequired = () => {

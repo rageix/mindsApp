@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "2.2.0",
+    "@next/third-parties": "^15.1.0",
     "@react-hook/resize-observer": "2.0.2",
     "@stripe/react-stripe-js": "2.8.1",
     "@stripe/stripe-js": "4.9.0",

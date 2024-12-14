@@ -2,15 +2,15 @@
 import FormLabel from '@/components/FormLabel';
 import Input from '@/components/Input';
 import FormErrors from '@/components/FormErrors';
-import SettingsFormController, { IForm } from './SettingsFormController';
+import FormDetailsFormController, { IForm } from './FormDetailsFormController';
 import Checkbox from '@/components/Checkbox';
 import Form from '@/components/Form';
 
 interface IProps {
-  controller: SettingsFormController;
+  controller: FormDetailsFormController;
 }
 
-export default function SettingsForm({ controller }: IProps) {
+export default function FormDetailsForm({ controller }: IProps) {
   controller.useController();
 
   const { form, state } = controller;

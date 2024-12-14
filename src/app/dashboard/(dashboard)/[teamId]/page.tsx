@@ -1,8 +1,6 @@
 'use client';
-import { redirect } from 'next/navigation';
-import useTeamId from '@/hooks/UseTeamId';
+import DashboardIdView from '@/components/DashboardIdView';
 
 export default function Page() {
-  const teamId = useTeamId();
-  redirect(`/dashboard/${teamId}/forms`);
+  return <DashboardIdView />;
 }

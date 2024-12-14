@@ -16,6 +16,7 @@ import FieldOption from '@/components/FormEditorView/FormEditor/FieldForm/FieldO
 import useTheme from '@/hooks/UseTheme';
 import { cn } from '@/util/Cn';
 import { ETheme } from '@/common/Theme';
+import Textarea from "@/components/Textarea";
 
 interface IProps {
   controller: FieldFormController;
@@ -53,6 +54,19 @@ export default function FieldForm({ controller, onUpdate }: IProps) {
         />
         <FormErrors<IForm>
           field="label"
+          errors={state.errors}
+        />
+      </div>
+      <div>
+        <FormLabel<IForm> field="description">Description</FormLabel>
+        <Textarea<IForm>
+          field="description"
+          errors={state.errors}
+          value={form.description}
+          onChange={controller.onChangeDescription}
+        />
+        <FormErrors<IForm>
+          field="description"
           errors={state.errors}
         />
       </div>

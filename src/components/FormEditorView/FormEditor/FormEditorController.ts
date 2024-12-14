@@ -1,19 +1,21 @@
 import BasicController from '@/util/BasicController';
 import { nanoid } from 'nanoid';
 import { MongoId } from '@/types/MongoDocument';
-import { IForm, newIForm } from '@/types/Form';
+import { IForm, IFormSettings, newIForm, newIFormSettings } from '@/types/Form';
 import { postApiFormsFindOne } from '@/requests/api/forms/findOne';
-import SettingsFormController
-  from "@/components/FormEditorView/FormEditor/SettingsForm/SettingsFormController";
-import SectionController
-  from "@/components/FormEditorView/FormEditor/Section/SectionController";
+import FormDetailsFormController from '@/components/FormEditorView/FormEditor/FormDetailsForm/FormDetailsFormController';
+import SectionController from '@/components/FormEditorView/FormEditor/Section/SectionController';
+import FormSettingsFormController from '@/components/FormEditorView/FormEditor/FormSettingsForm/FormSettingsFormController';
 
 interface IState {
   id: string;
   _id?: MongoId;
   hasErrors: boolean;
   initLoad: boolean;
-  settingsController: SettingsFormController;
+  showSettings: boolean;
+  settings: IFormSettings;
+  detailsController: FormDetailsFormController;
+  settingsController: FormSettingsFormController;
   sectionControllers: SectionController[];
   sectionController: SectionController | null;
 }
@@ -23,7 +25,10 @@ export function newDefaultState(): IState {
     id: nanoid(),
     hasErrors: false,
     initLoad: false,
-    settingsController: new SettingsFormController(),
+    showSettings: false,
+    settings: newIFormSettings(),
+    detailsController: new FormDetailsFormController(),
+    settingsController: new FormSettingsFormController(),
     sectionControllers: [],
     sectionController: null,
   };
@@ -38,6 +43,19 @@ export default class FormEditorController extends BasicController<IState> {
     this.loadId(_id, teamId);
     // this.reset();
   }
+
+  onClickShowSettings = () => {
+    this.state.settingsController.defaultForm = { ...this.state.settings };
+    this.setState({ showSettings: true });
+  };
+
+  onHideSettings = () => {
+    this.state.settingsController.defaultForm = this.state.settings;
+    this.setState({
+      showSettings: false,
+      settings: { ...this.state.settingsController.form },
+    });
+  };
 
   useController = (onUpdate: (form: IForm) => void) => {
     this._useController();
@@ -79,9 +97,12 @@ export default class FormEditorController extends BasicController<IState> {
     const state = newDefaultState();
     state._id = arg._id;
 
-    const settingsController = new SettingsFormController();
-    settingsController.setForm(arg);
+    const detailsController = new FormDetailsFormController();
+    detailsController.setForm(arg);
+    state.detailsController = detailsController;
 
+    const settingsController = new FormSettingsFormController();
+    settingsController.setForm({ ...newIFormSettings(), ...arg.settings });
     state.settingsController = settingsController;
 
     state.sectionControllers = (arg.sections || []).map((section) => {
@@ -100,7 +121,7 @@ export default class FormEditorController extends BasicController<IState> {
 
     let hasErrors = false;
 
-    if (!state.settingsController.onValidateForm()) {
+    if (!state.detailsController.onValidateForm()) {
       hasErrors = true;
     }
 
@@ -124,7 +145,7 @@ export default class FormEditorController extends BasicController<IState> {
   value = (): IForm => {
     return {
       _id: this.state._id,
-      ...this.state.settingsController.form,
+      ...this.state.detailsController.form,
       teamId: '',
       sections: this.state.sectionControllers.map((v) => v.getValue()),
     };

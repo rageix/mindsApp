@@ -35,6 +35,7 @@ export default function FormDrawer({ open, onClose, title, children }: IProps) {
             <DialogPanel
               transition
               className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
+
             >
               <div
                 className={

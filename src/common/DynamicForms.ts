@@ -16,6 +16,7 @@ export const fieldSchema = z.object({
   key: zStringRequiredValidator,
   type: z.nativeEnum(EFieldType),
   label: zStringRequiredValidator,
+  description: z.string(),
   isRequired: z.boolean(),
   selectOptions: z.array(zFieldOptionSchema),
   minLength: z.number(),

@@ -37,6 +37,7 @@ export interface IField {
   key: string;
   type: EFieldType;
   label: string;
+  description: string;
   isRequired: boolean;
   selectOptions: IFieldOption[];
   minLength?: number;
@@ -49,6 +50,7 @@ export function newIField(type: EFieldType): IField {
     key: nanoid(),
     type: type,
     label: `New ${fieldRecord[type]} Field`,
+    description: '',
     isRequired: true,
     selectOptions: [],
     minLength: 0,
@@ -74,14 +76,29 @@ export function newISection(): ISection {
 }
 
 export interface IFormSettings {
+  completionUrl: string;
+  googleAnalyticsId: string;
+  postbackUrl: string;
+}
+
+export function newIFormSettings(): IFormSettings {
+  return {
+    completionUrl: '',
+    googleAnalyticsId: '',
+    postbackUrl: ''
+  }
+}
+
+export interface IFormDetails {
   isActive: boolean;
   name: string;
 }
 
-export interface IForm extends MongoDocument, IFormSettings {
+export interface IForm extends MongoDocument, IFormDetails {
   teamId: MongoId;
   sections: ISection[];
   updatedAt?: Date;
+  settings?: IFormSettings
 }
 
 export function newIForm(teamId: MongoId): IForm {
@@ -90,5 +107,10 @@ export function newIForm(teamId: MongoId): IForm {
     teamId: teamId,
     name: 'New Form',
     sections: [],
+    settings: {
+      completionUrl: '',
+      googleAnalyticsId: '',
+      postbackUrl: ''
+    }
   };
 }

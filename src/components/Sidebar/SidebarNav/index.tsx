@@ -2,7 +2,7 @@ import SidebarItem from '../SidebarItem';
 import { usePathname } from 'next/navigation';
 import {
   ArrowLeftRightIcon,
-  FileIcon,
+  FileIcon, MessageSquareText,
   SettingsIcon,
 } from 'lucide-react';
 import useTeamId from '@/hooks/UseTeamId';
@@ -25,7 +25,7 @@ export default function SidebarNav() {
       {
         name: 'Form Responses',
         href: `/dashboard/${teamId}/formResponses`,
-        icon: FileIcon,
+        icon: MessageSquareText,
       },
     ],
     [teamId],
