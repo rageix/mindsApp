@@ -9,7 +9,7 @@ export enum EHandle {
   BottomRight,
   Bottom,
   BottomLeft,
-  Left
+  Left,
 }
 
 export interface IState {
@@ -48,7 +48,7 @@ export default class PixiTransformerController extends BasicController<IState> {
   defaultState = newIState();
 
   onMouseEnter = () => {
-    this.setState({ mouseOver: true });
+    this.setState({ mouseOver: true, handle: null });
   };
 
   onMouseOut = () => {
@@ -56,6 +56,10 @@ export default class PixiTransformerController extends BasicController<IState> {
   };
 
   onMouseDown = (event: FederatedPointerEvent) => {
+    if (this.state.mouseDown) {
+      this.setState({ x: this.state.startX, y: this.state.startY });
+      return;
+    }
     this.setState({
       mouseDown: true,
       downX: event.clientX,
@@ -66,25 +70,34 @@ export default class PixiTransformerController extends BasicController<IState> {
   };
 
   onMouseUp = () => {
+    console.log('onMouseUp');
     this.setState({ mouseDown: false });
+  };
+
+  onMouseUpOutside = () => {
+    console.log('onMouseUpOutside');
+
+    if (this.state.mouseDown) {
+      this.setState({ x: this.state.startX, y: this.state.startY });
+    }
   };
 
   onMouseMove = (event: FederatedPointerEvent) => {
     const xTransform = this.state.downX - event.clientX;
     const yTransform = this.state.downY - event.clientY;
 
-    if (
-      xTransform > 10 ||
-      xTransform < 10 ||
-      yTransform > 10 ||
-      yTransform < 10
-    ) {
-      if (event && this.state.mouseOver && this.state.mouseDown) {
-        this.setState({
-          x: this.state.startX - xTransform,
-          y: this.state.startY - yTransform,
-        });
-      }
+    // if (
+    //   xTransform > 10 ||
+    //   xTransform < 10 ||
+    //   yTransform > 10 ||
+    //   yTransform < 10
+    // ) {
+    if (event && this.state.mouseOver && this.state.mouseDown) {
+      this.setState({
+        x: this.state.startX - xTransform,
+        y: this.state.startY - yTransform,
+      });
+      // }
     }
   };
 
@@ -93,7 +106,6 @@ export default class PixiTransformerController extends BasicController<IState> {
   };
 
   onHandleMouseOut = () => {
-    console.log('onHandleMouseOut');
     this.setState({ handle: null });
   };
 }

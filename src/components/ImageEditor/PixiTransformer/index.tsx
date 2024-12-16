@@ -52,6 +52,7 @@ export default function PixiTransformer({ controller, children }: IProps) {
         onmousedown={controller.onMouseDown}
         onmouseup={controller.onMouseUp}
         onmousemove={controller.onMouseMove}
+        onmouseupoutside={controller.onMouseUpOutside}
         // calculateBounds={onCalculateBounds}
         interactive
       >
