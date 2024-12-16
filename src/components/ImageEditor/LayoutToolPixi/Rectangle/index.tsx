@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { Graphics } from '@pixi/react';
 import { Draw } from '@/types/Pixi';
+import { FederatedPointerEvent } from 'pixi.js';
 
 interface IProps {
   x: number;
@@ -8,17 +9,26 @@ interface IProps {
   width: number;
   height: number;
   fill: string;
+  fillAlpha?: number;
   borderColor?: string;
   borderWidth?: number;
   borderRadius?: number;
-  onMouseDown?: () => void;
+  onMouseDown?: (e?: FederatedPointerEvent) => void;
+  onMouseOver?: (e?: FederatedPointerEvent) => void;
+  onMouseOut?: (e?: FederatedPointerEvent) => void;
+  onMouseLeave?: (e?: FederatedPointerEvent) => void;
+  onMouseEnter?: (e?: FederatedPointerEvent) => void;
+  onMouseMove?: (e?: FederatedPointerEvent) => void;
+  onMouseUp?: (e?: FederatedPointerEvent) => void;
+  onMouseUpOutside?: (e?: FederatedPointerEvent) => void;
+  interactive?: boolean;
 }
 
 export default function Rectangle(props: IProps) {
   const draw = useCallback<Draw>(
     (g) => {
       g.clear();
-      g.beginFill(props.fill);
+      g.beginFill(props.fill, props.fillAlpha);
       if (props.borderWidth) {
         g.lineStyle(props.borderWidth, props.borderColor, 1);
       }
@@ -34,5 +44,15 @@ export default function Rectangle(props: IProps) {
     [props],
   );
 
-  return <Graphics draw={draw} />;
+  return <Graphics draw={draw}
+                   onmouseout={props.onMouseOut || null}
+                   onmouseover={props.onMouseOver || null}
+                   onmousedown={props.onMouseDown || null}
+                   onmouseleave={props.onMouseLeave || null}
+                   onmouseenter={props.onMouseEnter || null}
+                   onmousemove={props.onMouseMove || null}
+                   onmouseup={props.onMouseUp || null}
+                   onmouseupoutside={props.onMouseUpOutside || null}
+                   interactive={props.interactive || false}
+  />;
 }

@@ -2,25 +2,30 @@ import ImageEditorController from '@/components/ImageEditor/ImageEditorControlle
 import ControlBar from '@/components/ImageEditor/ControlBar';
 import useSize from '@/hooks/UseSize';
 import { useRef, useState } from 'react';
-import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
-import LayoutTool from '@/components/ImageEditor/LayoutTool';
+// import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
+// import LayoutTool from '@/components/ImageEditor/LayoutTool';
 import { Stage } from '@pixi/react';
-import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
+import PixiTransformerController
+  from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
 
 interface IProps {
   controller: ImageEditorController;
 }
 
 export default function ImageEditor({ controller }: IProps) {
-  const [layoutToolController] = useState(new LayoutToolController());
-  layoutToolController.useController();
+  // const [layoutToolController] = useState(new LayoutToolController());
+  const [transformerController] = useState(new PixiTransformerController());
+  transformerController.useController();
+  // layoutToolController.useController();
   controller.useController();
   const stageRef = useRef(null);
   const size = useSize(stageRef);
 
-  console.log(size);
+  // console.log(size);
 
   const state = controller.state;
 
@@ -35,28 +40,30 @@ export default function ImageEditor({ controller }: IProps) {
             width={size?.width}
             height={size?.height}
             options={{ background: 0xffffff }}
-            onMouseDown={(e) => layoutToolController.onMouseDown(e)}
-            onMouseUp={() => layoutToolController.onMouseUp()}
-            onMouseMove={(e) => layoutToolController.onMouseMove(e)}
+            // onMouseDown={(e) => layoutToolController.onMouseDown(e)}
+            // onMouseUp={() => layoutToolController.onMouseUp()}
+            // onMouseMove={(e) => layoutToolController.onMouseMove(e)}
           >
-            <Rectangle
+            {/*<Rectangle*/}
+            {/*  x={0}*/}
+            {/*  y={0}*/}
+            {/*  width={1000}*/}
+            {/*  height={1000}*/}
+            {/*  fill="0xffffff"*/}
+            {/*/>*/}
+            <PixiTransformer controller={transformerController}>
+            <Ellipse
               x={0}
               y={0}
-              width={1000}
-              height={1000}
-              fill="0xffffff"
-            />
-            <Ellipse
-              x={layoutToolController.state.x }
-              y={layoutToolController.state.y}
-              width={400}
-              height={200}
+              width={100}
+              height={100}
               fill="0x338948"
               borderColor="0x0005FF"
               borderWidth={2}
               // onClick={() => alert('clicked')}
             />
-            <LayoutTool controller={layoutToolController} />
+            </PixiTransformer>
+            {/*<LayoutTool controller={layoutToolController} />*/}
             {/*<Layer*/}
             {/*  onMouseDown={(e) => layoutToolController.onMouseDown(e)}*/}
             {/*  onMouseUp={() => layoutToolController.onMouseUp()}*/}
