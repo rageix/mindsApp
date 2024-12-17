@@ -73,3 +73,15 @@ export interface ILayoutTool {
   width: number;
   height: number;
 }
+
+export enum EHandle {
+  TopLeft,
+  Top,
+  TopRight,
+  Right,
+  BottomRight,
+  Bottom,
+  BottomLeft,
+  Left,
+  ScaleAroundCenter
+}

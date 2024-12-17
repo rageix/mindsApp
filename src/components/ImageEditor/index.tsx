@@ -1,16 +1,15 @@
 import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
 import ControlBar from '@/components/ImageEditor/ControlBar';
 import useSize from '@/hooks/UseSize';
-import { useRef, useState } from 'react';
-// import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
+import { useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
 // import LayoutTool from '@/components/ImageEditor/LayoutTool';
-import { Stage } from '@pixi/react';
-// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import { Stage } from '@pixi/react'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
-import PixiTransformerController
-  from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
+import { EHandle } from '@/types/ImageEditor';
+
 
 interface IProps {
   controller: ImageEditorController;
@@ -19,11 +18,35 @@ interface IProps {
 export default function ImageEditor({ controller }: IProps) {
   // const [layoutToolController] = useState(new LayoutToolController());
   const [transformerController] = useState(new PixiTransformerController());
+  const [mouseDown, setMouseDown] = useState(false);
+  const [handle, setHandle] = useState<EHandle | null>(null);
   transformerController.useController();
   // layoutToolController.useController();
   controller.useController();
-  const stageRef = useRef(null);
-  const size = useSize(stageRef);
+  const stageWrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<Stage>(null);
+  const size = useSize(stageWrapperRef);
+
+  function onMouseDown() {
+    setMouseDown(true);
+  }
+
+  function onMouseUp() {
+    setMouseDown(false);
+    setHandle(null);
+  }
+
+  function onHandleMouseOver(handle: EHandle) {
+    if(!mouseDown) {
+      setHandle(handle);
+    }
+  }
+
+  function onHandleMouseOut() {
+    if (!mouseDown) {
+      setHandle(null);
+    }
+  }
 
   // console.log(size);
 
@@ -33,13 +56,29 @@ export default function ImageEditor({ controller }: IProps) {
     <div className="flex flex-col">
       <div className="flex grow">
         <div
-          ref={stageRef}
+          ref={stageWrapperRef}
           className="w-full h-96 grow"
         >
           <Stage
+            ref={stageRef}
             width={size?.width}
             height={size?.height}
             options={{ background: 0xffffff }}
+            onMouseDown={(e) => {
+              onMouseDown();
+              transformerController.onMouseDown(e);
+            }}
+            onMouseUp={() => {
+              onMouseUp();
+              // transformerController.onMouseUp();
+            }}
+            onMouseMove={(e) => {
+              if (mouseDown) {
+                transformerController.onMouseMove(e, handle);
+              }
+            }}
+            // onMouseMoveUp={transformerController.onMouseUpOutside}
+
             // onMouseDown={(e) => layoutToolController.onMouseDown(e)}
             // onMouseUp={() => layoutToolController.onMouseUp()}
             // onMouseMove={(e) => layoutToolController.onMouseMove(e)}
@@ -51,17 +90,22 @@ export default function ImageEditor({ controller }: IProps) {
             {/*  height={1000}*/}
             {/*  fill="0xffffff"*/}
             {/*/>*/}
-            <PixiTransformer controller={transformerController}>
-            <Ellipse
-              x={0}
-              y={0}
-              width={100}
-              height={100}
-              fill="0x338948"
-              borderColor="0x0005FF"
-              borderWidth={2}
-              // onClick={() => alert('clicked')}
-            />
+            <PixiTransformer
+              controller={transformerController}
+              onHandleMouseOver={onHandleMouseOver}
+              onHandleMouseOut={onHandleMouseOut}
+              currentHandle={handle}
+            >
+              <Ellipse
+                x={transformerController.state.x}
+                y={transformerController.state.y}
+                width={transformerController.state.width}
+                height={transformerController.state.height}
+                fill="0x338948"
+                borderColor="0x0005FF"
+                borderWidth={2}
+                // onClick={() => alert('clicked')}
+              />
             </PixiTransformer>
             {/*<LayoutTool controller={layoutToolController} />*/}
             {/*<Layer*/}

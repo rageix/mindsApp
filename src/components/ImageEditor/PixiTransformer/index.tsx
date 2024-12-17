@@ -1,13 +1,15 @@
 import { Container } from '@pixi/react';
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import PixiTransformerController, {
-  EHandle
-} from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import { Container as TContainer, DisplayObject } from 'pixi.js';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import { EHandle } from '@/types/ImageEditor';
 
 interface IProps extends PropsWithChildren {
   controller: PixiTransformerController;
+  onHandleMouseOver: (handle: EHandle) => void;
+  onHandleMouseOut: () => void;
+  currentHandle: EHandle | null
 }
 
 interface IBoundingBox {
@@ -16,8 +18,10 @@ interface IBoundingBox {
 }
 
 const BORDER_WIDTH = 1;
+const HANDLE_SIZE = 10;
+const HANDLE_TRANSFORM = HANDLE_SIZE / 2;
 
-export default function PixiTransformer({ controller, children }: IProps) {
+export default function PixiTransformer({ controller, onHandleMouseOver, onHandleMouseOut, currentHandle, children }: IProps) {
   const ref = useRef<TContainer<DisplayObject>>(null);
   const [bounds, setBounds] = useState<IBoundingBox>({ width: 0, height: 0 });
 
@@ -33,9 +37,8 @@ export default function PixiTransformer({ controller, children }: IProps) {
   }, [children, ref.current]);
 
   const { state } = controller;
-  const HANDLE_SIZE = 10;
   const WIDTH_TRANSFORM = bounds.width / 2;
-  const HEIGHT_TRANSFORM = HANDLE_SIZE / 2;
+  const HEIGHT_TRANSFORM = bounds.height / 2;
 
   return (
     <>
@@ -44,15 +47,16 @@ export default function PixiTransformer({ controller, children }: IProps) {
         // position={[200, 150]}
         // width={200}
         // height={200}
-        x={state.x}
-        y={state.y}
+        // x={state.x}
+        // y={state.y}
+        // scale={1.5}
         onmouseleave={controller.onMouseOut}
         onmouseenter={controller.onMouseEnter}
         // onmouseout={() => console.log('onmouseout')}
-        onmousedown={controller.onMouseDown}
-        onmouseup={controller.onMouseUp}
-        onmousemove={controller.onMouseMove}
-        onmouseupoutside={controller.onMouseUpOutside}
+        // onmousedown={controller.onMouseDown}
+        // onmouseup={controller.onMouseUp}
+        // onmousemove={controller.onMouseMove}
+        // onmouseupoutside={controller.onMouseUpOutside}
         // calculateBounds={onCalculateBounds}
         interactive
       >
@@ -68,113 +72,123 @@ export default function PixiTransformer({ controller, children }: IProps) {
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
       />
-      {/* Top Left */}
+      {/* Rotation point */}
       <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
+        x={state.x - HANDLE_TRANSFORM}
+        y={state.y - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
+        fill={'0xFF0000'}
+        borderColor="0x000000"
+        borderWidth={BORDER_WIDTH}
+      />
+      {/* Top Left */}
+      <Rectangle
+        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
+        width={HANDLE_SIZE}
+        height={HANDLE_SIZE}
+        fill={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.TopLeft)}
-        onMouseOut={() => controller.onHandleMouseOut()}
+        onMouseOver={() => onHandleMouseOver(EHandle.TopLeft)}
+        onMouseOut={() => onHandleMouseOut()}
       />
       {/* Top */}
       <Rectangle
-        x={state.x}
-        y={state.y - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
+        x={state.x - HANDLE_TRANSFORM}
+        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
+        fill={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.Top)}
-        onMouseOut={() => controller.onHandleMouseOut()}
+        onMouseOver={() => onHandleMouseOver(EHandle.Top)}
+        onMouseOut={() => onHandleMouseOut()}
       />
       {/* Top Right */}
       <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
+        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
+        fill={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.TopRight)}
-        onMouseOut={() => controller.onHandleMouseOut()}
+        onMouseOver={() => onHandleMouseOver(EHandle.TopRight)}
+        onMouseOut={() => onHandleMouseOut()}
       />
       {/* Right */}
       <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y}
+        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
+        fill={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
         onMouseOver={() => {
-         controller.onHandleMouseOver(EHandle.Right);
+         onHandleMouseOver(EHandle.Right);
         }}
         onMouseOut={() => {
-          controller.onHandleMouseOut();
+          onHandleMouseOut();
         }}
-      />
-      {/* Bottom Left */}
-      <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={state.handle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.BottomRight)}
-        onMouseOut={() => controller.onHandleMouseOut()}
-      />
-      {/* Bottom Left */}
-      <Rectangle
-        x={state.x}
-        y={state.y + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={state.handle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.Bottom)}
-        onMouseOut={() => controller.onHandleMouseOut()}
       />
       {/* Bottom Right */}
       <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y + WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
+        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
+        fill={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.BottomLeft)}
-        onMouseOut={() => controller.onHandleMouseOut()}
+        onMouseOver={() => onHandleMouseOver(EHandle.BottomRight)}
+        onMouseOut={() => onHandleMouseOut()}
+      />
+      {/* Bottom */}
+      <Rectangle
+        x={state.x - HANDLE_TRANSFORM}
+        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
+        width={HANDLE_SIZE}
+        height={HANDLE_SIZE}
+        fill={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
+        borderColor="0x000000"
+        borderWidth={BORDER_WIDTH}
+        interactive
+        onMouseOver={() => onHandleMouseOver(EHandle.Bottom)}
+        onMouseOut={() => onHandleMouseOut()}
+      />
+      {/* Bottom Left */}
+      <Rectangle
+        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
+        width={HANDLE_SIZE}
+        height={HANDLE_SIZE}
+        fill={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
+        borderColor="0x000000"
+        borderWidth={BORDER_WIDTH}
+        interactive
+        onMouseOver={() => onHandleMouseOver(EHandle.BottomLeft)}
+        onMouseOut={() => onHandleMouseOut()}
       />
       {/* Left */}
       <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HEIGHT_TRANSFORM}
-        y={state.y - HEIGHT_TRANSFORM}
+        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
+        y={state.y - HANDLE_TRANSFORM}
         width={HANDLE_SIZE}
         height={HANDLE_SIZE}
-        fill={state.handle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
+        fill={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
         borderColor="0x000000"
         borderWidth={BORDER_WIDTH}
         interactive
-        onMouseOver={() => controller.onHandleMouseOver(EHandle.Left)}
-        onMouseOut={() => controller.onHandleMouseOut()}
+        onMouseOver={() => onHandleMouseOver(EHandle.Left)}
+        onMouseOut={() => onHandleMouseOut()}
       />
     </>
   );

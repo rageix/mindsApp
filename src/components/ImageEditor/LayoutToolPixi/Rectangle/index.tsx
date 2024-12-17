@@ -39,6 +39,7 @@ export default function Rectangle(props: IProps) {
         props.height,
         props.borderRadius || 0,
       );
+      // g.scale.set(1.25,2)
       g.endFill();
     },
     [props],

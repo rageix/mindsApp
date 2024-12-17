@@ -24,7 +24,7 @@ export default function Ellipse(props: IProps) {
       if (props.borderWidth) {
         g.lineStyle(props.borderWidth, props.borderColor, 1);
       }
-      g.drawEllipse(props.x, props.y, props.width, props.height);
+      g.drawEllipse(props.x, props.y, props.width / 2, props.height /2);
       g.endFill();
     },
     [props],
