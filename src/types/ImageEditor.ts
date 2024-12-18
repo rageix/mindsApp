@@ -83,5 +83,6 @@ export enum EHandle {
   Bottom,
   BottomLeft,
   Left,
-  ScaleAroundCenter
+  ScaleAroundCenter,
+  Rotate
 }

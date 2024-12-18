@@ -33,8 +33,8 @@ export default function Rectangle(props: IProps) {
         g.lineStyle(props.borderWidth, props.borderColor, 1);
       }
       g.drawRoundedRect(
-        props.x,
-        props.y,
+        props.x - props.width / 2,
+        props.y - props.height / 2,
         props.width,
         props.height,
         props.borderRadius || 0,
@@ -45,15 +45,18 @@ export default function Rectangle(props: IProps) {
     [props],
   );
 
-  return <Graphics draw={draw}
-                   onmouseout={props.onMouseOut || null}
-                   onmouseover={props.onMouseOver || null}
-                   onmousedown={props.onMouseDown || null}
-                   onmouseleave={props.onMouseLeave || null}
-                   onmouseenter={props.onMouseEnter || null}
-                   onmousemove={props.onMouseMove || null}
-                   onmouseup={props.onMouseUp || null}
-                   onmouseupoutside={props.onMouseUpOutside || null}
-                   interactive={props.interactive || false}
-  />;
+  return (
+    <Graphics
+      draw={draw}
+      onmouseout={props.onMouseOut || null}
+      onmouseover={props.onMouseOver || null}
+      onmousedown={props.onMouseDown || null}
+      onmouseleave={props.onMouseLeave || null}
+      onmouseenter={props.onMouseEnter || null}
+      onmousemove={props.onMouseMove || null}
+      onmouseup={props.onMouseUp || null}
+      onmouseupoutside={props.onMouseUpOutside || null}
+      interactive={props.interactive || false}
+    />
+  );
 }

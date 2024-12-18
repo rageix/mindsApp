@@ -9,6 +9,7 @@ import LayerList from '@/components/ImageEditor/LayerList';
 import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
 import { EHandle } from '@/types/ImageEditor';
+// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 
 
 interface IProps {
@@ -97,15 +98,27 @@ export default function ImageEditor({ controller }: IProps) {
               currentHandle={handle}
             >
               <Ellipse
-                x={transformerController.state.x}
-                y={transformerController.state.y}
+                x={0}
+                y={0}
                 width={transformerController.state.width}
                 height={transformerController.state.height}
                 fill="0x338948"
                 borderColor="0x0005FF"
                 borderWidth={2}
                 // onClick={() => alert('clicked')}
+                interactive
               />
+              {/*<Rectangle*/}
+              {/*  x={transformerController.state.x}*/}
+              {/*  y={transformerController.state.y}*/}
+              {/*  width={transformerController.state.width}*/}
+              {/*  height={transformerController.state.height}*/}
+              {/*  fill="0x338948"*/}
+              {/*  borderColor="0x0005FF"*/}
+              {/*  borderWidth={2}*/}
+              {/*  // onClick={() => alert('clicked')}*/}
+              {/*interactive*/}
+              {/*/>*/}
             </PixiTransformer>
             {/*<LayoutTool controller={layoutToolController} />*/}
             {/*<Layer*/}

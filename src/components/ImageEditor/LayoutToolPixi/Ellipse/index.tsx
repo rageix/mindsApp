@@ -14,6 +14,7 @@ interface IProps {
   borderRadius?: number;
   onClick?: () => void;
   onMouseOver?: () => void;
+  interactive?: boolean
 }
 
 export default function Ellipse(props: IProps) {
@@ -33,7 +34,7 @@ export default function Ellipse(props: IProps) {
   return (
     <Graphics
       draw={draw}
-      interactive={Boolean(props.onClick)}
+      interactive={props.interactive || false}
       onclick={props.onClick || null}
     />
   );

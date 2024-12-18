@@ -9,29 +9,44 @@ interface IProps extends PropsWithChildren {
   controller: PixiTransformerController;
   onHandleMouseOver: (handle: EHandle) => void;
   onHandleMouseOut: () => void;
-  currentHandle: EHandle | null
+  currentHandle: EHandle | null;
 }
 
 interface IBoundingBox {
   width: number;
   height: number;
+  x: number;
+  y: number;
 }
 
 const BORDER_WIDTH = 1;
 const HANDLE_SIZE = 10;
-const HANDLE_TRANSFORM = HANDLE_SIZE / 2;
+// const HANDLE_TRANSFORM = HANDLE_SIZE / 2;
 
-export default function PixiTransformer({ controller, onHandleMouseOver, onHandleMouseOut, currentHandle, children }: IProps) {
+export default function PixiTransformer({
+  controller,
+  onHandleMouseOver,
+  onHandleMouseOut,
+  currentHandle,
+  children,
+}: IProps) {
   const ref = useRef<TContainer<DisplayObject>>(null);
-  const [bounds, setBounds] = useState<IBoundingBox>({ width: 0, height: 0 });
+  const [bounds, setBounds] = useState<IBoundingBox>({
+    height: 0,
+    width: 0,
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     if (ref.current) {
-      const localBounds = ref.current.getLocalBounds();
+      const { x, y, width, height } = ref.current.getLocalBounds();
 
       setBounds({
-        width: localBounds.width,
-        height: localBounds.height,
+        x,
+        y,
+        width,
+        height,
       });
     }
   }, [children, ref.current]);
@@ -44,11 +59,11 @@ export default function PixiTransformer({ controller, onHandleMouseOver, onHandl
     <>
       <Container
         ref={ref}
-        // position={[200, 150]}
-        // width={200}
-        // height={200}
-        // x={state.x}
-        // y={state.y}
+        angle={state.angle}
+        // width={bounds.width}
+        // height={bounds.height}
+        x={state.x}
+        y={state.y}
         // scale={1.5}
         onmouseleave={controller.onMouseOut}
         onmouseenter={controller.onMouseEnter}
@@ -62,134 +77,155 @@ export default function PixiTransformer({ controller, onHandleMouseOver, onHandl
       >
         {children}
       </Container>
-      <Rectangle
-        x={state.x - bounds.width / 2}
-        y={state.y - bounds.height / 2}
-        width={bounds.width}
-        height={bounds.height}
-        fill="0xFFFFFF"
-        fillAlpha={0}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-      />
-      {/* Rotation point */}
-      <Rectangle
-        x={state.x - HANDLE_TRANSFORM}
-        y={state.y - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={'0xFF0000'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-      />
-      {/* Top Left */}
-      <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
+      <Container
+        angle={state.angle}
+        // width={bounds.width}
+        // height={bounds.height}
+        x={state.x}
+        y={state.y}
         interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.TopLeft)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Top */}
-      <Rectangle
-        x={state.x - HANDLE_TRANSFORM}
-        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.Top)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Top Right */}
-      <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y - HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.TopRight)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Right */}
-      <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => {
-         onHandleMouseOver(EHandle.Right);
-        }}
-        onMouseOut={() => {
-          onHandleMouseOut();
-        }}
-      />
-      {/* Bottom Right */}
-      <Rectangle
-        x={state.x + WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.BottomRight)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Bottom */}
-      <Rectangle
-        x={state.x - HANDLE_TRANSFORM}
-        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.Bottom)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Bottom Left */}
-      <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y + HEIGHT_TRANSFORM - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.BottomLeft)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
-      {/* Left */}
-      <Rectangle
-        x={state.x - WIDTH_TRANSFORM - HANDLE_TRANSFORM}
-        y={state.y - HANDLE_TRANSFORM}
-        width={HANDLE_SIZE}
-        height={HANDLE_SIZE}
-        fill={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
-        borderColor="0x000000"
-        borderWidth={BORDER_WIDTH}
-        interactive
-        onMouseOver={() => onHandleMouseOver(EHandle.Left)}
-        onMouseOut={() => onHandleMouseOut()}
-      />
+      >
+        <Rectangle
+          x={0}
+          y={0}
+          width={bounds?.width || 0}
+          height={bounds?.height || 0}
+          fill="0xFFFFFF"
+          fillAlpha={0}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+        />
+        {/* Rotation point */}
+        <Rectangle
+          x={0}
+          y={0}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={'0xFF0000'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+        />
+        {/* Top Left */}
+        <Rectangle
+          x={0 - WIDTH_TRANSFORM}
+          y={0 - HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.TopLeft)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        <Rectangle
+          x={0}
+          y={0 - HEIGHT_TRANSFORM - 30}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.Rotate ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.Rotate)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Top */}
+        <Rectangle
+          x={0}
+          y={0 - HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.Top)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Top Right */}
+        <Rectangle
+          x={0 + WIDTH_TRANSFORM}
+          y={0 - HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.TopRight)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Right */}
+        <Rectangle
+          x={0 + WIDTH_TRANSFORM}
+          y={0}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => {
+            onHandleMouseOver(EHandle.Right);
+          }}
+          onMouseOut={() => {
+            onHandleMouseOut();
+          }}
+        />
+        {/* Bottom Right */}
+        <Rectangle
+          x={0 + WIDTH_TRANSFORM}
+          y={0 + HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.BottomRight)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Bottom */}
+        <Rectangle
+          x={0}
+          y={0 + HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.Bottom)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Bottom Left */}
+        <Rectangle
+          x={0 - WIDTH_TRANSFORM}
+          y={0 + HEIGHT_TRANSFORM}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.BottomLeft)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+        {/* Left */}
+        <Rectangle
+          x={0 - WIDTH_TRANSFORM}
+          y={0}
+          width={HANDLE_SIZE}
+          height={HANDLE_SIZE}
+          fill={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
+          borderColor="0x000000"
+          borderWidth={BORDER_WIDTH}
+          interactive
+          onMouseOver={() => onHandleMouseOver(EHandle.Left)}
+          onMouseOut={() => onHandleMouseOut()}
+        />
+      </Container>
     </>
   );
 }

@@ -3,13 +3,17 @@ import { EHandle } from '@/types/ImageEditor';
 import { IVector2 } from '@/types/Vectors';
 import { getCanvasVector } from '@/util/getCanvasVector';
 import { MouseEvent } from 'react';
-import { getMidpoint } from '@/types/getMidpoint';
-import { getDiff } from '@/types/GetDiff';
+// import * as glm from 'gl-matrix';
+import { getMidpoint } from '@/util/GetMidpoint';
+import { findAngle } from '@/util/FindAngle';
+import { rotate } from '@/util/Rotate';
+import { distanceBetween } from '@/util/DistanceBetween';
+import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
 
 export interface IState {
   width: number;
   height: number;
-  rotation: number;
+  angle: number;
   x: number;
   y: number;
   startWidth: number;
@@ -25,9 +29,9 @@ export interface IState {
 
 function newIState(): IState {
   return {
-    width: 100,
+    width: 150,
     height: 100,
-    rotation: 0,
+    angle: 0,
     x: 200,
     y: 150,
     startWidth: 0,
@@ -91,148 +95,251 @@ export default class PixiTransformerController extends BasicController<IState> {
     e: React.MouseEvent<HTMLCanvasElement>,
     handle: EHandle | null,
   ) => {
-    const currentMouseVector: IVector2 = getCanvasVector(e);
+    const mousePoint: IVector2 = getCanvasVector(e);
 
-
-    // return;
+    const transformOrigin: IVector2 = {
+      x: this.state.startX,
+      y: this.state.startY,
+    };
 
     if (handle === EHandle.Right) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePoint);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x + distance,
+        y: anchorPoint.y,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.setState({
         height: this.state.startHeight,
-        width: xDiff,
-        y: this.state.startY,
+        width: distance,
+        y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.Left) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePoint);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x - distance,
+        y: anchorPoint.y,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.setState({
         height: this.state.startHeight,
-        width: xDiff,
-        y: this.state.startY,
+        width: distance,
+        y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.Top) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX,
         y: this.state.startY + this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePoint);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x,
+        y: anchorPoint.y - distance,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.setState({
-        height: yDiff,
+        height: distance,
         width: this.state.startWidth,
         y: midPoint.y,
-        x: this.state.startX,
+        x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.Bottom) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX,
         y: this.state.startY - this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePoint);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x,
+        y: anchorPoint.y + distance,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.setState({
-        height: yDiff,
+        height: distance,
         width: this.state.startWidth,
         y: midPoint.y,
-        x: this.state.startX,
+        x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.TopRight) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY + this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const midPoint = getMidpoint(anchorPoint, mousePoint);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePoint,
+        this.state.angle,
+      );
 
       this.setState({
-        height: yDiff,
-        width: xDiff,
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.BottomRight) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY - this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const midPoint = getMidpoint(anchorPoint, mousePoint);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePoint,
+        this.state.angle,
+      );
 
       this.setState({
-        height: yDiff,
-        width: xDiff,
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.BottomLeft) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY - this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const midPoint = getMidpoint(anchorPoint, mousePoint);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePoint,
+        this.state.angle,
+      );
 
       this.setState({
-        height: yDiff,
-        width: xDiff,
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.TopLeft) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY + this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const midPoint = getMidpoint(anchorPoint, mousePoint);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePoint,
+        this.state.angle,
+      );
 
       this.setState({
-        height: yDiff,
-        width: xDiff,
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
+    } else if (handle === EHandle.Rotate) {
+      const anchorPoint: IVector2 = {
+        x: this.state.startX,
+        y: this.state.startY,
+      };
+
+      const angle = findAngle(anchorPoint, mousePoint);
+
+      this.setState({
+        angle: angle - 270,
+      });
+
+      return;
     }
 
     if (this.state.mouseOver) {
-      const xTransform = currentMouseVector.x - this.state.downX;
-      const yTransform = currentMouseVector.y - this.state.downY;
+      const xTransform = mousePoint.x - this.state.downX;
+      const yTransform = mousePoint.y - this.state.downY;
 
       this.setState({
         x: this.state.startX + xTransform,
