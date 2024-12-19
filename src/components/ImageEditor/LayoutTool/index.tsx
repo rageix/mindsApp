@@ -36,7 +36,7 @@ export default function LayoutTool({ controller }: IProps) {
         y={state.startY + Math.max(0, state.height) / 2}
         width={Math.max(0, state.width) / 2}
         height={Math.max(0, state.height) / 2}
-        fill="0xffffff"
+        fillColor="0xffffff"
         borderColor="0x0005FF"
         borderWidth={2}
       />

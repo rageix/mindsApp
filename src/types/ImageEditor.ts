@@ -3,12 +3,15 @@ import LayerController from '@/components/ImageEditor/Layer/LayerController';
 import TextLayerController from '@/components/ImageEditor/Layer/Text/TextController';
 import ImageLayerController from '@/components/ImageEditor/Layer/Image/ImageController';
 import CircleLayerController from '@/components/ImageEditor/Layer/Circle/CircleController';
+import { ICorners } from '@/types/Corners';
 
 export enum ELayerType {
   Container = 'container',
   Text = 'text',
   Image = 'image',
   Circle = 'circle',
+  Rectangle = 'rectangle',
+  Ellipse = 'ellipse'
 }
 
 export interface ILayer {
@@ -20,13 +23,17 @@ export interface ILayer {
   y: number;
   width: number;
   height: number;
+  angle: number;
   visible: boolean;
-  opacity: number;
-  scaleX: number;
-  scaleY: number;
-  rotation: number;
   locked: boolean;
   dragging: boolean;
+  fillColor: string;
+  fillAlpha?: number;
+  borderColor?: string;
+  borderWidth?: number;
+  borderRadius?: number;
+  borderAlpha?: number;
+  corners?: ICorners;
 }
 
 export interface IImageLayer extends ILayer {

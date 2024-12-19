@@ -52,20 +52,8 @@ export default class BaseLayerController<
     this.onChangeVisible(!this.state.visible);
   };
 
-  onChangeOpacity = (value: number) => {
-    this.setState({ opacity: value } as Partial<T>);
-  };
-
-  onChangeScaleX = (value: number) => {
-    this.setState({ scaleX: value } as Partial<T>);
-  };
-
-  onChangeScaleY = (value: number) => {
-    this.setState({ scaleX: value } as Partial<T>);
-  };
-
   onChangeRotation = (value: number) => {
-    this.setState({ rotation: value } as Partial<T>);
+    this.setState({ angle: value } as Partial<T>);
   };
 
   onChangeLocked = (value: boolean) => {

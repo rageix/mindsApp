@@ -1,16 +1,16 @@
 import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
 import ControlBar from '@/components/ImageEditor/ControlBar';
 import useSize from '@/hooks/UseSize';
-import { useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
+import { useEffect, useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
 // import LayoutTool from '@/components/ImageEditor/LayoutTool';
-import { Stage } from '@pixi/react'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import { Container, Stage } from '@pixi/react'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
-import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
-import { EHandle } from '@/types/ImageEditor';
-// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import { EHandle, ELayerType } from '@/types/ImageEditor';
+import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 
+// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 
 interface IProps {
   controller: ImageEditorController;
@@ -18,14 +18,17 @@ interface IProps {
 
 export default function ImageEditor({ controller }: IProps) {
   // const [layoutToolController] = useState(new LayoutToolController());
-  const [transformerController] = useState(new PixiTransformerController());
+  // const [transformerController] = useState(new PixiTransformerController());
   const [mouseDown, setMouseDown] = useState(false);
+  const [middleMouseDown, setMiddleMouseDown] = useState(false);
   const [handle, setHandle] = useState<EHandle | null>(null);
-  transformerController.useController();
   // layoutToolController.useController();
   controller.useController();
+  const { state, transformController, documentController } = controller;
+
+  transformController.useController();
+  documentController.useController();
   const stageWrapperRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<Stage>(null);
   const size = useSize(stageWrapperRef);
 
   function onMouseDown() {
@@ -38,7 +41,7 @@ export default function ImageEditor({ controller }: IProps) {
   }
 
   function onHandleMouseOver(handle: EHandle) {
-    if(!mouseDown) {
+    if (!mouseDown) {
       setHandle(handle);
     }
   }
@@ -49,65 +52,122 @@ export default function ImageEditor({ controller }: IProps) {
     }
   }
 
-  // console.log(size);
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      console.log('onMouseUp', e.button);
+      if (e.button === 1) {
+        setMiddleMouseDown(false);
+        return;
+      }
+      onMouseUp();
+    }
 
-  const state = controller.state;
+    window.addEventListener('mouseup',fn);
+
+    return () => window.removeEventListener('mouseup', fn);
+  }, []);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex grow">
+    <div className="">
+      <div className="flex">
         <div
           ref={stageWrapperRef}
-          className="w-full h-96 grow"
+          className="grow"
         >
           <Stage
-            ref={stageRef}
-            width={size?.width}
-            height={size?.height}
-            options={{ background: 0xffffff }}
+            // width={size?.width}
+            // height={size?.height}
+            className="max-w-full"
+            options={{ background: 0xcbd5e1 }}
             onMouseDown={(e) => {
+              if (e.button === 1) {
+                console.log('middle down');
+                setMiddleMouseDown(true);
+                documentController.onMouseDown(e);
+                return;
+              }
               onMouseDown();
-              transformerController.onMouseDown(e);
+              transformController.onMouseDown(e);
             }}
-            onMouseUp={() => {
-              onMouseUp();
-              // transformerController.onMouseUp();
-            }}
+            // onMouseUp={(e) => {
+            //   if (e.button === 1) {
+            //     setMiddleMouseDown(false);
+            //     return;
+            //   }
+            //   onMouseUp();
+            //
+            //   // transformerController.onMouseUp();
+            // }}
             onMouseMove={(e) => {
+              if (middleMouseDown) {
+                documentController.onMouseMove(e);
+                return;
+              }
               if (mouseDown) {
-                transformerController.onMouseMove(e, handle);
+                transformController.onMouseMove(e, handle);
               }
             }}
+            // onMouseOut={() => {
+            //   setMiddleMouseDown(false);
+            //   setMouseDown(false);
+            // }}
+
             // onMouseMoveUp={transformerController.onMouseUpOutside}
 
             // onMouseDown={(e) => layoutToolController.onMouseDown(e)}
             // onMouseUp={() => layoutToolController.onMouseUp()}
             // onMouseMove={(e) => layoutToolController.onMouseMove(e)}
           >
-            {/*<Rectangle*/}
-            {/*  x={0}*/}
-            {/*  y={0}*/}
-            {/*  width={1000}*/}
-            {/*  height={1000}*/}
-            {/*  fill="0xffffff"*/}
-            {/*/>*/}
-            <PixiTransformer
-              controller={transformerController}
-              onHandleMouseOver={onHandleMouseOver}
-              onHandleMouseOut={onHandleMouseOut}
-              currentHandle={handle}
+            <Container
+              x={documentController.state.x}
+              y={documentController.state.y}
             >
-              <Ellipse
-                x={0}
-                y={0}
-                width={transformerController.state.width}
-                height={transformerController.state.height}
-                fill="0x338948"
-                borderColor="0x0005FF"
-                borderWidth={2}
-                // onClick={() => alert('clicked')}
-                interactive
+              <Rectangle
+                x={documentController.state.width / 2}
+                y={documentController.state.height / 2}
+                width={documentController.state.width}
+                height={documentController.state.height}
+                fill="0xffffff"
               />
+              {state.layers.map((v, i) => {
+                switch (v.state?.type) {
+                  case ELayerType.Ellipse:
+                    return (
+                      <Container
+                        key={v.state.id}
+                        angle={v.state.angle}
+                        // width={bounds.width}
+                        // height={bounds.height}
+                        x={v.state.x}
+                        y={v.state.y}
+                        interactive
+                      >
+                        <Ellipse
+                          key={v.state.id}
+                          x={0}
+                          y={0}
+                          width={v.state.width}
+                          height={v.state.height}
+                          fillColor={v.state.fillColor}
+                          fillAlpha={v.state.fillAlpha}
+                          borderColor={v.state.borderColor}
+                          borderWidth={v.state.borderWidth}
+                          // angle={v.state.angle}
+                          interactive={!v.state.locked}
+                          onClick={() => controller.onClickLayer(i)}
+                        />
+                      </Container>
+                    );
+                }
+              })}
+              {transformController.state?.isVisible && (
+                <PixiTransformer
+                  controller={transformController}
+                  onHandleMouseOver={onHandleMouseOver}
+                  onHandleMouseOut={onHandleMouseOut}
+                  currentHandle={handle}
+                />
+              )}
               {/*<Rectangle*/}
               {/*  x={transformerController.state.x}*/}
               {/*  y={transformerController.state.y}*/}
@@ -119,44 +179,44 @@ export default function ImageEditor({ controller }: IProps) {
               {/*  // onClick={() => alert('clicked')}*/}
               {/*interactive*/}
               {/*/>*/}
-            </PixiTransformer>
-            {/*<LayoutTool controller={layoutToolController} />*/}
-            {/*<Layer*/}
-            {/*  onMouseDown={(e) => layoutToolController.onMouseDown(e)}*/}
-            {/*  onMouseUp={() => layoutToolController.onMouseUp()}*/}
-            {/*  onMouseMove={(e) => layoutToolController.onMouseMove(e)}*/}
-            {/*>*/}
-            {/*  <Rect*/}
-            {/*    x={0}*/}
-            {/*    y={0}*/}
-            {/*    width={1000}*/}
-            {/*    height={1000}*/}
-            {/*    fill="white"*/}
-            {/*  />*/}
-            {/*  <LayoutTool controller={layoutToolController} />*/}
+              {/*<LayoutTool controller={layoutToolController} />*/}
+              {/*<Layer*/}
+              {/*  onMouseDown={(e) => layoutToolController.onMouseDown(e)}*/}
+              {/*  onMouseUp={() => layoutToolController.onMouseUp()}*/}
+              {/*  onMouseMove={(e) => layoutToolController.onMouseMove(e)}*/}
+              {/*>*/}
+              {/*  <Rect*/}
+              {/*    x={0}*/}
+              {/*    y={0}*/}
+              {/*    width={1000}*/}
+              {/*    height={1000}*/}
+              {/*    fill="white"*/}
+              {/*  />*/}
+              {/*  <LayoutTool controller={layoutToolController} />*/}
 
-            {/*{controller.state.layers.map((v) => {*/}
-            {/*  switch (v.defaultState.type) {*/}
-            {/*    case ELayerType.Circle:*/}
-            {/*      return (*/}
-            {/*        <CircleElement controller={v as CircleLayerController} />*/}
-            {/*      );*/}
-            {/*  }*/}
-            {/*})}*/}
+              {/*{controller.state.layers.map((v) => {*/}
+              {/*  switch (v.defaultState.type) {*/}
+              {/*    case ELayerType.Circle:*/}
+              {/*      return (*/}
+              {/*        <CircleElement controller={v as CircleLayerController} />*/}
+              {/*      );*/}
+              {/*  }*/}
+              {/*})}*/}
 
-            {/*<Circle*/}
-            {/*  x={10}*/}
-            {/*  y={10}*/}
-            {/*  width={10}*/}
-            {/*  height={10}*/}
-            {/*  fill="red"*/}
-            {/*/>*/}
-            {/*<Text*/}
-            {/*  text="Some text on canvas"*/}
-            {/*  fontSize={15}*/}
-            {/*  fill="#000"*/}
-            {/*/>*/}
-            {/*</Layer>*/}
+              {/*<Circle*/}
+              {/*  x={10}*/}
+              {/*  y={10}*/}
+              {/*  width={10}*/}
+              {/*  height={10}*/}
+              {/*  fill="red"*/}
+              {/*/>*/}
+              {/*<Text*/}
+              {/*  text="Some text on canvas"*/}
+              {/*  fontSize={15}*/}
+              {/*  fill="#000"*/}
+              {/*/>*/}
+              {/*</Layer>*/}
+            </Container>
           </Stage>
         </div>
         <div className="shrink-0">

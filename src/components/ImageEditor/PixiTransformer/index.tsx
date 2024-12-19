@@ -1,7 +1,6 @@
 import { Container } from '@pixi/react';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren } from 'react';
 import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
-import { Container as TContainer, DisplayObject } from 'pixi.js';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { EHandle } from '@/types/ImageEditor';
 
@@ -12,12 +11,12 @@ interface IProps extends PropsWithChildren {
   currentHandle: EHandle | null;
 }
 
-interface IBoundingBox {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-}
+// interface IBoundingBox {
+//   width: number;
+//   height: number;
+//   x: number;
+//   y: number;
+// }
 
 const BORDER_WIDTH = 1;
 const HANDLE_SIZE = 10;
@@ -28,72 +27,52 @@ export default function PixiTransformer({
   onHandleMouseOver,
   onHandleMouseOut,
   currentHandle,
-  children,
+  // children,
 }: IProps) {
-  const ref = useRef<TContainer<DisplayObject>>(null);
-  const [bounds, setBounds] = useState<IBoundingBox>({
-    height: 0,
-    width: 0,
-    x: 0,
-    y: 0,
-  });
-
-  useEffect(() => {
-    if (ref.current) {
-      const { x, y, width, height } = ref.current.getLocalBounds();
-
-      setBounds({
-        x,
-        y,
-        width,
-        height,
-      });
-    }
-  }, [children, ref.current]);
+  // const ref = useRef<TContainer<DisplayObject>>(null);
+  // const [bounds, setBounds] = useState<IBoundingBox>({
+  //   height: 0,
+  //   width: 0,
+  //   x: 0,
+  //   y: 0,
+  // });
+  //
+  // useEffect(() => {
+  //   if (ref.current) {
+  //     const { x, y, width, height } = ref.current.getLocalBounds();
+  //
+  //     setBounds({
+  //       x,
+  //       y,
+  //       width,
+  //       height,
+  //     });
+  //   }
+  // }, [children, ref.current]);
 
   const { state } = controller;
-  const WIDTH_TRANSFORM = bounds.width / 2;
-  const HEIGHT_TRANSFORM = bounds.height / 2;
+  const WIDTH_TRANSFORM = state.width / 2;
+  const HEIGHT_TRANSFORM = state.height / 2;
 
   return (
     <>
       <Container
-        ref={ref}
         angle={state.angle}
-        // width={bounds.width}
-        // height={bounds.height}
         x={state.x}
         y={state.y}
-        // scale={1.5}
-        onmouseleave={controller.onMouseOut}
-        onmouseenter={controller.onMouseEnter}
-        // onmouseout={() => console.log('onmouseout')}
-        // onmousedown={controller.onMouseDown}
-        // onmouseup={controller.onMouseUp}
-        // onmousemove={controller.onMouseMove}
-        // onmouseupoutside={controller.onMouseUpOutside}
-        // calculateBounds={onCalculateBounds}
-        interactive
-      >
-        {children}
-      </Container>
-      <Container
-        angle={state.angle}
-        // width={bounds.width}
-        // height={bounds.height}
-        x={state.x}
-        y={state.y}
-        interactive
       >
         <Rectangle
           x={0}
           y={0}
-          width={bounds?.width || 0}
-          height={bounds?.height || 0}
+          width={state?.width || 0}
+          height={state?.height || 0}
           fill="0xFFFFFF"
-          fillAlpha={0}
+          fillAlpha={.00000001}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
+          onMouseEnter={controller.onMouseEnter}
+          onMouseOut={controller.onMouseOut}
+          interactive
         />
         {/* Rotation point */}
         <Rectangle

@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export default function LayerList({ controllers }: IProps) {
-  controllers.forEach((v) => console.log(v));
+  // controllers.forEach((v) => console.log(v));
 
   return (
     <div className="w-64 bg-gray-700 h-full">

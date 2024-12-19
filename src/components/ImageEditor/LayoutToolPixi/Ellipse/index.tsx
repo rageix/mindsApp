@@ -8,10 +8,13 @@ interface IProps {
   y: number;
   width: number;
   height: number;
-  fill: string;
+  fillColor: string;
+  fillAlpha?: number;
   borderColor?: string;
   borderWidth?: number;
   borderRadius?: number;
+  borderAlpha?: number;
+  angle?: number;
   onClick?: () => void;
   onMouseOver?: () => void;
   interactive?: boolean
@@ -21,11 +24,12 @@ export default function Ellipse(props: IProps) {
   const draw = useCallback<Draw>(
     (g) => {
       g.clear();
-      g.beginFill(props.fill);
+      g.beginFill(props.fillColor, props.fillAlpha || 1);
       if (props.borderWidth) {
-        g.lineStyle(props.borderWidth, props.borderColor, 1);
+        g.lineStyle(props.borderWidth, props.borderColor, props.borderAlpha || 1);
       }
       g.drawEllipse(props.x, props.y, props.width / 2, props.height /2);
+      g.angle = props.angle || 0;
       g.endFill();
     },
     [props],

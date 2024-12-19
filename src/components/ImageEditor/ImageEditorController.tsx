@@ -9,40 +9,84 @@ import {
   TLayerControllers,
 } from '@/types/ImageEditor';
 import BaseLayerController from '@/components/ImageEditor/Layer/BaseLayerController';
-import ImageLayerController from '@/components/ImageEditor/Layer/Image/ImageController';
 import TextLayerController from '@/components/ImageEditor/Layer/Text/TextController';
 import { nanoid } from 'nanoid';
 import CircleLayerController from '@/components/ImageEditor/Layer/Circle/CircleController';
+import PixiTransformerController, {
+  IBoundingBox
+} from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import DocumentController from '@/components/ImageEditor/DocumentController';
 
 export interface IState {
   width: number;
   height: number;
   layers: TLayerControllers[];
-  selectedLayers: TLayerControllers[];
+  selectedLayers: number[];
 }
 
 export default class ImageEditorController extends BasicController<IState> {
   layers: TLayerControllers[] = [];
   name: string;
+  transformController: PixiTransformerController;
+  documentController: DocumentController;
 
   constructor(data: IImageEditor) {
     super();
 
     this.name = data.name;
+    this.transformController = new PixiTransformerController(this.onTransformSelection);
+    this.documentController = new DocumentController();
+
+    const layers: ILayer[] = [
+      {
+        id: nanoid(),
+        parentId: null,
+        name: 'Circle 1',
+        type: ELayerType.Ellipse,
+        x: 50,
+        y: 50,
+        width: 100,
+        height: 50,
+        angle: 0,
+        visible: true,
+        locked: false,
+        dragging: false,
+        fillColor: '0x1800FF',
+      },
+      {
+        id: nanoid(),
+        parentId: null,
+        name: 'Circle 2',
+        type: ELayerType.Ellipse,
+        x: 200,
+        y: 100,
+        width: 150,
+        height: 75,
+        angle: 0,
+        visible: true,
+        locked: false,
+        dragging: false,
+        fillColor: '0xFF0000',
+      },
+    ];
 
     this.defaultState = {
       width: data.width,
       height: data.height,
-      layers: data.layers.map((v) => {
-        switch (v.type) {
-          case ELayerType.Image:
-            return new ImageLayerController(v as IImageLayer);
-          case ELayerType.Text:
-            return new TextLayerController(v as ITextLayer);
-          default:
-            return new BaseLayerController(v);
-        }
-      }),
+      // layers: data.layers.map((v) => {
+      //   switch (v.type) {
+      //     case ELayerType.Circle:
+      //       return new CircleLayerController(v as ICircleLayer);
+      //     case ELayerType.Image:
+      //       return new ImageLayerController(v as IImageLayer);
+      //     case ELayerType.Text:
+      //       return new TextLayerController(v as ITextLayer);
+      //     default:
+      //       return new BaseLayerController(v);
+      //   }
+      // }),
+      // layers: data.layers.map((v) => new BaseLayerController(v)),
+      layers: layers.map((v) => new BaseLayerController(v)),
       selectedLayers: [],
     };
   }
@@ -67,12 +111,10 @@ export default class ImageEditorController extends BasicController<IState> {
       width: 0,
       height: 0,
       visible: true,
-      opacity: 100,
-      scaleX: 1,
-      scaleY: 1,
-      rotation: 0,
+      angle: 0,
       locked: false,
       dragging: false,
+      fillColor: '0xFFFFFF',
     };
   };
 
@@ -141,5 +183,58 @@ export default class ImageEditorController extends BasicController<IState> {
     };
 
     return state;
+  };
+
+  onClickCanvas = () => {
+    this.setState({
+      selectedLayers: [],
+    });
+    this.transformController.setState({ isVisible: false });
+  };
+
+  onTransformSelection = (value: IBoundingBox) => {
+    // console.log('onTransformSelection');
+    for(const layerIndex of this.state.selectedLayers) {
+      this.state.layers[layerIndex].setState(value);
+    }
+  }
+
+
+  onClickLayer = (index: number) => {
+    // console.log('onClickLayer', index);
+    // const selectedIndexes = toggleInArray(this.state.selectedLayers, index);
+    const selectedLayers = [index];
+    //
+    // if (selectedIndexes.length === 0) {
+    //   this.state.transformController.setState({
+    //     isVisible: false,
+    //   });
+    //
+    //   this.setState({ selectedLayers: [] });
+    //   return;
+    // }
+    //
+    if (selectedLayers.length === 1) {
+    //   const { state } = this.state.layers[selectedIndexes[0]];
+      const { state } = this.state.layers[selectedLayers[0]];
+      // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
+      this.transformController.setState({
+        x: state.x,
+        y: state.y,
+        width: state.width,
+        height: state.height,
+        angle: state.angle,
+        isVisible: true,
+      });
+
+    }
+
+    this.setState({selectedLayers});
+
+    // const corners: ICorners[] = [];
+    //
+    // for(const selectedIndex of selectedIndexes) {
+    //
+    // }
   };
 }
