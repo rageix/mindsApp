@@ -15,7 +15,7 @@ interface IProps {
   borderRadius?: number;
   borderAlpha?: number;
   angle?: number;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent) => void;
   onMouseOver?: () => void;
   interactive?: boolean
 }

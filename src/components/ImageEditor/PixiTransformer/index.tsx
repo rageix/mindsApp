@@ -3,12 +3,16 @@ import { PropsWithChildren } from 'react';
 import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { EHandle } from '@/types/ImageEditor';
+import {
+  IDocumentControllerState
+} from '@/components/ImageEditor/DocumentController';
 
 interface IProps extends PropsWithChildren {
   controller: PixiTransformerController;
   onHandleMouseOver: (handle: EHandle) => void;
   onHandleMouseOut: () => void;
   currentHandle: EHandle | null;
+  documentState: IDocumentControllerState
 }
 
 // interface IBoundingBox {
@@ -18,8 +22,8 @@ interface IProps extends PropsWithChildren {
 //   y: number;
 // }
 
-const BORDER_WIDTH = 1;
-const HANDLE_SIZE = 10;
+// const BORDER_WIDTH = 1;
+// const HANDLE_SIZE = 10;
 // const HANDLE_TRANSFORM = HANDLE_SIZE / 2;
 
 export default function PixiTransformer({
@@ -27,6 +31,7 @@ export default function PixiTransformer({
   onHandleMouseOver,
   onHandleMouseOut,
   currentHandle,
+                                          documentState
   // children,
 }: IProps) {
   // const ref = useRef<TContainer<DisplayObject>>(null);
@@ -53,6 +58,8 @@ export default function PixiTransformer({
   const { state } = controller;
   const WIDTH_TRANSFORM = state.width / 2;
   const HEIGHT_TRANSFORM = state.height / 2;
+  const BORDER_WIDTH = documentState.ratio;
+  const HANDLE_SIZE = 10 * documentState.ratio;
 
   return (
     <>
@@ -99,7 +106,7 @@ export default function PixiTransformer({
         />
         <Rectangle
           x={0}
-          y={0 - HEIGHT_TRANSFORM - 30}
+          y={0 - HEIGHT_TRANSFORM - HANDLE_SIZE * 3}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
           fill={currentHandle === EHandle.Rotate ? '0x000000' : '0xFFFFFF'}

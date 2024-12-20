@@ -3,12 +3,12 @@ import { EHandle } from '@/types/ImageEditor';
 import { IVector2 } from '@/types/Vectors';
 import { getCanvasVector } from '@/util/GetCanvasVector';
 import { MouseEvent } from 'react';
-// import * as glm from 'gl-matrix';
 import { getMidpoint } from '@/util/GetMidpoint';
 import { findAngle } from '@/util/FindAngle';
 import { rotate } from '@/util/Rotate';
 import { distanceBetween } from '@/util/DistanceBetween';
 import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
+import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
 
 export interface IBoundingBox {
   width: number;
@@ -27,7 +27,7 @@ export interface IState extends IBoundingBox {
   downX: number;
   downY: number;
   handle: EHandle | null;
-  isVisible: boolean
+  isVisible: boolean;
 }
 
 function newIState(): IState {
@@ -59,17 +59,15 @@ export default class PixiTransformerController extends BasicController<IState> {
   }
 
   onMouseEnter = () => {
-    console.log('onMouseEnter');
     this.setState({ mouseOver: true, handle: null });
   };
 
   onMouseOut = () => {
-    console.log('onMouseOut');
-    this.setState({ mouseOver: false});
+    this.setState({ mouseOver: false });
   };
 
   transformUpdate = (arg: Partial<IState>) => {
-    const newState = {...this.state, ...arg};
+    const newState = { ...this.state, ...arg };
     this.onUpdate({
       width: newState.width,
       height: newState.height,
@@ -78,8 +76,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       y: newState.y,
     });
     this.setState(arg);
-
-}
+  };
 
   onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
     // if (this.state.mouseDown) {
@@ -100,10 +97,27 @@ export default class PixiTransformerController extends BasicController<IState> {
   };
 
   onMouseMove = (
-    e: React.MouseEvent<HTMLCanvasElement>,
+    e: MouseEvent<HTMLCanvasElement>,
     handle: EHandle | null,
+    docState: IDocumentState,
   ) => {
     const mousePoint: IVector2 = getCanvasVector(e);
+
+    if (this.state.mouseOver) {
+      const xTransform = (mousePoint.x - this.state.downX) * docState.ratio;
+      const yTransform = (mousePoint.y - this.state.downY) * docState.ratio;
+
+      this.transformUpdate({
+        x: this.state.startX + xTransform,
+        y: this.state.startY + yTransform,
+      });
+      return;
+    }
+
+    const mousePointTranslated: IVector2 = {
+      x: (mousePoint.x - docState.x) * docState.scaleX,
+      y: (mousePoint.y - docState.y) * docState.scaleY,
+    };
 
     const transformOrigin: IVector2 = {
       x: this.state.startX,
@@ -121,7 +135,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePoint);
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x + distance,
@@ -155,7 +169,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePoint);
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x - distance,
@@ -183,7 +197,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePoint);
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
@@ -211,7 +225,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePoint);
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
@@ -240,11 +254,11 @@ export default class PixiTransformerController extends BasicController<IState> {
         this.state.angle,
       );
 
-      const midPoint = getMidpoint(anchorPoint, mousePoint);
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
 
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
-        mousePoint,
+        mousePointTranslated,
         this.state.angle,
       );
 
@@ -267,11 +281,11 @@ export default class PixiTransformerController extends BasicController<IState> {
         this.state.angle,
       );
 
-      const midPoint = getMidpoint(anchorPoint, mousePoint);
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
 
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
-        mousePoint,
+        mousePointTranslated,
         this.state.angle,
       );
 
@@ -294,11 +308,11 @@ export default class PixiTransformerController extends BasicController<IState> {
         this.state.angle,
       );
 
-      const midPoint = getMidpoint(anchorPoint, mousePoint);
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
 
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
-        mousePoint,
+        mousePointTranslated,
         this.state.angle,
       );
 
@@ -321,11 +335,11 @@ export default class PixiTransformerController extends BasicController<IState> {
         this.state.angle,
       );
 
-      const midPoint = getMidpoint(anchorPoint, mousePoint);
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
 
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
-        mousePoint,
+        mousePointTranslated,
         this.state.angle,
       );
 
@@ -342,23 +356,13 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: this.state.startY,
       };
 
-      const angle = findAngle(anchorPoint, mousePoint);
+      const angle = findAngle(anchorPoint, mousePointTranslated);
 
       this.transformUpdate({
         angle: angle - 270,
       });
 
       return;
-    }
-
-    if (this.state.mouseOver) {
-      const xTransform = mousePoint.x - this.state.downX;
-      const yTransform = mousePoint.y - this.state.downY;
-
-      this.transformUpdate({
-        x: this.state.startX + xTransform,
-        y: this.state.startY + yTransform,
-      });
     }
   };
 }

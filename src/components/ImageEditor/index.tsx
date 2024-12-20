@@ -8,9 +8,8 @@ import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
 import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
 import { EHandle, ELayerType } from '@/types/ImageEditor';
-import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
-
-// import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
 
 interface IProps {
   controller: ImageEditorController;
@@ -29,6 +28,7 @@ export default function ImageEditor({ controller }: IProps) {
   transformController.useController();
   documentController.useController();
   const stageWrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<Stage>(null);
   const size = useSize(stageWrapperRef);
 
   function onMouseDown() {
@@ -53,17 +53,35 @@ export default function ImageEditor({ controller }: IProps) {
   }
 
   useEffect(() => {
-    const fn = (e: MouseEvent) => {
-      console.log('onMouseUp', e.button);
-      if (e.button === 1) {
-        setMiddleMouseDown(false);
-        return;
-      }
-      onMouseUp();
+    if (stageWrapperRef.current) {
+      // react uses passive listeners for mouse wheel so
+      // in order to preventDefault() the mouse wheel events
+      // we have to go through this extra step of setting up
+      // our own eventListener that is not passive
+      stageWrapperRef?.current?.addEventListener(
+        'wheel',
+        documentController.onWheel,
+        { passive: false },
+      );
+
+      return () =>
+        stageWrapperRef?.current?.removeEventListener(
+          'wheel',
+          documentController.onWheel,
+        );
     }
+  }, [stageWrapperRef.current]);
 
-    window.addEventListener('mouseup',fn);
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (e.button === MOUSE_MIDDLE) {
+        setMiddleMouseDown(false);
+      } else if (e.button === MOUSE_LEFT) {
+        onMouseUp();
+      }
+    };
 
+    window.addEventListener('mouseup', fn);
     return () => window.removeEventListener('mouseup', fn);
   }, []);
 
@@ -75,38 +93,47 @@ export default function ImageEditor({ controller }: IProps) {
           className="grow"
         >
           <Stage
-            // width={size?.width}
-            // height={size?.height}
+            ref={stageRef}
+            width={size?.width}
+            height={size?.height}
             className="max-w-full"
             options={{ background: 0xcbd5e1 }}
             onMouseDown={(e) => {
-              if (e.button === 1) {
-                console.log('middle down');
+              if (e.button === MOUSE_LEFT) {
+                onMouseDown();
+                transformController.onMouseDown(e);
+              } else if (e.button === MOUSE_MIDDLE) {
                 setMiddleMouseDown(true);
                 documentController.onMouseDown(e);
-                return;
               }
-              onMouseDown();
-              transformController.onMouseDown(e);
             }}
             // onMouseUp={(e) => {
-            //   if (e.button === 1) {
+            //   if (e.button === MOUSE_LEFT) {
+            //     onMouseUp();
+            //   } else if (e.button === MOUSE_MIDDLE) {
             //     setMiddleMouseDown(false);
             //     return;
             //   }
-            //   onMouseUp();
-            //
             //   // transformerController.onMouseUp();
             // }}
             onMouseMove={(e) => {
-              if (middleMouseDown) {
+              // const mousePoint: IVector2 = getCanvasVector(e);
+              // console.log(mousePoint);
+              if (mouseDown) {
+                transformController.onMouseMove(
+                  e,
+                  handle,
+                  documentController.state,
+                );
+              } else if (middleMouseDown) {
                 documentController.onMouseMove(e);
                 return;
               }
-              if (mouseDown) {
-                transformController.onMouseMove(e, handle);
-              }
             }}
+            // onWheel={(e) => {
+            //   e.preventDefault();
+            //   documentController.onWheel(e);
+            // }}
             // onMouseOut={() => {
             //   setMiddleMouseDown(false);
             //   setMouseDown(false);
@@ -121,6 +148,7 @@ export default function ImageEditor({ controller }: IProps) {
             <Container
               x={documentController.state.x}
               y={documentController.state.y}
+              scale={documentController.state.scale}
             >
               <Rectangle
                 x={documentController.state.width / 2}
@@ -154,7 +182,11 @@ export default function ImageEditor({ controller }: IProps) {
                           borderWidth={v.state.borderWidth}
                           // angle={v.state.angle}
                           interactive={!v.state.locked}
-                          onClick={() => controller.onClickLayer(i)}
+                          onClick={(e: MouseEvent) => {
+                            if (e.button === MOUSE_LEFT) {
+                              controller.onClickLayer(i);
+                            }
+                          }}
                         />
                       </Container>
                     );
@@ -166,8 +198,26 @@ export default function ImageEditor({ controller }: IProps) {
                   onHandleMouseOver={onHandleMouseOver}
                   onHandleMouseOut={onHandleMouseOut}
                   currentHandle={handle}
+                  documentState={documentController.state}
                 />
               )}
+              {/*<Rectangle*/}
+              {/*  x={transformController.state.mousePointOffset.x}*/}
+              {/*  y={transformController.state.mousePointOffset.y}*/}
+              {/*  width={10}*/}
+              {/*  height={10}*/}
+              {/*  fill={'0x0060FF'}*/}
+              {/*  borderColor="0x000000"*/}
+              {/*  borderWidth={1}*/}
+              {/*/><Rectangle*/}
+              {/*  x={transformController.state.downX}*/}
+              {/*  y={transformController.state.downY}*/}
+              {/*  width={10}*/}
+              {/*  height={10}*/}
+              {/*  fill={'0x03F300'}*/}
+              {/*  borderColor="0x000000"*/}
+              {/*  borderWidth={1}*/}
+              {/*/>*/}
               {/*<Rectangle*/}
               {/*  x={transformerController.state.x}*/}
               {/*  y={transformerController.state.y}*/}
