@@ -10,6 +10,7 @@ import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
 import { EHandle, ELayerType } from '@/types/ImageEditor';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
+import { FederatedPointerEvent } from 'pixi.js';
 
 interface IProps {
   controller: ImageEditorController;
@@ -50,6 +51,7 @@ export default function ImageEditor({ controller }: IProps) {
     if (!mouseDown) {
       setHandle(null);
     }
+    transformController.onMouseOut();
   }
 
   useEffect(() => {
@@ -182,9 +184,19 @@ export default function ImageEditor({ controller }: IProps) {
                           borderWidth={v.state.borderWidth}
                           // angle={v.state.angle}
                           interactive={!v.state.locked}
-                          onClick={(e: MouseEvent) => {
-                            if (e.button === MOUSE_LEFT) {
-                              controller.onClickLayer(i);
+                          // onClick={(e: MouseEvent) => {
+                          //   if (e.button === MOUSE_LEFT) {
+                          //     controller.onClickLayer(i);
+                          //   }
+                          // }}
+                          onMouseDown={(
+                            e: FederatedPointerEvent | undefined,
+                          ) => {
+                            if (e) {
+                              if (e.button === MOUSE_LEFT) {
+                                controller.onClickLayer(i);
+                              }
+                              // console.log(e);
                             }
                           }}
                         />

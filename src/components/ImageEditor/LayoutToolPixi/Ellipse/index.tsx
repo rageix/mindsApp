@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { Graphics } from '@pixi/react';
 import { Draw } from '@/types/Pixi';
 import '@pixi/events';
+import { FederatedPointerEvent } from 'pixi.js';
 
 interface IProps {
   x: number;
@@ -16,7 +17,14 @@ interface IProps {
   borderAlpha?: number;
   angle?: number;
   onClick?: (e: MouseEvent) => void;
-  onMouseOver?: () => void;
+  onMouseDown?: (e?: FederatedPointerEvent) => void;
+  onMouseOver?: (e?: FederatedPointerEvent) => void;
+  onMouseOut?: (e?: FederatedPointerEvent) => void;
+  onMouseLeave?: (e?: FederatedPointerEvent) => void;
+  onMouseEnter?: (e?: FederatedPointerEvent) => void;
+  onMouseMove?: (e?: FederatedPointerEvent) => void;
+  onMouseUp?: (e?: FederatedPointerEvent) => void;
+  onMouseUpOutside?: (e?: FederatedPointerEvent) => void;
   interactive?: boolean
 }
 
@@ -38,8 +46,16 @@ export default function Ellipse(props: IProps) {
   return (
     <Graphics
       draw={draw}
-      interactive={props.interactive || false}
       onclick={props.onClick || null}
+      onmouseout={props.onMouseOut || null}
+      onmouseover={props.onMouseOver || null}
+      onmousedown={props.onMouseDown || null}
+      onmouseleave={props.onMouseLeave || null}
+      onmouseenter={props.onMouseEnter || null}
+      onmousemove={props.onMouseMove || null}
+      onmouseup={props.onMouseUp || null}
+      onmouseupoutside={props.onMouseUpOutside || null}
+      interactive={props.interactive || false}
     />
   );
 }

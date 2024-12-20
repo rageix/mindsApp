@@ -13,6 +13,7 @@ interface IProps {
   borderColor?: string;
   borderWidth?: number;
   borderRadius?: number;
+  onClick?: (e: MouseEvent) => void;
   onMouseDown?: (e?: FederatedPointerEvent) => void;
   onMouseOver?: (e?: FederatedPointerEvent) => void;
   onMouseOut?: (e?: FederatedPointerEvent) => void;
@@ -48,6 +49,7 @@ export default function Rectangle(props: IProps) {
   return (
     <Graphics
       draw={draw}
+      onclick={props.onClick || null}
       onmouseout={props.onMouseOut || null}
       onmouseover={props.onMouseOver || null}
       onmousedown={props.onMouseDown || null}
