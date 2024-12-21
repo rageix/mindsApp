@@ -82,6 +82,7 @@ export interface ILayoutTool {
 }
 
 export enum EHandle {
+  NoHandle,
   TopLeft,
   Top,
   TopRight,
@@ -91,5 +92,6 @@ export enum EHandle {
   BottomLeft,
   Left,
   ScaleAroundCenter,
-  Rotate
+  Rotate,
+  Move
 }

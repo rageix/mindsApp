@@ -3,6 +3,7 @@ import { MouseEvent } from 'react';
 import { IVector2 } from '@/types/Vectors';
 import { getCanvasVector } from '@/util/GetCanvasVector';
 import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
+import Decimal from 'decimal.js';
 
 export interface IDocumentControllerState {
   width: number;
@@ -19,8 +20,7 @@ export interface IDocumentControllerState {
   startY: number;
 }
 
-export interface IState extends IDocumentControllerState {
-}
+export interface IState extends IDocumentControllerState {}
 
 export function newIState(): IState {
   return {
@@ -39,7 +39,7 @@ export function newIState(): IState {
   };
 }
 
-const SCALE_INCREMENT = 0.05;
+const SCALE_INCREMENT = new Decimal(0.1);
 const SCROLL_UP = -1;
 // const SCROLL_DOWN = 1;
 
@@ -59,20 +59,31 @@ export default class DocumentController extends BasicController<IState> {
 
   onMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
     const currentMouseVector: IVector2 = getCanvasVector(e);
-    const xDiff = currentMouseVector.x - this.state.startX;
-    const yDiff = currentMouseVector.y - this.state.startY;
+    // const xDiff = currentMouseVector.x - this.state.startX;
+    const xDiff = new Decimal(currentMouseVector.x)
+      .sub(new Decimal(this.state.startX))
+    // const yDiff = currentMouseVector.y - this.state.startY;
+    const yDiff = new Decimal(currentMouseVector.y)
+      .sub(new Decimal(this.state.startY));
 
     this.setState({
-      x: this.state.originX + xDiff,
-      y: this.state.originY + yDiff,
+      //  x: this.state.originX + xDiff,
+      x: new Decimal(this.state.originX).add(xDiff).toNumber(),
+      //       y: this.state.originY + yDiff,
+      y: new Decimal(this.state.originY).add(yDiff).toNumber(),
     });
   };
 
   calcScales = (scale: number) => {
+    const dScale = new Decimal(scale);
+
     return {
-      scaleX: this.state.width / (this.state.width * scale),
-      scaleY: this.state.height / (this.state.height * scale),
-      ratio: 1 / scale
+      // scaleX: this.state.width / (this.state.width * scale),
+      scaleX: new Decimal(this.state.width).div(new Decimal(this.state.width).mul(dScale)).toNumber(),
+      // scaleY: this.state.height / (this.state.height * scale),
+      scaleY: new Decimal(this.state.height).div(new Decimal(this.state.height).mul(dScale)).toNumber(),
+      // ratio: 1 / scale
+      ratio: new Decimal(1).div(dScale).toNumber(),
     };
   };
 
@@ -80,17 +91,31 @@ export default class DocumentController extends BasicController<IState> {
     e.preventDefault();
     const scrollDirection = Math.sign(e.deltaY);
     if (e.ctrlKey) {
-      let newScale: number;
-
       if (scrollDirection === SCROLL_UP) {
-        newScale = this.state.scale + SCALE_INCREMENT;
-      } else {
-        newScale = this.state.scale - SCALE_INCREMENT;
+        this.onZoomIn();
+        return;
       }
 
-      newScale = limitNumberWithinRange(newScale, .1, 4);
-
-      this.setState({ scale: newScale, ...this.calcScales(newScale) });
+      this.onZoomOut();
     }
+  };
+
+  onChangeScale = (value: number) => {
+    console.log('value', value);
+    const newScale = limitNumberWithinRange(value, 0.1, 4);
+
+    this.setState({ scale: newScale, ...this.calcScales(newScale) });
+  };
+
+  onZoomIn = () => {
+    this.onChangeScale(
+      new Decimal(this.state.scale).add(SCALE_INCREMENT).toNumber()
+    );
+  };
+
+  onZoomOut = () => {
+    this.onChangeScale(
+      new Decimal(this.state.scale).sub(SCALE_INCREMENT).toNumber()
+    );
   };
 }

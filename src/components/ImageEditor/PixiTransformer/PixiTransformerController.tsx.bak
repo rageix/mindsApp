@@ -1,65 +1,74 @@
 import BasicController from '@/util/BasicController';
 import { EHandle } from '@/types/ImageEditor';
 import { IVector2 } from '@/types/Vectors';
-import { distanceBetween } from '@/util/distanceBetweenPoints';
-import { getCanvasVector } from '@/util/getCanvasVector';
-// import { FederatedPointerEvent } from 'pixi.js';
+import { getCanvasVector } from '@/util/GetCanvasVector';
 import { MouseEvent } from 'react';
-import { float2int } from '@/types/float2Int';
-import { getMidpoint } from '@/types/getMidpoint';
-import { getDiff } from '@/types/GetDiff';
+import { getMidpoint } from '@/util/GetMidpoint';
+import { findAngle } from '@/util/FindAngle';
+import { rotate } from '@/util/Rotate';
+import { distanceBetween } from '@/util/DistanceBetween';
+import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
+import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
+import Decimal from 'decimal.js';
 
-// how small you can scale an object
-const MIN_SIZE = 10;
-
-export interface IState {
+export interface IBoundingBox {
   width: number;
   height: number;
-  rotation: number;
+  angle: number;
   x: number;
   y: number;
+}
+
+export interface IState extends IBoundingBox {
   startWidth: number;
   startHeight: number;
   startX: number;
   startY: number;
   mouseOver: boolean;
-  mouseDown: boolean;
   downX: number;
   downY: number;
   handle: EHandle | null;
+  isVisible: boolean;
 }
 
 function newIState(): IState {
   return {
-    width: 100,
-    height: 100,
-    rotation: 0,
-    x: 200,
-    y: 150,
+    width: 0,
+    height: 0,
+    angle: 0,
+    x: 0,
+    y: 0,
     startWidth: 0,
     startHeight: 0,
     startX: 0,
     startY: 0,
     mouseOver: false,
-    mouseDown: false,
     downX: 0,
     downY: 0,
     handle: null,
+    isVisible: false,
   };
 }
 
 export default class PixiTransformerController extends BasicController<IState> {
   defaultState = newIState();
+  onUpdate: (value: IBoundingBox) => void;
 
-  onMouseEnter = () => {
-    this.setState({ mouseOver: true, handle: null });
-  };
+  constructor(onUpdate: (value: IBoundingBox) => void) {
+    super();
+    this.onUpdate = onUpdate;
+  }
 
-  onMouseOut = () => {
-    if (this.state.mouseDown) {
-      return;
-    }
-    this.setState({ mouseOver: false, mouseDown: false });
+  transformUpdate = (arg: Partial<IState>) => {
+    const newState = { ...this.state, ...arg };
+    this.onUpdate({
+      width: newState.width,
+      height: newState.height,
+      angle: newState.angle,
+      x: newState.x,
+      y: newState.y,
+    });
+    this.setState(arg);
   };
 
   onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
@@ -71,7 +80,6 @@ export default class PixiTransformerController extends BasicController<IState> {
     const currentMouseVector: IVector2 = getCanvasVector(e);
 
     this.setState({
-      mouseDown: true,
       downX: currentMouseVector.x,
       downY: currentMouseVector.y,
       startWidth: this.state.width,
@@ -81,239 +89,298 @@ export default class PixiTransformerController extends BasicController<IState> {
     });
   };
 
-  onMouseUp = () => {
-    this.setState({ mouseDown: false });
-  };
-
-  onMouseUpOutside = () => {
-    console.log('onMouseUpOutside');
-
-    if (this.state.mouseDown) {
-      this.setState({ x: this.state.startX, y: this.state.startY });
-    }
-  };
-
   onMouseMove = (
-    e: React.MouseEvent<HTMLCanvasElement>,
+    e: MouseEvent<HTMLCanvasElement>,
     handle: EHandle | null,
+    docState: IDocumentState,
   ) => {
-    const currentMouseVector: IVector2 = getCanvasVector(e);
+    const mousePoint: IVector2 = getCanvasVector(e);
 
-    console.log('currentMouseVector', currentMouseVector);
+    if (handle === EHandle.Move) {
+      // const xTransform = (mousePoint.x - this.state.downX) * docState.ratio;
+      const xTransform = new Decimal(
+        new Decimal(mousePoint.x).sub(this.state.downX),
+      ).mul(docState.ratio);
+      // const yTransform = (mousePoint.y - this.state.downY) * docState.ratio;
+      const yTransform = new Decimal(
+        new Decimal(mousePoint.y).sub(this.state.downY),
+      ).mul(docState.ratio);
 
-    let xTransform = float2int(currentMouseVector.x - this.state.downX);
-    let yTransform = float2int(currentMouseVector.y - this.state.downY);
-    // return;
+      this.transformUpdate({
+        // x: this.state.startX + xTransform,
+        x: new Decimal(this.state.startX).add(xTransform).toNumber(),
+        // y: this.state.startY + yTransform,
+        y: new Decimal(this.state.startY).add(yTransform).toNumber(),
+      });
+      return;
+    }
+
+    const mousePointTranslated: IVector2 = {
+      x: new Decimal(new Decimal(mousePoint.x).sub(docState.x).toNumber())
+        .mul(docState.scaleX)
+        .toNumber(),
+      y: new Decimal(new Decimal(mousePoint.y).sub(docState.y).toNumber())
+        .mul(docState.scaleY)
+        .toNumber(),
+    };
+
+    const transformOrigin: IVector2 = {
+      x: this.state.startX,
+      y: this.state.startY,
+    };
 
     if (handle === EHandle.Right) {
-
-      const anchorPoint: IVector2 = {
-        x: this.state.startX - this.state.startWidth / 2,
+      const anchorOrigin: IVector2 = {
+        //  x: this.state.startX - this.state.startWidth / 2,
+        x: new Decimal(this.state.startX)
+          .sub(new Decimal(this.state.startWidth).div(2))
+          .toNumber(),
         y: this.state.startY,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      // const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
-      this.setState({
+      const endingOrigin: IVector2 = {
+        x: new Decimal(anchorPoint.x).add(distance).toNumber(),
+        y: anchorPoint.y,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
+
+      // this.setState({
+      //   height: this.state.startHeight,
+      //   width: distance,
+      //   y: midPoint.y,
+      //   x: midPoint.x,
+      // });
+      this.transformUpdate({
         height: this.state.startHeight,
-        width: xDiff,
-        y: this.state.startY,
+        width: distance,
+        y: midPoint.y,
         x: midPoint.x,
       });
       return;
-
-
-
-      // const maxNegativeTransform = (this.state.startWidth - MIN_SIZE) * -1;
-      // if (xTransform < maxNegativeTransform) {
-      //   xTransform = maxNegativeTransform;
-      // }
-      // let newWidth = this.state.startWidth + xTransform;
-      // if (newWidth < MIN_SIZE) {
-      //   newWidth = MIN_SIZE;
-      // }
-      //
-      // this.setState({
-      //   width: newWidth,
-      //   x: this.state.startX + xTransform / 2,
-      // });
-      // return;
     } else if (handle === EHandle.Left) {
-      const maxNegativeTransform = this.state.startWidth - MIN_SIZE;
-      if (xTransform > maxNegativeTransform) {
-        xTransform = maxNegativeTransform;
-      }
-      let newWidth = this.state.startWidth - xTransform;
-      if (newWidth < MIN_SIZE) {
-        newWidth = MIN_SIZE;
-      }
+      const anchorOrigin: IVector2 = {
+        // x: this.state.startX + this.state.startWidth / 2,
+        x: new Decimal(this.state.startX)
+          .add(new Decimal(this.state.startWidth).div(2))
+          .toNumber(),
+        y: this.state.startY,
+      };
 
-      this.setState({
-        width: newWidth,
-        x: this.state.startX + xTransform / 2,
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x - distance,
+        y: anchorPoint.y,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
+
+      this.transformUpdate({
+        height: this.state.startHeight,
+        width: distance,
+        y: midPoint.y,
+        x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.Top) {
-      const maxNegativeTransform = this.state.startHeight - MIN_SIZE;
-      if (yTransform > maxNegativeTransform) {
-        yTransform = maxNegativeTransform;
-      }
-      let newHeight = this.state.startHeight - yTransform;
-      if (newHeight < MIN_SIZE) {
-        newHeight = MIN_SIZE;
-      }
+      const anchorOrigin: IVector2 = {
+        x: this.state.startX,
+        // y: this.state.startY + this.state.startHeight / 2,
+        y: new Decimal(this.state.startY)
+          .add(new Decimal(this.state.startHeight).div(2))
+          .toNumber(),
+      };
 
-      this.setState({
-        height: newHeight,
-        y: this.state.startY + yTransform / 2,
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x,
+        y: new Decimal(anchorPoint.y).sub(distance).toNumber(),
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
+
+      this.transformUpdate({
+        height: distance,
+        width: this.state.startWidth,
+        y: midPoint.y,
+        x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.Bottom) {
-      const maxNegativeTransform = (this.state.startHeight - MIN_SIZE) * -1;
-      if (yTransform < maxNegativeTransform) {
-        yTransform = maxNegativeTransform;
-      }
-      let newHeight = this.state.startHeight + yTransform;
-      if (newHeight < MIN_SIZE) {
-        newHeight = MIN_SIZE;
-      }
-
-      this.setState({
-        height: newHeight,
-        y: this.state.startY + yTransform / 2,
-      });
-      return;
-    } else if (handle === EHandle.ScaleAroundCenter) {
-      const startingPoint: IVector2 = {
-        x: this.state.startX + this.state.startWidth / 2,
-        y: this.state.startY - this.state.startHeight / 2,
+      const anchorOrigin: IVector2 = {
+        x: this.state.startX,
+        // y: this.state.startY - this.state.startHeight / 2,
+        y: new Decimal(this.state.startY)
+          .sub(new Decimal(this.state.startHeight).div(2))
+          .toNumber(),
       };
 
-      let distance = distanceBetween(startingPoint, currentMouseVector);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
-      console.log('distance', distance);
+      const endingOrigin: IVector2 = {
+        x: anchorPoint.x,
+        // y: anchorPoint.y + distance,
+        y: new Decimal(anchorPoint.y).add(distance).toNumber(),
+      };
 
-      if (
-        currentMouseVector.x < startingPoint.x &&
-        currentMouseVector.y > startingPoint.y
-      ) {
-        distance = distance * -1;
-      }
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const midPoint = getMidpoint(anchorPoint, endPoint);
 
-      const xScale = distance / this.state.startWidth;
-      const yScale = distance / this.state.startHeight;
-
-      xTransform = float2int(this.state.startWidth * xScale);
-      yTransform = float2int(this.state.startHeight * yScale);
-      console.log('xTransform', xTransform);
-      console.log('yTransform', yTransform);
-      // return;
-      // yTransform = this.state.startHeight * yScale;
-
-      const maxNegativeYTransform = (this.state.startHeight - MIN_SIZE) * -1;
-      console.log('maxNegativeYTransform', maxNegativeYTransform);
-      if (yTransform < maxNegativeYTransform) {
-        yTransform = maxNegativeYTransform;
-      }
-      //
-      const maxNegativeXTransform = (this.state.startWidth - MIN_SIZE) * -1;
-      if (xTransform < maxNegativeXTransform) {
-        xTransform = maxNegativeXTransform;
-      }
-      //
-      let newHeight = this.state.startHeight + yTransform;
-      if (newHeight < MIN_SIZE) {
-        newHeight = MIN_SIZE;
-      }
-
-      let newWidth = this.state.startWidth + xTransform;
-      if (newWidth < MIN_SIZE) {
-        newWidth = MIN_SIZE;
-      }
-
-      this.setState({
-        height: newHeight,
-        y: this.state.startY + yTransform / 2,
-        width: newWidth,
-        x: this.state.startX + xTransform / 2,
+      this.transformUpdate({
+        height: distance,
+        width: this.state.startWidth,
+        y: midPoint.y,
+        x: midPoint.x,
       });
+      return;
     } else if (handle === EHandle.TopRight) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY + this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
 
-      this.setState({
-        height: yDiff,
-        width: xDiff,
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePointTranslated,
+        this.state.angle,
+      );
+
+      this.transformUpdate({
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.BottomRight) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY - this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
 
-      this.setState({
-        height: yDiff,
-        width: xDiff,
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePointTranslated,
+        this.state.angle,
+      );
+
+      this.transformUpdate({
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.BottomLeft) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY - this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
 
-      this.setState({
-        height: yDiff,
-        width: xDiff,
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePointTranslated,
+        this.state.angle,
+      );
+
+      this.transformUpdate({
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
     } else if (handle === EHandle.TopLeft) {
-      const anchorPoint: IVector2 = {
+      const anchorOrigin: IVector2 = {
         x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY + this.state.startHeight / 2,
       };
 
-      const midPoint = getMidpoint(anchorPoint, currentMouseVector);
-      const xDiff = getDiff(anchorPoint.x, currentMouseVector.x);
-      const yDiff = getDiff(anchorPoint.y, currentMouseVector.y);
+      const anchorPoint = rotate(
+        anchorOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
 
-      this.setState({
-        height: yDiff,
-        width: xDiff,
+      const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
+
+      const [width, height] = rectangleFromPointsAndAngle(
+        anchorPoint,
+        mousePointTranslated,
+        this.state.angle,
+      );
+
+      this.transformUpdate({
+        height,
+        width,
         y: midPoint.y,
         x: midPoint.x,
       });
       return;
-    }
+    } else if (handle === EHandle.Rotate) {
+      const anchorPoint: IVector2 = {
+        x: this.state.startX,
+        y: this.state.startY,
+      };
 
-    if (this.state.mouseOver) {
-      this.setState({
-        x: this.state.startX + xTransform,
-        y: this.state.startY + yTransform,
+      const angle = findAngle(anchorPoint, mousePointTranslated);
+
+      this.transformUpdate({
+        angle: angle - 270,
       });
+
+      return;
     }
   };
 }

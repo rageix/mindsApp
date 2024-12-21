@@ -9,6 +9,7 @@ import { rotate } from '@/util/Rotate';
 import { distanceBetween } from '@/util/DistanceBetween';
 import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
 import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
+import { graphicsRound } from '@/hooks/GraphicsRound';
 
 export interface IBoundingBox {
   width: number;
@@ -58,32 +59,21 @@ export default class PixiTransformerController extends BasicController<IState> {
     this.onUpdate = onUpdate;
   }
 
-  onMouseEnter = () => {
-    this.setState({ mouseOver: true, handle: null });
-  };
-
-  onMouseOut = () => {
-    this.setState({ mouseOver: false });
-  };
-
   transformUpdate = (arg: Partial<IState>) => {
     const newState = { ...this.state, ...arg };
-    this.onUpdate({
-      width: newState.width,
-      height: newState.height,
-      angle: newState.angle,
-      x: newState.x,
-      y: newState.y,
-    });
-    this.setState(arg);
+    // console.log('angle', graphicsRound(newState.angle));
+    const update: IBoundingBox = {
+      width: graphicsRound(newState.width),
+      height: graphicsRound(newState.height),
+      angle: graphicsRound(newState.angle),
+      x: graphicsRound(newState.x),
+      y: graphicsRound(newState.y),
+    };
+    this.onUpdate(update);
+    this.setState(update);
   };
 
   onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
-    // if (this.state.mouseDown) {
-    //   this.setState({ x: this.state.startX, y: this.state.startY });
-    //   return;
-    // }
-
     const currentMouseVector: IVector2 = getCanvasVector(e);
 
     this.setState({
@@ -103,7 +93,7 @@ export default class PixiTransformerController extends BasicController<IState> {
   ) => {
     const mousePoint: IVector2 = getCanvasVector(e);
 
-    if (this.state.mouseOver) {
+    if (handle === EHandle.Move) {
       const xTransform = (mousePoint.x - this.state.downX) * docState.ratio;
       const yTransform = (mousePoint.y - this.state.downY) * docState.ratio;
 

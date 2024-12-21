@@ -3,16 +3,16 @@ import { PropsWithChildren } from 'react';
 import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { EHandle } from '@/types/ImageEditor';
-import {
-  IDocumentControllerState
-} from '@/components/ImageEditor/DocumentController';
+import { IDocumentControllerState } from '@/components/ImageEditor/DocumentController';
 
 interface IProps extends PropsWithChildren {
   controller: PixiTransformerController;
   onHandleMouseOver: (handle: EHandle) => void;
   onHandleMouseOut: () => void;
+  onMouseOver: () => void;
+  onMouseOut: () => void;
   currentHandle: EHandle | null;
-  documentState: IDocumentControllerState
+  documentState: IDocumentControllerState;
 }
 
 // interface IBoundingBox {
@@ -31,9 +31,12 @@ export default function PixiTransformer({
   onHandleMouseOver,
   onHandleMouseOut,
   currentHandle,
-                                          documentState
+  documentState,
+  onMouseOver,
+  onMouseOut,
   // children,
 }: IProps) {
+
   // const ref = useRef<TContainer<DisplayObject>>(null);
   // const [bounds, setBounds] = useState<IBoundingBox>({
   //   height: 0,
@@ -74,12 +77,12 @@ export default function PixiTransformer({
           width={state?.width || 0}
           height={state?.height || 0}
           fill="0xFFFFFF"
-          fillAlpha={.00000001}
+          fillAlpha={0.00000001}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          onMouseEnter={controller.onMouseEnter}
-          onMouseOut={controller.onMouseOut}
-          interactive
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOut}
+          eventMode="dynamic"
         />
         {/* Rotation point */}
         <Rectangle
@@ -100,7 +103,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.TopLeft)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -112,7 +115,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.Rotate ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Rotate)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -125,7 +128,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Top)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -138,7 +141,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.TopRight)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -151,7 +154,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => {
             onHandleMouseOver(EHandle.Right);
           }}
@@ -168,7 +171,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.BottomRight)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -181,7 +184,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Bottom)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -194,7 +197,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.BottomLeft)}
           onMouseOut={() => onHandleMouseOut()}
         />
@@ -207,7 +210,7 @@ export default function PixiTransformer({
           fill={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
-          interactive
+          eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Left)}
           onMouseOut={() => onHandleMouseOut()}
         />

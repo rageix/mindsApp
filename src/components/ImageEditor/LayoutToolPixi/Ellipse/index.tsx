@@ -3,6 +3,7 @@ import { Graphics } from '@pixi/react';
 import { Draw } from '@/types/Pixi';
 import '@pixi/events';
 import { FederatedPointerEvent } from 'pixi.js';
+import { EventMode } from '@pixi/events';
 
 interface IProps {
   x: number;
@@ -25,7 +26,7 @@ interface IProps {
   onMouseMove?: (e?: FederatedPointerEvent) => void;
   onMouseUp?: (e?: FederatedPointerEvent) => void;
   onMouseUpOutside?: (e?: FederatedPointerEvent) => void;
-  interactive?: boolean
+  eventMode?: EventMode
 }
 
 export default function Ellipse(props: IProps) {
@@ -55,7 +56,7 @@ export default function Ellipse(props: IProps) {
       onmousemove={props.onMouseMove || null}
       onmouseup={props.onMouseUp || null}
       onmouseupoutside={props.onMouseUpOutside || null}
-      interactive={props.interactive || false}
+      eventMode={props.eventMode || 'auto'}
     />
   );
 }
