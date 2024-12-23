@@ -3,12 +3,19 @@ import { MouseEvent } from 'react';
 import { IVector2 } from '@/types/Vectors';
 import { getCanvasVector } from '@/util/GetCanvasVector';
 import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
-import Decimal from 'decimal.js';
+import { roundTo1Place } from '@/util/RoundTo1Place';
+
+function roundToNearest10(num: number) {
+  const floorNum = Math.floor(num / 10) * 10;
+  const ceilNum = Math.ceil(num / 10) * 10;
+  return ceilNum - num < num - floorNum ? ceilNum : floorNum;
+}
 
 export interface IDocumentControllerState {
   width: number;
   height: number;
   scale: number;
+  scaleInt: number;
   ratio: number;
   scaleX: number;
   scaleY: number;
@@ -27,6 +34,7 @@ export function newIState(): IState {
     width: 1920,
     height: 1080,
     scale: 1,
+    scaleInt: 100,
     ratio: 1,
     x: 0,
     y: 0,
@@ -39,9 +47,8 @@ export function newIState(): IState {
   };
 }
 
-const SCALE_INCREMENT = new Decimal(0.1);
+const SCALE_INCREMENT = 10;
 const SCROLL_UP = -1;
-// const SCROLL_DOWN = 1;
 
 export default class DocumentController extends BasicController<IState> {
   defaultState = newIState();
@@ -59,38 +66,28 @@ export default class DocumentController extends BasicController<IState> {
 
   onMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
     const currentMouseVector: IVector2 = getCanvasVector(e);
-    // const xDiff = currentMouseVector.x - this.state.startX;
-    const xDiff = new Decimal(currentMouseVector.x)
-      .sub(new Decimal(this.state.startX))
-    // const yDiff = currentMouseVector.y - this.state.startY;
-    const yDiff = new Decimal(currentMouseVector.y)
-      .sub(new Decimal(this.state.startY));
+    const xDiff = currentMouseVector.x - this.state.startX;
+    const yDiff = currentMouseVector.y - this.state.startY;
 
     this.setState({
-      //  x: this.state.originX + xDiff,
-      x: new Decimal(this.state.originX).add(xDiff).toNumber(),
-      //       y: this.state.originY + yDiff,
-      y: new Decimal(this.state.originY).add(yDiff).toNumber(),
+      x: roundTo1Place(this.state.originX + xDiff),
+      y: roundTo1Place(this.state.originY + yDiff),
     });
   };
 
   calcScales = (scale: number) => {
-    const dScale = new Decimal(scale);
-
     return {
-      // scaleX: this.state.width / (this.state.width * scale),
-      scaleX: new Decimal(this.state.width).div(new Decimal(this.state.width).mul(dScale)).toNumber(),
-      // scaleY: this.state.height / (this.state.height * scale),
-      scaleY: new Decimal(this.state.height).div(new Decimal(this.state.height).mul(dScale)).toNumber(),
-      // ratio: 1 / scale
-      ratio: new Decimal(1).div(dScale).toNumber(),
+      scaleX: roundTo1Place(this.state.width / (this.state.width * scale)),
+      scaleY: roundTo1Place(this.state.height / (this.state.height * scale)),
+      ratio: roundTo1Place(1 / scale),
     };
   };
 
   onWheel = (e: WheelEvent) => {
     e.preventDefault();
-    const scrollDirection = Math.sign(e.deltaY);
     if (e.ctrlKey) {
+      const scrollDirection = Math.sign(e.deltaY);
+
       if (scrollDirection === SCROLL_UP) {
         this.onZoomIn();
         return;
@@ -100,22 +97,85 @@ export default class DocumentController extends BasicController<IState> {
     }
   };
 
-  onChangeScale = (value: number) => {
-    console.log('value', value);
-    const newScale = limitNumberWithinRange(value, 0.1, 4);
+  calcScaleState = (value: number) => {
+    const newScaleInt = limitNumberWithinRange(value, 10, 400);
+    const newScale = newScaleInt / 100;
 
-    this.setState({ scale: newScale, ...this.calcScales(newScale) });
+    return {
+      scale: newScale,
+      scaleInt: newScaleInt,
+      ...this.calcScales(newScale),
+    };
+  };
+
+  calcNewXY = (newScale: number): IVector2 => {
+    const oldWidth =
+      this.state.width - this.state.width * (this.state.scale || 0);
+    const oldHeight =
+      this.state.height - this.state.height * (this.state.scale || 0);
+    const newWidth = this.state.width - this.state.width * newScale;
+    const newHeight = this.state.height - this.state.height * newScale;
+    let xDiff: number;
+    let yDiff: number;
+    let newX: number;
+    let newY: number;
+
+    if (newScale > this.state.scale) {
+      xDiff = (oldWidth - newWidth) / 2;
+      yDiff = (oldHeight - newHeight) / 2;
+
+      newX = roundTo1Place(this.state.x - xDiff);
+      newY = roundTo1Place(this.state.y - yDiff);
+    } else {
+      xDiff = (newWidth - oldWidth) / 2;
+      yDiff = (newHeight - oldHeight) / 2;
+
+      newX = roundTo1Place(this.state.x + xDiff);
+      newY = roundTo1Place(this.state.y + yDiff);
+    }
+
+    return { x: newX, y: newY };
   };
 
   onZoomIn = () => {
-    this.onChangeScale(
-      new Decimal(this.state.scale).add(SCALE_INCREMENT).toNumber()
+    const newState = this.calcScaleState(
+      roundToNearest10(this.state.scaleInt) + SCALE_INCREMENT,
     );
+
+    const newPosition = this.calcNewXY(newState.scale);
+
+    this.setState({ ...newState, x: newPosition.x, y: newPosition.y });
   };
 
   onZoomOut = () => {
-    this.onChangeScale(
-      new Decimal(this.state.scale).sub(SCALE_INCREMENT).toNumber()
+    const newState = this.calcScaleState(
+      roundToNearest10(this.state.scaleInt) - SCALE_INCREMENT,
     );
+
+    const newPosition = this.calcNewXY(newState.scale);
+
+    this.setState({ ...newState, x: newPosition.x, y: newPosition.y });
+  };
+
+  onChangeScale = (scale: number) => {
+    const newState = this.calcScaleState(scale);
+    const newPosition = this.calcNewXY(newState.scale);
+
+    this.setState({ ...newState, x: newPosition.x, y: newPosition.y });
+  };
+
+  onFitToView = (width: number, height: number) => {
+    const viewportRatio = width / height;
+    const documentRatio = this.state.width / this.state.height;
+
+    const scale =
+      viewportRatio < documentRatio
+        ? width / this.state.width
+        : height / this.state.height;
+
+    const newState = this.calcScaleState(roundTo1Place(scale * 100));
+    const newX = roundTo1Place((width - this.state.width * scale) / 2);
+    const newY = roundTo1Place((height - this.state.height * scale) / 2);
+    this.setState({ ...newState, x: newX, y: newY });
   };
 }

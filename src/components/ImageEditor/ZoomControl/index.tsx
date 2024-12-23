@@ -2,62 +2,61 @@ import { ZoomIn, ZoomOut } from 'lucide-react';
 import Select from '@/components/Select';
 import { ISelectOption } from '@/types/SelectOption';
 import { useMemo } from 'react';
-import { float2Int } from '@/util/Float2Int';
 
 const ZOOM_OPTIONS: ISelectOption<number>[] = [
   {
     key: '400%',
-    value: 4,
+    value: 400,
     label: '400%',
   },
   {
     key: '300%',
-    value: 3,
+    value: 300,
     label: '300%',
   },
   {
     key: '200%',
-    value: 2,
+    value: 200,
     label: '200%',
   },
   {
     key: '175%',
-    value: 1.75,
+    value: 175,
     label: '175%',
   },
   {
     key: '150%',
-    value: 1.5,
+    value: 150,
     label: '150%',
   },
   {
     key: '125%',
-    value: 1.25,
+    value: 125,
     label: '125%',
   },
   {
     key: '100%',
-    value: 1,
+    value: 100,
     label: '100%',
   },
   {
     key: '75%',
-    value: 0.75,
+    value: 75,
     label: '75%',
   },
   {
     key: '50%',
-    value: 0.5,
+    value: 50,
     label: '50%',
   },
   {
     key: '25%',
-    value: 0.25,
+    value: 25,
     label: '25%',
   },
   {
     key: '10%',
-    value: 0.1,
+    value: 10,
     label: '10%',
   },
 ];
@@ -76,7 +75,7 @@ export default function ZoomControl({
   onClickZoomOut,
 }: IProps) {
   const value: ISelectOption<number> = useMemo(() => {
-    const label = float2Int(scale * 100) + '%';
+    const label = scale + '%';
     return {
       key: label,
       value: scale,
@@ -98,7 +97,7 @@ export default function ZoomControl({
         />
       </button>
       <Select
-        className="w-[5.75rem]"
+        className="w-[6rem]"
         options={ZOOM_OPTIONS}
         value={value}
         onChange={(option) => onChange(option.value)}

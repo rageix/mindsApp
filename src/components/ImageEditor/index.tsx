@@ -11,6 +11,8 @@ import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
 import { FederatedPointerEvent } from 'pixi.js';
 import ZoomControl from '@/components/ImageEditor/ZoomControl';
+import { MoveHorizontal } from 'lucide-react';
+import Button from '@/components/Buttton';
 
 interface IProps {
   controller: ImageEditorController;
@@ -51,6 +53,14 @@ export default function ImageEditor({ controller }: IProps) {
     setAction(null);
   }
 
+  function onClickFitToView() {
+    if (stageWrapperRef.current) {
+      const rect = stageWrapperRef.current.getBoundingClientRect();
+
+      documentController.onFitToView(rect.width, rect.height);
+    }
+  }
+
   useEffect(() => {
     if (stageWrapperRef.current) {
       // react uses passive listeners for mouse wheel so
@@ -62,6 +72,8 @@ export default function ImageEditor({ controller }: IProps) {
         documentController.onWheel,
         { passive: false },
       );
+
+      onClickFitToView();
 
       return () =>
         stageWrapperRef?.current?.removeEventListener(
@@ -84,12 +96,10 @@ export default function ImageEditor({ controller }: IProps) {
     return () => window.removeEventListener('mouseup', fn);
   }, []);
 
-  console.log(transformController.state);
-
   return (
     <div className="">
       <div className="flex">
-        <div>
+        <div className="grow">
           <div
             ref={stageWrapperRef}
             className="grow"
@@ -171,8 +181,6 @@ export default function ImageEditor({ controller }: IProps) {
                         <Container
                           key={v.state.id}
                           angle={v.state.angle}
-                          // width={bounds.width}
-                          // height={bounds.height}
                           x={v.state.x}
                           y={v.state.y}
                           eventMode={!v.state.locked ? 'dynamic' : 'auto'}
@@ -187,13 +195,7 @@ export default function ImageEditor({ controller }: IProps) {
                             fillAlpha={v.state.fillAlpha}
                             borderColor={v.state.borderColor}
                             borderWidth={v.state.borderWidth}
-                            // angle={v.state.angle}
                             eventMode={!v.state.locked ? 'dynamic' : 'auto'}
-                            // onClick={(e: MouseEvent) => {
-                            //   if (e.button === MOUSE_LEFT) {
-                            //     controller.onClickLayer(i);
-                            //   }
-                            // }}
                             onMouseDown={(
                               e: FederatedPointerEvent | undefined,
                             ) => {
@@ -219,88 +221,33 @@ export default function ImageEditor({ controller }: IProps) {
                     onMouseOut={() => setTransformMove(false)}
                   />
                 )}
-                {/*<Rectangle*/}
-                {/*  x={transformController.state.mousePointOffset.x}*/}
-                {/*  y={transformController.state.mousePointOffset.y}*/}
-                {/*  width={10}*/}
-                {/*  height={10}*/}
-                {/*  fill={'0x0060FF'}*/}
-                {/*  borderColor="0x000000"*/}
-                {/*  borderWidth={1}*/}
-                {/*/><Rectangle*/}
-                {/*  x={transformController.state.downX}*/}
-                {/*  y={transformController.state.downY}*/}
-                {/*  width={10}*/}
-                {/*  height={10}*/}
-                {/*  fill={'0x03F300'}*/}
-                {/*  borderColor="0x000000"*/}
-                {/*  borderWidth={1}*/}
-                {/*/>*/}
-                {/*<Rectangle*/}
-                {/*  x={transformerController.state.x}*/}
-                {/*  y={transformerController.state.y}*/}
-                {/*  width={transformerController.state.width}*/}
-                {/*  height={transformerController.state.height}*/}
-                {/*  fill="0x338948"*/}
-                {/*  borderColor="0x0005FF"*/}
-                {/*  borderWidth={2}*/}
-                {/*  // onClick={() => alert('clicked')}*/}
-                {/*interactive*/}
-                {/*/>*/}
-                {/*<LayoutTool controller={layoutToolController} />*/}
-                {/*<Layer*/}
-                {/*  onMouseDown={(e) => layoutToolController.onMouseDown(e)}*/}
-                {/*  onMouseUp={() => layoutToolController.onMouseUp()}*/}
-                {/*  onMouseMove={(e) => layoutToolController.onMouseMove(e)}*/}
-                {/*>*/}
-                {/*  <Rect*/}
-                {/*    x={0}*/}
-                {/*    y={0}*/}
-                {/*    width={1000}*/}
-                {/*    height={1000}*/}
-                {/*    fill="white"*/}
-                {/*  />*/}
-                {/*  <LayoutTool controller={layoutToolController} />*/}
-
-                {/*{controller.state.layers.map((v) => {*/}
-                {/*  switch (v.defaultState.type) {*/}
-                {/*    case ELayerType.Circle:*/}
-                {/*      return (*/}
-                {/*        <CircleElement controller={v as CircleLayerController} />*/}
-                {/*      );*/}
-                {/*  }*/}
-                {/*})}*/}
-
-                {/*<Circle*/}
-                {/*  x={10}*/}
-                {/*  y={10}*/}
-                {/*  width={10}*/}
-                {/*  height={10}*/}
-                {/*  fill="red"*/}
-                {/*/>*/}
-                {/*<Text*/}
-                {/*  text="Some text on canvas"*/}
-                {/*  fontSize={15}*/}
-                {/*  fill="#000"*/}
-                {/*/>*/}
-                {/*</Layer>*/}
               </Container>
             </Stage>
-            {/* info bar */}
           </div>
-          <div className="w-full p-3">
+          {/* info bar*/}
+          <div className="w-full p-3 flex gap-x-3">
             <ZoomControl
-              scale={documentController.state.scale}
+              scale={documentController.state.scaleInt}
               onChange={documentController.onChangeScale}
               onClickZoomIn={documentController.onZoomIn}
               onClickZoomOut={documentController.onZoomOut}
             />
+            <Button
+              variant="blue"
+              onClick={onClickFitToView}
+              isInline
+            >
+              <MoveHorizontal />
+              <span className="ms-1">Fit To View</span>
+            </Button>
           </div>
         </div>
+        {/* layers */}
         <div className="shrink-0">
           <LayerList controllers={state.layers} />
         </div>
       </div>
+      {/* bottom controls */}
       <ControlBar controller={controller} />
     </div>
   );

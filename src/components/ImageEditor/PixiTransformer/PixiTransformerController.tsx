@@ -9,7 +9,8 @@ import { rotate } from '@/util/Rotate';
 import { distanceBetween } from '@/util/DistanceBetween';
 import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
 import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
-import { graphicsRound } from '@/hooks/GraphicsRound';
+import { roundTo1Place } from '@/util/RoundTo1Place';
+import { calculateLastPoint } from '@/util/CalculateLastPoint';
 
 export interface IBoundingBox {
   width: number;
@@ -63,11 +64,11 @@ export default class PixiTransformerController extends BasicController<IState> {
     const newState = { ...this.state, ...arg };
     // console.log('angle', graphicsRound(newState.angle));
     const update: IBoundingBox = {
-      width: graphicsRound(newState.width),
-      height: graphicsRound(newState.height),
-      angle: graphicsRound(newState.angle),
-      x: graphicsRound(newState.x),
-      y: graphicsRound(newState.y),
+      width: roundTo1Place(newState.width),
+      height: roundTo1Place(newState.height),
+      angle: roundTo1Place(newState.angle),
+      x: roundTo1Place(newState.x),
+      y: roundTo1Place(newState.y),
     };
     this.onUpdate(update);
     this.setState(update);
@@ -104,6 +105,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       return;
     }
 
+    // convert mouse pointer from view space to scaled space
     const mousePointTranslated: IVector2 = {
       x: (mousePoint.x - docState.x) * docState.scaleX,
       y: (mousePoint.y - docState.y) * docState.scaleY,
@@ -135,12 +137,6 @@ export default class PixiTransformerController extends BasicController<IState> {
       const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
-      // this.setState({
-      //   height: this.state.startHeight,
-      //   width: distance,
-      //   y: midPoint.y,
-      //   x: midPoint.x,
-      // });
       this.transformUpdate({
         height: this.state.startHeight,
         width: distance,
@@ -161,12 +157,13 @@ export default class PixiTransformerController extends BasicController<IState> {
       );
       const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
-      const endingOrigin: IVector2 = {
-        x: anchorPoint.x - distance,
-        y: anchorPoint.y,
-      };
-
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      // const endingOrigin: IVector2 = {
+      //   x: anchorPoint.x - distance,
+      //   y: anchorPoint.y,
+      // };
+      //
+      // const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = calculateLastPoint(anchorPoint, mousePointTranslated);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({

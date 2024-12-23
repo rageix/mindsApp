@@ -13,7 +13,7 @@ import TextLayerController from '@/components/ImageEditor/Layer/Text/TextControl
 import { nanoid } from 'nanoid';
 import CircleLayerController from '@/components/ImageEditor/Layer/Circle/CircleController';
 import PixiTransformerController, {
-  IBoundingBox
+  IBoundingBox,
 } from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import DocumentController from '@/components/ImageEditor/DocumentController';
 
@@ -34,7 +34,9 @@ export default class ImageEditorController extends BasicController<IState> {
     super();
 
     this.name = data.name;
-    this.transformController = new PixiTransformerController(this.onTransformSelection);
+    this.transformController = new PixiTransformerController(
+      this.onTransformSelection,
+    );
     this.documentController = new DocumentController();
 
     const layers: ILayer[] = [
@@ -43,8 +45,8 @@ export default class ImageEditorController extends BasicController<IState> {
         parentId: null,
         name: 'Circle 1',
         type: ELayerType.Ellipse,
-        x: 50,
-        y: 50,
+        x: 1920 / 2 - 50,
+        y: 1080 / 2 - 50,
         width: 100,
         height: 50,
         angle: 0,
@@ -58,8 +60,8 @@ export default class ImageEditorController extends BasicController<IState> {
         parentId: null,
         name: 'Circle 2',
         type: ELayerType.Ellipse,
-        x: 200,
-        y: 100,
+        x: 1920 / 2,
+        y: 1080 / 2,
         width: 150,
         height: 75,
         angle: 0,
@@ -194,11 +196,10 @@ export default class ImageEditorController extends BasicController<IState> {
 
   onTransformSelection = (value: IBoundingBox) => {
     // console.log('onTransformSelection');
-    for(const layerIndex of this.state.selectedLayers) {
+    for (const layerIndex of this.state.selectedLayers) {
       this.state.layers[layerIndex].setState(value);
     }
-  }
-
+  };
 
   onClickLayer = (index: number) => {
     // console.log('onClickLayer', index);
@@ -215,7 +216,7 @@ export default class ImageEditorController extends BasicController<IState> {
     // }
     //
     if (selectedLayers.length === 1) {
-    //   const { state } = this.state.layers[selectedIndexes[0]];
+      //   const { state } = this.state.layers[selectedIndexes[0]];
       const { state } = this.state.layers[selectedLayers[0]];
       // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
       this.transformController.setState({
@@ -226,10 +227,9 @@ export default class ImageEditorController extends BasicController<IState> {
         angle: state.angle,
         isVisible: true,
       });
-
     }
 
-    this.setState({selectedLayers});
+    this.setState({ selectedLayers });
 
     // const corners: ICorners[] = [];
     //
