@@ -6,11 +6,12 @@ import { MouseEvent } from 'react';
 import { getMidpoint } from '@/util/GetMidpoint';
 import { findAngle } from '@/util/FindAngle';
 import { rotate } from '@/util/Rotate';
-import { distanceBetween } from '@/util/DistanceBetween';
 import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
 import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
 import { roundTo1Place } from '@/util/RoundTo1Place';
-import { calculateLastPoint } from '@/util/CalculateLastPoint';
+import { isPointPositive } from '@/util/IsPointPositive';
+import { threePointDistance } from '@/util/ThreePointDistance';
+import { getDiff } from '@/util/GetDiff';
 
 export interface IBoundingBox {
   width: number;
@@ -122,15 +123,39 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: this.state.startY,
       };
 
+      const bottomLeftOrigin: IVector2 = {
+        x: this.state.startX - this.state.startWidth / 2,
+        y: this.state.startY + this.state.startHeight / 2,
+      };
+
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedBottomLeft = rotate(
+        bottomLeftOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedBottomLeft,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedBottomLeft,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.x, mousePointTranslated.x);
+      }
 
       const endingOrigin: IVector2 = {
-        x: anchorPoint.x + distance,
+        x: isPositive ? anchorPoint.x + distance : anchorPoint.x - distance,
         y: anchorPoint.y,
       };
 
@@ -150,20 +175,43 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: this.state.startY,
       };
 
+      const topRight: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY - this.state.startHeight / 2,
+      };
+
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
 
-      // const endingOrigin: IVector2 = {
-      //   x: anchorPoint.x - distance,
-      //   y: anchorPoint.y,
-      // };
-      //
-      // const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
-      const endPoint = calculateLastPoint(anchorPoint, mousePointTranslated);
+      const rotatedTopRight = rotate(
+        topRight,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.x, mousePointTranslated.x);
+      }
+
+      const endingOrigin: IVector2 = {
+        x: isPositive ? anchorPoint.x - distance : anchorPoint.x + distance,
+        y: anchorPoint.y,
+      };
+
+      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -179,16 +227,40 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: this.state.startY + this.state.startHeight / 2,
       };
 
+      const bottomRightOrigin: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY + this.state.startHeight / 2,
+      };
+
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedBottomRight = rotate(
+        bottomRightOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedBottomRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedBottomRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.y, mousePointTranslated.y);
+      }
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
-        y: anchorPoint.y - distance,
+        y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
       const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
@@ -207,16 +279,40 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: this.state.startY - this.state.startHeight / 2,
       };
 
+      const topRightOrigin: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY - this.state.startHeight / 2,
+      };
+
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
         this.state.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedTopRight = rotate(
+        topRightOrigin,
+        transformOrigin,
+        this.state.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.y, mousePointTranslated.y);
+      }
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
-        y: anchorPoint.y + distance,
+        y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
       const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
