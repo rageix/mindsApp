@@ -1,6 +1,7 @@
 import BasicController from '@/util/BasicController';
 import {
   ELayerType,
+  ETab,
   ICircleLayer,
   IImageEditor,
   IImageLayer,
@@ -8,10 +9,7 @@ import {
   ITextLayer,
   TLayerControllers,
 } from '@/types/ImageEditor';
-import BaseLayerController from '@/components/ImageEditor/Layer/BaseLayerController';
-import TextLayerController from '@/components/ImageEditor/Layer/Text/TextController';
 import { nanoid } from 'nanoid';
-import CircleLayerController from '@/components/ImageEditor/Layer/Circle/CircleController';
 import PixiTransformerController, {
   IBoundingBox,
 } from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
@@ -20,8 +18,9 @@ import DocumentController from '@/components/ImageEditor/DocumentController';
 export interface IState {
   width: number;
   height: number;
-  layers: TLayerControllers[];
+  layers: ILayer[];
   selectedLayers: number[];
+  tab: ETab;
 }
 
 export default class ImageEditorController extends BasicController<IState> {
@@ -50,7 +49,8 @@ export default class ImageEditorController extends BasicController<IState> {
         width: 100,
         height: 50,
         angle: 0,
-        visible: true,
+        isVisible: true,
+        isSelected: false,
         locked: false,
         dragging: false,
         fillColor: '0x1800FF',
@@ -65,7 +65,8 @@ export default class ImageEditorController extends BasicController<IState> {
         width: 150,
         height: 75,
         angle: 0,
-        visible: true,
+        isVisible: true,
+        isSelected: false,
         locked: false,
         dragging: false,
         fillColor: '0xFF0000',
@@ -88,8 +89,10 @@ export default class ImageEditorController extends BasicController<IState> {
       //   }
       // }),
       // layers: data.layers.map((v) => new BaseLayerController(v)),
-      layers: layers.map((v) => new BaseLayerController(v)),
+      // layers: layers.map((v) => new BaseLayerController(v)),
+      layers: layers,
       selectedLayers: [],
+      tab: ETab.Layers,
     };
   }
 
@@ -112,7 +115,8 @@ export default class ImageEditorController extends BasicController<IState> {
       y: 0,
       width: 0,
       height: 0,
-      visible: true,
+      isVisible: true,
+      isSelected: true,
       angle: 0,
       locked: false,
       dragging: false,
@@ -157,31 +161,31 @@ export default class ImageEditorController extends BasicController<IState> {
     };
   };
 
-  onClickNewTextLayer = () => {
-    const data = this.newTextLayer();
-    const controller = new TextLayerController(data);
-    const layers = [...this.state.layers, controller];
-    this.setState({ layers });
-  };
-
-  onClickNewImageLayer = () => {
-    const controller = new TextLayerController(this.newTextLayer());
-    const layers = [...this.state.layers, controller];
-    this.setState({ layers });
-  };
-
-  onClickNewCircleLayer = () => {
-    const controller = new CircleLayerController(this.newCircleLayer());
-    const layers = [...this.state.layers, controller];
-    this.setState({ layers });
-  };
+  // onClickNewTextLayer = () => {
+  //   const data = this.newTextLayer();
+  //   const controller = new TextLayerController(data);
+  //   const layers = [...this.state.layers, controller];
+  //   this.setState({ layers });
+  // };
+  //
+  // onClickNewImageLayer = () => {
+  //   const controller = new TextLayerController(this.newTextLayer());
+  //   const layers = [...this.state.layers, controller];
+  //   this.setState({ layers });
+  // };
+  //
+  // onClickNewCircleLayer = () => {
+  //   const controller = new CircleLayerController(this.newCircleLayer());
+  //   const layers = [...this.state.layers, controller];
+  //   this.setState({ layers });
+  // };
 
   save = () => {
     const state: IImageEditor = {
       name: this.name,
       width: this.state.width,
       height: this.state.height,
-      layers: this.layers.map((v) => v.state),
+      layers: this.state.layers,
     };
 
     return state;
@@ -196,15 +200,37 @@ export default class ImageEditorController extends BasicController<IState> {
 
   onTransformSelection = (value: IBoundingBox) => {
     // console.log('onTransformSelection');
+    const layers = [...this.state.layers];
+
     for (const layerIndex of this.state.selectedLayers) {
-      this.state.layers[layerIndex].setState(value);
+      layers[layerIndex] = { ...layers[layerIndex], ...value };
     }
+
+    this.setState({ layers });
+  };
+
+  onDeselect = () => {
+    this.setState({ selectedLayers: [] });
+    this.transformController.onDisable();
   };
 
   onClickLayer = (index: number) => {
+    console.log('onClickLayer', index);
+    let layers = [...this.state.layers];
+
     // console.log('onClickLayer', index);
     // const selectedIndexes = toggleInArray(this.state.selectedLayers, index);
     const selectedLayers = [index];
+
+    layers = layers.map((v, i) => {
+      const result = selectedLayers.find((x) => x === i);
+      if (result === undefined) {
+        v.isSelected = false;
+      } else {
+        v.isSelected = true;
+      }
+      return v;
+    });
     //
     // if (selectedIndexes.length === 0) {
     //   this.state.transformController.setState({
@@ -217,24 +243,36 @@ export default class ImageEditorController extends BasicController<IState> {
     //
     if (selectedLayers.length === 1) {
       //   const { state } = this.state.layers[selectedIndexes[0]];
-      const { state } = this.state.layers[selectedLayers[0]];
+      const layer = layers[selectedLayers[0]];
       // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
       this.transformController.setState({
-        x: state.x,
-        y: state.y,
-        width: state.width,
-        height: state.height,
-        angle: state.angle,
+        x: layer.x,
+        y: layer.y,
+        width: layer.width,
+        height: layer.height,
+        angle: layer.angle,
         isVisible: true,
       });
     }
 
-    this.setState({ selectedLayers });
+    this.setState({ selectedLayers, layers });
 
     // const corners: ICorners[] = [];
     //
     // for(const selectedIndex of selectedIndexes) {
     //
     // }
+  };
+
+  onClickLayerVisibility = (index: number) => {
+    const layers = [...this.state.layers];
+
+    layers[index].isVisible = !layers[index].isVisible;
+
+    this.setState({ layers });
+  };
+
+  onClickTab = (tab: ETab) => {
+    this.setState({ tab });
   };
 }

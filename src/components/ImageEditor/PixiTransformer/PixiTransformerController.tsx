@@ -448,4 +448,8 @@ export default class PixiTransformerController extends BasicController<IState> {
       return;
     }
   };
+
+  onDisable = () => {
+    this.setState({ isVisible: false });
+  };
 }

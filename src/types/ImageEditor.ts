@@ -11,7 +11,7 @@ export enum ELayerType {
   Image = 'image',
   Circle = 'circle',
   Rectangle = 'rectangle',
-  Ellipse = 'ellipse'
+  Ellipse = 'ellipse',
 }
 
 export interface ILayer {
@@ -24,7 +24,8 @@ export interface ILayer {
   width: number;
   height: number;
   angle: number;
-  visible: boolean;
+  isVisible: boolean;
+  isSelected: boolean;
   locked: boolean;
   dragging: boolean;
   fillColor: string;
@@ -93,5 +94,19 @@ export enum EHandle {
   Left,
   ScaleAroundCenter,
   Rotate,
-  Move
+  Move,
+}
+
+export enum ETool {
+  Pointer,
+  Text,
+  Image,
+  Ellipse,
+  Box,
+}
+
+export enum ETab {
+  Layers,
+  Settings,
+  History,
 }

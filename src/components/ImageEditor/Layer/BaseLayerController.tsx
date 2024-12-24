@@ -45,11 +45,11 @@ export default class BaseLayerController<
   };
 
   onChangeVisible = (value: boolean) => {
-    this.setState({ visible: value } as Partial<T>);
+    this.setState({ isVisible: value } as Partial<T>);
   };
 
   onClickVisible = () => {
-    this.onChangeVisible(!this.state.visible);
+    this.onChangeVisible(!this.state.isVisible);
   };
 
   onChangeRotation = (value: number) => {

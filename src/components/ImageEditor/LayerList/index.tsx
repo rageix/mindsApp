@@ -1,21 +1,23 @@
 import LayerListItem from '@/components/ImageEditor/LayerList/LayerListItem';
-import { TLayerControllers } from '@/types/ImageEditor';
+import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
+import Tabs from '@/components/ImageEditor/Tabs';
 
 interface IProps {
-  controllers: TLayerControllers[];
+  controller: ImageEditorController;
 }
 
-export default function LayerList({ controllers }: IProps) {
-  // controllers.forEach((v) => console.log(v));
+export default function LayerList({ controller }: IProps) {
 
   return (
-    <div className="w-64 bg-gray-700 h-full">
-      <div>layer controls</div>
-      <div>
-        {controllers.map((v) => (
+    <div className="w-64 bg-gray-700 h-full flex flex-col gap-y-3">
+      <Tabs controller={controller}/>
+      <div className="divide-gray-900 divide-y border-t border-b border-gray-900">
+        {controller.state.layers.map((v, i) => (
           <LayerListItem
-            key={v.state?.id || v.defaultState?.id}
-            controller={v}
+            key={v.id}
+            layer={v}
+            index={i}
+            controller={controller}
           />
         ))}
       </div>

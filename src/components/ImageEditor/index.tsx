@@ -1,12 +1,12 @@
 import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
 import ControlBar from '@/components/ImageEditor/ControlBar';
 import useSize from '@/hooks/UseSize';
-import { useEffect, useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
+import { MouseEvent, useEffect, useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
 import { Container, Stage } from '@pixi/react'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
 import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
-import { EHandle, ELayerType } from '@/types/ImageEditor';
+import { EHandle, ELayerType, ETool } from '@/types/ImageEditor';
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
 import { FederatedPointerEvent } from 'pixi.js';
@@ -26,6 +26,7 @@ export default function ImageEditor({ controller }: IProps) {
   const [handle, setHandle] = useState<EHandle | null>(null);
   const [transformMove, setTransformMove] = useState(false);
   const [action, setAction] = useState<EHandle | null>(null);
+  const [tool, setTool] = useState<ETool>(ETool.Pointer);
   // layoutToolController.useController();
   controller.useController();
   const { state, transformController, documentController } = controller;
@@ -36,21 +37,22 @@ export default function ImageEditor({ controller }: IProps) {
   const stageRef = useRef<Stage>(null);
   const size = useSize(stageWrapperRef);
 
-  function onMouseDown() {
-    // setMouseDown(true);
-    if (handle) {
-      setAction(handle);
-    } else if (transformMove) {
-      setAction(EHandle.Move);
-    } else {
-      setAction(null);
+  function onCanvasMouseDown(e: MouseEvent<HTMLCanvasElement>) {
+    if (e.button === MOUSE_LEFT) {
+      if (handle) {
+        setAction(handle);
+        transformController.onMouseDown(e);
+      } else if (transformMove) {
+        setAction(EHandle.Move);
+        transformController.onMouseDown(e);
+      } else {
+        setAction(null);
+        controller.onDeselect();
+      }
+    } else if (e.button === MOUSE_MIDDLE) {
+      setMiddleMouseDown(true);
+      documentController.onMouseDown(e);
     }
-  }
-
-  function onMouseUp() {
-    // setMouseDown(false);
-    setHandle(null);
-    setAction(null);
   }
 
   function onClickFitToView() {
@@ -88,11 +90,14 @@ export default function ImageEditor({ controller }: IProps) {
       if (e.button === MOUSE_MIDDLE) {
         setMiddleMouseDown(false);
       } else if (e.button === MOUSE_LEFT) {
-        onMouseUp();
+        setAction(null);
       }
     };
 
+    // @ts-ignore
+    // defs have to be wrong
     window.addEventListener('mouseup', fn);
+    // @ts-ignore
     return () => window.removeEventListener('mouseup', fn);
   }, []);
 
@@ -114,15 +119,7 @@ export default function ImageEditor({ controller }: IProps) {
                 antialias: true,
                 powerPreference: 'high-performance',
               }}
-              onMouseDown={(e) => {
-                if (e.button === MOUSE_LEFT) {
-                  onMouseDown();
-                  transformController.onMouseDown(e);
-                } else if (e.button === MOUSE_MIDDLE) {
-                  setMiddleMouseDown(true);
-                  documentController.onMouseDown(e);
-                }
-              }}
+              onMouseDown={onCanvasMouseDown}
               // onMouseUp={(e) => {
               //   if (e.button === MOUSE_LEFT) {
               //     onMouseUp();
@@ -175,31 +172,36 @@ export default function ImageEditor({ controller }: IProps) {
                   fill="0xffffff"
                 />
                 {state.layers.map((v, i) => {
-                  switch (v.state?.type) {
+                  if (!v.isVisible) {
+                    return null;
+                  }
+
+                  switch (v.type) {
                     case ELayerType.Ellipse:
                       return (
                         <Container
-                          key={v.state.id}
-                          angle={v.state.angle}
-                          x={v.state.x}
-                          y={v.state.y}
-                          eventMode={!v.state.locked ? 'dynamic' : 'auto'}
+                          key={v.id}
+                          angle={v.angle}
+                          x={v.x}
+                          y={v.y}
+                          eventMode={!v.locked ? 'dynamic' : 'auto'}
                         >
                           <Ellipse
-                            key={v.state.id}
+                            key={v.id}
                             x={0}
                             y={0}
-                            width={v.state.width}
-                            height={v.state.height}
-                            fillColor={v.state.fillColor}
-                            fillAlpha={v.state.fillAlpha}
-                            borderColor={v.state.borderColor}
-                            borderWidth={v.state.borderWidth}
-                            eventMode={!v.state.locked ? 'dynamic' : 'auto'}
+                            width={v.width}
+                            height={v.height}
+                            fillColor={v.fillColor}
+                            fillAlpha={v.fillAlpha}
+                            borderColor={v.borderColor}
+                            borderWidth={v.borderWidth}
+                            eventMode={!v.locked ? 'dynamic' : 'auto'}
                             onMouseDown={(
                               e: FederatedPointerEvent | undefined,
                             ) => {
                               console.log('onMouseDown');
+                              e?.preventDefault();
                               if (e?.button === MOUSE_LEFT) {
                                 controller.onClickLayer(i);
                               }
@@ -210,7 +212,7 @@ export default function ImageEditor({ controller }: IProps) {
                       );
                   }
                 })}
-                {transformController.state?.isVisible && (
+                {controller.state.selectedLayers.length > 0 && (
                   <PixiTransformer
                     controller={transformController}
                     onHandleMouseOver={(handle) => setHandle(handle)}
@@ -244,11 +246,14 @@ export default function ImageEditor({ controller }: IProps) {
         </div>
         {/* layers */}
         <div className="shrink-0">
-          <LayerList controllers={state.layers} />
+          <LayerList controller={controller} />
         </div>
       </div>
       {/* bottom controls */}
-      <ControlBar controller={controller} />
+      <ControlBar
+        activeTool={tool}
+        onChangeTool={setTool}
+      />
     </div>
   );
 }
