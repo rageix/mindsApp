@@ -10,10 +10,9 @@ import {
   TLayerControllers,
 } from '@/types/ImageEditor';
 import { nanoid } from 'nanoid';
-import PixiTransformerController, {
-  IBoundingBox,
-} from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
 import DocumentController from '@/components/ImageEditor/DocumentController';
+import { ILayerTransform, newILayerTransform } from '@/types/LayerTransform';
 
 export interface IState {
   width: number;
@@ -21,6 +20,7 @@ export interface IState {
   layers: ILayer[];
   selectedLayers: number[];
   tab: ETab;
+  transform: ILayerTransform;
 }
 
 export default class ImageEditorController extends BasicController<IState> {
@@ -93,6 +93,7 @@ export default class ImageEditorController extends BasicController<IState> {
       layers: layers,
       selectedLayers: [],
       tab: ETab.Layers,
+      transform: newILayerTransform(),
     };
   }
 
@@ -198,7 +199,7 @@ export default class ImageEditorController extends BasicController<IState> {
     this.transformController.setState({ isVisible: false });
   };
 
-  onTransformSelection = (value: IBoundingBox) => {
+  onTransformSelection = (value: ILayerTransform) => {
     // console.log('onTransformSelection');
     const layers = [...this.state.layers];
 
@@ -206,7 +207,7 @@ export default class ImageEditorController extends BasicController<IState> {
       layers[layerIndex] = { ...layers[layerIndex], ...value };
     }
 
-    this.setState({ layers });
+    this.setState({ layers, transform: value });
   };
 
   onDeselect = () => {
@@ -215,7 +216,7 @@ export default class ImageEditorController extends BasicController<IState> {
   };
 
   onClickLayer = (index: number) => {
-    console.log('onClickLayer', index);
+    // console.log('onClickLayer', index);
     let layers = [...this.state.layers];
 
     // console.log('onClickLayer', index);
@@ -223,12 +224,7 @@ export default class ImageEditorController extends BasicController<IState> {
     const selectedLayers = [index];
 
     layers = layers.map((v, i) => {
-      const result = selectedLayers.find((x) => x === i);
-      if (result === undefined) {
-        v.isSelected = false;
-      } else {
-        v.isSelected = true;
-      }
+      v.isSelected = selectedLayers.findIndex((x) => x === i) > -1;
       return v;
     });
     //
@@ -241,21 +237,24 @@ export default class ImageEditorController extends BasicController<IState> {
     //   return;
     // }
     //
+    let transform: ILayerTransform = newILayerTransform();
+
     if (selectedLayers.length === 1) {
       //   const { state } = this.state.layers[selectedIndexes[0]];
       const layer = layers[selectedLayers[0]];
       // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
-      this.transformController.setState({
+      transform = {
         x: layer.x,
         y: layer.y,
         width: layer.width,
         height: layer.height,
         angle: layer.angle,
-        isVisible: true,
-      });
+      };
+
+      this.transformController.onShow();
     }
 
-    this.setState({ selectedLayers, layers });
+    this.setState({ selectedLayers, layers, transform });
 
     // const corners: ICorners[] = [];
     //
@@ -275,4 +274,5 @@ export default class ImageEditorController extends BasicController<IState> {
   onClickTab = (tab: ETab) => {
     this.setState({ tab });
   };
+
 }

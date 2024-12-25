@@ -4,9 +4,11 @@ import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/
 import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
 import { EHandle } from '@/types/ImageEditor';
 import { IDocumentControllerState } from '@/components/ImageEditor/DocumentController';
+import { ILayerTransform } from '@/types/LayerTransform';
 
 interface IProps extends PropsWithChildren {
   controller: PixiTransformerController;
+  transform: ILayerTransform;
   onHandleMouseOver: (handle: EHandle) => void;
   onHandleMouseOut: () => void;
   onMouseOver: () => void;
@@ -15,19 +17,8 @@ interface IProps extends PropsWithChildren {
   documentState: IDocumentControllerState;
 }
 
-// interface IBoundingBox {
-//   width: number;
-//   height: number;
-//   x: number;
-//   y: number;
-// }
-
-// const BORDER_WIDTH = 1;
-// const HANDLE_SIZE = 10;
-// const HANDLE_TRANSFORM = HANDLE_SIZE / 2;
-
 export default function PixiTransformer({
-  controller,
+  transform,
   onHandleMouseOver,
   onHandleMouseOut,
   currentHandle,
@@ -58,24 +49,23 @@ export default function PixiTransformer({
   //   }
   // }, [children, ref.current]);
 
-  const { state } = controller;
-  const WIDTH_TRANSFORM = state.width / 2;
-  const HEIGHT_TRANSFORM = state.height / 2;
+  const WIDTH_TRANSFORM = transform.width / 2;
+  const HEIGHT_TRANSFORM = transform.height / 2;
   const BORDER_WIDTH = documentState.ratio;
   const HANDLE_SIZE = 10 * documentState.ratio;
 
   return (
     <>
       <Container
-        angle={state.angle}
-        x={state.x}
-        y={state.y}
+        angle={transform.angle}
+        x={transform.x}
+        y={transform.y}
       >
         <Rectangle
           x={0}
           y={0}
-          width={state?.width || 0}
-          height={state?.height || 0}
+          width={transform?.width || 0}
+          height={transform?.height || 0}
           fill="0xFFFFFF"
           fillAlpha={0.00000001}
           borderColor="0x000000"

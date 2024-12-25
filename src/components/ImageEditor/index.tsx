@@ -41,10 +41,10 @@ export default function ImageEditor({ controller }: IProps) {
     if (e.button === MOUSE_LEFT) {
       if (handle) {
         setAction(handle);
-        transformController.onMouseDown(e);
+        transformController.onMouseDown(e, controller.state.transform);
       } else if (transformMove) {
         setAction(EHandle.Move);
-        transformController.onMouseDown(e);
+        transformController.onMouseDown(e, controller.state.transform);
       } else {
         setAction(null);
         controller.onDeselect();
@@ -130,15 +130,12 @@ export default function ImageEditor({ controller }: IProps) {
               //   // transformerController.onMouseUp();
               // }}
               onMouseMove={(e) => {
-                // const mousePoint: IVector2 = getCanvasVector(e);
-                // console.log(mousePoint);
-                // console.log('onMouseMove', e.buttons);
-                // if (e.buttons === 1 && action) {
                 if (e.buttons === 1 && action) {
                   transformController.onMouseMove(
                     e,
                     action,
                     documentController.state,
+                    controller.state.transform
                   );
                 } else if (middleMouseDown) {
                   documentController.onMouseMove(e);
@@ -215,6 +212,7 @@ export default function ImageEditor({ controller }: IProps) {
                 {controller.state.selectedLayers.length > 0 && (
                   <PixiTransformer
                     controller={transformController}
+                    transform={controller.state.transform}
                     onHandleMouseOver={(handle) => setHandle(handle)}
                     onHandleMouseOut={() => setHandle(null)}
                     currentHandle={handle}

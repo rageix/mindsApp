@@ -12,20 +12,14 @@ import { roundTo1Place } from '@/util/RoundTo1Place';
 import { isPointPositive } from '@/util/IsPointPositive';
 import { threePointDistance } from '@/util/ThreePointDistance';
 import { getDiff } from '@/util/GetDiff';
+import { ILayerTransform } from '@/types/LayerTransform';
 
-export interface IBoundingBox {
-  width: number;
-  height: number;
-  angle: number;
-  x: number;
-  y: number;
-}
-
-export interface IState extends IBoundingBox {
+export interface IState {
   startWidth: number;
   startHeight: number;
   startX: number;
   startY: number;
+  startAngle: number;
   mouseOver: boolean;
   downX: number;
   downY: number;
@@ -35,15 +29,11 @@ export interface IState extends IBoundingBox {
 
 function newIState(): IState {
   return {
-    width: 0,
-    height: 0,
-    angle: 0,
-    x: 0,
-    y: 0,
     startWidth: 0,
     startHeight: 0,
     startX: 0,
     startY: 0,
+    startAngle: 0,
     mouseOver: false,
     downX: 0,
     downY: 0,
@@ -54,37 +44,47 @@ function newIState(): IState {
 
 export default class PixiTransformerController extends BasicController<IState> {
   defaultState = newIState();
-  onUpdate: (value: IBoundingBox) => void;
+  onUpdate: (value: ILayerTransform) => void;
 
-  constructor(onUpdate: (value: IBoundingBox) => void) {
+  constructor(onUpdate: (value: ILayerTransform) => void) {
     super();
     this.onUpdate = onUpdate;
   }
 
-  transformUpdate = (arg: Partial<IState>) => {
-    const newState = { ...this.state, ...arg };
-    // console.log('angle', graphicsRound(newState.angle));
-    const update: IBoundingBox = {
-      width: roundTo1Place(newState.width),
-      height: roundTo1Place(newState.height),
-      angle: roundTo1Place(newState.angle),
-      x: roundTo1Place(newState.x),
-      y: roundTo1Place(newState.y),
+  transformUpdate = (transform: Partial<ILayerTransform>) => {
+    const newTransform = {
+      width: this.state.startWidth,
+      height: this.state.startHeight,
+      angle: this.state.startAngle,
+      x: this.state.startX,
+      y: this.state.startY,
+      ...transform,
+    };
+
+    const update: ILayerTransform = {
+      width: roundTo1Place(newTransform.width),
+      height: roundTo1Place(newTransform.height),
+      angle: roundTo1Place(newTransform.angle),
+      x: roundTo1Place(newTransform.x),
+      y: roundTo1Place(newTransform.y),
     };
     this.onUpdate(update);
-    this.setState(update);
   };
 
-  onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
+  onMouseDown = (
+    e: MouseEvent<HTMLCanvasElement>,
+    currentTransform: ILayerTransform,
+  ) => {
     const currentMouseVector: IVector2 = getCanvasVector(e);
 
     this.setState({
       downX: currentMouseVector.x,
       downY: currentMouseVector.y,
-      startWidth: this.state.width,
-      startHeight: this.state.height,
-      startX: this.state.x,
-      startY: this.state.y,
+      startWidth: currentTransform.width,
+      startHeight: currentTransform.height,
+      startX: currentTransform.x,
+      startY: currentTransform.y,
+      startAngle: currentTransform.angle
     });
   };
 
@@ -92,6 +92,7 @@ export default class PixiTransformerController extends BasicController<IState> {
     e: MouseEvent<HTMLCanvasElement>,
     handle: EHandle | null,
     docState: IDocumentState,
+    transform: ILayerTransform,
   ) => {
     const mousePoint: IVector2 = getCanvasVector(e);
 
@@ -131,13 +132,13 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const rotatedBottomLeft = rotate(
         bottomLeftOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const isPositive = isPointPositive(
@@ -159,7 +160,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: anchorPoint.y,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -183,13 +184,13 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const rotatedTopRight = rotate(
         topRight,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const isPositive = isPointPositive(
@@ -211,7 +212,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: anchorPoint.y,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -235,13 +236,13 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const rotatedBottomRight = rotate(
         bottomRightOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const isPositive = isPointPositive(
@@ -263,7 +264,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -287,13 +288,13 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const rotatedTopRight = rotate(
         topRightOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const isPositive = isPointPositive(
@@ -315,7 +316,7 @@ export default class PixiTransformerController extends BasicController<IState> {
         y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -334,7 +335,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -342,7 +343,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -361,7 +362,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -369,7 +370,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -388,7 +389,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -396,7 +397,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -415,7 +416,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -423,7 +424,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -450,6 +451,14 @@ export default class PixiTransformerController extends BasicController<IState> {
   };
 
   onDisable = () => {
+    this.setState({ isVisible: false });
+  };
+
+  onShow = () => {
+    this.setState({ isVisible: true });
+  };
+
+  onHide = () => {
     this.setState({ isVisible: false });
   };
 }

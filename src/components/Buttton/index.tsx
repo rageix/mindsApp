@@ -11,6 +11,7 @@ interface Props extends PropsWithChildren {
   isInline?: boolean;
   onClick?: () => void;
   submit?: boolean;
+  isActive?: boolean;
 }
 
 const colors: Record<TButtonVariant, string> = {
@@ -28,6 +29,20 @@ const colors: Record<TButtonVariant, string> = {
   gray: 'bg-gray-700 hover:bg-gray-600 active:bg-gray-800 focus-visible:outline-gray-700 text-white',
   link: 'text-blue-600 hover:text-blue-500 focus-visible:outline-blue-500 !shadow-none',
   text: 'text-gray-400 hover:text-gray-300 focus-visible:outline-gray-400 !shadow-none',
+  custom: '',
+};
+
+const active: Record<TButtonVariant, string> = {
+  indigo: '!bg-indigo-800',
+  blue: '!bg-blue-800',
+  red: 'bg-red-700 hover:bg-red-600 active:bg-red-800 focus-visible:outline-red-700 text-white',
+  purple: '!bg-purple-800',
+  green: '!bg-green-800',
+  yellow: '!bg-yellow-800',
+  white: '',
+  gray: '!bg-gray-800',
+  link: '',
+  text: '',
   custom: '',
 };
 
@@ -53,6 +68,7 @@ export default function Button({
   variant,
   isInline,
   onClick,
+  isActive,
   children,
 }: Props) {
   return (
@@ -65,6 +81,7 @@ export default function Button({
         className ? className : null,
         disabled ? colorsDisabled[variant] : null,
         isInline ? 'inline' : 'w-full',
+        isActive ? active[variant] : null,
       )}
       onClick={onClick}
     >
