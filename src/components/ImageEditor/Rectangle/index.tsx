@@ -9,7 +9,7 @@ interface IProps {
   y: number;
   width: number;
   height: number;
-  fill: string;
+  fillColor: string;
   fillAlpha?: number;
   borderColor?: string;
   borderWidth?: number;
@@ -30,7 +30,7 @@ export default function Rectangle(props: IProps) {
   const draw = useCallback<Draw>(
     (g) => {
       g.clear();
-      g.beginFill(props.fill, props.fillAlpha);
+      g.beginFill(props.fillColor, props.fillAlpha);
       if (props.borderWidth) {
         g.lineStyle(props.borderWidth, props.borderColor, 1);
       }

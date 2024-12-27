@@ -6,24 +6,20 @@ import { MouseEvent } from 'react';
 import { getMidpoint } from '@/util/GetMidpoint';
 import { findAngle } from '@/util/FindAngle';
 import { rotate } from '@/util/Rotate';
-import { distanceBetween } from '@/util/DistanceBetween';
 import { rectangleFromPointsAndAngle } from '@/util/RectangleFromPointsAndAngle';
 import { IState as IDocumentState } from '@/components/ImageEditor/DocumentController';
-import Decimal from 'decimal.js';
+import { roundTo1Place } from '@/util/RoundTo1Place';
+import { isPointPositive } from '@/util/IsPointPositive';
+import { threePointDistance } from '@/util/ThreePointDistance';
+import { getDiff } from '@/util/GetDiff';
+import { ILayerTransform } from '@/types/LayerTransform';
 
-export interface IBoundingBox {
-  width: number;
-  height: number;
-  angle: number;
-  x: number;
-  y: number;
-}
-
-export interface IState extends IBoundingBox {
+export interface IState {
   startWidth: number;
   startHeight: number;
   startX: number;
   startY: number;
+  startAngle: number;
   mouseOver: boolean;
   downX: number;
   downY: number;
@@ -33,15 +29,11 @@ export interface IState extends IBoundingBox {
 
 function newIState(): IState {
   return {
-    width: 0,
-    height: 0,
-    angle: 0,
-    x: 0,
-    y: 0,
     startWidth: 0,
     startHeight: 0,
     startX: 0,
     startY: 0,
+    startAngle: 0,
     mouseOver: false,
     downX: 0,
     downY: 0,
@@ -50,42 +42,49 @@ function newIState(): IState {
   };
 }
 
-export default class PixiTransformerController extends BasicController<IState> {
+export default class TransformerToolController extends BasicController<IState> {
   defaultState = newIState();
-  onUpdate: (value: IBoundingBox) => void;
+  onUpdate: (value: ILayerTransform) => void;
 
-  constructor(onUpdate: (value: IBoundingBox) => void) {
+  constructor(onUpdate: (value: ILayerTransform) => void) {
     super();
     this.onUpdate = onUpdate;
   }
 
-  transformUpdate = (arg: Partial<IState>) => {
-    const newState = { ...this.state, ...arg };
-    this.onUpdate({
-      width: newState.width,
-      height: newState.height,
-      angle: newState.angle,
-      x: newState.x,
-      y: newState.y,
-    });
-    this.setState(arg);
+  transformUpdate = (transform: Partial<ILayerTransform>) => {
+    const newTransform = {
+      width: this.state.startWidth,
+      height: this.state.startHeight,
+      angle: this.state.startAngle,
+      x: this.state.startX,
+      y: this.state.startY,
+      ...transform,
+    };
+
+    const update: ILayerTransform = {
+      width: roundTo1Place(newTransform.width),
+      height: roundTo1Place(newTransform.height),
+      angle: roundTo1Place(newTransform.angle),
+      x: roundTo1Place(newTransform.x),
+      y: roundTo1Place(newTransform.y),
+    };
+    this.onUpdate(update);
   };
 
-  onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
-    // if (this.state.mouseDown) {
-    //   this.setState({ x: this.state.startX, y: this.state.startY });
-    //   return;
-    // }
-
+  onMouseDown = (
+    e: MouseEvent<HTMLCanvasElement>,
+    currentTransform: ILayerTransform,
+  ) => {
     const currentMouseVector: IVector2 = getCanvasVector(e);
 
     this.setState({
       downX: currentMouseVector.x,
       downY: currentMouseVector.y,
-      startWidth: this.state.width,
-      startHeight: this.state.height,
-      startX: this.state.x,
-      startY: this.state.y,
+      startWidth: currentTransform.width,
+      startHeight: currentTransform.height,
+      startX: currentTransform.x,
+      startY: currentTransform.y,
+      startAngle: currentTransform.angle
     });
   };
 
@@ -93,35 +92,25 @@ export default class PixiTransformerController extends BasicController<IState> {
     e: MouseEvent<HTMLCanvasElement>,
     handle: EHandle | null,
     docState: IDocumentState,
+    transform: ILayerTransform,
   ) => {
     const mousePoint: IVector2 = getCanvasVector(e);
 
     if (handle === EHandle.Move) {
-      // const xTransform = (mousePoint.x - this.state.downX) * docState.ratio;
-      const xTransform = new Decimal(
-        new Decimal(mousePoint.x).sub(this.state.downX),
-      ).mul(docState.ratio);
-      // const yTransform = (mousePoint.y - this.state.downY) * docState.ratio;
-      const yTransform = new Decimal(
-        new Decimal(mousePoint.y).sub(this.state.downY),
-      ).mul(docState.ratio);
+      const xTransform = (mousePoint.x - this.state.downX) * docState.ratio;
+      const yTransform = (mousePoint.y - this.state.downY) * docState.ratio;
 
       this.transformUpdate({
-        // x: this.state.startX + xTransform,
-        x: new Decimal(this.state.startX).add(xTransform).toNumber(),
-        // y: this.state.startY + yTransform,
-        y: new Decimal(this.state.startY).add(yTransform).toNumber(),
+        x: this.state.startX + xTransform,
+        y: this.state.startY + yTransform,
       });
       return;
     }
 
+    // convert mouse pointer from view space to scaled space
     const mousePointTranslated: IVector2 = {
-      x: new Decimal(new Decimal(mousePoint.x).sub(docState.x).toNumber())
-        .mul(docState.scaleX)
-        .toNumber(),
-      y: new Decimal(new Decimal(mousePoint.y).sub(docState.y).toNumber())
-        .mul(docState.scaleY)
-        .toNumber(),
+      x: (mousePoint.x - docState.x) * docState.scaleX,
+      y: (mousePoint.y - docState.y) * docState.scaleY,
     };
 
     const transformOrigin: IVector2 = {
@@ -131,34 +120,49 @@ export default class PixiTransformerController extends BasicController<IState> {
 
     if (handle === EHandle.Right) {
       const anchorOrigin: IVector2 = {
-        //  x: this.state.startX - this.state.startWidth / 2,
-        x: new Decimal(this.state.startX)
-          .sub(new Decimal(this.state.startWidth).div(2))
-          .toNumber(),
+        x: this.state.startX - this.state.startWidth / 2,
         y: this.state.startY,
+      };
+
+      const bottomLeftOrigin: IVector2 = {
+        x: this.state.startX - this.state.startWidth / 2,
+        y: this.state.startY + this.state.startHeight / 2,
       };
 
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedBottomLeft = rotate(
+        bottomLeftOrigin,
+        transformOrigin,
+        transform.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedBottomLeft,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedBottomLeft,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.x, mousePointTranslated.x);
+      }
 
       const endingOrigin: IVector2 = {
-        x: new Decimal(anchorPoint.x).add(distance).toNumber(),
+        x: isPositive ? anchorPoint.x + distance : anchorPoint.x - distance,
         y: anchorPoint.y,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
-      // this.setState({
-      //   height: this.state.startHeight,
-      //   width: distance,
-      //   y: midPoint.y,
-      //   x: midPoint.x,
-      // });
       this.transformUpdate({
         height: this.state.startHeight,
         width: distance,
@@ -168,26 +172,47 @@ export default class PixiTransformerController extends BasicController<IState> {
       return;
     } else if (handle === EHandle.Left) {
       const anchorOrigin: IVector2 = {
-        // x: this.state.startX + this.state.startWidth / 2,
-        x: new Decimal(this.state.startX)
-          .add(new Decimal(this.state.startWidth).div(2))
-          .toNumber(),
+        x: this.state.startX + this.state.startWidth / 2,
         y: this.state.startY,
+      };
+
+      const topRight: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY - this.state.startHeight / 2,
       };
 
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedTopRight = rotate(
+        topRight,
+        transformOrigin,
+        transform.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.x, mousePointTranslated.x);
+      }
 
       const endingOrigin: IVector2 = {
-        x: anchorPoint.x - distance,
+        x: isPositive ? anchorPoint.x - distance : anchorPoint.x + distance,
         y: anchorPoint.y,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -200,25 +225,46 @@ export default class PixiTransformerController extends BasicController<IState> {
     } else if (handle === EHandle.Top) {
       const anchorOrigin: IVector2 = {
         x: this.state.startX,
-        // y: this.state.startY + this.state.startHeight / 2,
-        y: new Decimal(this.state.startY)
-          .add(new Decimal(this.state.startHeight).div(2))
-          .toNumber(),
+        y: this.state.startY + this.state.startHeight / 2,
+      };
+
+      const bottomRightOrigin: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY + this.state.startHeight / 2,
       };
 
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedBottomRight = rotate(
+        bottomRightOrigin,
+        transformOrigin,
+        transform.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedBottomRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedBottomRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.y, mousePointTranslated.y);
+      }
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
-        y: new Decimal(anchorPoint.y).sub(distance).toNumber(),
+        y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -231,26 +277,46 @@ export default class PixiTransformerController extends BasicController<IState> {
     } else if (handle === EHandle.Bottom) {
       const anchorOrigin: IVector2 = {
         x: this.state.startX,
-        // y: this.state.startY - this.state.startHeight / 2,
-        y: new Decimal(this.state.startY)
-          .sub(new Decimal(this.state.startHeight).div(2))
-          .toNumber(),
+        y: this.state.startY - this.state.startHeight / 2,
+      };
+
+      const topRightOrigin: IVector2 = {
+        x: this.state.startX + this.state.startWidth / 2,
+        y: this.state.startY - this.state.startHeight / 2,
       };
 
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
-      const distance = distanceBetween(anchorPoint, mousePointTranslated);
+
+      const rotatedTopRight = rotate(
+        topRightOrigin,
+        transformOrigin,
+        transform.angle,
+      );
+
+      const isPositive = isPointPositive(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      let distance = threePointDistance(
+        rotatedTopRight,
+        anchorPoint,
+        mousePointTranslated,
+      );
+      if (distance === Infinity) {
+        distance = getDiff(anchorPoint.y, mousePointTranslated.y);
+      }
 
       const endingOrigin: IVector2 = {
         x: anchorPoint.x,
-        // y: anchorPoint.y + distance,
-        y: new Decimal(anchorPoint.y).add(distance).toNumber(),
+        y: isPositive ? anchorPoint.y - distance : anchorPoint.y + distance,
       };
 
-      const endPoint = rotate(endingOrigin, anchorPoint, this.state.angle);
+      const endPoint = rotate(endingOrigin, anchorPoint, transform.angle);
       const midPoint = getMidpoint(anchorPoint, endPoint);
 
       this.transformUpdate({
@@ -269,7 +335,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -277,7 +343,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -296,7 +362,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -304,7 +370,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -323,7 +389,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -331,7 +397,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -350,7 +416,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const anchorPoint = rotate(
         anchorOrigin,
         transformOrigin,
-        this.state.angle,
+        transform.angle,
       );
 
       const midPoint = getMidpoint(anchorPoint, mousePointTranslated);
@@ -358,7 +424,7 @@ export default class PixiTransformerController extends BasicController<IState> {
       const [width, height] = rectangleFromPointsAndAngle(
         anchorPoint,
         mousePointTranslated,
-        this.state.angle,
+        transform.angle,
       );
 
       this.transformUpdate({
@@ -382,5 +448,17 @@ export default class PixiTransformerController extends BasicController<IState> {
 
       return;
     }
+  };
+
+  onDisable = () => {
+    this.setState({ isVisible: false });
+  };
+
+  onShow = () => {
+    this.setState({ isVisible: true });
+  };
+
+  onHide = () => {
+    this.setState({ isVisible: false });
   };
 }

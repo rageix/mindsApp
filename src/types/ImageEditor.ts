@@ -9,8 +9,7 @@ export enum ELayerType {
   Container = 'container',
   Text = 'text',
   Image = 'image',
-  Circle = 'circle',
-  Rectangle = 'rectangle',
+  Box = 'box',
   Ellipse = 'ellipse',
 }
 
@@ -25,7 +24,6 @@ export interface ILayer {
   height: number;
   angle: number;
   isVisible: boolean;
-  isSelected: boolean;
   locked: boolean;
   dragging: boolean;
   fillColor: string;
@@ -109,4 +107,22 @@ export enum ETab {
   Layers,
   Settings,
   History,
+}
+
+export interface ILayout {
+  downX: number;
+  downY: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface IStyle {
+  fillColor: string;
+  fillAlpha?: number;
+  borderColor?: string;
+  borderWidth?: number;
+  borderRadius?: number;
+  borderAlpha?: number;
 }

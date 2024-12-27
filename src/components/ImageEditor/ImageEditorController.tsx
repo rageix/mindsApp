@@ -2,38 +2,47 @@ import BasicController from '@/util/BasicController';
 import {
   ELayerType,
   ETab,
-  ICircleLayer,
+  ETool,
   IImageEditor,
-  IImageLayer,
   ILayer,
-  ITextLayer,
+  ILayout,
+  IStyle,
   TLayerControllers,
 } from '@/types/ImageEditor';
 import { nanoid } from 'nanoid';
-import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
+import TransformerToolController from '@/components/ImageEditor/TransformerTool/TransformerToolController';
 import DocumentController from '@/components/ImageEditor/DocumentController';
 import { ILayerTransform, newILayerTransform } from '@/types/LayerTransform';
+import { MouseEvent } from 'react';
+import { IVector2 } from '@/types/Vectors';
+import { getCanvasVector } from '@/util/GetCanvasVector';
+import { getDiff } from '@/util/GetDiff';
+import { getMidpoint } from '@/util/GetMidpoint';
+import { roundTo1Place } from '@/util/RoundTo1Place';
 
 export interface IState {
   width: number;
   height: number;
   layers: ILayer[];
-  selectedLayers: number[];
+  selected: number[];
   tab: ETab;
   transform: ILayerTransform;
+  layout: ILayout | null;
+  style: IStyle;
+  tool: ETool;
 }
 
 export default class ImageEditorController extends BasicController<IState> {
   layers: TLayerControllers[] = [];
   name: string;
-  transformController: PixiTransformerController;
+  transformController: TransformerToolController;
   documentController: DocumentController;
 
   constructor(data: IImageEditor) {
     super();
 
     this.name = data.name;
-    this.transformController = new PixiTransformerController(
+    this.transformController = new TransformerToolController(
       this.onTransformSelection,
     );
     this.documentController = new DocumentController();
@@ -50,7 +59,6 @@ export default class ImageEditorController extends BasicController<IState> {
         height: 50,
         angle: 0,
         isVisible: true,
-        isSelected: false,
         locked: false,
         dragging: false,
         fillColor: '0x1800FF',
@@ -66,7 +74,6 @@ export default class ImageEditorController extends BasicController<IState> {
         height: 75,
         angle: 0,
         isVisible: true,
-        isSelected: false,
         locked: false,
         dragging: false,
         fillColor: '0xFF0000',
@@ -91,9 +98,14 @@ export default class ImageEditorController extends BasicController<IState> {
       // layers: data.layers.map((v) => new BaseLayerController(v)),
       // layers: layers.map((v) => new BaseLayerController(v)),
       layers: layers,
-      selectedLayers: [],
+      selected: [],
       tab: ETab.Layers,
       transform: newILayerTransform(),
+      layout: null,
+      style: {
+        fillColor: '0x6B7280',
+      },
+      tool: ETool.Pointer,
     };
   }
 
@@ -106,81 +118,6 @@ export default class ImageEditorController extends BasicController<IState> {
     }
   };
 
-  newLayerData = (): ILayer => {
-    return {
-      id: this.newLayerId(),
-      parentId: null,
-      name: 'Layer',
-      type: ELayerType.Container,
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-      isVisible: true,
-      isSelected: true,
-      angle: 0,
-      locked: false,
-      dragging: false,
-      fillColor: '0xFFFFFF',
-    };
-  };
-
-  newImageLayer = (data?: Partial<IImageLayer>): IImageLayer => {
-    return {
-      ...this.newLayerData(),
-      name: 'Image Layer',
-      type: ELayerType.Image,
-      imageId: null,
-      ...data,
-    };
-  };
-
-  newTextLayer = (data?: Partial<ITextLayer>): ITextLayer => {
-    return {
-      ...this.newLayerData(),
-      type: ELayerType.Text,
-      name: 'Text Layer',
-      fontFamily: 'Arial',
-      fontSize: 12,
-      fontStyle: 'regular',
-      textDecoration: '',
-      text: '',
-      align: 'left',
-      fill: '#000',
-      ...data,
-    };
-  };
-
-  newCircleLayer = (data?: Partial<ICircleLayer>): ICircleLayer => {
-    return {
-      ...this.newLayerData(),
-      type: ELayerType.Circle,
-      width: 20,
-      height: 20,
-      fill: '#000',
-      ...data,
-    };
-  };
-
-  // onClickNewTextLayer = () => {
-  //   const data = this.newTextLayer();
-  //   const controller = new TextLayerController(data);
-  //   const layers = [...this.state.layers, controller];
-  //   this.setState({ layers });
-  // };
-  //
-  // onClickNewImageLayer = () => {
-  //   const controller = new TextLayerController(this.newTextLayer());
-  //   const layers = [...this.state.layers, controller];
-  //   this.setState({ layers });
-  // };
-  //
-  // onClickNewCircleLayer = () => {
-  //   const controller = new CircleLayerController(this.newCircleLayer());
-  //   const layers = [...this.state.layers, controller];
-  //   this.setState({ layers });
-  // };
-
   save = () => {
     const state: IImageEditor = {
       name: this.name,
@@ -192,41 +129,33 @@ export default class ImageEditorController extends BasicController<IState> {
     return state;
   };
 
-  onClickCanvas = () => {
-    this.setState({
-      selectedLayers: [],
-    });
-    this.transformController.setState({ isVisible: false });
-  };
-
   onTransformSelection = (value: ILayerTransform) => {
     // console.log('onTransformSelection');
     const layers = [...this.state.layers];
 
-    for (const layerIndex of this.state.selectedLayers) {
+    for (const layerIndex of this.state.selected) {
       layers[layerIndex] = { ...layers[layerIndex], ...value };
     }
 
     this.setState({ layers, transform: value });
   };
 
-  onDeselect = () => {
-    this.setState({ selectedLayers: [] });
-    this.transformController.onDisable();
-  };
-
   onClickLayer = (index: number) => {
     // console.log('onClickLayer', index);
-    let layers = [...this.state.layers];
+    // let layers = [...this.state.layers];
 
     // console.log('onClickLayer', index);
     // const selectedIndexes = toggleInArray(this.state.selectedLayers, index);
-    const selectedLayers = [index];
+    // console.log(layers.length - index - 1);
 
-    layers = layers.map((v, i) => {
-      v.isSelected = selectedLayers.findIndex((x) => x === i) > -1;
-      return v;
-    });
+    // convert the index from the list index where it
+    // was rendered to its actual index in the array
+    const selected = [index];
+
+    // layers = layers.map((v, i) => {
+    //   v.isSelected = selectedLayers.findIndex((x) => x === i) > -1;
+    //   return v;
+    // });
     //
     // if (selectedIndexes.length === 0) {
     //   this.state.transformController.setState({
@@ -239,9 +168,9 @@ export default class ImageEditorController extends BasicController<IState> {
     //
     let transform: ILayerTransform = newILayerTransform();
 
-    if (selectedLayers.length === 1) {
+    if (selected.length === 1) {
       //   const { state } = this.state.layers[selectedIndexes[0]];
-      const layer = layers[selectedLayers[0]];
+      const layer = this.state.layers[selected[0]];
       // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
       transform = {
         x: layer.x,
@@ -254,7 +183,7 @@ export default class ImageEditorController extends BasicController<IState> {
       this.transformController.onShow();
     }
 
-    this.setState({ selectedLayers, layers, transform });
+    this.setState({ selected, transform });
 
     // const corners: ICorners[] = [];
     //
@@ -275,4 +204,154 @@ export default class ImageEditorController extends BasicController<IState> {
     this.setState({ tab });
   };
 
+  onCanvasMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
+    let layout: ILayout | null = null;
+    const { tool } = this.state;
+
+    if (tool !== ETool.Pointer) {
+      const mousePoint: IVector2 = getCanvasVector(e);
+      const docState = this.documentController.state;
+      const mousePointTranslated: IVector2 = {
+        x: (mousePoint.x - docState.x) * docState.scaleX,
+        y: (mousePoint.y - docState.y) * docState.scaleY,
+      };
+
+      layout = {
+        downX: roundTo1Place(mousePointTranslated.x),
+        downY: roundTo1Place(mousePointTranslated.y),
+        x: roundTo1Place(mousePointTranslated.x),
+        y: roundTo1Place(mousePointTranslated.y),
+        width: 0,
+        height: 0,
+      };
+    }
+
+    this.setState({
+      // selected: [],
+      // lastSelected: selected,
+      layout,
+    });
+    this.transformController.onDisable();
+  };
+
+  onCanvasMouseUp = () => {
+    const { layout, style, tool, selected } = this.state;
+
+    if (layout && layout.width > 5 && layout.height > 5 && tool && tool > 0) {
+      const layers = [...this.state.layers];
+      let layerType: ELayerType = ELayerType.Container;
+      let layerName = 'New Layer';
+
+      switch (tool) {
+        case ETool.Text:
+          layerType = ELayerType.Text;
+          layerName = 'Text';
+          break;
+        case ETool.Image:
+          layerType = ELayerType.Image;
+          layerName = 'Image';
+          break;
+        case ETool.Box:
+          layerType = ELayerType.Box;
+          layerName = 'Box';
+          break;
+        case ETool.Ellipse:
+          layerType = ELayerType.Ellipse;
+          layerName = 'Ellipse';
+          break;
+      }
+
+      const newLayer: ILayer = {
+        id: this.newLayerId(),
+        parentId: null,
+        name: layerName,
+        type: layerType,
+        x: layout.x,
+        y: layout.y,
+        width: layout.width,
+        height: layout.height,
+        angle: 0,
+        isVisible: true,
+        locked: false,
+        dragging: false,
+        ...style,
+      };
+
+      let newIndex =
+        selected.length === 0 ? layers.length - 1 : Math.max(...selected);
+
+      // if (newIndex === Infinity || newIndex === -Infinity) {
+      //   newIndex = layers.length - 1;
+      // }
+
+      newIndex += 1;
+
+      layers.splice(newIndex, 0, newLayer);
+      const newSelected = [newIndex];
+
+      const transform: ILayerTransform = {
+        x: layout.x,
+        y: layout.y,
+        width: layout.width,
+        height: layout.height,
+        angle: 0,
+      };
+
+      this.setState({
+        layout: null,
+        layers,
+        transform,
+        selected: newSelected,
+      });
+      return;
+    }
+
+    this.setState({ layout: null });
+  };
+
+  onLayoutMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
+    if (!this.state.layout) {
+      return;
+    }
+
+    const layout = { ...this.state.layout };
+    const docState = this.documentController.state;
+
+    const mousePoint: IVector2 = getCanvasVector(e);
+    // translate mouse from global space to scaled space
+    const mousePointTranslated: IVector2 = {
+      x: (mousePoint.x - docState.x) * docState.scaleX,
+      y: (mousePoint.y - docState.y) * docState.scaleY,
+    };
+
+    const midPoint = getMidpoint(
+      { x: layout.downX, y: layout.downY },
+      mousePointTranslated,
+    );
+
+    layout.x = roundTo1Place(midPoint.x);
+    layout.y = roundTo1Place(midPoint.y);
+    layout.width = roundTo1Place(getDiff(layout.downX, mousePointTranslated.x));
+    layout.height = roundTo1Place(
+      getDiff(layout.downY, mousePointTranslated.y),
+    );
+
+    this.setState({ layout });
+  };
+
+  onChangeTool = (tool: ETool) => {
+    this.setState({ tool });
+  };
+
+  onDeleteSelected = () => {
+    const layers = this.state.layers.filter(
+      (_, i) => this.state.selected.findIndex((x) => x === i) === -1,
+    );
+
+    this.setState({ layers, selected: [] });
+  };
+
+  onDeselect = () => {
+    this.setState({ selected: [] });
+  };
 }

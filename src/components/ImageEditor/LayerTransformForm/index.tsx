@@ -27,7 +27,7 @@ export default function LayerTransformForm({ controller }: IProps) {
   const [activeField, setActiveField] = useState<IActiveField<ILayerTransform>>(
     { field: null, value: '' },
   );
-  const { transform, selectedLayers } = controller.state;
+  const { transform, selected } = controller.state;
 
   function onChangeActiveField(e: ChangeEvent<HTMLInputElement>) {
     console.log('onChangeActiveField', activeField.field);
@@ -66,7 +66,7 @@ export default function LayerTransformForm({ controller }: IProps) {
     }
   }
 
-  const disabled = selectedLayers.length === 0;
+  const disabled = selected.length === 0;
 
   return (
     <Form

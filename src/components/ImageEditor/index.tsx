@@ -3,16 +3,17 @@ import ControlBar from '@/components/ImageEditor/ControlBar';
 import useSize from '@/hooks/UseSize';
 import { MouseEvent, useEffect, useRef, useState } from 'react'; // import LayoutToolController from '@/components/ImageEditor/LayoutTool/LayoutToolController';
 import { Container, Stage } from '@pixi/react'; // import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
-import Ellipse from '@/components/ImageEditor/LayoutToolPixi/Ellipse';
+import Ellipse from './Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
-import PixiTransformer from '@/components/ImageEditor/PixiTransformer';
-import { EHandle, ELayerType, ETool } from '@/types/ImageEditor';
-import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import PixiTransformer from './TransformerTool';
+import { EHandle, ELayerType } from '@/types/ImageEditor';
+import Rectangle from './Rectangle';
 import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
 import { FederatedPointerEvent } from 'pixi.js';
 import ZoomControl from '@/components/ImageEditor/ZoomControl';
 import { MoveHorizontal } from 'lucide-react';
 import Button from '@/components/Buttton';
+import Layout from './LayoutTool';
 
 interface IProps {
   controller: ImageEditorController;
@@ -26,7 +27,6 @@ export default function ImageEditor({ controller }: IProps) {
   const [handle, setHandle] = useState<EHandle | null>(null);
   const [transformMove, setTransformMove] = useState(false);
   const [action, setAction] = useState<EHandle | null>(null);
-  const [tool, setTool] = useState<ETool>(ETool.Pointer);
   // layoutToolController.useController();
   controller.useController();
   const { state, transformController, documentController } = controller;
@@ -46,8 +46,8 @@ export default function ImageEditor({ controller }: IProps) {
         setAction(EHandle.Move);
         transformController.onMouseDown(e, controller.state.transform);
       } else {
-        setAction(null);
-        controller.onDeselect();
+        // setAction(null);
+        controller.onCanvasMouseDown(e);
       }
     } else if (e.button === MOUSE_MIDDLE) {
       setMiddleMouseDown(true);
@@ -61,6 +61,11 @@ export default function ImageEditor({ controller }: IProps) {
 
       documentController.onFitToView(rect.width, rect.height);
     }
+  }
+
+  function onClickLayer (i: number) {
+    controller.onClickLayer(i);
+    setTransformMove(true);
   }
 
   useEffect(() => {
@@ -90,7 +95,8 @@ export default function ImageEditor({ controller }: IProps) {
       if (e.button === MOUSE_MIDDLE) {
         setMiddleMouseDown(false);
       } else if (e.button === MOUSE_LEFT) {
-        setAction(null);
+        // setAction(null);
+        controller.onCanvasMouseUp();
       }
     };
 
@@ -100,6 +106,8 @@ export default function ImageEditor({ controller }: IProps) {
     // @ts-ignore
     return () => window.removeEventListener('mouseup', fn);
   }, []);
+
+  console.log('selected', state.selected);
 
   return (
     <div className="">
@@ -130,13 +138,17 @@ export default function ImageEditor({ controller }: IProps) {
               //   // transformerController.onMouseUp();
               // }}
               onMouseMove={(e) => {
-                if (e.buttons === 1 && action) {
-                  transformController.onMouseMove(
-                    e,
-                    action,
-                    documentController.state,
-                    controller.state.transform
-                  );
+                if (e.buttons === 1) {
+                  if (action) {
+                    transformController.onMouseMove(
+                      e,
+                      action,
+                      documentController.state,
+                      controller.state.transform,
+                    );
+                  } else if (controller.state.layout) {
+                    controller.onLayoutMouseDown(e);
+                  }
                 } else if (middleMouseDown) {
                   documentController.onMouseMove(e);
                 }
@@ -160,13 +172,15 @@ export default function ImageEditor({ controller }: IProps) {
                 x={documentController.state.x}
                 y={documentController.state.y}
                 scale={documentController.state.scale}
+                // onclick={controller.onDeselect}
               >
                 <Rectangle
                   x={documentController.state.width / 2}
                   y={documentController.state.height / 2}
                   width={documentController.state.width}
                   height={documentController.state.height}
-                  fill="0xffffff"
+                  fillColor="0xffffff"
+                  // onClick={controller.onDeselect}
                 />
                 {state.layers.map((v, i) => {
                   if (!v.isVisible) {
@@ -197,10 +211,43 @@ export default function ImageEditor({ controller }: IProps) {
                             onMouseDown={(
                               e: FederatedPointerEvent | undefined,
                             ) => {
-                              console.log('onMouseDown');
+                              // console.log('onMouseDown');
                               e?.preventDefault();
                               if (e?.button === MOUSE_LEFT) {
-                                controller.onClickLayer(i);
+                                onClickLayer(i);
+                              }
+                              // console.log(e);
+                            }}
+                          />
+                        </Container>
+                      );
+                    case ELayerType.Box:
+                      return (
+                        <Container
+                          key={v.id}
+                          angle={v.angle}
+                          x={v.x}
+                          y={v.y}
+                          eventMode={!v.locked ? 'dynamic' : 'auto'}
+                        >
+                          <Rectangle
+                            key={v.id}
+                            x={0}
+                            y={0}
+                            width={v.width}
+                            height={v.height}
+                            fillColor={v.fillColor}
+                            fillAlpha={v.fillAlpha}
+                            borderColor={v.borderColor}
+                            borderWidth={v.borderWidth}
+                            eventMode={!v.locked ? 'dynamic' : 'auto'}
+                            onMouseDown={(
+                              e: FederatedPointerEvent | undefined,
+                            ) => {
+                              // console.log('onMouseDown');
+                              e?.preventDefault();
+                              if (e?.button === MOUSE_LEFT) {
+                                onClickLayer(i);
                               }
                               // console.log(e);
                             }}
@@ -209,7 +256,7 @@ export default function ImageEditor({ controller }: IProps) {
                       );
                   }
                 })}
-                {controller.state.selectedLayers.length > 0 && (
+                {controller.state.selected.length > 0 && (
                   <PixiTransformer
                     controller={transformController}
                     transform={controller.state.transform}
@@ -221,6 +268,7 @@ export default function ImageEditor({ controller }: IProps) {
                     onMouseOut={() => setTransformMove(false)}
                   />
                 )}
+                <Layout controller={controller} />
               </Container>
             </Stage>
           </div>
@@ -249,8 +297,8 @@ export default function ImageEditor({ controller }: IProps) {
       </div>
       {/* bottom controls */}
       <ControlBar
-        activeTool={tool}
-        onChangeTool={setTool}
+        activeTool={controller.state.tool}
+        onChangeTool={controller.onChangeTool}
       />
     </div>
   );

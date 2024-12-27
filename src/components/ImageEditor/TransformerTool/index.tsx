@@ -1,13 +1,16 @@
 import { Container } from '@pixi/react';
 import { PropsWithChildren } from 'react';
-import PixiTransformerController from '@/components/ImageEditor/PixiTransformer/PixiTransformerController';
-import Rectangle from '@/components/ImageEditor/LayoutToolPixi/Rectangle';
+import TransformerToolController from '@/components/ImageEditor/TransformerTool/TransformerToolController';
+import Rectangle from '../Rectangle';
 import { EHandle } from '@/types/ImageEditor';
 import { IDocumentControllerState } from '@/components/ImageEditor/DocumentController';
 import { ILayerTransform } from '@/types/LayerTransform';
 
+
+const BORDER_COLOR = "0x3b82f6";
+
 interface IProps extends PropsWithChildren {
-  controller: PixiTransformerController;
+  controller: TransformerToolController;
   transform: ILayerTransform;
   onHandleMouseOver: (handle: EHandle) => void;
   onHandleMouseOut: () => void;
@@ -61,14 +64,15 @@ export default function PixiTransformer({
         x={transform.x}
         y={transform.y}
       >
+        {/* Selection outline */}
         <Rectangle
           x={0}
           y={0}
           width={transform?.width || 0}
           height={transform?.height || 0}
-          fill="0xFFFFFF"
+          fillColor="0xFFFFFF"
           fillAlpha={0.00000001}
-          borderColor="0x000000"
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           onMouseOver={onMouseOver}
           onMouseOut={onMouseOut}
@@ -80,7 +84,7 @@ export default function PixiTransformer({
           y={0}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={'0xFF0000'}
+          fillColor={'0xFF0000'}
           borderColor="0x000000"
           borderWidth={BORDER_WIDTH}
         />
@@ -90,8 +94,8 @@ export default function PixiTransformer({
           y={0 - HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.TopLeft ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.TopLeft)}
@@ -102,8 +106,8 @@ export default function PixiTransformer({
           y={0 - HEIGHT_TRANSFORM - HANDLE_SIZE * 3}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.Rotate ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.Rotate ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Rotate)}
@@ -115,8 +119,8 @@ export default function PixiTransformer({
           y={0 - HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.Top ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Top)}
@@ -128,8 +132,8 @@ export default function PixiTransformer({
           y={0 - HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.TopRight ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.TopRight)}
@@ -141,8 +145,8 @@ export default function PixiTransformer({
           y={0}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.Right ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => {
@@ -158,8 +162,8 @@ export default function PixiTransformer({
           y={0 + HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.BottomRight ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.BottomRight)}
@@ -171,8 +175,8 @@ export default function PixiTransformer({
           y={0 + HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.Bottom ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Bottom)}
@@ -184,8 +188,8 @@ export default function PixiTransformer({
           y={0 + HEIGHT_TRANSFORM}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.BottomLeft ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.BottomLeft)}
@@ -197,8 +201,8 @@ export default function PixiTransformer({
           y={0}
           width={HANDLE_SIZE}
           height={HANDLE_SIZE}
-          fill={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
-          borderColor="0x000000"
+          fillColor={currentHandle === EHandle.Left ? '0x000000' : '0xFFFFFF'}
+          borderColor={BORDER_COLOR}
           borderWidth={BORDER_WIDTH}
           eventMode="dynamic"
           onMouseOver={() => onHandleMouseOver(EHandle.Left)}
