@@ -180,7 +180,7 @@ export default class ImageEditorController extends BasicController<IState> {
         angle: layer.angle,
       };
 
-      this.transformController.onShow();
+      // this.transformController.onShow();
     }
 
     this.setState({ selected, transform });
@@ -224,20 +224,21 @@ export default class ImageEditorController extends BasicController<IState> {
         width: 0,
         height: 0,
       };
+      this.setState({
+        layout,
+      });
+      return;
     }
 
     this.setState({
-      // selected: [],
-      // lastSelected: selected,
-      layout,
+      selected: [],
     });
-    this.transformController.onDisable();
   };
 
   onCanvasMouseUp = () => {
     const { layout, style, tool, selected } = this.state;
 
-    if (layout && layout.width > 5 && layout.height > 5 && tool && tool > 0) {
+    if (layout && layout.width > 1 && layout.height > 1 && tool && tool > 0) {
       const layers = [...this.state.layers];
       let layerType: ELayerType = ELayerType.Container;
       let layerName = 'New Layer';
@@ -306,7 +307,7 @@ export default class ImageEditorController extends BasicController<IState> {
       return;
     }
 
-    this.setState({ layout: null });
+    // this.setState({ layout: null });
   };
 
   onLayoutMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {

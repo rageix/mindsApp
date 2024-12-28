@@ -77,9 +77,9 @@ export default class DocumentController extends BasicController<IState> {
 
   calcScales = (scale: number) => {
     return {
-      scaleX: roundTo1Place(this.state.width / (this.state.width * scale)),
-      scaleY: roundTo1Place(this.state.height / (this.state.height * scale)),
-      ratio: roundTo1Place(1 / scale),
+      scaleX: this.state.width / (this.state.width * scale),
+      scaleY: this.state.height / (this.state.height * scale),
+      ratio: 1 / scale,
     };
   };
 

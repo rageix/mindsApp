@@ -6,6 +6,7 @@ import { useMemo, useRef } from 'react';
 import Button from '@/components/Buttton';
 import { Trash } from 'lucide-react';
 import useSize from '@/hooks/UseSize';
+import Color from '@/components/ImageEditor/Color';
 
 interface IProps {
   controller: ImageEditorController;
@@ -20,9 +21,14 @@ export default function LayerList({ controller }: IProps) {
   const layersListRef = useRef<HTMLDivElement>(null);
   const size = useSize(layersListRef);
 
+  console.log('LayerList', 'render');
+
   return (
     <div className="w-64 bg-gray-700 h-full flex flex-col">
-      <div className="shrink-0">
+      <div className="shrink-0 p-3">
+        <Color/>
+      </div>
+      <div className="shrink-0 mt-3">
         <Tabs controller={controller} />
       </div>
       <div
