@@ -30,6 +30,7 @@ interface IProps {
 }
 
 export default function Ellipse(props: IProps) {
+
   const draw = useCallback<Draw>(
     (g) => {
       g.clear();

@@ -1,26 +1,33 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react';
-import { cn } from '@/util/Cn';
+import {
+  MouseEvent,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { MOUSE_LEFT } from '@/common/Mouse';
 import { CircleIcon } from 'lucide-react';
 import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
+import { IVector2 } from '@/types/Vectors';
+import { cn } from '@/util/Cn';
 
-interface IProps {
-  value: number;
-  // min: number;
-  // max: number;
-  onChange: (value: number) => void;
+interface IProps extends PropsWithChildren {
+  value: IVector2;
+  onChange: (value: IVector2) => void;
   className?: string;
   handleSize?: number;
 }
 
-export default function Slider({
+export default function XYSlider({
   value,
   onChange,
   className,
   handleSize = 10,
+  children,
 }: IProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const mouseDownRef = useRef(false);
 
   function onHandleMouseDown() {
@@ -41,13 +48,24 @@ export default function Slider({
       e.stopPropagation();
       e.preventDefault();
       const sliderRect = ref.current.getBoundingClientRect();
-      const width = sliderRect.width - handleSize;
+      const width = sliderRect.width;
       const startX = sliderRect.x;
       const currentX = e.clientX;
       const positionX = currentX - startX;
-      const ratio = positionX / width;
+      const xRatio = positionX / width;
 
-      onChange(limitNumberWithinRange(ratio, 0, 1));
+      const height = sliderRect.height;
+      const startY = sliderRect.y;
+      const currentY = e.clientY;
+      const positionY = currentY - startY;
+      const yRatio = positionY / height;
+
+      const out: IVector2 = {
+        x: limitNumberWithinRange(xRatio, 0, 1),
+        y: limitNumberWithinRange(yRatio, 0, 1),
+      };
+
+      onChange(out);
     }
   }
 
@@ -86,27 +104,30 @@ export default function Slider({
   }, [onChange]);
 
   useEffect(() => {
-    if(ref.current) {
-      setWidth(ref.current.getBoundingClientRect().width - handleSize);
+    if (ref.current) {
+      setWidth(ref.current.getBoundingClientRect().width);
+      setHeight(ref.current.getBoundingClientRect().height);
     }
   }, [ref.current]);
 
-  const left = width * value;
+  const left = width * value.x;
+  const top = height * value.y;
 
   return (
     <div
       ref={ref}
-      className={cn('flex items-center', className)}
+      className={cn('relative', className)}
       onMouseDown={onClick}
     >
       <span
-        className="relative text-white hover:text-gray-200"
-        style={{ left: left }}
+        className="absolute z-10 text-white hover:text-gray-200"
+        style={{ left: left - handleSize / 2, top: top - handleSize / 2 }}
         onMouseDown={onHandleMouseDown}
       >
         {/*<CircleIcon fill="#ffff" size={handleSize} />*/}
         <CircleIcon size={handleSize} />
       </span>
+      {children}
     </div>
   );
 }

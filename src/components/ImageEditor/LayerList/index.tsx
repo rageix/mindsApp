@@ -21,12 +21,13 @@ export default function LayerList({ controller }: IProps) {
   const layersListRef = useRef<HTMLDivElement>(null);
   const size = useSize(layersListRef);
 
-  console.log('LayerList', 'render');
-
   return (
     <div className="w-64 bg-gray-700 h-full flex flex-col">
       <div className="shrink-0 p-3">
-        <Color/>
+        <Color
+          controller={controller}
+          color={controller.state.fillColor}
+        />
       </div>
       <div className="shrink-0 mt-3">
         <Tabs controller={controller} />

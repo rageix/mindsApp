@@ -19,6 +19,11 @@ import { getCanvasVector } from '@/util/GetCanvasVector';
 import { getDiff } from '@/util/GetDiff';
 import { getMidpoint } from '@/util/GetMidpoint';
 import { roundTo1Place } from '@/util/RoundTo1Place';
+import { IColor, newIColor } from '@/types/Color';
+import hslToRgb from '@/util/HslToRgb';
+import rgbToHex from '@/util/RgbToHex';
+import rgbToHsl from '@/util/RgbToHsl';
+import hexStrToRgb from '@/util/HexStringToRgb';
 
 export interface IState {
   width: number;
@@ -30,6 +35,8 @@ export interface IState {
   layout: ILayout | null;
   style: IStyle;
   tool: ETool;
+  fillColor: IColor;
+  // borderColor: IColorAlpha
 }
 
 export default class ImageEditorController extends BasicController<IState> {
@@ -106,6 +113,7 @@ export default class ImageEditorController extends BasicController<IState> {
         fillColor: '0x6B7280',
       },
       tool: ETool.Pointer,
+      fillColor: newIColor(),
     };
   }
 
@@ -151,6 +159,8 @@ export default class ImageEditorController extends BasicController<IState> {
     // convert the index from the list index where it
     // was rendered to its actual index in the array
     const selected = [index];
+    const layer = this.state.layers[index];
+    const fillColor = this.hexToColor(layer.fillColor.substring(2), (layer.fillAlpha || 1) * 100);
 
     // layers = layers.map((v, i) => {
     //   v.isSelected = selectedLayers.findIndex((x) => x === i) > -1;
@@ -170,7 +180,7 @@ export default class ImageEditorController extends BasicController<IState> {
 
     if (selected.length === 1) {
       //   const { state } = this.state.layers[selectedIndexes[0]];
-      const layer = this.state.layers[selected[0]];
+      // const layer = this.state.layers[selected[0]];
       // const corners = getCorners(state.x, state.y, state.width, state.height, state.angle);
       transform = {
         x: layer.x,
@@ -183,7 +193,7 @@ export default class ImageEditorController extends BasicController<IState> {
       // this.transformController.onShow();
     }
 
-    this.setState({ selected, transform });
+    this.setState({ selected, transform, fillColor });
 
     // const corners: ICorners[] = [];
     //
@@ -355,4 +365,140 @@ export default class ImageEditorController extends BasicController<IState> {
   onDeselect = () => {
     this.setState({ selected: [] });
   };
+
+  onChangeFill = (value: IColor) => {
+    const layers = [...this.state.layers];
+
+    const fillColor = '0x' + value.hex.substring(1);
+    const fillAlpha = value.opacity / 100;
+    // fillAlpha = fillAlpha === 0 ? -1 : fillAlpha;
+
+    for (const index of this.state.selected) {
+      layers[index].fillColor = fillColor;
+      layers[index].fillAlpha = fillAlpha;
+    }
+
+    this.setState({ layers, fillColor: value });
+  };
+
+  onChangeHSL = (h: number, s: number, l: number) => {
+    const [r, g, b] = hslToRgb(h / 360, s / 100, l / 100);
+    if (r === undefined || g === undefined || b === undefined) {
+      this.setState({ ...this.state, fillColor: newIColor() });
+      return;
+    }
+    const hex = rgbToHex(r, g, b);
+
+    const color: IColor = {
+      ...this.state.fillColor,
+      h,
+      s,
+      l,
+      r: Math.round(r),
+      g: Math.round(g),
+      b: Math.round(b),
+      hex,
+    };
+
+    this.onChangeFill(color);
+  };
+
+  onChangeH = (h: number) => {
+    const color = this.state.fillColor;
+    this.onChangeHSL(h, color.s, color.l);
+  };
+
+  onChangeS = (s: number) => {
+    const color = this.state.fillColor;
+    this.onChangeHSL(color.h, s, color.l);
+  };
+
+  onChangeL = (l: number) => {
+    const color = this.state.fillColor;
+    this.onChangeHSL(color.h, color.s, l);
+  };
+
+  onChangeRgb = (r: number, g: number, b: number) => {
+    const [h, s, l] = rgbToHsl(r, g, b);
+    if (h === undefined || s === undefined || l === undefined) {
+      this.onChangeFill(newIColor());
+      return;
+    }
+    const hex = rgbToHex(r, g, b);
+
+    const out: IColor = {
+      ...this.state.fillColor,
+      h: Math.round(h * 360),
+      s: Math.round(s * 100),
+      l: Math.round(l * 100),
+      r,
+      g,
+      b,
+      hex,
+    };
+
+    this.onChangeFill(out);
+  };
+
+  onChangeR = (r: number) => {
+    const color = this.state.fillColor;
+    this.onChangeRgb(r, color.g, color.b);
+  };
+
+  onChangeG = (g: number) => {
+    const color = this.state.fillColor;
+    this.onChangeRgb(color.r, g, color.b);
+  };
+
+  onChangeB = (b: number) => {
+    const color = this.state.fillColor;
+    this.onChangeRgb(color.r, color.g, b);
+  };
+
+  onChangeOpacity = (opacity: number) => {
+    const out: IColor = {
+      ...this.state.fillColor,
+      opacity,
+    };
+
+    this.onChangeFill(out);
+  };
+
+  hexToColor(hex: string, opacity?: number) {
+    hex = hex.trim();
+    // add # sign if missing
+    if (hex.substring(0, 1) !== '#') {
+      hex = '#' + hex;
+    }
+    // if using shortened format like #fff,
+    // make it long format like #ffffff
+    if (hex.substring(1).length === 3) {
+      hex += hex.substring(1);
+    }
+    const [r, g, b] = hexStrToRgb(hex);
+    if (r === undefined || g === undefined || b === undefined) {
+      return newIColor();
+    }
+    const [h, s, l] = rgbToHsl(r, g, b);
+    hex = rgbToHex(r, g, b);
+
+    const out: IColor = {
+      opacity: opacity ? opacity : 1,
+      h: Math.round(h * 360),
+      s: Math.round(s * 100),
+      l: Math.round(l * 100),
+      r,
+      g,
+      b,
+      hex,
+    };
+
+    return out;
+  }
+
+  onChangeHex(hex: string, opacity?: number) {
+    const out = this.hexToColor(hex, opacity);
+
+    this.onChangeFill(out);
+  }
 }

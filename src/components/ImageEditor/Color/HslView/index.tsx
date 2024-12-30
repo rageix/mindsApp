@@ -1,23 +1,4 @@
 import SliderItem from '@/components/ImageEditor/Color/SliderItem';
-import { ISelectOption } from '@/types/SelectOption';
-
-enum EView {
-  Hsl = 'hsl',
-  Rgb = 'rgb',
-}
-
-export const VIEW_OPTIONS: ISelectOption<EView>[] = [
-  {
-    key: EView.Hsl,
-    value: EView.Hsl,
-    label: 'HSL',
-  },
-  {
-    key: EView.Rgb,
-    value: EView.Rgb,
-    label: 'RGB',
-  },
-];
 
 interface IProps {
   h: number;
@@ -28,7 +9,7 @@ interface IProps {
   onChangeL: (value: number) => void;
 }
 
-export default function HSLView({
+export default function HslView({
   h,
   s,
   l,
@@ -39,25 +20,28 @@ export default function HSLView({
   return (
     <div className="flex flex-col gap-y-3">
       <SliderItem
-        label="H:"
+        label="Hue"
         value={h}
+        scaled={h / 360}
         min={0}
         max={360}
-        onChange={onChangeH}
+        onChange={(v) => onChangeH(Math.round(v * 360))}
       />
       <SliderItem
-        label="S:"
+        label="Saturation"
         value={s}
+        scaled={s / 100}
         min={0}
         max={100}
-        onChange={onChangeS}
+        onChange={(v) => onChangeS(Math.round(v * 100))}
       />
       <SliderItem
-        label="L:"
+        label="Lightness"
         value={l}
+        scaled={l / 100}
         min={0}
         max={100}
-        onChange={onChangeL}
+        onChange={(v) => onChangeL(Math.round(v * 100))}
       />
     </div>
   );

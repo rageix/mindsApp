@@ -3,7 +3,7 @@ export default function rgbToHex(r: number, g: number, b: number): string {
     '#' +
     [r, g, b]
       .map((x) =>
-        Math.round(x)
+        Math.round(x || 0)
           .toString(16)
           .padStart(2, '0'),
       )

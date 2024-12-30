@@ -157,7 +157,10 @@ export default function ImageEditor({ controller }: IProps) {
                   fillColor="0xffffff"
                 />
                 {state.layers.map((v, i) => {
-                  if (!v.isVisible) {
+                  if (
+                    !v.isVisible ||
+                    (v.fillAlpha !== undefined && v.fillAlpha <= 0)
+                  ) {
                     return null;
                   }
 

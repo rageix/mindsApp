@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ISelectOption } from '@/types/SelectOption';
 import Select from '@/components/Select';
-import HSLView from '@/components/ImageEditor/Color/HSLView';
-import hslToRgb from '@/util/HslToRgb';
-import rgbToHsl from '@/util/RgbToHsl';
-import rgbToHex from '@/util/RgbToHex';
+import RgbView from '@/components/ImageEditor/Color/RgbView';
+import HslView from '@/components/ImageEditor/Color/HslView';
+import SliderItem from '@/components/ImageEditor/Color/SliderItem';
+import HexView from '@/components/ImageEditor/Color/HexView';
+import { IColor } from '@/types/Color';
+import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
+import PickerView from '@/components/ImageEditor/Color/PickerView';
 
 enum EView {
   Hsl = 'hsl',
   Rgb = 'rgb',
+  Hex = 'hex',
+  Picker = 'picker',
 }
 
 export const VIEW_OPTIONS: ISelectOption<EView>[] = [
@@ -22,85 +27,154 @@ export const VIEW_OPTIONS: ISelectOption<EView>[] = [
     value: EView.Rgb,
     label: 'RGB',
   },
+  {
+    key: EView.Hex,
+    value: EView.Hex,
+    label: 'Hex',
+  },
+  {
+    key: EView.Picker,
+    value: EView.Picker,
+    label: 'Picker',
+  },
 ];
 
-interface IColor {
-  r: number;
-  g: number;
-  b: number;
-  h: number;
-  s: number;
-  l: number;
-  hex: string;
+interface IProps {
+  controller: ImageEditorController;
+  color: IColor;
 }
 
-export function newIColor() {
-  console.log('newIColor()');
-  return {
-    r: 0,
-    g: 0,
-    b: 0,
-    h: 0,
-    s: 0,
-    l: 0,
-    hex: '#000000',
-  };
-}
-
-// interface IProps {
-//   // style: IStyle;
-// }
-
-export default function Color() {
-  const [color, setColor] = useState<IColor>(newIColor());
+export default function Color({ controller, color }: IProps) {
+  // const [color, setColor] = useState<IColor>(newIColor());
+  // const colorRef = useRef<IColor>(newIColor());
   const [view, setView] = useState<ISelectOption<EView>>(VIEW_OPTIONS[0]);
 
-  function onChangeHSL(h: number, s: number, l: number) {
-    const [r, g, b] = hslToRgb(h / 360, s / 100, l / 100);
-    const hex = rgbToHex(r,g,b);
+  // function onChangeColor() {
+  //   if(colorRef.current) {
+  //     onChange({
+  //       color: '0x' + colorRef.current.hex.substring(1),
+  //       alpha: colorRef.current.opacity / 100,
+  //     });
+  //   }
+  // }
+  //
+  // function onChangeHSL(h: number, s: number, l: number) {
+  //   const [r, g, b] = hslToRgb(h / 360, s / 100, l / 100);
+  //   if (r === undefined || g === undefined || b === undefined) {
+  //     setColor(newIColor());
+  //     return;
+  //   }
+  //   const hex = rgbToHex(r, g, b);
+  //
+  //   setColor({
+  //     ...(colorRef.current || {}),
+  //     h,
+  //     s,
+  //     l,
+  //     r: Math.round(r),
+  //     g: Math.round(g),
+  //     b: Math.round(b),
+  //     hex,
+  //   });
+  //
+  //   onChangeColor();
+  // }
+  //
+  // function onChangeH(h: number) {
+  //   onChangeHSL(h, colorRef.current.s, colorRef.current.l);
+  // }
+  //
+  // function onChangeS(s: number) {
+  //   onChangeHSL(colorRef.current.h, s, colorRef.current.l);
+  // }
+  //
+  // function onChangeL(l: number) {
+  //   onChangeHSL(colorRef.current.h, colorRef.current.s, l);
+  // }
+  //
+  // function onChangeRgb(r: number, g: number, b: number) {
+  //   const [h, s, l] = rgbToHsl(r, g, b);
+  //   if (h === undefined || s === undefined || l === undefined) {
+  //     setColor(newIColor());
+  //     return;
+  //   }
+  //   const hex = rgbToHex(r, g, b);
+  //
+  //   const out: IColor = {
+  //   ...(colorRef.current || {}),
+  //     h: Math.round(h * 360),
+  //     s: Math.round(s * 100),
+  //     l: Math.round(l * 100),
+  //     r,
+  //     g,
+  //     b,
+  //     hex,
+  //   }
+  //
+  //   colorRef.current = out;
+  //
+  //   onChangeColor();
+  // }
+  //
+  // function onChangeR(r: number) {
+  //   onChangeRgb(r, colorRef.current.g, colorRef.current.b);
+  // }
+  //
+  // function onChangeG(g: number) {
+  //   onChangeRgb(colorRef.current.r, g, colorRef.current.b);
+  // }
+  //
+  // function onChangeB(b: number) {
+  //   onChangeRgb(colorRef.current.r, colorRef.current.g, b);
+  // }
+  //
+  // function onChangeOpacity(opacity: number) {
+  //   setColor({ ...color, opacity });
+  //   onChangeColor();
+  // }
+  //
+  // function onChangeHex(hex: string, opacity?: number) {
+  //   hex = hex.trim();
+  //   // add # sign if missing
+  //   if (hex.substring(0, 1) !== '#') {
+  //     hex = '#' + hex;
+  //   }
+  //   // if using shortened format like #fff,
+  //   // make it long format like #ffffff
+  //   if (hex.substring(1).length === 3) {
+  //     hex += hex.substring(1);
+  //   }
+  //   const [r, g, b] = hexStrToRgb(hex);
+  //   if (r === undefined || g === undefined || b === undefined) {
+  //     setColor(newIColor());
+  //     return;
+  //   }
+  //   const [h, s, l] = rgbToHsl(r, g, b);
+  //   hex = rgbToHex(r, g, b);
+  //
+  //   const out: IColor = {
+  //     opacity: opacity ? opacity : color.opacity,
+  //     h: Math.round(h * 360),
+  //     s: Math.round(s * 100),
+  //     l: Math.round(l * 100),
+  //     r,
+  //     g,
+  //     b,
+  //     hex,
+  //   };
+  //
+  //   colorRef.current = out;
+  //   // onChangeColor();
+  // }
+  //
+  // useEffect(() => {
+  //   onChangeHex(value.color.substring(2), Math.round(value.alpha * 100));
+  // }, [value]);
 
-    setColor({
-      ...color,
-      h,
-      s,
-      l,
-      r,
-      g,
-      b,
-      hex,
-    });
-  }
-
-  function onChangeH(h: number) {
-    onChangeHSL(h, color.s, color.l);
-  }
-
-  function onChangeS(s: number) {
-    onChangeHSL(color.h, s, color.l);
-  }
-
-  function onChangeL(l: number) {
-    onChangeHSL(color.h, color.s, l);
-  }
-
-  function onChangeRgb(r: number, g: number, b: number) {
-    const [h, s, l] = rgbToHsl(r, g, b);
-    const hex = rgbToHex(r, g, b);
-    setColor({
-      h,
-      s,
-      l,
-      r,
-      g,
-      b,
-      hex,
-    });
-  }
-
-  useEffect(() => {
-    console.log('Color', 'onMount');
-    return () => console.log('Color', 'onUnmount');
-  }, [])
+  // useEffect(() => {
+  //   console.log('Color', 'onMount');
+  //   return () => console.log('Color', 'onUnmount');
+  // }, []);
 
   // const rgb = hsl2rgb(h,s / 100,l / 100);
   // console.log(rgb.map(v => v*256));
@@ -108,7 +182,9 @@ export default function Color() {
   // console.log(currentHex);
 
   // const currentHex = hslToHex(h, s, l);
-  console.log(color);
+  // console.log(color);
+
+  // const colors = colorRef.current;
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -128,15 +204,48 @@ export default function Color() {
         </div>
       </div>
       {view.value === EView.Hsl && (
-        <HSLView
+        <HslView
           h={color.h}
           s={color.s}
           l={color.l}
-          onChangeH={onChangeH}
-          onChangeS={onChangeS}
-          onChangeL={onChangeL}
+          onChangeH={controller.onChangeH}
+          onChangeS={controller.onChangeS}
+          onChangeL={controller.onChangeL}
         />
       )}
+      {view.value === EView.Rgb && (
+        <RgbView
+          r={color.r}
+          g={color.g}
+          b={color.b}
+          onChangeR={controller.onChangeR}
+          onChangeG={controller.onChangeG}
+          onChangeB={controller.onChangeB}
+        />
+      )}
+      {view.value === EView.Hex && (
+        <HexView
+          hex={color.hex}
+          onChange={controller.onChangeHex}
+        />
+      )}
+      {view.value === EView.Picker && (
+        <PickerView
+          h={color.h}
+          s={color.s}
+          l={color.l}
+          hex={color.hex}
+          onChange={controller.onChangeHSL}
+        />
+      )}
+      <SliderItem
+        label="Opacity"
+        value={color.opacity}
+        scaled={color.opacity / 100}
+        min={0}
+        max={100}
+        onChange={(v) => controller.onChangeOpacity(Math.round(v * 100))}
+      />
     </div>
   );
 }
