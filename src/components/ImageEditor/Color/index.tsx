@@ -8,12 +8,14 @@ import HexView from '@/components/ImageEditor/Color/HexView';
 import { IColor } from '@/types/Color';
 import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
 import PickerView from '@/components/ImageEditor/Color/PickerView';
+import SwatchView from '@/components/ImageEditor/Color/SwatchView';
 
 enum EView {
   Hsl = 'hsl',
   Rgb = 'rgb',
   Hex = 'hex',
   Picker = 'picker',
+  Swatches = 'swatches',
 }
 
 export const VIEW_OPTIONS: ISelectOption<EView>[] = [
@@ -36,6 +38,11 @@ export const VIEW_OPTIONS: ISelectOption<EView>[] = [
     key: EView.Picker,
     value: EView.Picker,
     label: 'Picker',
+  },
+  {
+    key: EView.Swatches,
+    value: EView.Swatches,
+    label: 'Swatches',
   },
 ];
 
@@ -200,6 +207,7 @@ export default function Color({ controller, color }: IProps) {
             options={VIEW_OPTIONS}
             value={view}
             onChange={setView}
+            className="w-[8rem]"
           />
         </div>
       </div>
@@ -234,17 +242,20 @@ export default function Color({ controller, color }: IProps) {
           h={color.h}
           s={color.s}
           l={color.l}
-          hex={color.hex}
           onChange={controller.onChangeHSL}
+        />
+      )}
+      {view.value === EView.Swatches && (
+        <SwatchView
+          onChange={(hex) => controller.onChangeHex(hex, color.opacity)}
         />
       )}
       <SliderItem
         label="Opacity"
-        value={color.opacity}
-        scaled={color.opacity / 100}
-        min={0}
-        max={100}
-        onChange={(v) => controller.onChangeOpacity(Math.round(v * 100))}
+        value={String(Math.round(color.opacity * 100))}
+        scaled={color.opacity}
+        onChangeSlider={(v) => controller.onChangeOpacity(v)}
+        onChangeInput={(v) => controller.onChangeOpacity(parseInt(v) / 100)}
       />
     </div>
   );

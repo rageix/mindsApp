@@ -21,27 +21,24 @@ export default function HslView({
     <div className="flex flex-col gap-y-3">
       <SliderItem
         label="Hue"
-        value={h}
-        scaled={h / 360}
-        min={0}
-        max={360}
-        onChange={(v) => onChangeH(Math.round(v * 360))}
+        value={String(Math.round(h * 360))}
+        scaled={h}
+        onChangeSlider={(v) => onChangeH(v)}
+        onChangeInput={(v) => onChangeH(parseInt(v) / 360)}
       />
       <SliderItem
         label="Saturation"
-        value={s}
-        scaled={s / 100}
-        min={0}
-        max={100}
-        onChange={(v) => onChangeS(Math.round(v * 100))}
+        value={String(Math.round(s * 100))}
+        scaled={s}
+        onChangeSlider={(v) => onChangeS(v)}
+        onChangeInput={(v) => onChangeS(parseInt(v) / 100)}
       />
       <SliderItem
         label="Lightness"
-        value={l}
-        scaled={l / 100}
-        min={0}
-        max={100}
-        onChange={(v) => onChangeL(Math.round(v * 100))}
+        value={String(Math.round(l * 100))}
+        scaled={l}
+        onChangeSlider={(v) => onChangeL(v)}
+        onChangeInput={(v) => onChangeL(parseInt(v) / 100)}
       />
     </div>
   );

@@ -270,17 +270,19 @@ export default function ImageEditor({ controller }: IProps) {
               <span className="ms-1">Fit To View</span>
             </Button>
           </div>
+          {/* bottom controls */}
+          <ControlBar
+            activeTool={controller.state.tool}
+            onChangeTool={controller.onChangeTool}
+          />
         </div>
+
         {/* layers */}
         <div className="shrink-0">
           <LayerList controller={controller} />
         </div>
       </div>
-      {/* bottom controls */}
-      <ControlBar
-        activeTool={controller.state.tool}
-        onChangeTool={controller.onChangeTool}
-      />
+
     </div>
   );
 }

@@ -2,12 +2,12 @@ import BasicController from '@/util/BasicController';
 import {
   ELayerType,
   ETab,
-  ETool,
+  ETool, ETopTab,
   IImageEditor,
   ILayer,
   ILayout,
   IStyle,
-  TLayerControllers,
+  TLayerControllers
 } from '@/types/ImageEditor';
 import { nanoid } from 'nanoid';
 import TransformerToolController from '@/components/ImageEditor/TransformerTool/TransformerToolController';
@@ -24,12 +24,14 @@ import hslToRgb from '@/util/HslToRgb';
 import rgbToHex from '@/util/RgbToHex';
 import rgbToHsl from '@/util/RgbToHsl';
 import hexStrToRgb from '@/util/HexStringToRgb';
+import { ISelectOption } from '@/types/SelectOption';
 
 export interface IState {
   width: number;
   height: number;
   layers: ILayer[];
   selected: number[];
+  topTab: ETopTab;
   tab: ETab;
   transform: ILayerTransform;
   layout: ILayout | null;
@@ -106,6 +108,7 @@ export default class ImageEditorController extends BasicController<IState> {
       // layers: layers.map((v) => new BaseLayerController(v)),
       layers: layers,
       selected: [],
+      topTab: ETopTab.Color,
       tab: ETab.Layers,
       transform: newILayerTransform(),
       layout: null,
@@ -160,7 +163,10 @@ export default class ImageEditorController extends BasicController<IState> {
     // was rendered to its actual index in the array
     const selected = [index];
     const layer = this.state.layers[index];
-    const fillColor = this.hexToColor(layer.fillColor.substring(2), (layer.fillAlpha || 1) * 100);
+    const fillColor = this.hexToColor(
+      layer.fillColor.substring(2),
+      layer.fillAlpha || 1,
+    );
 
     // layers = layers.map((v, i) => {
     //   v.isSelected = selectedLayers.findIndex((x) => x === i) > -1;
@@ -210,8 +216,12 @@ export default class ImageEditorController extends BasicController<IState> {
     this.setState({ layers });
   };
 
-  onClickTab = (tab: ETab) => {
-    this.setState({ tab });
+  onChangeTopTab = (option: ISelectOption<ETopTab>) => {
+    this.setState({ topTab: option.value });
+  };
+
+  onChangeTab = (option: ISelectOption<ETab>) => {
+    this.setState({ tab: option.value });
   };
 
   onCanvasMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
@@ -370,7 +380,7 @@ export default class ImageEditorController extends BasicController<IState> {
     const layers = [...this.state.layers];
 
     const fillColor = '0x' + value.hex.substring(1);
-    const fillAlpha = value.opacity / 100;
+    const fillAlpha = value.opacity;
     // fillAlpha = fillAlpha === 0 ? -1 : fillAlpha;
 
     for (const index of this.state.selected) {
@@ -382,7 +392,7 @@ export default class ImageEditorController extends BasicController<IState> {
   };
 
   onChangeHSL = (h: number, s: number, l: number) => {
-    const [r, g, b] = hslToRgb(h / 360, s / 100, l / 100);
+    const [r, g, b] = hslToRgb(h, s, l);
     if (r === undefined || g === undefined || b === undefined) {
       this.setState({ ...this.state, fillColor: newIColor() });
       return;
@@ -394,9 +404,9 @@ export default class ImageEditorController extends BasicController<IState> {
       h,
       s,
       l,
-      r: Math.round(r),
-      g: Math.round(g),
-      b: Math.round(b),
+      r: r,
+      g: g,
+      b: b,
       hex,
     };
 
@@ -428,9 +438,9 @@ export default class ImageEditorController extends BasicController<IState> {
 
     const out: IColor = {
       ...this.state.fillColor,
-      h: Math.round(h * 360),
-      s: Math.round(s * 100),
-      l: Math.round(l * 100),
+      h: h,
+      s: s,
+      l: l * 100,
       r,
       g,
       b,
@@ -464,7 +474,7 @@ export default class ImageEditorController extends BasicController<IState> {
     this.onChangeFill(out);
   };
 
-  hexToColor(hex: string, opacity?: number) {
+  hexToColor = (hex: string, opacity?: number) => {
     hex = hex.trim();
     // add # sign if missing
     if (hex.substring(0, 1) !== '#') {
@@ -476,6 +486,7 @@ export default class ImageEditorController extends BasicController<IState> {
       hex += hex.substring(1);
     }
     const [r, g, b] = hexStrToRgb(hex);
+
     if (r === undefined || g === undefined || b === undefined) {
       return newIColor();
     }
@@ -484,9 +495,9 @@ export default class ImageEditorController extends BasicController<IState> {
 
     const out: IColor = {
       opacity: opacity ? opacity : 1,
-      h: Math.round(h * 360),
-      s: Math.round(s * 100),
-      l: Math.round(l * 100),
+      h: h,
+      s: s,
+      l: l,
       r,
       g,
       b,
@@ -494,11 +505,11 @@ export default class ImageEditorController extends BasicController<IState> {
     };
 
     return out;
-  }
+  };
 
-  onChangeHex(hex: string, opacity?: number) {
+  onChangeHex = (hex: string, opacity?: number) => {
     const out = this.hexToColor(hex, opacity);
 
     this.onChangeFill(out);
-  }
+  };
 }

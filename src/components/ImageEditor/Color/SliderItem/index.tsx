@@ -1,38 +1,35 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import Slider from '@/components/Slider';
 import Input from '@/components/Input';
-import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
 
 interface IProps {
   label: string;
-  value: number;
+  value: string;
   scaled: number;
-  min: number;
-  max: number;
-  onChange: (value: number) => void;
+  onChangeSlider: (value: number) => void;
+  onChangeInput : (value: string) => void;
 }
 
 export default function SliderItem({
   label,
   value,
   scaled,
-  min,
-  max,
-  onChange,
+  onChangeSlider,
+  onChangeInput,
 }: IProps) {
   const [inputValue, setInputValue] = useState('0');
 
-  function onChangeInput(e: ChangeEvent<HTMLInputElement>) {
+  function onChangeInputValue(e: ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
   }
 
   function onBlurInput() {
-    const value = limitNumberWithinRange(
-      Math.round(parseInt(inputValue) || 0),
-      min,
-      max,
-    );
-    onChange(value);
+    // const value = limitNumberWithinRange(
+    //   Math.round(parseInt(inputValue) || 0),
+    //   min,
+    //   max,
+    // );
+    onChangeInput(inputValue);
   }
 
   useEffect(() => {
@@ -46,7 +43,7 @@ export default function SliderItem({
           <div className="text-sm">{label}</div>
           <Slider
             value={scaled}
-            onChange={onChange}
+            onChange={onChangeSlider}
             className="rounded-full h-4 bg-blue-500"
             handleSize={16}
           />
@@ -55,7 +52,7 @@ export default function SliderItem({
           <Input
             type="number"
             value={inputValue}
-            onChange={onChangeInput}
+            onChange={onChangeInputValue}
             onBlur={onBlurInput}
           />
         </div>

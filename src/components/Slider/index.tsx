@@ -11,6 +11,7 @@ interface IProps {
   onChange: (value: number) => void;
   className?: string;
   handleSize?: number;
+  innerClassName?: string;
 }
 
 export default function Slider({
@@ -18,6 +19,7 @@ export default function Slider({
   onChange,
   className,
   handleSize = 10,
+  innerClassName,
 }: IProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -41,7 +43,7 @@ export default function Slider({
       e.stopPropagation();
       e.preventDefault();
       const sliderRect = ref.current.getBoundingClientRect();
-      const width = sliderRect.width - handleSize;
+      const width = sliderRect.width;
       const startX = sliderRect.x;
       const currentX = e.clientX;
       const positionX = currentX - startX;
@@ -51,7 +53,7 @@ export default function Slider({
     }
   }
 
-  function onClick(e: MouseEvent) {
+  function onMouseDown(e: MouseEvent) {
     onHandleMouseDown();
     onMouseMove(e);
   }
@@ -86,27 +88,33 @@ export default function Slider({
   }, [onChange]);
 
   useEffect(() => {
-    if(ref.current) {
+    if (ref.current) {
       setWidth(ref.current.getBoundingClientRect().width - handleSize);
     }
   }, [ref.current]);
 
-  const left = width * value;
+  const left = (width + handleSize) * value;
+  const halfHandle = handleSize / 2;
 
   return (
     <div
-      ref={ref}
-      className={cn('flex items-center', className)}
-      onMouseDown={onClick}
+      className={cn('', className)}
+      style={{ paddingLeft: halfHandle, paddingRight: halfHandle }}
     >
-      <span
-        className="relative text-white hover:text-gray-200"
-        style={{ left: left }}
-        onMouseDown={onHandleMouseDown}
+      <div
+        ref={ref}
+        onMouseDown={onMouseDown}
+        className={cn('flex items-center w-full', innerClassName)}
       >
-        {/*<CircleIcon fill="#ffff" size={handleSize} />*/}
-        <CircleIcon size={handleSize} />
-      </span>
+        <span
+          className={'relative text-white hover:text-gray-200'}
+          style={{ left: left - halfHandle }}
+          onMouseDown={onHandleMouseDown}
+        >
+          {/*<CircleIcon fill="#ffff" size={handleSize} />*/}
+          <CircleIcon size={handleSize} />
+        </span>
+      </div>
     </div>
   );
 }

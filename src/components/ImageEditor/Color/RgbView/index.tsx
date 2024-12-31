@@ -21,27 +21,24 @@ export default function RgbView({
     <div className="flex flex-col gap-y-3">
       <SliderItem
         label="Red"
-        value={r}
-        scaled={r / 255}
-        min={0}
-        max={255}
-        onChange={(v) => onChangeR(Math.round(v * 255))}
+        value={String(Math.round(r * 255))}
+        scaled={r}
+        onChangeSlider={(v) => onChangeR(v)}
+        onChangeInput={(v) => onChangeR(parseInt(v) / 255)}
       />
       <SliderItem
         label="Green"
-        value={g}
-        scaled={g / 255}
-        min={0}
-        max={255}
-        onChange={(v) => onChangeG(Math.round(v * 255))}
+        value={String(Math.round(g * 255))}
+        scaled={g}
+        onChangeSlider={(v) => onChangeG(v)}
+        onChangeInput={(v) => onChangeG(parseInt(v) / 255)}
       />
       <SliderItem
         label="Blue"
-        value={b}
-        scaled={b / 255}
-        min={0}
-        max={255}
-        onChange={(v) => onChangeB(Math.round(v * 255))}
+        value={String(Math.round(b * 255))}
+        scaled={b}
+        onChangeSlider={(v) => onChangeB(v)}
+        onChangeInput={(v) => onChangeB(parseInt(v) / 255)}
       />
     </div>
   );

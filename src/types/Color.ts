@@ -18,7 +18,7 @@ export function newIColor() {
     s: 0,
     l: 0,
     hex: '#000000',
-    opacity: 100,
+    opacity: 1,
   };
 }
 

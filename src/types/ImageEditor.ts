@@ -109,6 +109,11 @@ export enum ETab {
   History,
 }
 
+export enum ETopTab {
+  Color,
+  Transform
+}
+
 export interface ILayout {
   downX: number;
   downY: number;
