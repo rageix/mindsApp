@@ -39,6 +39,7 @@ export interface IState {
   tool: ETool;
   fillColor: IColor;
   // borderColor: IColorAlpha
+  showTextEditor: boolean
 }
 
 export default class ImageEditorController extends BasicController<IState> {
@@ -117,6 +118,7 @@ export default class ImageEditorController extends BasicController<IState> {
       },
       tool: ETool.Pointer,
       fillColor: newIColor(),
+      showTextEditor: true,
     };
   }
 
@@ -512,4 +514,9 @@ export default class ImageEditorController extends BasicController<IState> {
 
     this.onChangeFill(out);
   };
+
+  onClickHideTextEditor = () => {
+    this.setState({showTextEditor: false})
+  }
+
 }

@@ -6,7 +6,7 @@ import { Container, Stage } from '@pixi/react'; // import Rectangle from '@/comp
 import Ellipse from './Ellipse';
 import LayerList from '@/components/ImageEditor/LayerList';
 import PixiTransformer from './TransformerTool';
-import { EHandle, ELayerType } from '@/types/ImageEditor';
+import { EHandle, ELayerType, ETool } from '@/types/ImageEditor';
 import Rectangle from './Rectangle';
 import { MOUSE_LEFT, MOUSE_MIDDLE } from '@/common/Mouse';
 import { FederatedPointerEvent } from 'pixi.js';
@@ -14,6 +14,8 @@ import ZoomControl from '@/components/ImageEditor/ZoomControl';
 import { MoveHorizontal } from 'lucide-react';
 import Button from '@/components/Buttton';
 import Layout from './LayoutTool';
+import TextEditor from '@/components/ImageEditor/TextEditor';
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 
 interface IProps {
   controller: ImageEditorController;
@@ -109,9 +111,9 @@ export default function ImageEditor({ controller }: IProps) {
   }, []);
 
   return (
-    <div className="">
+    <div>
       <div className="flex">
-        <div className="grow">
+        <div className="grow relative">
           <div
             ref={stageWrapperRef}
             className="grow"
@@ -188,7 +190,10 @@ export default function ImageEditor({ controller }: IProps) {
                             onMouseDown={(
                               e: FederatedPointerEvent | undefined,
                             ) => {
-                              if (e?.button === MOUSE_LEFT) {
+                              if (
+                                controller.state.tool === ETool.Pointer &&
+                                e?.button === MOUSE_LEFT
+                              ) {
                                 onClickLayer(i);
                               }
                             }}
@@ -223,7 +228,10 @@ export default function ImageEditor({ controller }: IProps) {
                             onMouseDown={(
                               e: FederatedPointerEvent | undefined,
                             ) => {
-                              if (e?.button === MOUSE_LEFT) {
+                              if (
+                                controller.state.tool === ETool.Pointer &&
+                                e?.button === MOUSE_LEFT
+                              ) {
                                 onClickLayer(i);
                               }
                             }}
@@ -233,6 +241,39 @@ export default function ImageEditor({ controller }: IProps) {
                               }
                             }}
                           />
+                        </Container>
+                      );
+                    case ELayerType.Text:
+                      return (
+                        <Container
+                          key={v.id}
+                          angle={v.angle}
+                          x={v.x}
+                          y={v.y}
+                          eventMode={!v.locked ? 'dynamic' : 'auto'}
+                        >
+                          {/*  <TextEditor*/}
+                          {/*    key={v.id}*/}
+                          {/*    width={v.width}*/}
+                          {/*    height={v.height}*/}
+                          {/*    fillColor={v.fillColor}*/}
+                          {/*    fillAlpha={v.fillAlpha}*/}
+                          {/*    // eventMode={!v.locked ? 'dynamic' : 'auto'}*/}
+                          {/*    onMouseDown={(e: FederatedPointerEvent | undefined) => {*/}
+                          {/*      if (*/}
+                          {/*        controller.state.tool === ETool.Pointer &&*/}
+                          {/*        e?.button === MOUSE_LEFT*/}
+                          {/*      ) {*/}
+                          {/*        onClickLayer(i);*/}
+                          {/*      }*/}
+                          {/*    }}*/}
+                          {/*    onMouseOut={() => {*/}
+                          {/*      if (controller.state.selected.length > 0) {*/}
+                          {/*        setTransformMove(false);*/}
+                          {/*      }*/}
+                          {/*    }}*/}
+                          {/*    editor={controller.state.editor}*/}
+                          {/*  />*/}
                         </Container>
                       );
                   }
@@ -253,6 +294,20 @@ export default function ImageEditor({ controller }: IProps) {
               </Container>
             </Stage>
           </div>
+          {controller.state.showTextEditor && (
+            <div className="w-full p-3 bg-white h-[16rem] absolute bottom-[9.25rem] border-t border-gray-200">
+              <div className="w-full flex justify-end">
+                <Button
+                  variant="link"
+                  onClick={controller.onClickHideTextEditor}
+                  isInline
+                >
+                  <CloseIcon />
+                </Button>
+              </div>
+              <TextEditor controller={controller} />
+            </div>
+          )}
           {/* info bar*/}
           <div className="w-full p-3 flex gap-x-3">
             <ZoomControl
@@ -282,7 +337,6 @@ export default function ImageEditor({ controller }: IProps) {
           <LayerList controller={controller} />
         </div>
       </div>
-
     </div>
   );
 }
