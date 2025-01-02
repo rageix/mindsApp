@@ -16,6 +16,7 @@ import Button from '@/components/Buttton';
 import Layout from './LayoutTool';
 import TextEditor from '@/components/ImageEditor/TextEditor';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
+import TextBlock from '@/components/ImageEditor/TextBlock';
 
 interface IProps {
   controller: ImageEditorController;
@@ -244,6 +245,7 @@ export default function ImageEditor({ controller }: IProps) {
                         </Container>
                       );
                     case ELayerType.Text:
+                      if (!v.editorState) return null;
                       return (
                         <Container
                           key={v.id}
@@ -252,28 +254,30 @@ export default function ImageEditor({ controller }: IProps) {
                           y={v.y}
                           eventMode={!v.locked ? 'dynamic' : 'auto'}
                         >
-                          {/*  <TextEditor*/}
-                          {/*    key={v.id}*/}
-                          {/*    width={v.width}*/}
-                          {/*    height={v.height}*/}
-                          {/*    fillColor={v.fillColor}*/}
-                          {/*    fillAlpha={v.fillAlpha}*/}
-                          {/*    // eventMode={!v.locked ? 'dynamic' : 'auto'}*/}
-                          {/*    onMouseDown={(e: FederatedPointerEvent | undefined) => {*/}
-                          {/*      if (*/}
-                          {/*        controller.state.tool === ETool.Pointer &&*/}
-                          {/*        e?.button === MOUSE_LEFT*/}
-                          {/*      ) {*/}
-                          {/*        onClickLayer(i);*/}
-                          {/*      }*/}
-                          {/*    }}*/}
-                          {/*    onMouseOut={() => {*/}
-                          {/*      if (controller.state.selected.length > 0) {*/}
-                          {/*        setTransformMove(false);*/}
-                          {/*      }*/}
-                          {/*    }}*/}
-                          {/*    editor={controller.state.editor}*/}
-                          {/*  />*/}
+                          <TextBlock
+                            key={v.id}
+                            width={v.width}
+                            height={v.height}
+                            fillColor={v.fillColor}
+                            fillAlpha={v.fillAlpha}
+                            // eventMode={!v.locked ? 'dynamic' : 'auto'}
+                            onMouseDown={(
+                              e: FederatedPointerEvent | undefined,
+                            ) => {
+                              if (
+                                controller.state.tool === ETool.Pointer &&
+                                e?.button === MOUSE_LEFT
+                              ) {
+                                onClickLayer(i);
+                              }
+                            }}
+                            onMouseOut={() => {
+                              if (controller.state.selected.length > 0) {
+                                setTransformMove(false);
+                              }
+                            }}
+                            editorState={v.editorState}
+                          />
                         </Container>
                       );
                   }

@@ -2,12 +2,13 @@ import BasicController from '@/util/BasicController';
 import {
   ELayerType,
   ETab,
-  ETool, ETopTab,
+  ETool,
+  ETopTab,
   IImageEditor,
   ILayer,
   ILayout,
   IStyle,
-  TLayerControllers
+  TLayerControllers,
 } from '@/types/ImageEditor';
 import { nanoid } from 'nanoid';
 import TransformerToolController from '@/components/ImageEditor/TransformerTool/TransformerToolController';
@@ -25,6 +26,7 @@ import rgbToHex from '@/util/RgbToHex';
 import rgbToHsl from '@/util/RgbToHsl';
 import hexStrToRgb from '@/util/HexStringToRgb';
 import { ISelectOption } from '@/types/SelectOption';
+import { SerializedEditorState } from 'lexical';
 
 export interface IState {
   width: number;
@@ -39,7 +41,7 @@ export interface IState {
   tool: ETool;
   fillColor: IColor;
   // borderColor: IColorAlpha
-  showTextEditor: boolean
+  showTextEditor: boolean;
 }
 
 export default class ImageEditorController extends BasicController<IState> {
@@ -516,7 +518,17 @@ export default class ImageEditorController extends BasicController<IState> {
   };
 
   onClickHideTextEditor = () => {
-    this.setState({showTextEditor: false})
-  }
+    this.setState({ showTextEditor: false });
+  };
 
+  onChangeTextEditor = (editorState: SerializedEditorState) => {
+    if (
+      this.state.selected.length === 1 &&
+      this.state.layers[this.state.selected[0]].type === ELayerType.Text
+    ) {
+      const layers = [...this.state.layers];
+      layers[this.state.selected[0]].editorState = editorState;
+      this.setState({ layers });
+    }
+  };
 }

@@ -4,6 +4,7 @@ import TextLayerController from '@/components/ImageEditor/Layer/Text/TextControl
 import ImageLayerController from '@/components/ImageEditor/Layer/Image/ImageController';
 import CircleLayerController from '@/components/ImageEditor/Layer/Circle/CircleController';
 import { ICorners } from '@/types/Corners';
+import { SerializedEditorState } from 'lexical';
 
 export enum ELayerType {
   Container = 'container',
@@ -33,6 +34,7 @@ export interface ILayer {
   borderRadius?: number;
   borderAlpha?: number;
   corners?: ICorners;
+  editorState?:  SerializedEditorState;
 }
 
 export interface IImageLayer extends ILayer {
