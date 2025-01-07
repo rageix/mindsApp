@@ -1,9 +1,9 @@
 {
-  "name": "faincyApp",
+  "name": "hobort",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --experimental-https -H local.faincy.com",
+    "dev": "next dev --experimental-https -H local.hobort.com",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
