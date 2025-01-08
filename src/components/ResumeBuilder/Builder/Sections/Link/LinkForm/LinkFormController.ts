@@ -16,7 +16,7 @@ export default class LinkFormController extends FormController<IForm> {
     this.onChangeForm({ label: e.target.value });
   };
 
-  onChangeHref = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ href: e.target.value });
+  onChangeLink = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ link: e.target.value });
   };
 }

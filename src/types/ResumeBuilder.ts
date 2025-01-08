@@ -14,10 +14,10 @@ export enum ERBType {
   Reference = 'reference',
 }
 
-export interface IRBSection<T> {
+export interface IRBSection {
   type: ERBType;
   // isSortable: boolean;
-  data: T;
+  data: TResumeBuilderSection[];
 }
 
 export interface IRBDetail {
@@ -64,8 +64,8 @@ export interface IRBSummary {
 
 export function newIRBSummary(): IRBSummary {
   return {
-    description: ''
-  }
+    description: '',
+  };
 }
 
 export interface IRBDate {
@@ -102,13 +102,13 @@ export function newIRBEducation(): IRBEducation {
 
 export interface IRBLink {
   label: string;
-  href: string;
+  link: string;
 }
 
 export function newIRBLink(): IRBLink {
   return {
     label: '',
-    href: '',
+    link: '',
   };
 }
 
@@ -250,20 +250,20 @@ export function newIRBReference(): IRBReference {
 export type TResumeBuilderSection =
   | IRBDetail
   | IRBSummary
-  | IRBEducation[]
-  | IRBLink[]
-  | IRBSkill[]
-  | IRBCustom[]
-  | IRBCourse[]
-  | IRBExtraCurricular[]
-  | IRBInternship[]
-  | IRBLanguage[]
-  | IRBReference[];
+  | IRBEducation
+  | IRBLink
+  | IRBSkill
+  | IRBCustom
+  | IRBCourse
+  | IRBExtraCurricular
+  | IRBInternship
+  | IRBLanguage
+  | IRBReference;
 
 export interface IRBStyle {
-  font: string,
-  color: string,
-  size: number,
+  font: string;
+  color: string;
+  size: number;
 }
 
 export function newIRBStyle(): IRBStyle {
@@ -271,19 +271,36 @@ export function newIRBStyle(): IRBStyle {
     font: '',
     color: '',
     size: 16,
-  }
+  };
 }
 
 export interface IResumeBuilder {
-  sections: IRBSection<TResumeBuilderSection>[];
-  style: IRBStyle,
-  templateId: MongoId,
+  sections: IRBSection[];
+  style: IRBStyle;
+  templateId: MongoId;
+}
+
+export function newIResumeBuilderSections(): IRBSection[] {
+  return [
+    {
+      type: ERBType.Detail,
+      data: [newIRBDetail()],
+    },
+    {
+      type: ERBType.Summary,
+      data: [newIRBSummary()],
+    },
+    {
+      type: ERBType.Link,
+      data: [newIRBLink()],
+    },
+  ];
 }
 
 export function newIResumeBuilder(): IResumeBuilder {
   return {
-    sections: [],
+    sections: newIResumeBuilderSections(),
     style: newIRBStyle(),
-    templateId: ''
-  }
+    templateId: '',
+  };
 }

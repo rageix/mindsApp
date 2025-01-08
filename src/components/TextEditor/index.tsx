@@ -6,38 +6,34 @@
  *
  */
 
-import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import {
   InitialConfigType,
-  LexicalComposer
+  LexicalComposer,
 } from '@lexical/react/LexicalComposer';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import {
   $isTextNode,
   DOMConversionMap,
   DOMExportOutput,
-  DOMExportOutputMap, EditorState,
+  DOMExportOutputMap,
   isHTMLElement,
   Klass,
   LexicalEditor,
   LexicalNode,
   ParagraphNode,
-  TextNode
+  TextNode,
 } from 'lexical';
 
 import ExampleTheme from './Theme';
 import ToolbarPlugin from './ToolbarPlugin';
-import {parseAllowedColor, parseAllowedFontSize} from './StyleConfig';
+import { parseAllowedColor, parseAllowedFontSize } from './StyleConfig';
 import './style.css';
-import ImageEditorController
-  from '@/components/ImageEditor/ImageEditorController';
-import {
-  useLexicalComposerContext
-} from '@lexical/react/LexicalComposerContext';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 
 const placeholder = 'Enter some rich text...';
 
@@ -116,7 +112,7 @@ const constructImportMap = (): DOMConversionMap => {
           }
           const extraStyles = getExtraStyles(element);
           if (extraStyles) {
-            const {forChild} = output;
+            const { forChild } = output;
             return {
               ...output,
               forChild: (child, parent) => {
@@ -137,49 +133,55 @@ const constructImportMap = (): DOMConversionMap => {
   return importMap;
 };
 
-interface IOnChangeProps {
-  onChange: (arg: EditorState) =>void
-}
-
-function MyOnChangePlugin({ onChange  }: IOnChangeProps) {
-  const [editor] = useLexicalComposerContext();
-  useEffect(() => {
-    return editor.registerUpdateListener(({editorState}) => {
-      onChange(editorState);
-    });
-  }, [editor, onChange]);
-  return null;
-}
-
-const editorConfig: InitialConfigType = {
-  html: {
-    export: exportMap,
-    import: constructImportMap(),
-  },
-  namespace: 'React.js Demo',
-  nodes: [ParagraphNode, TextNode],
-  onError(error: Error) {
-    throw error;
-  },
-  theme: ExampleTheme,
-};
+// interface IOnChangeProps {
+//   onChange: (arg: EditorState) => void;
+// }
+//
+// function MyOnChangePlugin({ onChange }: IOnChangeProps) {
+//   const [editor] = useLexicalComposerContext();
+//   useEffect(() => {
+//     return editor.registerUpdateListener(({ editorState }) => {
+//       onChange(editorState);
+//     });
+//   }, [editor, onChange]);
+//   return null;
+// }
+//
+// const editorConfig: InitialConfigType = {
+//   html: {
+//     export: exportMap,
+//     import: constructImportMap(),
+//   },
+//   namespace: 'textEditor',
+//   nodes: [ParagraphNode, TextNode],
+//   onError(error: Error) {
+//     throw error;
+//   },
+//   theme: ExampleTheme,
+// };
 
 interface IProps {
-  controller: ImageEditorController
+  initialState: string | null;
+  onChange: (state: string) => void;
 }
 
-export default function TextEditor({controller}: IProps) {
-  // const [editorState, setEditorState] = useState<EditorState>();
-  // const [editorJson, setEditorJson] = useState<string>();
-  function onChange(editorState: EditorState) {
-    // setEditorState(editorState);
-    // Call toJSON on the EditorState object, which produces a serialization safe string
-    const editorStateJSON = editorState.toJSON();
-    controller.onChangeTextEditor(editorStateJSON);
-    // console.log('editorStateJSON',editorStateJSON);
-    // // However, we still have a JavaScript object, so we need to convert it to an actual string with JSON.stringify
-    // setEditorJson(JSON.stringify(editorStateJSON));
-  }
+export default function TextEditor({ initialState, onChange }: IProps) {
+  const editorConfig: InitialConfigType = useMemo(
+    () => ({
+      html: {
+        export: exportMap,
+        import: constructImportMap(),
+      },
+      namespace: 'textEditor',
+      nodes: [ParagraphNode, TextNode],
+      onError(error: Error) {
+        throw error;
+      },
+      theme: ExampleTheme,
+      editorState: initialState,
+    }),
+    [initialState],
+  );
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
@@ -200,8 +202,11 @@ export default function TextEditor({controller}: IProps) {
           />
           <HistoryPlugin />
           <AutoFocusPlugin />
-          {/*<TreeViewPlugin />*/}
-          <MyOnChangePlugin onChange={onChange}/>
+          <OnChangePlugin
+            onChange={(editorState) => {
+              onChange(JSON.stringify(editorState.toJSON()));
+            }}
+          />
         </div>
       </div>
     </LexicalComposer>

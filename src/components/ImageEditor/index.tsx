@@ -14,7 +14,7 @@ import ZoomControl from '@/components/ImageEditor/ZoomControl';
 import { MoveHorizontal } from 'lucide-react';
 import Button from '@/components/Buttton';
 import Layout from './LayoutTool';
-import TextEditor from '@/components/ImageEditor/TextEditor';
+import TextEditor from '../TextEditor';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import TextBlock from '@/components/ImageEditor/TextBlock';
 

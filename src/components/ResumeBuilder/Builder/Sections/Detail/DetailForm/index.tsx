@@ -1,9 +1,8 @@
 'use client';
 import FormLabel from '@/components/FormLabel';
-import Form from '@/components/Form';
 import DetailFormController, {
   IForm,
-} from '@/components/ResumeBuilder/Builder/DetailForm/DetailFormController';
+} from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import Input from '@/components/Input';
 import { useState } from 'react';
 import { cn } from '@/util/Cn';
@@ -20,7 +19,7 @@ export default function DetailForm({ controller }: IProps) {
   const { form, state } = controller;
 
   return (
-    <Form onSubmit={controller.onSubmitForm}>
+    <div>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="title">Title</FormLabel>
@@ -170,6 +169,6 @@ export default function DetailForm({ controller }: IProps) {
       >
         {showMore ? 'Show less fields...' : 'Show more fields...'}
       </Button>
-    </Form>
+    </div>
   );
 }
