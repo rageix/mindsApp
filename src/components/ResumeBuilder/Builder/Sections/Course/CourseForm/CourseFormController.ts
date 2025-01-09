@@ -8,7 +8,7 @@ export function defaultForm(): IForm {
   return newIRBCourse();
 }
 
-export default class CoursesFormController extends FormController<IForm> {
+export default class CourseFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
@@ -28,7 +28,7 @@ export default class CoursesFormController extends FormController<IForm> {
     this.onChangeForm({ end: value });
   };
 
-  onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ description: e.target.value });
+  onChangeDescription = (value: string) => {
+    this.onChangeForm({ description: value });
   };
 }

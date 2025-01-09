@@ -1,6 +1,10 @@
 import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
-import { IRBLanguage, newIRBLanguage } from '@/types/ResumeBuilder';
+import {
+  ERBLanguageLevel,
+  IRBLanguage,
+  newIRBLanguage
+} from '@/types/ResumeBuilder';
 
 export interface IForm extends IRBLanguage {}
 
@@ -15,4 +19,8 @@ export default class LanguageFormController extends FormController<IForm> {
   onChangeLanguage = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ language: e.target.value });
   };
+
+  onChangeLevel = (value: ERBLanguageLevel | null) => {
+    this.onChangeForm({ level: value });
+  }
 }

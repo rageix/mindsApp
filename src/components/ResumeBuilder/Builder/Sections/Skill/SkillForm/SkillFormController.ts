@@ -1,6 +1,6 @@
 import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
-import { ERBSkill, IRBSkill, newIRBSkill } from '@/types/ResumeBuilder';
+import { ERBSkillLevel, IRBSkill, newIRBSkill } from '@/types/ResumeBuilder';
 
 export interface IForm extends IRBSkill {}
 
@@ -12,11 +12,11 @@ export default class SkillFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
-  onChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ label: e.target.value });
+  onChangeSkill = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ skill: e.target.value });
   };
 
-  onChangeLevel = (value: ERBSkill | null) => {
+  onChangeLevel = (value: ERBSkillLevel | null) => {
     this.onChangeForm({ level: value });
   };
 }

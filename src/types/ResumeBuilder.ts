@@ -3,6 +3,7 @@ import { MongoId } from '@/types/MongoDocument';
 export enum ERBType {
   Detail = 'detail',
   Summary = 'summary',
+  Employment = 'employment',
   Education = 'education',
   Link = 'link',
   Skill = 'skill',
@@ -16,7 +17,7 @@ export enum ERBType {
 
 export interface IRBSection {
   type: ERBType;
-  // isSortable: boolean;
+  isHidden?: boolean;
   data: TResumeBuilderSection[];
 }
 
@@ -71,12 +72,34 @@ export function newIRBSummary(): IRBSummary {
 export interface IRBDate {
   month: number | null;
   year: number | null;
+  present: boolean;
 }
 
 export function newIRBDate(): IRBDate {
   return {
     month: null,
     year: null,
+    present: false,
+  };
+}
+
+export interface IRBEmployment {
+  title: string;
+  employer: string;
+  start: IRBDate | null;
+  end: IRBDate | null;
+  city: string;
+  description: string;
+}
+
+export function newIRBEmployment(): IRBEmployment {
+  return {
+    title: '',
+    employer: '',
+    start: null,
+    end: null,
+    city: '',
+    description: '',
   };
 }
 
@@ -112,22 +135,22 @@ export function newIRBLink(): IRBLink {
   };
 }
 
-export enum ERBSkill {
+export enum ERBSkillLevel {
   Novice = 1,
   Beginner = 2,
-  SkillFull = 3,
+  Skillfull = 3,
   Experienced = 4,
   Expert = 5,
 }
 
 export interface IRBSkill {
-  label: string;
-  level: ERBSkill | null;
+  skill: string;
+  level: ERBSkillLevel | null;
 }
 
 export function newIRBSkill(): IRBSkill {
   return {
-    label: '',
+    skill: '',
     level: null,
   };
 }
@@ -232,6 +255,7 @@ export function newIRBLanguage(): IRBLanguage {
 }
 
 export interface IRBReference {
+  byRequestOnly: boolean;
   name: string;
   company: string;
   phone: string;
@@ -240,6 +264,7 @@ export interface IRBReference {
 
 export function newIRBReference(): IRBReference {
   return {
+    byRequestOnly: false,
     name: '',
     company: '',
     phone: '',
@@ -247,9 +272,12 @@ export function newIRBReference(): IRBReference {
   };
 }
 
+
+
 export type TResumeBuilderSection =
   | IRBDetail
   | IRBSummary
+  | IRBEmployment
   | IRBEducation
   | IRBLink
   | IRBSkill
@@ -291,8 +319,49 @@ export function newIResumeBuilderSections(): IRBSection[] {
       data: [newIRBSummary()],
     },
     {
+      type: ERBType.Employment,
+      data: [newIRBEducation()],
+    },
+    {
+      type: ERBType.Education,
+      data: [newIRBEducation()],
+    },
+    {
       type: ERBType.Link,
       data: [newIRBLink()],
+    },
+    {
+      type: ERBType.Skill,
+      data: [newIRBSkill()],
+    },
+    {
+      type: ERBType.Custom,
+      isHidden: true,
+      data: [newIRBCustom()],
+    },
+    {
+      type: ERBType.Course,
+      isHidden: true,
+      data: [newIRBCourse()],
+    },{
+      type: ERBType.ExtraCurricular,
+      isHidden: true,
+      data: [newIRBExtraCurricular()],
+    },
+    {
+      type: ERBType.Internship,
+      isHidden: true,
+      data: [newIRBInternship()],
+    },
+    {
+      type: ERBType.Language,
+      isHidden: true,
+      data: [newIRBLanguage()],
+    },
+    {
+      type: ERBType.Reference,
+      isHidden: true,
+      data: [newIRBReference()],
     },
   ];
 }

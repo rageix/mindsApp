@@ -36,8 +36,8 @@ export default class EducationFormController extends FormController<IForm> {
     this.onChangeForm({ city: e.target.value });
   };
 
-  onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ description: e.target.value });
+  onChangeDescription = (value: string) => {
+    this.onChangeForm({ description: value });
   };
 
 }

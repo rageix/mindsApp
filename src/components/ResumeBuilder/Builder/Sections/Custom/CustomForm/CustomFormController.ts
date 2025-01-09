@@ -28,7 +28,7 @@ export default class CustomFormController extends FormController<IForm> {
     this.onChangeForm({ end: value });
   };
 
-  onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ description: e.target.value });
+  onChangeDescription = (value: string) => {
+    this.onChangeForm({ description: value });
   };
 }

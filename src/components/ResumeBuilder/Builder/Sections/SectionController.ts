@@ -6,6 +6,7 @@ import {
   IRBCustom,
   IRBDetail,
   IRBEducation,
+  IRBEmployment,
   IRBExtraCurricular,
   IRBInternship,
   IRBLanguage,
@@ -17,21 +18,23 @@ import {
 } from '@/types/ResumeBuilder';
 import DetailFormController from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import { nanoid } from 'nanoid';
-import EducationFormController from '@/components/ResumeBuilder/Builder/EducationForm/EducationFormController';
 import LinkFormController from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm/LinkFormController';
-import SkillFormController from '@/components/ResumeBuilder/Builder/SkillForm/SkillFormController';
-import CustomFormController from '@/components/ResumeBuilder/Builder/CustomForm.ts/CustomFormController';
-import CoursesFormController from '@/components/ResumeBuilder/Builder/CoursesForm/CoursesFormController';
-import ExtraCurricularFormController from '@/components/ResumeBuilder/Builder/ExtraCurricularForm/CoursesFormController';
-import InternshipFormController from '@/components/ResumeBuilder/Builder/InternshipForm/InternshipFormController';
-import LanguageFormController from '@/components/ResumeBuilder/Builder/LanguageForm/InternshipFormController';
-import ReferenceFormController from '@/components/ResumeBuilder/Builder/ReferenceForm/ReferenceFormController';
+import CustomFormController from '@/components/ResumeBuilder/Builder/Sections/Custom/CustomForm/CustomFormController';
+import CourseFormController from '@/components/ResumeBuilder/Builder/Sections/Course/CourseForm/CourseFormController';
+import ExtraCurricularFormController from '@/components/ResumeBuilder/Builder/Sections/ExtraCurricular/ExtraCurricularForm/ExtraCurricularFormController';
+import InternshipFormController from '@/components/ResumeBuilder/Builder/Sections/Internship/InternshipForm/InternshipFormController';
+import LanguageFormController from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/LanguageFormController';
+import ReferenceFormController from '@/components/ResumeBuilder/Builder/Sections/Reference/ReferenceForm/ReferenceFormController';
 import SummaryFormController from '@/components/ResumeBuilder/Builder/Sections/Summary/SummaryForm/SummaryFormController';
+import EducationFormController from '@/components/ResumeBuilder/Builder/Sections/Education/EducationForm/EducationFormController';
+import SkillFormController from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
+import EmploymentFormController from '@/components/ResumeBuilder/Builder/Sections/Employment/EmploymentForm/EmploymentFormController';
 
 type TBuilderFormController =
-  | CoursesFormController
+  | CourseFormController
   | CustomFormController
   | DetailFormController
+  | EmploymentFormController
   | EducationFormController
   | InternshipFormController
   | LinkFormController
@@ -72,7 +75,6 @@ export default class SectionController extends BasicController<IState> {
   };
 
   load = (section: IRBSection) => {
-    console.log('load section', section);
     const controllers: TBuilderFormController[] = [];
 
     for (const data of section.data) {
@@ -85,6 +87,9 @@ export default class SectionController extends BasicController<IState> {
           break;
         case ERBType.Summary:
           controller = new SummaryFormController(data as IRBSummary);
+          break;
+        case ERBType.Employment:
+          controller = new EmploymentFormController(data as IRBEmployment);
           break;
         case ERBType.Education:
           controller = new EducationFormController(data as IRBEducation);
@@ -99,7 +104,7 @@ export default class SectionController extends BasicController<IState> {
           controller = new CustomFormController(data as IRBCustom);
           break;
         case ERBType.Course:
-          controller = new CoursesFormController(data as IRBCourse);
+          controller = new CourseFormController(data as IRBCourse);
           break;
         case ERBType.ExtraCurricular:
           controller = new ExtraCurricularFormController(
@@ -137,6 +142,9 @@ export default class SectionController extends BasicController<IState> {
       case ERBType.Summary:
         controller = new SummaryFormController();
         break;
+      case ERBType.Employment:
+        controller = new EmploymentFormController();
+        break;
       case ERBType.Education:
         controller = new EducationFormController();
         break;
@@ -150,7 +158,7 @@ export default class SectionController extends BasicController<IState> {
         controller = new CustomFormController();
         break;
       case ERBType.Course:
-        controller = new CoursesFormController();
+        controller = new CourseFormController();
         break;
       case ERBType.ExtraCurricular:
         controller = new ExtraCurricularFormController();
@@ -176,4 +184,10 @@ export default class SectionController extends BasicController<IState> {
       data: this.state.controllers.map((v) => v.form),
     };
   };
+
+  onChangeHidden = () => {
+    const section  = {...this.state.section};
+    section.isHidden = !section.isHidden;
+    this.setState({section})
+  }
 }

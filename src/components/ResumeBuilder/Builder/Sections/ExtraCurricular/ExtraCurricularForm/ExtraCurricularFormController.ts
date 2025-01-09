@@ -2,26 +2,22 @@ import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
 import {
   IRBDate,
-  IRBInternship,
-  newIRBInternship,
+  IRBExtraCurricular,
+  newIRBExtraCurricular,
 } from '@/types/ResumeBuilder';
 
-export interface IForm extends IRBInternship {}
+export interface IForm extends IRBExtraCurricular {}
 
 export function defaultForm(): IForm {
-  return newIRBInternship();
+  return newIRBExtraCurricular();
 }
 
-export default class InternshipFormController extends FormController<IForm> {
+export default class ExtraCurricularFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
-  onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ title: e.target.value });
-  };
-
-  onChangeEmployer = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ employer: e.target.value });
+  onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ name: e.target.value });
   };
 
   onChangeStart = (value: IRBDate | null) => {
@@ -36,7 +32,7 @@ export default class InternshipFormController extends FormController<IForm> {
     this.onChangeForm({ city: e.target.value });
   };
 
-  onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ description: e.target.value });
+  onChangeDescription = (value: string) => {
+    this.onChangeForm({ description: value });
   };
 }

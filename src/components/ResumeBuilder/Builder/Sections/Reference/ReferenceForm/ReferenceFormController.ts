@@ -12,6 +12,10 @@ export default class ReferenceFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
+  onChangeByRequestOnly = () => {
+    this.onChangeForm({ byRequestOnly: !this.form.byRequestOnly });
+  };
+
   onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ name: e.target.value });
   };

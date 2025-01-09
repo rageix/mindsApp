@@ -1,0 +1,79 @@
+'use client';
+import FormLabel from '@/components/FormLabel';
+import Input from '@/components/Input';
+import SkillFormController, {
+  IForm,
+} from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
+import { ISelectOption } from '@/types/SelectOption';
+import { ERBSkillLevel } from '@/types/ResumeBuilder';
+import { useMemo } from 'react';
+import Select from '@/components/Select';
+
+const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
+  {
+    key: String(ERBSkillLevel.Novice),
+    value: ERBSkillLevel.Novice,
+    label: '1 - Novice',
+  },
+  {
+    key: String(ERBSkillLevel.Beginner),
+    value: ERBSkillLevel.Beginner,
+    label: '2 - Beginner',
+  },
+  {
+    key: String(ERBSkillLevel.Skillfull),
+    value: ERBSkillLevel.Skillfull,
+    label: '3 - Skillfull',
+  },
+  {
+    key: String(ERBSkillLevel.Experienced),
+    value: ERBSkillLevel.Experienced,
+    label: '4 - Experienced',
+  },
+  {
+    key: String(ERBSkillLevel.Expert),
+    value: ERBSkillLevel.Expert,
+    label: '5 - Expert',
+  },
+];
+
+interface IProps {
+  controller: SkillFormController;
+}
+
+export default function SkillForm({ controller }: IProps) {
+  controller.useController();
+
+  const { form, state } = controller;
+
+  const value: ISelectOption<ERBSkillLevel | null> | undefined = useMemo(() => {
+    return OPTIONS.find((v) => v.value === form.level)
+  }, [form.level]);
+
+  return (
+    <div>
+      <div className="flex flex-col sm:flex-row">
+        <div className="flex-1">
+          <FormLabel<IForm> field="skill">Skill</FormLabel>
+          <Input<IForm>
+            field="skill"
+            errors={state.errors}
+            value={form.skill}
+            onChange={controller.onChangeSkill}
+          />
+        </div>
+        <div className="flex-1">
+          <FormLabel<IForm> field="level">Level</FormLabel>
+          <Select<ERBSkillLevel | null, IForm>
+            field="level"
+            options={OPTIONS}
+            value={value}
+            onChange={(option) => controller.onChangeLevel(option.value)}
+            isClearable
+            onClickClear={() => controller.onChangeLevel(null)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

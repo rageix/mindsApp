@@ -1,6 +1,6 @@
 import { cn } from '@/util/Cn';
 import { TButtonVariant } from '@/types/Variant';
-import { MutableRefObject, PropsWithChildren } from 'react';
+import { MutableRefObject, PropsWithChildren, MouseEvent } from 'react';
 
 interface Props extends PropsWithChildren {
   ref?: MutableRefObject<any>;
@@ -9,7 +9,7 @@ interface Props extends PropsWithChildren {
   disabled?: boolean;
   variant: TButtonVariant;
   isInline?: boolean;
-  onClick?: () => void;
+  onClick?: (e?: MouseEvent) => void;
   submit?: boolean;
   isActive?: boolean;
 }
@@ -76,7 +76,7 @@ export default function Button({
       ref={ref}
       type={type}
       className={cn(
-        `flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 `,
+        `flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 `,
         disabled ? '!cursor-auto' : colors[variant],
         className ? className : null,
         disabled ? colorsDisabled[variant] : null,

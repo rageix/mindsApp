@@ -2,14 +2,15 @@ import {
   Listbox,
   ListboxButton,
   ListboxOption,
-  ListboxOptions,
+  ListboxOptions
 } from '@headlessui/react';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, XIcon } from 'lucide-react';
 import { ISelectOption } from '@/types/SelectOption';
 import { useMemo, useRef } from 'react';
 import _ from 'lodash';
 import { cn } from '@/util/Cn';
 import useSize from '@/hooks/UseSize';
+import Button from '@/components/Buttton';
 
 interface IProps<T, F> {
   field?: keyof F;
@@ -17,10 +18,13 @@ interface IProps<T, F> {
   options: ISelectOption<T>[];
   value: ISelectOption<T> | undefined;
   onChange: (value: ISelectOption<T>) => void;
+  onClickClear?: () => void;
   disabled?: boolean;
   className?: string;
   buttonClassName?: string;
   portal?: boolean;
+  isClearable?: boolean;
+  placeholder?: string;
 }
 
 export default function Select<T, F>({
@@ -29,10 +33,13 @@ export default function Select<T, F>({
   options,
   value,
   onChange,
+  onClickClear,
   disabled,
   className,
   buttonClassName,
   portal,
+  isClearable,
+  placeholder = 'Chose an option...',
 }: IProps<T, F>) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -63,19 +70,41 @@ export default function Select<T, F>({
         className={cn('relative', className)}
       >
         <ListboxButton
+          as="div"
           className={cn(
             'relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6',
             buttonClassName,
           )}
         >
-          <span className="block truncate font-semibold">
-            {value?.label || ''}
+          <span className={cn('block truncate', !value ? 'text-gray-400': '')}>
+            {!value ? placeholder || '' : value?.label || ''}
           </span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronDownIcon
-              aria-hidden="true"
-              className="h-5 w-5 text-gray-400"
-            />
+          <span className="absolute inset-y-0 right-0 flex">
+            {isClearable && (
+              <Button
+                variant="custom"
+                className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300"
+                onClick={(e) => {
+                  e?.preventDefault();
+                  e?.stopPropagation();
+                  if (onClickClear) {
+                    onClickClear();
+                  }
+                }}
+              >
+                <span className="sr-only">Clear</span>
+                <XIcon
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                />
+              </Button>
+            )}
+            <span className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300">
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="h-5 w-5 text-gray-400"
+              />
+            </span>
           </span>
         </ListboxButton>
         <ListboxOptions
