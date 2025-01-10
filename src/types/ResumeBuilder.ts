@@ -17,11 +17,23 @@ export enum ERBType {
 
 export interface IRBSection {
   type: ERBType;
-  isHidden?: boolean;
+  title: string;
+  isHidden: boolean;
+  isSortable: boolean;
   data: TResumeBuilderSection[];
 }
 
-export interface IRBDetail {
+export interface IRBSectionItem {
+  isExpanded: boolean;
+}
+
+export function newIRBSectionItem(): IRBSectionItem {
+  return {
+    isExpanded: true,
+  };
+}
+
+export interface IRBDetail extends IRBSectionItem {
   title: string;
   image: string;
   firstName: string;
@@ -41,6 +53,7 @@ export interface IRBDetail {
 
 export function newIRBDetail(): IRBDetail {
   return {
+    ...newIRBSectionItem(),
     title: '',
     image: '',
     firstName: '',
@@ -59,12 +72,13 @@ export function newIRBDetail(): IRBDetail {
   };
 }
 
-export interface IRBSummary {
+export interface IRBSummary extends IRBSectionItem {
   description: string;
 }
 
 export function newIRBSummary(): IRBSummary {
   return {
+    ...newIRBSectionItem(),
     description: '',
   };
 }
@@ -83,7 +97,7 @@ export function newIRBDate(): IRBDate {
   };
 }
 
-export interface IRBEmployment {
+export interface IRBEmployment extends IRBSectionItem {
   title: string;
   employer: string;
   start: IRBDate | null;
@@ -94,6 +108,8 @@ export interface IRBEmployment {
 
 export function newIRBEmployment(): IRBEmployment {
   return {
+    ...newIRBSectionItem(),
+
     title: '',
     employer: '',
     start: null,
@@ -103,7 +119,7 @@ export function newIRBEmployment(): IRBEmployment {
   };
 }
 
-export interface IRBEducation {
+export interface IRBEducation extends IRBSectionItem {
   school: string;
   degree: string;
   start: IRBDate | null;
@@ -114,6 +130,7 @@ export interface IRBEducation {
 
 export function newIRBEducation(): IRBEducation {
   return {
+    ...newIRBSectionItem(),
     school: '',
     degree: '',
     start: null,
@@ -123,13 +140,14 @@ export function newIRBEducation(): IRBEducation {
   };
 }
 
-export interface IRBLink {
+export interface IRBLink extends IRBSectionItem {
   label: string;
   link: string;
 }
 
 export function newIRBLink(): IRBLink {
   return {
+    ...newIRBSectionItem(),
     label: '',
     link: '',
   };
@@ -143,19 +161,20 @@ export enum ERBSkillLevel {
   Expert = 5,
 }
 
-export interface IRBSkill {
+export interface IRBSkill extends IRBSectionItem {
   skill: string;
   level: ERBSkillLevel | null;
 }
 
 export function newIRBSkill(): IRBSkill {
   return {
+    ...newIRBSectionItem(),
     skill: '',
     level: null,
   };
 }
 
-export interface IRBCustom {
+export interface IRBCustom extends IRBSectionItem {
   title: string;
   city: string;
   start: IRBDate | null;
@@ -165,6 +184,7 @@ export interface IRBCustom {
 
 export function newIRBCustom(): IRBCustom {
   return {
+    ...newIRBSectionItem(),
     title: '',
     city: '',
     start: null,
@@ -173,7 +193,7 @@ export function newIRBCustom(): IRBCustom {
   };
 }
 
-export interface IRBCourse {
+export interface IRBCourse extends IRBSectionItem {
   name: string;
   institution: string;
   start: IRBDate | null;
@@ -183,6 +203,7 @@ export interface IRBCourse {
 
 export function newIRBCourse(): IRBCourse {
   return {
+    ...newIRBSectionItem(),
     name: '',
     institution: '',
     start: null,
@@ -191,7 +212,7 @@ export function newIRBCourse(): IRBCourse {
   };
 }
 
-export interface IRBExtraCurricular {
+export interface IRBExtraCurricular extends IRBSectionItem {
   name: string;
   start: IRBDate | null;
   end: IRBDate | null;
@@ -201,6 +222,7 @@ export interface IRBExtraCurricular {
 
 export function newIRBExtraCurricular(): IRBExtraCurricular {
   return {
+    ...newIRBSectionItem(),
     name: '',
     start: null,
     end: null,
@@ -209,7 +231,7 @@ export function newIRBExtraCurricular(): IRBExtraCurricular {
   };
 }
 
-export interface IRBInternship {
+export interface IRBInternship extends IRBSectionItem {
   title: string;
   employer: string;
   start: IRBDate | null;
@@ -220,6 +242,7 @@ export interface IRBInternship {
 
 export function newIRBInternship(): IRBInternship {
   return {
+    ...newIRBSectionItem(),
     title: '',
     employer: '',
     start: null,
@@ -242,19 +265,20 @@ export enum ERBLanguageLevel {
   A1,
 }
 
-export interface IRBLanguage {
+export interface IRBLanguage extends IRBSectionItem {
   language: string;
   level: ERBLanguageLevel | null;
 }
 
 export function newIRBLanguage(): IRBLanguage {
   return {
+    ...newIRBSectionItem(),
     language: '',
     level: null,
   };
 }
 
-export interface IRBReference {
+export interface IRBReference extends IRBSectionItem {
   byRequestOnly: boolean;
   name: string;
   company: string;
@@ -264,6 +288,7 @@ export interface IRBReference {
 
 export function newIRBReference(): IRBReference {
   return {
+    ...newIRBSectionItem(),
     byRequestOnly: false,
     name: '',
     company: '',
@@ -271,8 +296,6 @@ export function newIRBReference(): IRBReference {
     email: '',
   };
 }
-
-
 
 export type TResumeBuilderSection =
   | IRBDetail
@@ -302,6 +325,25 @@ export function newIRBStyle(): IRBStyle {
   };
 }
 
+export type TSectionVisibility = Record<ERBType, boolean>;
+
+export function newTSectionVisibility(): TSectionVisibility {
+  return {
+    [ERBType.Detail]: true,
+    [ERBType.Summary]: true,
+    [ERBType.Employment]: true,
+    [ERBType.Education]: true,
+    [ERBType.Link]: true,
+    [ERBType.Skill]: true,
+    [ERBType.Custom]: true,
+    [ERBType.Course]: true,
+    [ERBType.ExtraCurricular]: true,
+    [ERBType.Internship]: true,
+    [ERBType.Language]: true,
+    [ERBType.Reference]: true,
+  };
+}
+
 export interface IResumeBuilder {
   sections: IRBSection[];
   style: IRBStyle;
@@ -312,55 +354,86 @@ export function newIResumeBuilderSections(): IRBSection[] {
   return [
     {
       type: ERBType.Detail,
+      title: 'Personal Details',
+      isHidden: false,
+      isSortable: false,
       data: [newIRBDetail()],
     },
     {
       type: ERBType.Summary,
+      title: 'Professional Summary',
+      isHidden: false,
+      isSortable: false,
       data: [newIRBSummary()],
     },
     {
       type: ERBType.Employment,
+      title: 'Employment',
+      isHidden: false,
+      isSortable: true,
       data: [newIRBEducation()],
     },
     {
       type: ERBType.Education,
+      title: 'Education',
+      isHidden: false,
+      isSortable: true,
       data: [newIRBEducation()],
     },
     {
       type: ERBType.Link,
+      title: 'Links',
+      isHidden: false,
+      isSortable: true,
       data: [newIRBLink()],
     },
     {
       type: ERBType.Skill,
+      title: 'Skills',
+      isHidden: false,
+      isSortable: true,
       data: [newIRBSkill()],
     },
     {
       type: ERBType.Custom,
+      title: 'Custom',
       isHidden: true,
+      isSortable: true,
       data: [newIRBCustom()],
     },
     {
       type: ERBType.Course,
+      title: 'Courses',
       isHidden: true,
+      isSortable: true,
       data: [newIRBCourse()],
-    },{
+    },
+    {
       type: ERBType.ExtraCurricular,
+      title: 'Extra-curricular Activities',
       isHidden: true,
+      isSortable: true,
       data: [newIRBExtraCurricular()],
     },
     {
       type: ERBType.Internship,
+      title: 'Internships',
       isHidden: true,
+      isSortable: true,
       data: [newIRBInternship()],
     },
     {
       type: ERBType.Language,
+      title: 'Languages',
       isHidden: true,
+      isSortable: true,
       data: [newIRBLanguage()],
     },
     {
       type: ERBType.Reference,
+      title: 'References',
       isHidden: true,
+      isSortable: true,
       data: [newIRBReference()],
     },
   ];
@@ -373,3 +446,20 @@ export function newIResumeBuilder(): IResumeBuilder {
     templateId: '',
   };
 }
+
+export type TVisibleToggle =
+  | ERBType.Custom
+  | ERBType.Course
+  | ERBType.ExtraCurricular
+  | ERBType.Internship
+  | ERBType.Language
+  | ERBType.Reference;
+
+export const TOGGLEABLE_TYPES: TVisibleToggle[] = [
+  ERBType.Custom,
+  ERBType.Course,
+  ERBType.ExtraCurricular,
+  ERBType.Internship,
+  ERBType.Language,
+  ERBType.Reference,
+];

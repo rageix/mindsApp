@@ -17,7 +17,7 @@ export default function Eduction({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Education</Title>
+      <Title title={controller.state.section.title}/>
       <Description>
         A varied education on your resume sums up the value that your learnings and background will bring to job.
       </Description>

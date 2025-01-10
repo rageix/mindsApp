@@ -14,7 +14,7 @@ export default function Course({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Course</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <CourseForm
           key={v.id}

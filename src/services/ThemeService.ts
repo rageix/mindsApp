@@ -22,6 +22,8 @@ class ThemeService {
   };
 
   get = (): string => {
+    return ETheme.light;
+
     if(typeof window === 'undefined') {
       return DEFAULT;
     }

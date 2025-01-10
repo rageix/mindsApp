@@ -1,10 +1,12 @@
 import BuilderController from '@/components/ResumeBuilder/Builder/BuilderController';
 import BuilderSection from '@/components/ResumeBuilder/Builder/Sections';
-import { ERBType } from '@/types/ResumeBuilder';
-import { useMemo } from 'react';
+import {
+  ERBType,
+  newTSectionVisibility,
+  TSectionVisibility,
+} from '@/types/ResumeBuilder';
 import Switch from '@/components/Switch';
-
-
+import { useMemo } from 'react';
 
 interface IProps {
   controller: BuilderController;
@@ -13,33 +15,22 @@ interface IProps {
 export default function Builder({ controller }: IProps) {
   controller.useController();
 
-  const hidden: THiddenSections = useMemo(() => {
-    console.log('calc hidden');
-    const controllers = controller.state.controllers;
+  // const { state } = controller;
 
-    return {
-      [ERBType.Custom]: !!(controllers.find(
-        (v) => v.state?.section?.type === ERBType.Custom,
-      )?.state.section.isHidden),
-      [ERBType.Course]: !!controllers.find(
-        (v) => v.state?.section?.type === ERBType.Course,
-      )?.state.section.isHidden,
-      [ERBType.ExtraCurricular]: !!controllers.find(
-        (v) => v.state?.section?.type === ERBType.ExtraCurricular,
-      )?.state.section.isHidden,
-      [ERBType.Internship]: !!controllers.find(
-        (v) => v.state?.section?.type === ERBType.Internship,
-      )?.state.section.isHidden,
-      [ERBType.Language]: !!controllers.find(
-        (v) => v.state?.section?.type === ERBType.Language,
-      )?.state.section.isHidden,
-      [ERBType.Reference]: !!controllers.find(
-        (v) => v.state?.section?.type === ERBType.Reference,
-      )?.state.section.isHidden,
-    };
+  const isHidden: TSectionVisibility = useMemo(() => {
+    const sectionControllers = controller.state.controllers;
+    const out = newTSectionVisibility();
+
+    for (const value of Object.values(ERBType)) {
+      const index = sectionControllers.findIndex((v) => v.type() === value);
+
+      if (index > -1) {
+        out[value] = !sectionControllers[index].isHidden;
+      }
+    }
+
+    return out;
   }, [controller.state.controllers]);
-
-  console.log('hidden', hidden);
 
   return (
     <div>
@@ -55,7 +46,7 @@ export default function Builder({ controller }: IProps) {
         <div className="flex">
           <div className="flex-1">
             <Switch
-              checked={hidden.custom}
+              checked={isHidden[ERBType.Custom]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Custom)
               }
@@ -65,7 +56,7 @@ export default function Builder({ controller }: IProps) {
           </div>
           <div className="flex-1">
             <Switch
-              checked={hidden.course}
+              checked={isHidden[ERBType.Course]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Course)
               }
@@ -77,7 +68,7 @@ export default function Builder({ controller }: IProps) {
         <div className="flex">
           <div className="flex-1">
             <Switch
-              checked={hidden.internship}
+              checked={isHidden[ERBType.Internship]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Internship)
               }
@@ -87,7 +78,7 @@ export default function Builder({ controller }: IProps) {
           </div>
           <div className="flex-1">
             <Switch
-              checked={hidden.language}
+              checked={isHidden[ERBType.Language]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Language)
               }
@@ -99,7 +90,7 @@ export default function Builder({ controller }: IProps) {
         <div className="flex">
           <div className="flex-1">
             <Switch
-              checked={hidden.reference}
+              checked={isHidden[ERBType.Reference]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Reference)
               }

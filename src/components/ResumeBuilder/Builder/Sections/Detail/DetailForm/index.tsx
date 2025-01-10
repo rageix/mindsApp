@@ -7,6 +7,12 @@ import Input from '@/components/Input';
 import { useState } from 'react';
 import { cn } from '@/util/Cn';
 import Button from '@/components/Buttton';
+import SectionItemHeader
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItem
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemBody
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 
 interface IProps {
   controller: DetailFormController;
@@ -19,7 +25,11 @@ export default function DetailForm({ controller }: IProps) {
   const { form, state } = controller;
 
   return (
-    <div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+        {form.title || '(Not specified)'}
+      </SectionItemHeader>
+      <SectionItemBody>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="title">Title</FormLabel>
@@ -169,6 +179,7 @@ export default function DetailForm({ controller }: IProps) {
       >
         {showMore ? 'Show less fields...' : 'Show more fields...'}
       </Button>
-    </div>
+      </SectionItemBody>
+    </SectionItem>
   );
 }

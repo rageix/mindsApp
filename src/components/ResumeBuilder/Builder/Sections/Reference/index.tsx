@@ -14,7 +14,7 @@ export default function Reference({ controller }: IProps) {
 
   return (
     <div>
-      <Title>References</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <ReferenceForm
           key={v.id}

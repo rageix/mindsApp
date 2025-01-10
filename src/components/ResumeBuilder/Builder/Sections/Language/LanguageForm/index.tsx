@@ -8,6 +8,12 @@ import Select from '@/components/Select';
 import LanguageFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/LanguageFormController';
+import SectionItem
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemHeader
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItemBody
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 
 const OPTIONS: ISelectOption<ERBLanguageLevel | null>[] = [
   {
@@ -77,8 +83,11 @@ export default function LanguageForm({ controller }: IProps) {
     }, [form.level]);
 
   return (
-    <div>
-      <div>{form.language || '(Not specified)'}</div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+        {form.language || '(Not specified)'}
+      </SectionItemHeader>
+      <SectionItemBody>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="language">Language</FormLabel>
@@ -101,6 +110,7 @@ export default function LanguageForm({ controller }: IProps) {
           />
         </div>
       </div>
-    </div>
+      </SectionItemBody>
+    </SectionItem>
   );
 }

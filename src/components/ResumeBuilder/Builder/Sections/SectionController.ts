@@ -52,12 +52,13 @@ interface IState {
 export function newDefaultState(): IState {
   return {
     controllers: [],
-    section: { type: ERBType.Detail, data: [] },
+    section: { type: ERBType.Detail, title: '', isHidden: true, isSortable: true, data: [] },
   };
 }
 
 export default class SectionController extends BasicController<IState> {
   defaultState = newDefaultState();
+  isHidden = false;
 
   constructor(section: IRBSection) {
     super();
@@ -126,6 +127,7 @@ export default class SectionController extends BasicController<IState> {
       controllers.push(controller);
     }
 
+    this.isHidden = section.isHidden;
     this.setState({ controllers, section });
   };
 
@@ -179,15 +181,27 @@ export default class SectionController extends BasicController<IState> {
   };
 
   value = (): IRBSection => {
+    const state = this.state || this.defaultState;
+
     return {
-      type: this.state.section.type,
-      data: this.state.controllers.map((v) => v.form),
+      ...state.section,
+      isHidden: this.isHidden,
+      data: state.controllers.map((v) => v.form),
     };
   };
 
+  type = (): ERBType => {
+    const state = this.state || this.defaultState;
+
+    return state.section.type;
+  };
+
+  // isHidden = (): boolean => {
+  //   const state = this.state || this.defaultState;
+  //   return state.section.isHidden;
+  // };
+
   onChangeHidden = () => {
-    const section  = {...this.state.section};
-    section.isHidden = !section.isHidden;
-    this.setState({section})
-  }
+    this.isHidden = !this.isHidden;
+  };
 }

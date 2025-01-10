@@ -1,12 +1,15 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { PropsWithChildren } from 'react';
-import { GeistSans } from 'geist/font/sans';
+// import { GeistSans } from 'geist/font/sans';
 import { cn } from '@/util/Cn';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProviderWrapper from '@/components/ProviderWrapper';
 import OuterPageWrapper from '@/components/OuterPageWrapper';
+import { Nunito_Sans } from 'next/font/google';
+
+const nunitoSans = Nunito_Sans({subsets: ["latin"]});
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -29,7 +32,7 @@ export default function RootLayout({ children }: Props) {
           content="width=device-width, initial-scale=1.0"
         />
       </head>
-      <body className={cn('min-h-screen', GeistSans.className)}>
+      <body className={cn('min-h-screen', nunitoSans.className)}>
         <ProviderWrapper>
           <OuterPageWrapper>{children}</OuterPageWrapper>
         </ProviderWrapper>

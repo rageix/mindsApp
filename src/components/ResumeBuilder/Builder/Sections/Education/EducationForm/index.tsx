@@ -6,6 +6,10 @@ import EducationFormController, {
 } from '@/components/ResumeBuilder/Builder/Sections/Education/EducationForm/EducationFormController';
 import TextEditor from '@/components/TextEditor';
 import MonthYearInput from '@/components/ResumeBuilder/Builder/MonthYearInput';
+import SectionItemHeader
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItem
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 
 interface IProps {
   controller: EducationFormController;
@@ -17,10 +21,10 @@ export default function EducationForm({ controller }: IProps) {
   const { form, state } = controller;
 
   return (
-    <div>
-      <div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
         {form.school || '(Not specified)'}
-      </div>
+      </SectionItemHeader>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="school">School</FormLabel>
@@ -78,6 +82,6 @@ export default function EducationForm({ controller }: IProps) {
           onChange={controller.onChangeDescription}
         />
       </div>
-    </div>
+    </SectionItem>
   );
 }

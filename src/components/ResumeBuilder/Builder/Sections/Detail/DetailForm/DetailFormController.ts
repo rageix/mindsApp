@@ -1,6 +1,7 @@
-import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
 import { IRBDetail, newIRBDetail } from '@/types/ResumeBuilder';
+import SectionItemController
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBDetail {}
 
@@ -8,9 +9,13 @@ export function defaultForm(): IForm {
   return newIRBDetail();
 }
 
-export default class DetailFormController extends FormController<IForm> {
+export default class DetailFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeIsExpanded = () => {
+    this.onChangeForm({ isExpanded: !this.form.isExpanded });
+  };
 
   onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ title: e.target.value });

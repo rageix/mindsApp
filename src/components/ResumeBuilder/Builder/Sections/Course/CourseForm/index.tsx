@@ -7,6 +7,12 @@ import MonthYearInput from '@/components/ResumeBuilder/Builder/MonthYearInput';
 import CourseFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Course/CourseForm/CourseFormController';
+import SectionItem
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemHeader
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItemBody
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 
 interface IProps {
   controller: CourseFormController;
@@ -18,10 +24,11 @@ export default function CourseForm({ controller }: IProps) {
   const { form, state } = controller;
 
   return (
-    <div>
-      <div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
         {form.name || '(Not specified)'}
-      </div>
+      </SectionItemHeader>
+      <SectionItemBody>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="name">Name</FormLabel>
@@ -71,6 +78,7 @@ export default function CourseForm({ controller }: IProps) {
           onChange={controller.onChangeDescription}
         />
       </div>
-    </div>
+      </SectionItemBody>
+    </SectionItem>
   );
 }

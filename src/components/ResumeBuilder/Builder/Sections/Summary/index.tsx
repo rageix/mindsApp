@@ -14,7 +14,7 @@ export default function Summary({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Summary</Title>
+      <Title title={controller.state.section.title}/>
       <Description>
         Write 2-4 short, energetic sentences about how great you are. Mention
         the role and what you did. What were the big achievements? Describe your

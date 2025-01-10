@@ -23,7 +23,7 @@ export default function OuterPageWrapper({ children }: Props) {
     <div
       className={cn(
         'min-h-screen',
-        theme === ETheme.light ? 'bg-gray-200 text-gray-900' : null,
+        theme === ETheme.light ? 'bg-white text-gray-900' : null,
         theme === ETheme.dark ? 'bg-gray-900 text-white' : null,
       )}
     >

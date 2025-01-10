@@ -8,6 +8,10 @@ import { ISelectOption } from '@/types/SelectOption';
 import { ERBSkillLevel } from '@/types/ResumeBuilder';
 import { useMemo } from 'react';
 import Select from '@/components/Select';
+import SectionItem
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemHeader
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 
 const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   {
@@ -51,7 +55,10 @@ export default function SkillForm({ controller }: IProps) {
   }, [form.level]);
 
   return (
-    <div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+        {form.skill || '(Not specified)'}
+      </SectionItemHeader>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="skill">Skill</FormLabel>
@@ -74,6 +81,6 @@ export default function SkillForm({ controller }: IProps) {
           />
         </div>
       </div>
-    </div>
+    </SectionItem>
   );
 }

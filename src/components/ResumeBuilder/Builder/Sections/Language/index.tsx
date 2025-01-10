@@ -14,7 +14,7 @@ export default function Language({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Languages</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <LanguageForm
           key={v.id}

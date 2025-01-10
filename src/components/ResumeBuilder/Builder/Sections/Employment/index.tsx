@@ -15,7 +15,7 @@ export default function Employment({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Employment</Title>
+      <Title title={controller.state.section.title} />
       <Description>
         Show your relevant experience (last 10 years). Use bullet points to note
         your achievements, if possible - use numbers/facts (Achieved X, measured

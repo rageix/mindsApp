@@ -14,7 +14,7 @@ export default function ExtraCurricular({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Extra-curricular Activities</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <ExtraCurricularForm
           key={v.id}

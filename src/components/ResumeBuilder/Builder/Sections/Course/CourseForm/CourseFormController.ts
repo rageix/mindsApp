@@ -1,6 +1,6 @@
-import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
 import { IRBCourse, IRBDate, newIRBCourse } from '@/types/ResumeBuilder';
+import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBCourse {}
 
@@ -8,7 +8,7 @@ export function defaultForm(): IForm {
   return newIRBCourse();
 }
 
-export default class CourseFormController extends FormController<IForm> {
+export default class CourseFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 

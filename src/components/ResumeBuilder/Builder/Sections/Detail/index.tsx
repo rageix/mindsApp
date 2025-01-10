@@ -12,7 +12,7 @@ interface IProps {
 export default function Detail({ controller }: IProps) {
   return (
     <div>
-      <Title>Personal Details</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <DetailForm
           key={v.id}

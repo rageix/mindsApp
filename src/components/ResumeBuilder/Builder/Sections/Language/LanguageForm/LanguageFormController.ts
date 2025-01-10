@@ -1,10 +1,10 @@
-import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
 import {
   ERBLanguageLevel,
   IRBLanguage,
-  newIRBLanguage
+  newIRBLanguage,
 } from '@/types/ResumeBuilder';
+import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBLanguage {}
 
@@ -12,7 +12,7 @@ export function defaultForm(): IForm {
   return newIRBLanguage();
 }
 
-export default class LanguageFormController extends FormController<IForm> {
+export default class LanguageFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
@@ -22,5 +22,5 @@ export default class LanguageFormController extends FormController<IForm> {
 
   onChangeLevel = (value: ERBLanguageLevel | null) => {
     this.onChangeForm({ level: value });
-  }
+  };
 }

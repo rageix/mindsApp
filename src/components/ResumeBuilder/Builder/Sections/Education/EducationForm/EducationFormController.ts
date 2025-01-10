@@ -1,10 +1,6 @@
-import FormController from '@/util/FormController';
 import { ChangeEvent } from 'react';
-import {
-  IRBDate,
-  IRBEducation,
-  newIRBEducation
-} from '@/types/ResumeBuilder';
+import { IRBDate, IRBEducation, newIRBEducation } from '@/types/ResumeBuilder';
+import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBEducation {}
 
@@ -12,9 +8,13 @@ export function defaultForm(): IForm {
   return newIRBEducation();
 }
 
-export default class EducationFormController extends FormController<IForm> {
+export default class EducationFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeIsExpanded = () => {
+    this.onChangeForm({ isExpanded: !this.form.isExpanded });
+  };
 
   onChangeSchool = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ school: e.target.value });
@@ -39,5 +39,4 @@ export default class EducationFormController extends FormController<IForm> {
   onChangeDescription = (value: string) => {
     this.onChangeForm({ description: value });
   };
-
 }

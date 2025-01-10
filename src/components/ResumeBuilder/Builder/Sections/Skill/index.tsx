@@ -15,7 +15,7 @@ export default function Skill({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Skills</Title>
+      <Title title={controller.state.section.title}/>
       <Description>
         Choose 5 important skills that show you fit the position. Make sure they
         match the key skills mentioned in the job listing (especially when

@@ -15,7 +15,7 @@ export default function Link({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Websites & Social Links</Title>
+      <Title title={controller.state.section.title}/>
       <Description>
         You can add links to websites you want hiring managers to see! Perhaps
         It will be a link to your portfolio, LinkedIn profile, or personal

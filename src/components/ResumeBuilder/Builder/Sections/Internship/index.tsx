@@ -16,7 +16,7 @@ export default function Internship({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Internships</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <InternshipForm
           key={v.id}

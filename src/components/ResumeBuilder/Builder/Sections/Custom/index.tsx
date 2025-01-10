@@ -14,7 +14,7 @@ export default function Custom({ controller }: IProps) {
 
   return (
     <div>
-      <Title>Custom</Title>
+      <Title title={controller.state.section.title}/>
       {controller.state.controllers.map((v) => (
         <CustomForm
           key={v.id}

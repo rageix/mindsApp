@@ -3,8 +3,13 @@ import FormLabel from '@/components/FormLabel';
 import Input from '@/components/Input';
 import TextEditor from '@/components/TextEditor';
 import MonthYearInput from '@/components/ResumeBuilder/Builder/MonthYearInput';
-import ExtraCurricularFormController, {IForm}
-  from '@/components/ResumeBuilder/Builder/Sections/ExtraCurricular/ExtraCurricularForm/ExtraCurricularFormController';
+import ExtraCurricularFormController, {
+  IForm,
+} from '@/components/ResumeBuilder/Builder/Sections/ExtraCurricular/ExtraCurricularForm/ExtraCurricularFormController';
+import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItemBody
+  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 
 interface IProps {
   controller: ExtraCurricularFormController;
@@ -16,10 +21,11 @@ export default function ExtraCurricularForm({ controller }: IProps) {
   const { form, state } = controller;
 
   return (
-    <div>
-      <div>
+    <SectionItem>
+      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
         {form.name || '(Not specified)'}
-      </div>
+      </SectionItemHeader>
+      <SectionItemBody>
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1">
           <FormLabel<IForm> field="name">Name</FormLabel>
@@ -69,6 +75,7 @@ export default function ExtraCurricularForm({ controller }: IProps) {
           onChange={controller.onChangeDescription}
         />
       </div>
-    </div>
+      </SectionItemBody>
+    </SectionItem>
   );
 }

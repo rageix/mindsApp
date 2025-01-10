@@ -20,7 +20,7 @@ interface IProps {
 export default function BuilderSection({ controller }: IProps) {
   controller.useController();
   const section = controller.state.section;
-  const isHidden = !!section.isHidden;
+  const isHidden = controller.isHidden;
 
   switch (section.type) {
     case ERBType.Detail:
