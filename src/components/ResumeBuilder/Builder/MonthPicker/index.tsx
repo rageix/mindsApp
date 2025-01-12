@@ -58,12 +58,12 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
   }
 
   return (
-    <div className="bg-white">
-      <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
-        <div className="flex items-center text-center text-gray-900">
+    <div className="bg-white p-3 border rounded-md flex flex-col gap-y-2 my-0.5">
+      <div className="">
+        <div className="flex gap-y-4 items-center text-center text-gray-900">
           <button
             type="button"
-            className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
             onClick={onClickPrevYear}
           >
             <span className="sr-only">Previous Year</span>
@@ -74,8 +74,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
           </button>
           <div className="flex-auto text-sm font-semibold">
             <Button
-              variant="custom"
-              className="bg-white hover:bg-blue-100 active:bg-blue-200 text-gray-400 hover:text-blue-600"
+              variant="link"
               onClick={onClickYear}
             >
               {year}
@@ -83,7 +82,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
           </div>
           <button
             type="button"
-            className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
             onClick={onClickNextYear}
           >
             <span className="sr-only">Next Year</span>
@@ -97,8 +96,8 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
       <div className="grid grid-cols-4 gap-4">
         {MONTHS_ABBR.map((v, i) => (
           <Button
-            variant="custom"
-            className="bg-white hover:bg-blue-100 active:bg-blue-200 text-gray-400 hover:text-blue-600"
+            variant="link"
+            className=""
             key={i}
             onClick={() => onClickMonth(i)}
           >
@@ -107,7 +106,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
         ))}
       </div>
       {showPresent && (
-        <div className="flex">
+        <div className="flex mt-3">
           <Button
             variant="blue"
             isActive={value?.present}

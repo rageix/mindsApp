@@ -14,6 +14,10 @@ import {
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { ListNode, ListItemNode } from "@lexical/list";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import {
   $isTextNode,
@@ -35,7 +39,7 @@ import './style.css';
 import { useMemo } from 'react';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 
-const placeholder = 'Enter some rich text...';
+const placeholder = 'Enter some text...';
 
 const removeStylesExportDOM = (
   editor: LexicalEditor,
@@ -173,7 +177,7 @@ export default function TextEditor({ initialState, onChange }: IProps) {
         import: constructImportMap(),
       },
       namespace: 'textEditor',
-      nodes: [ParagraphNode, TextNode],
+      nodes: [ParagraphNode, TextNode, ListItemNode, ListNode, LinkNode, AutoLinkNode],
       onError(error: Error) {
         throw error;
       },
@@ -185,16 +189,16 @@ export default function TextEditor({ initialState, onChange }: IProps) {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <div className="relative w-full border border-gray-200 rounded-md overflow-hidden">
         <ToolbarPlugin />
-        <div className="editor-inner">
+        <div className="relative">
           <RichTextPlugin
             contentEditable={
               <ContentEditable
-                className="editor-input"
+                className="editor-input min-h-[10rem] resize-none text-base relative outline-0 px-4 py-2 [&>ul]:list-disc [&>ol]:list-decimal"
                 aria-placeholder={placeholder}
                 placeholder={
-                  <div className="editor-placeholder">{placeholder}</div>
+                  <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-4 left-2 text-base">{placeholder}</div>
                 }
               />
             }
@@ -202,6 +206,8 @@ export default function TextEditor({ initialState, onChange }: IProps) {
           />
           <HistoryPlugin />
           <AutoFocusPlugin />
+          <ListPlugin/>
+          <LinkPlugin/>
           <OnChangePlugin
             onChange={(editorState) => {
               onChange(JSON.stringify(editorState.toJSON()));

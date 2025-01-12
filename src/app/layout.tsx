@@ -13,7 +13,7 @@ const nunitoSans = Nunito_Sans({subsets: ["latin"]});
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'cluvv',
+    title: 'Hobort',
   };
 }
 

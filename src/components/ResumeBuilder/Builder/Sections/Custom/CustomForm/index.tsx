@@ -9,23 +9,36 @@ import CustomFormController, {
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
+import FormStartEnd from '@/components/ResumeBuilder/Builder/Sections/FormStartEnd';
 
 interface IProps {
   controller: CustomFormController;
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
-export default function CustomForm({ controller }: IProps) {
+export default function CustomForm({
+  controller,
+  onDuplicate,
+  onDelete,
+}: IProps) {
   controller.useController();
 
   const { form, state } = controller;
 
   return (
     <SectionItem>
-      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+      <SectionItemHeader
+        isExpanded={form.isExpanded}
+        onClickHeader={controller.onChangeIsExpanded}
+        onClickDuplicate={onDuplicate}
+        onClickDelete={onDelete}
+      >
         {form.title || '(Not specified)'}
       </SectionItemHeader>
-      <SectionItemBody>
-        <div className="flex flex-col sm:flex-row">
+      <SectionItemBody isExpanded={form.isExpanded}>
+        <FormRow>
           <div className="flex-1">
             <FormLabel<IForm> field="title">Title</FormLabel>
             <Input<IForm>
@@ -44,9 +57,9 @@ export default function CustomForm({ controller }: IProps) {
               onChange={controller.onChangeCity}
             />
           </div>
-        </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className="flex-1 flex">
+        </FormRow>
+        <FormRow>
+          <FormStartEnd>
             <div className="flex-1">
               <FormLabel<IForm> field="start">Start</FormLabel>
               <MonthYearInput
@@ -64,16 +77,16 @@ export default function CustomForm({ controller }: IProps) {
                 isClearable
               />
             </div>
-          </div>
+          </FormStartEnd>
           <div className="flex-1"></div>
-        </div>
-        <div>
+        </FormRow>
+        <FormRow>
           <FormLabel>Description</FormLabel>
           <TextEditor
             initialState={null}
             onChange={controller.onChangeDescription}
           />
-        </div>
+        </FormRow>
       </SectionItemBody>
     </SectionItem>
   );

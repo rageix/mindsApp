@@ -52,7 +52,13 @@ interface IState {
 export function newDefaultState(): IState {
   return {
     controllers: [],
-    section: { type: ERBType.Detail, title: '', isHidden: true, isSortable: true, data: [] },
+    section: {
+      type: ERBType.Detail,
+      title: '',
+      isHidden: true,
+      isSortable: true,
+      data: [],
+    },
   };
 }
 
@@ -131,10 +137,9 @@ export default class SectionController extends BasicController<IState> {
     this.setState({ controllers, section });
   };
 
-  onClickAddForm = () => {
+  createNewController = () => {
     const id = this.getUniqueId(this.state.controllers);
 
-    const controllers = [...this.state.controllers];
     let controller: TBuilderFormController;
 
     switch (this.state.section.type) {
@@ -176,7 +181,13 @@ export default class SectionController extends BasicController<IState> {
         break;
     }
     controller.id = id;
-    controllers.push(controller);
+    return controller;
+  }
+
+  onClickAddForm = () => {
+    const controllers = [...this.state.controllers];
+
+    controllers.push(this.createNewController());
     this.setState({ controllers });
   };
 
@@ -196,12 +207,26 @@ export default class SectionController extends BasicController<IState> {
     return state.section.type;
   };
 
-  // isHidden = (): boolean => {
-  //   const state = this.state || this.defaultState;
-  //   return state.section.isHidden;
-  // };
-
   onChangeHidden = () => {
     this.isHidden = !this.isHidden;
+  };
+
+  onDuplicateIndex = (index: number) => {
+    const controllers = [...this.state.controllers];
+
+    const controller = this.createNewController();
+    const form = { ...controllers[index].form };
+    controller.reset(form as any);
+
+    controllers.splice(index + 1, 0, controller);
+
+    this.setState({ controllers });
+  };
+
+  onDeleteIndex = (index: number) => {
+    const controllers = [...this.state.controllers];
+    controllers.splice(index, 1);
+
+    this.setState({ controllers });
   };
 }

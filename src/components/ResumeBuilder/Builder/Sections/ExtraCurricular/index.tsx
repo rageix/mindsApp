@@ -1,9 +1,10 @@
 'use client';
 import Title from '@/components/ResumeBuilder/Builder/Sections/Title';
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
-import Button from '@/components/Buttton';
 import ExtraCurricularForm from '@/components/ResumeBuilder/Builder/Sections/ExtraCurricular/ExtraCurricularForm';
 import ExtraCurricularFormController from '@/components/ResumeBuilder/Builder/Sections/ExtraCurricular/ExtraCurricularForm/ExtraCurricularFormController';
+import FormList from '../FormList';
+import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 
 interface IProps {
   controller: SectionController;
@@ -14,19 +15,18 @@ export default function ExtraCurricular({ controller }: IProps) {
 
   return (
     <div>
-      <Title title={controller.state.section.title}/>
-      {controller.state.controllers.map((v) => (
-        <ExtraCurricularForm
-          key={v.id}
-          controller={v as ExtraCurricularFormController}
-        />
-      ))}
-      <Button
-        variant="link"
-        onClick={controller.onClickAddForm}
-      >
-        + Add One
-      </Button>
+      <Title title={controller.state.section.title} />
+      <FormList>
+        {controller.state.controllers.map((v, i) => (
+          <ExtraCurricularForm
+            key={v.id}
+            controller={v as ExtraCurricularFormController}
+            onDuplicate={() => controller.onDuplicateIndex(i)}
+            onDelete={() => controller.onDeleteIndex(i)}
+          />
+        ))}
+      </FormList>
+      <AddFormButton onClick={controller.onClickAddForm} />
     </div>
   );
 }

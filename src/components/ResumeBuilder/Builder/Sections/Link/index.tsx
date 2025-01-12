@@ -4,7 +4,8 @@ import Description from '@/components/ResumeBuilder/Builder/Sections/Description
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
 import LinkForm from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm';
 import LinkFormController from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm/LinkFormController';
-import Button from '@/components/Buttton';
+import FormList from '../FormList';
+import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 
 interface IProps {
   controller: SectionController;
@@ -15,24 +16,23 @@ export default function Link({ controller }: IProps) {
 
   return (
     <div>
-      <Title title={controller.state.section.title}/>
+      <Title title={controller.state.section.title} />
       <Description>
         You can add links to websites you want hiring managers to see! Perhaps
         It will be a link to your portfolio, LinkedIn profile, or personal
         website
       </Description>
-      {controller.state.controllers.map((v) => (
-        <LinkForm
-          key={v.id}
-          controller={v as LinkFormController}
-        />
-      ))}
-      <Button
-        variant="link"
-        onClick={controller.onClickAddForm}
-      >
-        + Add One
-      </Button>
+      <FormList>
+        {controller.state.controllers.map((v, i) => (
+          <LinkForm
+            key={v.id}
+            controller={v as LinkFormController}
+            onDuplicate={() => controller.onDuplicateIndex(i)}
+            onDelete={() => controller.onDeleteIndex(i)}
+          />
+        ))}
+      </FormList>
+      <AddFormButton onClick={controller.onClickAddForm} />
     </div>
   );
 }

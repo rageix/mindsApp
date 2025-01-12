@@ -1,9 +1,10 @@
 'use client';
 import Title from '@/components/ResumeBuilder/Builder/Sections/Title';
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
-import Button from '@/components/Buttton';
 import LanguageForm from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm';
 import LanguageFormController from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/LanguageFormController';
+import FormList from '../FormList';
+import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 
 interface IProps {
   controller: SectionController;
@@ -14,19 +15,18 @@ export default function Language({ controller }: IProps) {
 
   return (
     <div>
-      <Title title={controller.state.section.title}/>
-      {controller.state.controllers.map((v) => (
-        <LanguageForm
-          key={v.id}
-          controller={v as LanguageFormController}
-        />
-      ))}
-      <Button
-        variant="link"
-        onClick={controller.onClickAddForm}
-      >
-        + Add One
-      </Button>
+      <Title title={controller.state.section.title} />
+      <FormList>
+        {controller.state.controllers.map((v, i) => (
+          <LanguageForm
+            key={v.id}
+            controller={v as LanguageFormController}
+            onDuplicate={() => controller.onDuplicateIndex(i)}
+            onDelete={() => controller.onDeleteIndex(i)}
+          />
+        ))}
+      </FormList>
+      <AddFormButton onClick={controller.onClickAddForm} />
     </div>
   );
 }

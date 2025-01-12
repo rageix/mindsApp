@@ -8,33 +8,31 @@ import Select from '@/components/Select';
 import LanguageFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/LanguageFormController';
-import SectionItem
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
-import SectionItemHeader
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
-import SectionItemBody
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
+import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
+import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 
 const OPTIONS: ISelectOption<ERBLanguageLevel | null>[] = [
   {
     key: String(ERBLanguageLevel.NativeSpeaker),
     value: ERBLanguageLevel.NativeSpeaker,
-    label: 'NativeSpeaker',
+    label: 'Native speaker',
   },
   {
     key: String(ERBLanguageLevel.HighlyProficient),
     value: ERBLanguageLevel.HighlyProficient,
-    label: 'HighlyProficient',
+    label: 'Highly proficient',
   },
   {
     key: String(ERBLanguageLevel.VeryGoodCommand),
     value: ERBLanguageLevel.VeryGoodCommand,
-    label: 'VeryGoodCommand',
+    label: 'Very good command',
   },
   {
     key: String(ERBLanguageLevel.WorkingKnowledge),
     value: ERBLanguageLevel.WorkingKnowledge,
-    label: 'WorkingKnowledge',
+    label: 'Working knowledge',
   },
   {
     key: String(ERBLanguageLevel.C2),
@@ -70,46 +68,56 @@ const OPTIONS: ISelectOption<ERBLanguageLevel | null>[] = [
 
 interface IProps {
   controller: LanguageFormController;
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
-export default function LanguageForm({ controller }: IProps) {
+export default function LanguageForm({
+  controller,
+  onDuplicate,
+  onDelete,
+}: IProps) {
   controller.useController();
 
   const { form, state } = controller;
 
-  const value: ISelectOption<ERBLanguageLevel | null> | undefined =
-    useMemo(() => {
-      return OPTIONS.find((v) => v.value === form.level);
-    }, [form.level]);
+  const value: ISelectOption<ERBLanguageLevel | null> | null = useMemo(() => {
+    return OPTIONS.find((v) => v.value === form.level) || null;
+  }, [form.level]);
 
   return (
     <SectionItem>
-      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+      <SectionItemHeader
+        isExpanded={form.isExpanded}
+        onClickHeader={controller.onChangeIsExpanded}
+        onClickDuplicate={onDuplicate}
+        onClickDelete={onDelete}
+      >
         {form.language || '(Not specified)'}
       </SectionItemHeader>
-      <SectionItemBody>
-      <div className="flex flex-col sm:flex-row">
-        <div className="flex-1">
-          <FormLabel<IForm> field="language">Language</FormLabel>
-          <Input<IForm>
-            field="language"
-            errors={state.errors}
-            value={form.language}
-            onChange={controller.onChangeLanguage}
-          />
-        </div>
-        <div className="flex-1">
-          <FormLabel<IForm> field="level">Level</FormLabel>
-          <Select<ERBLanguageLevel | null, IForm>
-            field="level"
-            options={OPTIONS}
-            value={value}
-            onChange={(option) => controller.onChangeLevel(option.value)}
-            isClearable
-            onClickClear={() => controller.onChangeLevel(null)}
-          />
-        </div>
-      </div>
+      <SectionItemBody isExpanded={form.isExpanded}>
+        <FormRow>
+          <div className="flex-1">
+            <FormLabel<IForm> field="language">Language</FormLabel>
+            <Input<IForm>
+              field="language"
+              errors={state.errors}
+              value={form.language}
+              onChange={controller.onChangeLanguage}
+            />
+          </div>
+          <div className="flex-1">
+            <FormLabel<IForm> field="level">Level</FormLabel>
+            <Select<ERBLanguageLevel | null, IForm>
+              field="level"
+              options={OPTIONS}
+              value={value}
+              onChange={(option) => controller.onChangeLevel(option.value)}
+              isClearable
+              onClickClear={() => controller.onChangeLevel(null)}
+            />
+          </div>
+        </FormRow>
       </SectionItemBody>
     </SectionItem>
   );

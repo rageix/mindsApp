@@ -48,10 +48,15 @@ export default function MonthYearInput<T>({
 
   return (
     <Popover className="relative">
-      <PopoverButton as="div">
+      <PopoverButton
+        as="div"
+        className="group"
+        onClick={() => (document?.activeElement as HTMLElement)?.blur()}
+      >
         <Input
           field={field}
           value={inputValue}
+          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600"
           onChange={() => null}
         />
         {isClearable && (

@@ -2,9 +2,10 @@
 import Title from '@/components/ResumeBuilder/Builder/Sections/Title';
 import Description from '@/components/ResumeBuilder/Builder/Sections/Description';
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
-import Button from '@/components/Buttton';
 import SkillForm from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm';
 import SkillFormController from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
+import FormList from '../FormList';
+import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 
 interface IProps {
   controller: SectionController;
@@ -15,24 +16,23 @@ export default function Skill({ controller }: IProps) {
 
   return (
     <div>
-      <Title title={controller.state.section.title}/>
+      <Title title={controller.state.section.title} />
       <Description>
         Choose 5 important skills that show you fit the position. Make sure they
         match the key skills mentioned in the job listing (especially when
         applying via an online system).{' '}
       </Description>
-      {controller.state.controllers.map((v) => (
-        <SkillForm
-          key={v.id}
-          controller={v as SkillFormController}
-        />
-      ))}
-      <Button
-        variant="link"
-        onClick={controller.onClickAddForm}
-      >
-        + Add One
-      </Button>
+      <FormList>
+        {controller.state.controllers.map((v, i) => (
+          <SkillForm
+            key={v.id}
+            controller={v as SkillFormController}
+            onDuplicate={() => controller.onDuplicateIndex(i)}
+            onDelete={() => controller.onDeleteIndex(i)}
+          />
+        ))}
+      </FormList>
+      <AddFormButton onClick={controller.onClickAddForm} />
     </div>
   );
 }

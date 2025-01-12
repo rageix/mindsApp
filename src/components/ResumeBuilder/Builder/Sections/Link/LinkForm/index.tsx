@@ -6,26 +6,37 @@ import LinkFormController, {
 } from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm/LinkFormController';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
-import SectionItemBody
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 
 interface IProps {
   controller: LinkFormController;
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
-export default function LinkForm({ controller }: IProps) {
+export default function LinkForm({
+  controller,
+  onDuplicate,
+  onDelete,
+}: IProps) {
   controller.useController();
 
   const { form, state } = controller;
 
   return (
     <SectionItem>
-      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+      <SectionItemHeader
+        isExpanded={form.isExpanded}
+        onClickHeader={controller.onChangeIsExpanded}
+        onClickDuplicate={onDuplicate}
+        onClickDelete={onDelete}
+      >
         <div>{form.label || '(Not specified)'}</div>
         <div>{form.link || '(Not specified)'}</div>
       </SectionItemHeader>
-      <SectionItemBody>
-        <div className="flex flex-col sm:flex-row">
+      <SectionItemBody isExpanded={form.isExpanded}>
+        <FormRow>
           <div className="flex-1">
             <FormLabel<IForm> field="label">Label</FormLabel>
             <Input<IForm>
@@ -44,7 +55,7 @@ export default function LinkForm({ controller }: IProps) {
               onChange={controller.onChangeLink}
             />
           </div>
-        </div>
+        </FormRow>
       </SectionItemBody>
     </SectionItem>
   );

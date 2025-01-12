@@ -34,7 +34,7 @@ export default function Builder({ controller }: IProps) {
 
   return (
     <div>
-      <div>
+      <div className="flex flex-col gap-y-6">
         {(controller.state?.controllers || []).map((v) => (
           <BuilderSection
             key={v.id}
@@ -42,7 +42,7 @@ export default function Builder({ controller }: IProps) {
           />
         ))}
       </div>
-      <div>
+      <div className="mt-6 flex flex-col gap-y-3">
         <div className="flex">
           <div className="flex-1">
             <Switch

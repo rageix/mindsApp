@@ -7,39 +7,51 @@ import ReferenceFormController, {
 import Switch from '@/components/Switch';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
-import SectionItemBody
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 
 interface IProps {
   controller: ReferenceFormController;
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
-export default function ReferenceForm({ controller }: IProps) {
+export default function ReferenceForm({
+  controller,
+  onDuplicate,
+  onDelete,
+}: IProps) {
   controller.useController();
 
   const { form, state } = controller;
 
   return (
     <SectionItem>
-      <SectionItemHeader onClick={controller.onChangeIsExpanded}>
+      <SectionItemHeader
+        isExpanded={form.isExpanded}
+        onClickHeader={controller.onChangeIsExpanded}
+        onClickDuplicate={onDuplicate}
+        onClickDelete={onDelete}
+      >
         <div>
           {form.byRequestOnly
             ? 'By request only'
             : form.name || '(Not specified)'}
         </div>
       </SectionItemHeader>
-      <SectionItemBody>
+      <SectionItemBody isExpanded={form.isExpanded}>
         <div className="flex item">
           <Switch
             checked={form.byRequestOnly}
             onChange={controller.onChangeByRequestOnly}
             label="By request only"
-          />
-          By request only
+          >
+            By request only
+          </Switch>
         </div>
         {!form.byRequestOnly && (
           <>
-            <div className="flex flex-col sm:flex-row">
+            <FormRow>
               <div className="flex-1">
                 <FormLabel<IForm> field="name">Name</FormLabel>
                 <Input<IForm>
@@ -58,8 +70,8 @@ export default function ReferenceForm({ controller }: IProps) {
                   onChange={controller.onChangeCompany}
                 />
               </div>
-            </div>
-            <div className="flex flex-col sm:flex-row">
+            </FormRow>
+            <FormRow>
               <div className="flex-1">
                 <FormLabel<IForm> field="phone">Phone</FormLabel>
                 <Input<IForm>
@@ -78,7 +90,7 @@ export default function ReferenceForm({ controller }: IProps) {
                   onChange={controller.onChangeEmail}
                 />
               </div>
-            </div>
+            </FormRow>
           </>
         )}
       </SectionItemBody>
