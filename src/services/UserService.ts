@@ -5,12 +5,12 @@ import _ from 'lodash';
 import userStore, { IUserStore } from '@/stores/UserStore';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import BasicController from '@/util/BasicController';
-import { IUser } from '@/types/User';
 import { getApiUserLogout } from '@/requests/api/user/logout';
 import tokenService from '@/services/TokenService';
+import { IUserCurrentResponse } from '@/types/UserCurrent';
 
 export class UserService extends BasicController<IUserStore> {
-  query: UseQueryResult<IUser | null, Error> | undefined;
+  query: UseQueryResult<IUserCurrentResponse | null, Error> | undefined;
 
   useController = () => {
     // this._useController();
@@ -39,9 +39,13 @@ export class UserService extends BasicController<IUserStore> {
       }
 
       userStore.set({
-        user: this.query?.data || null,
+        user: this.query?.data?.user || null,
         loaded: true,
       });
+
+      if(this.query?.data?.accessToken) {
+        tokenService.save(this.query?.data?.accessToken);
+      }
     }, [this.query.isFetching]);
   };
 

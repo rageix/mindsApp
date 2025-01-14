@@ -46,6 +46,50 @@ export default function Builder({ controller }: IProps) {
         <div className="flex">
           <div className="flex-1">
             <Switch
+              checked={isHidden[ERBType.Employment]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.Employment)
+              }
+            >
+              <span>Employment</span>
+            </Switch>
+          </div>
+          <div className="flex-1">
+            <Switch
+              checked={isHidden[ERBType.Education]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.Education)
+              }
+            >
+              <span>Education</span>
+            </Switch>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="flex-1">
+            <Switch
+              checked={isHidden[ERBType.Link]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.Link)
+              }
+            >
+              <span>Links</span>
+            </Switch>
+          </div>
+          <div className="flex-1">
+            <Switch
+              checked={isHidden[ERBType.Skill]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.Skill)
+              }
+            >
+              <span>Skills</span>
+            </Switch>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="flex-1">
+            <Switch
               checked={isHidden[ERBType.Custom]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Custom)

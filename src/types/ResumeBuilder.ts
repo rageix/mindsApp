@@ -1,4 +1,4 @@
-import { MongoId } from '@/types/MongoDocument';
+import { MongoDocument, MongoId } from '@/types/MongoDocument';
 
 export enum ERBType {
   Detail = 'detail',
@@ -312,6 +312,7 @@ export type TResumeBuilderSection =
   | IRBReference;
 
 export interface IRBStyle {
+  templateId: MongoId,
   font: string;
   color: string;
   size: number;
@@ -319,6 +320,7 @@ export interface IRBStyle {
 
 export function newIRBStyle(): IRBStyle {
   return {
+    templateId: '',
     font: '',
     color: '',
     size: 16,
@@ -344,10 +346,14 @@ export function newTSectionVisibility(): TSectionVisibility {
   };
 }
 
-export interface IResumeBuilder {
+export interface IResumeBuilder extends MongoDocument {
+  userId?: MongoId;
+  sessionId?: MongoId;
+  name: string;
   sections: IRBSection[];
   style: IRBStyle;
-  templateId: MongoId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export function newIResumeBuilderSections(): IRBSection[] {
@@ -441,13 +447,17 @@ export function newIResumeBuilderSections(): IRBSection[] {
 
 export function newIResumeBuilder(): IResumeBuilder {
   return {
+    name: '(Untitled)',
     sections: newIResumeBuilderSections(),
     style: newIRBStyle(),
-    templateId: '',
   };
 }
 
 export type TVisibleToggle =
+  | ERBType.Employment
+  | ERBType.Education
+  | ERBType.Link
+  | ERBType.Skill
   | ERBType.Custom
   | ERBType.Course
   | ERBType.ExtraCurricular

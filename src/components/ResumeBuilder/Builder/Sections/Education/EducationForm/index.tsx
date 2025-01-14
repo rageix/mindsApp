@@ -89,11 +89,13 @@ export default function EducationForm({
           </div>
         </FormRow>
         <FormRow>
-          <FormLabel>Description</FormLabel>
-          <TextEditor
-            initialState={null}
-            onChange={controller.onChangeDescription}
-          />
+          <div className="flex-1">
+            <FormLabel>Description</FormLabel>
+            <TextEditor
+              initialState={null}
+              onChange={controller.onChangeDescription}
+            />
+          </div>
         </FormRow>
       </SectionItemBody>
     </SectionItem>

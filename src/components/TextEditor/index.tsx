@@ -9,7 +9,7 @@
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import {
   InitialConfigType,
-  LexicalComposer,
+  LexicalComposer
 } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
@@ -17,9 +17,12 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListNode, ListItemNode } from "@lexical/list";
-import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { LinkNode } from "@lexical/link";
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import {
+  $createParagraphNode,
+  $createTextNode,
+  $getRoot,
   $isTextNode,
   DOMConversionMap,
   DOMExportOutput,
@@ -29,7 +32,7 @@ import {
   LexicalEditor,
   LexicalNode,
   ParagraphNode,
-  TextNode,
+  TextNode
 } from 'lexical';
 
 import ExampleTheme from './Theme';
@@ -137,32 +140,13 @@ const constructImportMap = (): DOMConversionMap => {
   return importMap;
 };
 
-// interface IOnChangeProps {
-//   onChange: (arg: EditorState) => void;
-// }
-//
-// function MyOnChangePlugin({ onChange }: IOnChangeProps) {
-//   const [editor] = useLexicalComposerContext();
-//   useEffect(() => {
-//     return editor.registerUpdateListener(({ editorState }) => {
-//       onChange(editorState);
-//     });
-//   }, [editor, onChange]);
-//   return null;
-// }
-//
-// const editorConfig: InitialConfigType = {
-//   html: {
-//     export: exportMap,
-//     import: constructImportMap(),
-//   },
-//   namespace: 'textEditor',
-//   nodes: [ParagraphNode, TextNode],
-//   onError(error: Error) {
-//     throw error;
-//   },
-//   theme: ExampleTheme,
-// };
+export const defaultEditorState = () => {
+  const paragraph = $createParagraphNode();
+  const text = $createTextNode('');
+  paragraph.append(text);
+  $getRoot().append(paragraph);
+  $getRoot().selectEnd();
+}
 
 interface IProps {
   initialState: string | null;
@@ -170,6 +154,7 @@ interface IProps {
 }
 
 export default function TextEditor({ initialState, onChange }: IProps) {
+
   const editorConfig: InitialConfigType = useMemo(
     () => ({
       html: {
@@ -177,12 +162,12 @@ export default function TextEditor({ initialState, onChange }: IProps) {
         import: constructImportMap(),
       },
       namespace: 'textEditor',
-      nodes: [ParagraphNode, TextNode, ListItemNode, ListNode, LinkNode, AutoLinkNode],
+      nodes: [ParagraphNode, TextNode, ListItemNode, ListNode, LinkNode],
       onError(error: Error) {
         throw error;
       },
       theme: ExampleTheme,
-      editorState: initialState,
+      editorState: initialState || defaultEditorState ,
     }),
     [initialState],
   );
@@ -198,7 +183,7 @@ export default function TextEditor({ initialState, onChange }: IProps) {
                 className="editor-input min-h-[10rem] resize-none text-base relative outline-0 px-4 py-2 [&>ul]:list-disc [&>ol]:list-decimal"
                 aria-placeholder={placeholder}
                 placeholder={
-                  <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-4 left-2 text-base">{placeholder}</div>
+                  <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-2 left-4 text-base">{placeholder}</div>
                 }
               />
             }
