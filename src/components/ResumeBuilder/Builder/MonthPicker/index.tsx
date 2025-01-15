@@ -1,9 +1,10 @@
 'use client';
-import { IRBDate } from '@/types/ResumeBuilder';
+import { IRBDate } from '@/types/Resume';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { MONTHS_ABBR } from '@/util/Time';
 import { useMemo } from 'react';
 import Button from '@/components/Buttton';
+import { cn } from '@/util/Cn';
 
 interface IProps {
   value: IRBDate | null;
@@ -24,7 +25,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
     onChange({
       month: value?.month || null,
       year: year,
-      present: value?.present || false,
+      present: false,
     });
   }
 
@@ -46,12 +47,12 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
 
   function onClickMonth(month: number) {
     const newMonth: number | null = value?.month === month ? null : month;
-    onChange({ month: newMonth, year, present: value?.present || false });
+    onChange({ month: newMonth, year, present: false });
   }
 
   function onClickPresent() {
     onChange({
-      month: value?.month || null,
+      month: null,
       year: year,
       present: !value?.present,
     });
@@ -97,7 +98,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
         {MONTHS_ABBR.map((v, i) => (
           <Button
             variant="link"
-            className=""
+            className={cn(value?.month === i ? 'bg-blue-100' : null)}
             key={i}
             onClick={() => onClickMonth(i)}
           >

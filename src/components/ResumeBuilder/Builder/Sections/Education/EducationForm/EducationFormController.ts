@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { IRBDate, IRBEducation, newIRBEducation } from '@/types/ResumeBuilder';
+import { IRBDate, IRBEducation, newIRBEducation } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBEducation {}

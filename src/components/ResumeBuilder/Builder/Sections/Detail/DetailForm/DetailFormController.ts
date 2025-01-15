@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { IRBDetail, newIRBDetail } from '@/types/ResumeBuilder';
+import { IRBDetail, newIRBDetail } from '@/types/Resume';
 import SectionItemController
   from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 

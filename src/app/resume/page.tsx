@@ -1,4 +1,4 @@
-import ResumeView from '../../../components/ResumeView';
+import ResumeView from '../../components/ResumeView';
 
 export default function Page() {
   return <ResumeView />;

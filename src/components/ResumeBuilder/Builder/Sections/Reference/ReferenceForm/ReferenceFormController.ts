@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { IRBReference, newIRBReference } from '@/types/ResumeBuilder';
+import { IRBReference, newIRBReference } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBReference {}

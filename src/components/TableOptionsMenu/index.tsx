@@ -19,7 +19,7 @@ export default function TableOptionsMenu({ className, children }: IProps) {
     >
       <MenuButton
         className={cn('-m-2.5 block p-2.5 ',
-          theme === ETheme.light ? 'text-gray-500 hover:text-gray-400' : null,
+          theme === ETheme.light ? 'text-gray-500 hover:text-gray-400 focus:ring-blue-600 focus-visible:outline-blue-600' : null,
           theme === ETheme.dark ? 'text-gray-400 hover:text-white' : null,
           )}
       >

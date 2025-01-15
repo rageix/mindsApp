@@ -2,7 +2,7 @@
 import FormLabel from '@/components/FormLabel';
 import Input from '@/components/Input';
 import { ISelectOption } from '@/types/SelectOption';
-import { ERBLanguageLevel } from '@/types/ResumeBuilder';
+import { ERBLanguageLevel } from '@/types/Resume';
 import { useMemo } from 'react';
 import Select from '@/components/Select';
 import LanguageFormController, {

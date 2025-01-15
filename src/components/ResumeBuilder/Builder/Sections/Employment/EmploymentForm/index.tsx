@@ -27,6 +27,8 @@ export default function EmploymentForm({
 
   const { form, state } = controller;
 
+  console.log('EmploymentForm', 'form', form);
+
   return (
     <SectionItem>
       <SectionItemHeader
@@ -92,7 +94,7 @@ export default function EmploymentForm({
           <div className="flex-1">
             <FormLabel>Description</FormLabel>
             <TextEditor
-              initialState={null}
+              initialState={form.description}
               onChange={controller.onChangeDescription}
             />
           </div>

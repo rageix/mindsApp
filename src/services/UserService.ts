@@ -44,7 +44,7 @@ export class UserService extends BasicController<IUserStore> {
       });
 
       if(this.query?.data?.accessToken) {
-        tokenService.save(this.query?.data?.accessToken);
+        tokenService.save(this.query.data.accessToken);
       }
     }, [this.query.isFetching]);
   };

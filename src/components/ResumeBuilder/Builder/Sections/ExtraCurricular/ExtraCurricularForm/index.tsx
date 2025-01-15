@@ -83,7 +83,7 @@ export default function ExtraCurricularForm({
         <FormRow>
           <FormLabel>Description</FormLabel>
           <TextEditor
-            initialState={null}
+            initialState={form.description}
             onChange={controller.onChangeDescription}
           />
         </FormRow>

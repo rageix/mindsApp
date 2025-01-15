@@ -137,8 +137,6 @@ export default function ToolbarPlugin() {
           ? node.getFormat()
           : parent?.getFormat() || IS_ALIGN_LEFT;
 
-      console.log(format);
-
       setTextJustify(format);
     }
   }, []);
@@ -251,7 +249,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
           }}
-          // className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isBold ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -265,7 +262,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
           }}
-          // className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isItalic ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -279,7 +275,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
           }}
-          // className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isUnderline ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -293,7 +288,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
           }}
-          // className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isStrikethrough ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -313,7 +307,6 @@ export default function ToolbarPlugin() {
             }
             editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
           }}
-          // className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isBulletList ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -331,7 +324,6 @@ export default function ToolbarPlugin() {
             }
             editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
           }}
-          // className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isNumberList ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -354,7 +346,6 @@ export default function ToolbarPlugin() {
                   },
             );
           }}
-          // className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
           className={cn(
             BUTTON_CLASS_NAME,
             isLink ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -384,7 +375,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
           }}
-          // className="toolbar-item spaced"
           className={cn(
             BUTTON_CLASS_NAME,
             textJustify === IS_ALIGN_CENTER ? ACTIVE_BUTTON_CLASS_NAME : null,
@@ -398,7 +388,6 @@ export default function ToolbarPlugin() {
           onClick={() => {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
           }}
-          // className="toolbar-item spaced"
           className={cn(
             BUTTON_CLASS_NAME,
             textJustify === IS_ALIGN_RIGHT ? ACTIVE_BUTTON_CLASS_NAME : null,

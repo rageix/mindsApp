@@ -1,5 +1,5 @@
 'use client';
-import { IRBDate } from '@/types/ResumeBuilder';
+import { IRBDate } from '@/types/Resume';
 import { MONTHS_ABBR } from '@/util/Time';
 import { MouseEvent, useMemo } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
@@ -42,6 +42,7 @@ export default function MonthYearInput<T>({
   }, [value]);
 
   function onClickClear(e: MouseEvent | undefined) {
+    e?.preventDefault();
     e?.stopPropagation();
     onChange(null);
   }
@@ -56,15 +57,16 @@ export default function MonthYearInput<T>({
         <Input
           field={field}
           value={inputValue}
-          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600"
+          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600 focus:ring-blue-600"
           onChange={() => null}
         />
         {isClearable && (
           <div className="absolute inset-y-0 right-0 flex">
             <Button
               variant="custom"
-              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer"
+              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer focus:ring-blue-600 focus-visible:outline-blue-600"
               onClick={onClickClear}
+              onKeyDown={(e) => e?.stopPropagation()}
             >
               <span className="sr-only">Clear</span>
               <XIcon

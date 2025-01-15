@@ -1,4 +1,4 @@
-import { ERBType } from '@/types/ResumeBuilder';
+import { ERBType } from '@/types/Resume';
 import Detail from '@/components/ResumeBuilder/Builder/Sections/Detail';
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
 import Summary from '@/components/ResumeBuilder/Builder/Sections/Summary';
@@ -28,13 +28,13 @@ export default function BuilderSection({ controller }: IProps) {
     case ERBType.Summary:
       return <Summary controller={controller} />;
     case ERBType.Employment:
-      return <Employment controller={controller} />;
+      return !isHidden ? <Employment controller={controller} /> : null;
     case ERBType.Education:
-      return <Eduction controller={controller} />;
+      return !isHidden ? <Eduction controller={controller} /> : null;
     case ERBType.Link:
-      return <Link controller={controller} />;
+      return !isHidden ? <Link controller={controller} /> : null;
     case ERBType.Skill:
-      return <Skill controller={controller} />;
+      return !isHidden ? <Skill controller={controller} /> : null;
     case ERBType.Custom:
       return !isHidden ? <Custom controller={controller} /> : null;
     case ERBType.Course:

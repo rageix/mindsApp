@@ -1,6 +1,6 @@
 import { cn } from '@/util/Cn';
 import { TButtonVariant } from '@/types/Variant';
-import { MutableRefObject, PropsWithChildren, MouseEvent } from 'react';
+import { MouseEvent, KeyboardEvent, MutableRefObject, PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
   ref?: MutableRefObject<any>;
@@ -10,6 +10,7 @@ interface Props extends PropsWithChildren {
   variant: TButtonVariant;
   isInline?: boolean;
   onClick?: (e?: MouseEvent) => void;
+  onKeyDown?: (e?: KeyboardEvent) => void;
   submit?: boolean;
   isActive?: boolean;
 }
@@ -68,6 +69,7 @@ export default function Button({
   variant,
   isInline,
   onClick,
+  onKeyDown,
   isActive,
   children,
 }: Props) {
@@ -84,6 +86,7 @@ export default function Button({
         isActive ? active[variant] : null,
       )}
       onClick={onClick}
+      onKeyDown={onKeyDown}
     >
       {children}
     </button>

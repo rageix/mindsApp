@@ -3,7 +3,7 @@ import {
   ERBLanguageLevel,
   IRBLanguage,
   newIRBLanguage,
-} from '@/types/ResumeBuilder';
+} from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBLanguage {}

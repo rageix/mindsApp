@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import SummaryFormController from '@/components/ResumeBuilder/Builder/Sections/Summary/SummaryForm/SummaryFormController';
 import TextEditor from '@/components/TextEditor';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
@@ -13,7 +12,6 @@ interface IProps {
 
 export default function SummaryForm({ controller }: IProps) {
   controller.useController();
-  const [initState] = useState(null);
 
   const { form } = controller;
 
@@ -28,10 +26,10 @@ export default function SummaryForm({ controller }: IProps) {
       <SectionItemBody isExpanded={form.isExpanded}>
         <FormRow>
           <div className="flex-1">
-          <TextEditor
-            initialState={initState}
-            onChange={controller.onChangeDescription}
-          />
+            <TextEditor
+              initialState={form.description}
+              onChange={controller.onChangeDescription}
+            />
           </div>
         </FormRow>
       </SectionItemBody>

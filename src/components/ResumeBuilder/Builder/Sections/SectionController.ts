@@ -15,7 +15,7 @@ import {
   IRBSection,
   IRBSkill,
   IRBSummary,
-} from '@/types/ResumeBuilder';
+} from '@/types/Resume';
 import DetailFormController from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import { nanoid } from 'nanoid';
 import LinkFormController from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm/LinkFormController';
@@ -83,49 +83,58 @@ export default class SectionController extends BasicController<IState> {
 
   load = (section: IRBSection) => {
     const controllers: TBuilderFormController[] = [];
-
     for (const data of section.data) {
       const id = this.getUniqueId(controllers);
       let controller: TBuilderFormController;
 
       switch (section.type) {
         case ERBType.Detail:
-          controller = new DetailFormController(data as IRBDetail);
+          controller = new DetailFormController();
+          controller.reset(data as IRBDetail);
           break;
         case ERBType.Summary:
-          controller = new SummaryFormController(data as IRBSummary);
+          controller = new SummaryFormController();
+          controller.reset(data as IRBSummary);
           break;
         case ERBType.Employment:
-          controller = new EmploymentFormController(data as IRBEmployment);
+          controller = new EmploymentFormController();
+          controller.reset(data as IRBEmployment);
           break;
         case ERBType.Education:
-          controller = new EducationFormController(data as IRBEducation);
+          controller = new EducationFormController();
+          controller.reset(data as IRBEducation);
           break;
         case ERBType.Link:
-          controller = new LinkFormController(data as IRBLink);
+          controller = new LinkFormController();
+          controller.reset(data as IRBLink);
           break;
         case ERBType.Skill:
-          controller = new SkillFormController(data as IRBSkill);
+          controller = new SkillFormController();
+          controller.reset(data as IRBSkill);
           break;
         case ERBType.Custom:
-          controller = new CustomFormController(data as IRBCustom);
+          controller = new CustomFormController();
+          controller.reset(data as IRBCustom);
           break;
         case ERBType.Course:
-          controller = new CourseFormController(data as IRBCourse);
+          controller = new CourseFormController();
+          controller.reset(data as IRBCourse);
           break;
         case ERBType.ExtraCurricular:
-          controller = new ExtraCurricularFormController(
-            data as IRBExtraCurricular,
-          );
+          controller = new ExtraCurricularFormController();
+          controller.reset(data as IRBExtraCurricular);
           break;
         case ERBType.Internship:
-          controller = new InternshipFormController(data as IRBInternship);
+          controller = new InternshipFormController();
+          controller.reset(data as IRBInternship);
           break;
         case ERBType.Language:
-          controller = new LanguageFormController(data as IRBLanguage);
+          controller = new LanguageFormController();
+          controller.reset(data as IRBLanguage);
           break;
         case ERBType.Reference:
-          controller = new ReferenceFormController(data as IRBReference);
+          controller = new ReferenceFormController();
+          controller.reset(data as IRBReference);
           break;
       }
 
@@ -182,7 +191,7 @@ export default class SectionController extends BasicController<IState> {
     }
     controller.id = id;
     return controller;
-  }
+  };
 
   onClickAddForm = () => {
     const controllers = [...this.state.controllers];
@@ -197,7 +206,7 @@ export default class SectionController extends BasicController<IState> {
     return {
       ...state.section,
       isHidden: this.isHidden,
-      data: state.controllers.map((v) => v.form),
+      data: state.controllers.map((v) => (v.form ? v.form : v.defaultForm)),
     };
   };
 

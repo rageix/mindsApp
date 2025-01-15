@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { IRBCustom, IRBDate, newIRBCustom } from '@/types/ResumeBuilder';
+import { IRBCustom, IRBDate, newIRBCustom } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBCustom {}

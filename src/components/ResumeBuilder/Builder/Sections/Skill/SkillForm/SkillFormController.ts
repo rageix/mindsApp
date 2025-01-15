@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { ERBSkillLevel, IRBSkill, newIRBSkill } from '@/types/ResumeBuilder';
+import { ERBSkillLevel, IRBSkill, newIRBSkill } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBSkill {}

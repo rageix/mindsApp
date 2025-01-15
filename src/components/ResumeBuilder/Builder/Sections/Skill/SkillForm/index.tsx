@@ -5,7 +5,7 @@ import SkillFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import { ISelectOption } from '@/types/SelectOption';
-import { ERBSkillLevel } from '@/types/ResumeBuilder';
+import { ERBSkillLevel } from '@/types/Resume';
 import { useMemo } from 'react';
 import Select from '@/components/Select';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';

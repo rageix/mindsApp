@@ -1,4 +1,5 @@
 import { MongoDocument, MongoId } from '@/types/MongoDocument';
+import { IHasId } from '@/types/HasId';
 
 export enum ERBType {
   Detail = 'detail',
@@ -312,7 +313,7 @@ export type TResumeBuilderSection =
   | IRBReference;
 
 export interface IRBStyle {
-  templateId: MongoId,
+  templateId: MongoId | null,
   font: string;
   color: string;
   size: number;
@@ -320,7 +321,7 @@ export interface IRBStyle {
 
 export function newIRBStyle(): IRBStyle {
   return {
-    templateId: '',
+    templateId: null,
     font: '',
     color: '',
     size: 16,
@@ -346,7 +347,7 @@ export function newTSectionVisibility(): TSectionVisibility {
   };
 }
 
-export interface IResumeBuilder extends MongoDocument {
+export interface IResume extends MongoDocument {
   userId?: MongoId;
   sessionId?: MongoId;
   name: string;
@@ -356,7 +357,7 @@ export interface IResumeBuilder extends MongoDocument {
   updatedAt?: Date;
 }
 
-export function newIResumeBuilderSections(): IRBSection[] {
+export function newIResumeSections(): IRBSection[] {
   return [
     {
       type: ERBType.Detail,
@@ -377,7 +378,7 @@ export function newIResumeBuilderSections(): IRBSection[] {
       title: 'Employment',
       isHidden: false,
       isSortable: true,
-      data: [newIRBEducation()],
+      data: [newIRBEmployment()],
     },
     {
       type: ERBType.Education,
@@ -445,10 +446,10 @@ export function newIResumeBuilderSections(): IRBSection[] {
   ];
 }
 
-export function newIResumeBuilder(): IResumeBuilder {
+export function newIResumeBuilder(): IResume {
   return {
     name: '(Untitled)',
-    sections: newIResumeBuilderSections(),
+    sections: newIResumeSections(),
     style: newIRBStyle(),
   };
 }
@@ -473,3 +474,8 @@ export const TOGGLEABLE_TYPES: TVisibleToggle[] = [
   ERBType.Language,
   ERBType.Reference,
 ];
+
+export interface IResumeSessionResponse {
+  token?: string,
+  resume: IHasId<IResume>,
+}

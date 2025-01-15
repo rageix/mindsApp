@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { IRBLink, newIRBLink } from '@/types/ResumeBuilder';
+import { IRBLink, newIRBLink } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBLink {}

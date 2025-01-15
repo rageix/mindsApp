@@ -72,9 +72,10 @@ export default function Select<T, F>({
         <ListboxButton
           as="div"
           className={cn(
-            'relative w-full cursor-default rounded-md bg-gray-100 pl-4 py-2 pr-10 text-left text-gray-900 data-[active]:ring-2 data-[active]:ring-blue-600 focus:ring-2 focus:ring-blue-600 text-xl',
+            'relative w-full cursor-default rounded-md bg-gray-100 pl-4 py-2 pr-10 text-left text-gray-900 data-[active]:ring-2 data-[active]:ring-blue-600 focus:ring-2 focus:ring-blue-600 text-xl focus-visible:outline-blue-600',
             buttonClassName,
           )}
+          tabIndex={0}
         >
           <span className={cn('block truncate', !value ? 'text-gray-400': '')}>
             {!value ? placeholder || '' : value?.label || ''}
@@ -83,7 +84,7 @@ export default function Select<T, F>({
             {isClearable && (
               <Button
                 variant="custom"
-                className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300"
+                className="flex items-center rounded-r-md px-2 focus:ring-2 focus:ring-blue-600 focus-visible:outline-blue-600 text-gray-400 hover:text-gray-300"
                 onClick={(e) => {
                   e?.preventDefault();
                   e?.stopPropagation();

@@ -1,4 +1,4 @@
-import { IRBSummary, newIRBSummary } from '@/types/ResumeBuilder';
+import { IRBSummary, newIRBSummary } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 
 export interface IForm extends IRBSummary {}

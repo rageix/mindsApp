@@ -84,7 +84,7 @@ export default function CustomForm({
           <div className="flex-1">
             <FormLabel>Description</FormLabel>
             <TextEditor
-              initialState={null}
+              initialState={form.description}
               onChange={controller.onChangeDescription}
             />
           </div>
