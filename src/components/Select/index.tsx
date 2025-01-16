@@ -72,7 +72,7 @@ export default function Select<T, F>({
         <ListboxButton
           as="div"
           className={cn(
-            'relative w-full cursor-default rounded-md bg-gray-100 pl-4 py-2 pr-10 text-left text-gray-900 data-[active]:ring-2 data-[active]:ring-blue-600 focus:ring-2 focus:ring-blue-600 text-xl focus-visible:outline-blue-600',
+            'relative w-full cursor-default rounded-md bg-gray-100 pl-4 py-2 pr-10 text-left text-gray-900 data-[active]:ring-2 data-[active]:ring-blue-600 focus:ring-2 focus:ring-blue-600 focus-visible:outline-blue-600 text-xl',
             buttonClassName,
           )}
           tabIndex={0}

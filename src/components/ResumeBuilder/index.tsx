@@ -9,6 +9,7 @@ import Switch from '@/components/Switch';
 import { useMemo } from 'react';
 import Button from '@/components/Buttton';
 import FormattedDate from '@/components/FormattedDate';
+import ResumeSettingsForm from '@/components/ResumeBuilder/ResumeSettingsForm';
 
 interface IProps {
   controller: ResumeController;
@@ -37,6 +38,11 @@ export default function Builder({ controller }: IProps) {
   return (
     <div>
       <div className="flex flex-col gap-y-6">
+        {controller.state.settingsController && (
+          <ResumeSettingsForm
+            controller={controller.state.settingsController}
+          />
+        )}
         {(controller.state?.controllers || []).map((v) => (
           <BuilderSection
             key={v.id}

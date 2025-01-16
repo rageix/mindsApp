@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import { IRBDetail, newIRBDetail } from '@/types/Resume';
 import SectionItemController
   from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
+import { MongoId } from '@/types/MongoDocument';
 
 export interface IForm extends IRBDetail {}
 
@@ -22,7 +23,7 @@ export default class DetailFormController extends SectionItemController<IForm> {
   };
 
   onChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ image: e.target.value });
+    this.onChangeForm({ photo: e.target.value });
   };
 
   onChangeFirstName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +72,14 @@ export default class DetailFormController extends SectionItemController<IForm> {
 
   onChangeDateOfBirth = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ dateOfBirth: e.target.value });
+  };
+
+  onImageUpload = (ids?: MongoId[]) => {
+
+    if(ids && ids.length > 0) {
+      this.onChangeForm({ photo: String(ids[0] || '') });
+    }
+
   };
 
 }

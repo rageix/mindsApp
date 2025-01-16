@@ -36,7 +36,7 @@ export function newIRBSectionItem(): IRBSectionItem {
 
 export interface IRBDetail extends IRBSectionItem {
   title: string;
-  image: string;
+  photo: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -56,7 +56,7 @@ export function newIRBDetail(): IRBDetail {
   return {
     ...newIRBSectionItem(),
     title: '',
-    image: '',
+    photo: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -347,10 +347,19 @@ export function newTSectionVisibility(): TSectionVisibility {
   };
 }
 
-export interface IResume extends MongoDocument {
+export interface IResumeSettings {
+  name: string,
+}
+
+export function newIResumeSettings(): IResumeSettings {
+  return {
+   name: '(Not Specified)'
+  };
+}
+
+export interface IResume extends MongoDocument, IResumeSettings {
   userId?: MongoId;
   sessionId?: MongoId;
-  name: string;
   sections: IRBSection[];
   style: IRBStyle;
   createdAt?: Date;
@@ -448,7 +457,7 @@ export function newIResumeSections(): IRBSection[] {
 
 export function newIResumeBuilder(): IResume {
   return {
-    name: '(Untitled)',
+    ...newIResumeSettings(),
     sections: newIResumeSections(),
     style: newIRBStyle(),
   };

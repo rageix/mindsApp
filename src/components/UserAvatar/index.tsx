@@ -4,9 +4,10 @@ import ProtectedImage from '@/components/ProtectedImage';
 
 interface IProps {
   value?: MongoId;
+  alt?: string;
 }
 
-export function UserAvatar({ value }: IProps) {
+export function UserAvatar({ value, alt = "User Avatar" }: IProps) {
   if (!value) {
     return <UserRoundIcon className="w-full h-full" />;
   }
@@ -15,7 +16,7 @@ export function UserAvatar({ value }: IProps) {
     <ProtectedImage
       key={String(value)}
       _id={value}
-      alt="User Avatar"
+      alt={alt}
       width="0"
       height="0"
       sizes="100vw"

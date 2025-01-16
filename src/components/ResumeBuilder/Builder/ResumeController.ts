@@ -7,6 +7,7 @@ import tokenService from '@/services/TokenService';
 import { MongoId } from '@/types/MongoDocument';
 import { postApiResumesFindOne } from '@/requests/api/resumes/findOne';
 import { postApiResumes } from '@/requests/api/resumes';
+import ResumeSettingsFormController from '@/components/ResumeBuilder/ResumeSettingsForm/ResumeSettingsFormController';
 
 // type TBuilderFormController = CoursesFormController | CustomFormController | DateFormController | DetailFormController | EducationFormController | CoursesFormController | InternshipFormController | LinkFormController | ReferenceFormController | SkillFormController | SummaryFormController;
 interface IState {
@@ -14,6 +15,8 @@ interface IState {
   isLoading: boolean;
   lastSavedAt: Date | null;
   original: IResume | null;
+  settingsController: ResumeSettingsFormController | null;
+  current: IResume | null;
   // hiddenSections: THiddenSections;
 }
 
@@ -23,6 +26,8 @@ export function newDefaultState(): IState {
     isLoading: true,
     lastSavedAt: null,
     original: null,
+    settingsController: null,
+    current: null,
     // hiddenSections: {
     //   [ERBType.Custom]: true,
     //   [ERBType.Course]: true,
@@ -61,18 +66,23 @@ export default class ResumeController extends BasicController<IState> {
       controllers.push(controller);
     }
 
+    const settingsController = new ResumeSettingsFormController();
+    settingsController.reset({ name: resume.name });
+
     this.setState({
       controllers,
       isLoading: false,
       original: resume,
       lastSavedAt: resume.updatedAt,
+      settingsController,
+      current: resume,
     });
   };
 
   value = (): IResume => {
     return {
       _id: this.state.original?._id,
-      name: this.state.original?.name || '',
+      name: this.state.settingsController?.form.name || '',
       sections: this.state.controllers.map((v) => v.value()),
       style: this.state.original?.style || newIRBStyle(),
     };
@@ -126,6 +136,6 @@ export default class ResumeController extends BasicController<IState> {
     const resume = this.value();
     await postApiResumes(resume);
 
-    this.setState({ lastSavedAt: new Date() });
+    this.setState({ lastSavedAt: new Date(), current: resume });
   };
 }

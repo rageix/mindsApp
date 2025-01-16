@@ -89,7 +89,7 @@ export default function Modal({
           <DialogPanel
             transition
             className={cn(
-              'relative transform overflow-visible rounded-lg bg-gray-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 w-full sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
+              'relative transform overflow-visible rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 w-full sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95',
               modalSizes[size],
             )}
           >
@@ -122,7 +122,7 @@ export default function Modal({
               <div>
                 <DialogTitle
                   as="h3"
-                  className="text-center text-base font-semibold leading-6 text-white"
+                  className="text-center text-base font-semibold leading-6 text-gray-900"
                 >
                   {title}
                 </DialogTitle>

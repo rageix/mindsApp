@@ -11,6 +11,10 @@ import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/Secti
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import ImageUploadModal from '@/components/ImageUploadModal';
+import { UserAvatar } from '@/components/UserAvatar';
+import { MongoId } from '@/types/MongoDocument';
 
 interface IProps {
   controller: DetailFormController;
@@ -25,6 +29,7 @@ export default function DetailForm({
 }: IProps) {
   controller.useController();
   const [showMore, setShowMore] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   const { form, state } = controller;
 
@@ -49,14 +54,20 @@ export default function DetailForm({
               onChange={controller.onChangeTitle}
             />
           </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="title">Email</FormLabel>
-            <Input<IForm>
-              field="title"
-              errors={state.errors}
-              value={form.title}
-              onChange={controller.onChangeTitle}
-            />
+          <div className="flex-1 flex items-end">
+            <div className="flex items-center gap-x-3">
+              <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
+                <UserAvatar value={form.photo} alt="UserPhoto" />
+              </div>
+              <div className="grow">
+                <Button
+                  variant="link"
+                  onClick={() => setShowImageUpload(true)}
+                >
+                  Upload photo
+                </Button>
+              </div>
+            </div>
           </div>
         </FormRow>
         <FormRow>
@@ -183,12 +194,28 @@ export default function DetailForm({
         </div>
         <Button
           variant="link"
-          className="!justify-start"
           onClick={() => setShowMore(!showMore)}
         >
-          {showMore ? 'Show less fields...' : 'Show more fields...'}
+          <div className="flex w-full">
+            <div className="grow text-left">
+              {showMore ? 'Show less fields' : 'Show more fields'}
+            </div>
+            <div className="shrink-0 text-gray-500">
+              {showMore ? <ChevronDown /> : <ChevronUp />}
+            </div>
+          </div>
         </Button>
       </SectionItemBody>
+      <ImageUploadModal
+        open={showImageUpload}
+        onClose={() => setShowImageUpload(false)}
+        onUpload={(ids?: MongoId[]) => {
+          controller.onImageUpload(ids);
+          setShowImageUpload(false);
+        }}
+        route="/api/resumes/photo"
+        maxFileSize={2000000}
+      />
     </SectionItem>
   );
 }

@@ -62,9 +62,10 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
     <div className="bg-white p-3 border rounded-md flex flex-col gap-y-2 my-0.5">
       <div className="">
         <div className="flex gap-y-4 items-center text-center text-gray-900">
-          <button
-            type="button"
-            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+          <Button
+            variant="custom"
+            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-blue-600 focus-visible:outline-blue-600"
+            isInline
             onClick={onClickPrevYear}
           >
             <span className="sr-only">Previous Year</span>
@@ -72,7 +73,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
               className="size-5"
               aria-hidden="true"
             />
-          </button>
+          </Button>
           <div className="flex-auto text-sm font-semibold">
             <Button
               variant="link"
@@ -81,9 +82,10 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
               {year}
             </Button>
           </div>
-          <button
-            type="button"
-            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+          <Button
+            variant="custom"
+            className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-blue-600 focus-visible:outline-blue-600"
+            isInline
             onClick={onClickNextYear}
           >
             <span className="sr-only">Next Year</span>
@@ -91,7 +93,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
               className="size-5"
               aria-hidden="true"
             />
-          </button>
+          </Button>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
