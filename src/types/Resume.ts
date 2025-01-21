@@ -312,19 +312,27 @@ export type TResumeBuilderSection =
   | IRBLanguage
   | IRBReference;
 
+export enum ETemplate {
+  Stockholm = 'stockholm'
+}
+
 export interface IRBStyle {
-  templateId: MongoId | null,
-  font: string;
-  color: string;
-  size: number;
+  templateId: ETemplate,
+  fontFamily: string;
+  primaryColor: string;
+  secondaryColor: string;
+  lineHeight: number;
+  fontSize: number;
 }
 
 export function newIRBStyle(): IRBStyle {
   return {
-    templateId: null,
-    font: '',
-    color: '',
-    size: 16,
+    templateId: ETemplate.Stockholm,
+    fontFamily: 'Helvetica',
+    primaryColor: '#111827',
+    secondaryColor: '#3b82f6',
+    lineHeight: 1,
+    fontSize: 16,
   };
 }
 

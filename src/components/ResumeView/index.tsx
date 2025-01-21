@@ -52,14 +52,14 @@ export default function ResumeView() {
   // const isLoggedIn = user.isLoggedIn();
 
   return (
-    <div className="min-h-screen h-full flex items-center">
+    <div className="min-h-screen h-full flex">
       <div className="flex-1">
       <Container size="3xl">
         <Builder controller={controller} />
       </Container>
       </div>
-      <div className="flex-1">
-        <Renderer resume={controller.state.current}/>
+      <div className="flex-1 min-h-screen h-full relative">
+        <Renderer controller={controller} resume={controller.state.current}/>
       </div>
     </div>
   );

@@ -1,15 +1,23 @@
-import { IResume } from '@/types/Resume';
-import Stockholm from '@/components/ResumeBuilder/Renderer/Stockholm';
 import { useMemo } from 'react';
 // import { jsPDF } from 'jspdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import {
+  PDFDownloadLink,
+  PDFViewer,
+  UsePDFInstance,
+} from '@react-pdf/renderer';
 import StockholmPDF from '@/components/ResumeBuilder/Renderer/StockholmPDF';
+import ResumeController from '@/components/ResumeBuilder/Builder/ResumeController';
+import LineHeightPicker from '@/components/ResumeBuilder/Renderer/LineHeightPicker';
+import FontSizePicker from '@/components/ResumeBuilder/Renderer/FontSizePicker';
+import Button from '@/components/Buttton';
+import ColorPicker from '@/components/ResumeBuilder/Renderer/ColorPicker';
 
 interface IProps {
-  resume: IResume | null;
+  // resume: IResume | null;
+  controller: ResumeController;
 }
 
-export default function Renderer({ resume }: IProps) {
+export default function Renderer({ controller }: IProps) {
   // const ref = useRef<HTMLDivElement>(null);
   //
   // if (!resume) {
@@ -97,20 +105,41 @@ export default function Renderer({ resume }: IProps) {
   //     </Document>
   //   );
 
+  const resume = controller.state.current;
+  const styleController = controller.state.styleController;
+  styleController.useController();
+
   const Doc = useMemo(
     () => (resume ? () => <StockholmPDF resume={resume} /> : () => null),
     [resume],
   );
 
   return (
-    <div className="bg-gray-700 p-3">
-      <div>
+    <div className="px-2 py-4 h-full absolute w-full">
+      <div className="flex items-end gap-x-2 justify-end">
+        <ColorPicker
+          value={styleController.form.primaryColor}
+          onChange={styleController.onChangePrimaryColor}
+        />
+        <FontSizePicker
+          value={styleController.form.fontSize}
+          onChange={styleController.onChangeFontSize}
+        />
+        <LineHeightPicker
+          value={styleController.form.lineHeight}
+          onChange={styleController.onChangeLineHeight}
+        />
         <PDFDownloadLink
           document={<Doc />}
           fileName="somename.pdf"
         >
-          {({ blob, url, loading, error }) =>
-            loading ? 'Loading document...' : 'Download now!'
+          {/*// @ts-ignore*/}
+          {({ loading }: UsePDFInstance) =>
+            loading ? (
+              <Button variant="blue">Loading...</Button>
+            ) : (
+              <Button variant="blue">Download PDF</Button>
+            )
           }
         </PDFDownloadLink>
         {/*<Button*/}
@@ -120,12 +149,18 @@ export default function Renderer({ resume }: IProps) {
         {/*  Create PDF*/}
         {/*</Button>*/}
       </div>
-      {/*<div*/}
-      {/*  // ref={ref}*/}
-      {/*  className="bg-white p-6 mt-2"*/}
-      {/*>*/}
-      {/*  <Stockholm resume={resume} />*/}
-      {/*</div>*/}
+      <div
+        // ref={ref}
+        className="bg-white border rounded-md p-6 mt-2 h-full"
+      >
+        <PDFViewer
+          width="100%"
+          height="100%"
+          showToolbar={false}
+        >
+          <Doc />
+        </PDFViewer>
+      </div>
     </div>
   );
 }

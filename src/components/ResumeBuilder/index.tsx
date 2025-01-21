@@ -17,7 +17,6 @@ interface IProps {
 
 export default function Builder({ controller }: IProps) {
   // controller.useController();
-
   // const { state } = controller;
 
   const isHidden: TSectionVisibility = useMemo(() => {
@@ -149,7 +148,7 @@ export default function Builder({ controller }: IProps) {
           <div className="flex-1"></div>
         </div>
       </div>
-      <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center">
+      <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
         <div className="grow">
           <div className="flex gap-x-2">
             <div>Last saved:</div>

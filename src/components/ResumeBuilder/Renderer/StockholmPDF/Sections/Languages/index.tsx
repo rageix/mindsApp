@@ -33,8 +33,6 @@ export default function Languages({ section }: IProps) {
           const item = v as IRBLanguage;
           const option = LANGUAGE_OPTIONS.find((v) => v.value === item.level);
 
-          console.log('language', item);
-
           return (
             <View
               key={i}

@@ -8,6 +8,7 @@ import { MongoId } from '@/types/MongoDocument';
 import { postApiResumesFindOne } from '@/requests/api/resumes/findOne';
 import { postApiResumes } from '@/requests/api/resumes';
 import ResumeSettingsFormController from '@/components/ResumeBuilder/ResumeSettingsForm/ResumeSettingsFormController';
+import StyleController from '@/components/ResumeBuilder/Builder/Sections/StyleController';
 
 // type TBuilderFormController = CoursesFormController | CustomFormController | DateFormController | DetailFormController | EducationFormController | CoursesFormController | InternshipFormController | LinkFormController | ReferenceFormController | SkillFormController | SummaryFormController;
 interface IState {
@@ -17,6 +18,7 @@ interface IState {
   original: IResume | null;
   settingsController: ResumeSettingsFormController | null;
   current: IResume | null;
+  styleController: StyleController;
   // hiddenSections: THiddenSections;
 }
 
@@ -28,6 +30,7 @@ export function newDefaultState(): IState {
     original: null,
     settingsController: null,
     current: null,
+    styleController: new StyleController(),
     // hiddenSections: {
     //   [ERBType.Custom]: true,
     //   [ERBType.Course]: true,
@@ -69,6 +72,8 @@ export default class ResumeController extends BasicController<IState> {
     const settingsController = new ResumeSettingsFormController();
     settingsController.reset({ name: resume.name });
 
+    this.state.styleController.reset({ ...newIRBStyle(), ...resume.style });
+
     this.setState({
       controllers,
       isLoading: false,
@@ -76,6 +81,7 @@ export default class ResumeController extends BasicController<IState> {
       lastSavedAt: resume.updatedAt,
       settingsController,
       current: resume,
+      styleController: this.state.styleController,
     });
   };
 

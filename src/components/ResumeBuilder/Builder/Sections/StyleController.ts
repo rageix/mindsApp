@@ -1,0 +1,33 @@
+import { IRBStyle, newIRBStyle } from '@/types/Resume';
+import FormController from '@/util/FormController';
+
+export interface IForm extends IRBStyle {}
+
+export function defaultForm(): IForm {
+  return newIRBStyle();
+}
+
+export default class StyleController extends FormController<IForm> {
+  resetForm = defaultForm();
+  defaultForm = defaultForm();
+
+  onChangeFontFamily = (value: string) => {
+    this.onChangeForm({ fontFamily: value });
+  };
+
+  onChangePrimaryColor = (value: string) => {
+    this.onChangeForm({ primaryColor: value });
+  };
+
+  onChangeSecondaryColor = (value: string) => {
+    this.onChangeForm({ secondaryColor: value });
+  };
+
+  onChangeLineHeight = (value: number) => {
+    this.onChangeForm({ lineHeight: value });
+  };
+
+  onChangeFontSize = (value: number) => {
+    this.onChangeForm({ fontSize: value });
+  };
+}
