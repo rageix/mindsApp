@@ -3,14 +3,19 @@ import { StyleSheet, Text } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   text: {
-    color: '#111827',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });
 
-interface IProps extends PropsWithChildren {}
+interface IProps extends PropsWithChildren {
+  fontScale: number;
+}
 
-export default function ItemTitle({ children }: IProps) {
-  return <Text style={styles.text}>{children}</Text>;
+export default function ItemTitle({ fontScale, children }: IProps) {
+  return (
+    <Text style={[styles.text, { fontSize: styles.text.fontSize * fontScale }]}>
+      {children}
+    </Text>
+  );
 }

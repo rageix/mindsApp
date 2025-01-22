@@ -171,4 +171,12 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   onValidateForm = (form?: T): boolean => {
     return this._onValidateForm(form);
   };
+
+  _getForm = (): T => {
+    return this.form || this.defaultForm;
+  }
+
+  getForm = (): T => {
+    return this._getForm();
+  }
 }

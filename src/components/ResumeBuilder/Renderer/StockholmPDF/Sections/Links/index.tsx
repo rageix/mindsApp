@@ -21,12 +21,13 @@ const styles = StyleSheet.create({
 
 interface IProps {
   section: IRBSection;
+  fontScale: number;
 }
 
-export default function Links({ section }: IProps) {
+export default function Links({ section, fontScale }: IProps) {
   return (
     <View style={styles.container}>
-      <SectionTitle>{section.title}</SectionTitle>
+      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
       <View>
         {section.data.map((v, i) => {
           const item = v as IRBLink;

@@ -3,12 +3,11 @@ import { StyleSheet, Text } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   name: {
-    color: '#111827',
+    // fontFamily: 'Courier',
     fontSize: 18,
     fontWeight: 'bold',
   },
   title: {
-    color: '#111827',
     fontSize: 16,
     fontWeight: 'normal',
   },
@@ -16,9 +15,10 @@ const styles = StyleSheet.create({
 
 interface IProps {
   sections: IRBSection[];
+  fontScale: number;
 }
 
-export default function HeaderDetails({ sections }: IProps) {
+export default function HeaderDetails({ sections, fontScale }: IProps) {
   const section = sections.find((v) => v.type === ERBType.Detail);
 
   if (!section) {
@@ -33,10 +33,16 @@ export default function HeaderDetails({ sections }: IProps) {
 
   return (
     <>
-      <Text style={styles.name}>
+      <Text
+        style={[styles.name, { fontSize: styles.name.fontSize * fontScale }]}
+      >
         {data.firstName} {data.lastName}
       </Text>
-      <Text style={styles.title}>{data.title}</Text>
+      <Text
+        style={[styles.title, { fontSize: styles.title.fontSize * fontScale }]}
+      >
+        {data.title}
+      </Text>
     </>
   );
 }

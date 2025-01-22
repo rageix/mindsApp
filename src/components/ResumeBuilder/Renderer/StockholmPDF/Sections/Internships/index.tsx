@@ -24,26 +24,31 @@ const styles = StyleSheet.create({
 
 interface IProps {
   section: IRBSection;
+  fontScale: number;
 }
 
-export default function Internships({ section }: IProps) {
+export default function Internships({ section, fontScale }: IProps) {
   return (
     <View style={styles.container}>
-      <SectionTitle>{section.title}</SectionTitle>
+      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
       <View>
         {section.data.map((v, i) => {
           const item = v as IRBInternship;
           return (
             <View key={i}>
-              <ItemTitle>
+              <ItemTitle fontScale={fontScale}>
                 {item.title} at {item.employer} in {item.city}
               </ItemTitle>
               <ItemDateRange
                 start={item.start}
                 end={item.end}
+                fontScale={fontScale}
               />
               <View style={{ marginTop: 5 }}>
-                <ItemTextEditor value={item.description} />
+                <ItemTextEditor
+                  value={item.description}
+                  fontScale={fontScale}
+                />
               </View>
             </View>
           );

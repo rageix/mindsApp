@@ -18,16 +18,17 @@ const styles = StyleSheet.create({
 
 interface IProps {
   sections: IRBSection[];
+  fontScale: number;
 }
 
-export default function MainBody({ sections }: IProps) {
+export default function MainBody({ sections, fontScale }: IProps) {
   return (
     <View
-      debug
+      // debug
       style={styles.container}
     >
       {sections.map((v, i) => {
-        if(v.isHidden) {
+        if (v.isHidden) {
           return null;
         }
 
@@ -37,6 +38,7 @@ export default function MainBody({ sections }: IProps) {
               <Summary
                 key={i}
                 data={v.data[0] as IRBSummary}
+                fontScale={fontScale}
               />
             );
           case ERBType.Employment:
@@ -44,6 +46,7 @@ export default function MainBody({ sections }: IProps) {
               <Employment
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           case ERBType.Education:
@@ -51,6 +54,7 @@ export default function MainBody({ sections }: IProps) {
               <Education
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           case ERBType.Custom:
@@ -58,6 +62,7 @@ export default function MainBody({ sections }: IProps) {
               <Custom
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           case ERBType.Course:
@@ -65,6 +70,7 @@ export default function MainBody({ sections }: IProps) {
               <Courses
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           case ERBType.Internship:
@@ -72,6 +78,7 @@ export default function MainBody({ sections }: IProps) {
               <Internships
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           case ERBType.Reference:
@@ -79,6 +86,7 @@ export default function MainBody({ sections }: IProps) {
               <References
                 key={i}
                 section={v}
+                fontScale={fontScale}
               />
             );
           default:

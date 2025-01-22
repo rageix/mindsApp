@@ -1,82 +1,137 @@
-// import { jsPDF } from 'jspdf';
 import { useState } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import SimpleColors from '@/components/ResumeBuilder/Renderer/ColorPicker/SimpleColors';
 import { ISelectOption } from '@/types/SelectOption';
 import Select from '@/components/Select';
+import ColorController from '@/components/Color/ColorController';
+import HslView from '@/components/Color/HslView';
+import RgbView from '@/components/Color/RgbView';
+import HexView from '@/components/Color/HexView';
+import PickerView from '@/components/Color/PickerView';
+import SwatchView from '@/components/Color/SwatchView';
 
-enum ETabs {
+enum EViews {
   Simple,
-  Pallets,
+  Swatches,
   ColorPicker,
   HSL,
+  RGB,
   Hex,
 }
 
-const TAB_OPTIONS: ISelectOption<ETabs>[] = [
+const VIEW_OPTIONS: ISelectOption<EViews>[] = [
   {
-    key: String(ETabs.Simple),
-    value: ETabs.Simple,
+    key: String(EViews.Simple),
+    value: EViews.Simple,
     label: 'Simple',
   },
   {
-    key: String(ETabs.Pallets),
-    value: ETabs.Pallets,
-    label: 'Pallets',
+    key: String(EViews.Swatches),
+    value: EViews.Swatches,
+    label: 'Swatches' + '',
   },
   {
-    key: String(ETabs.ColorPicker),
-    value: ETabs.ColorPicker,
+    key: String(EViews.ColorPicker),
+    value: EViews.ColorPicker,
     label: 'Color Picker',
   },
   {
-    key: String(ETabs.HSL),
-    value: ETabs.HSL,
+    key: String(EViews.RGB),
+    value: EViews.RGB,
+    label: 'RGB',
+  },
+  {
+    key: String(EViews.HSL),
+    value: EViews.HSL,
     label: 'HSL',
   },
   {
-    key: String(ETabs.Hex),
-    value: ETabs.Hex,
+    key: String(EViews.Hex),
+    value: EViews.Hex,
     label: 'Hex',
   },
 ];
 
 interface IProps {
-  value: string;
-  onChange: (value: string) => void;
+  controller: ColorController;
+  title: string;
 }
 
-export default function ColorPicker({ value, onChange }: IProps) {
-  // const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<ISelectOption<ETabs>>(TAB_OPTIONS[0]);
+export default function ColorPicker({ controller, title }: IProps) {
+  const [view, setView] = useState<ISelectOption<EViews>>(VIEW_OPTIONS[0]);
+  controller.useController();
 
-  // function onClick(value: number) {
-  //   // onChange(roundTo2Places(limitNumberWithinRange(value, 12, 32)));
-  // }
+  const color = controller.state;
 
   return (
-    <Popover className="relative">
+    <Popover className="relative flex">
       <PopoverButton>
         <div
           className="size-10 rounded-full border-2 border-gray-900"
-          style={{ backgroundColor: value }}
+          style={{ backgroundColor: color.hex }}
+          title={title}
+          aria-label={title}
         />
       </PopoverButton>
-      <PopoverPanel anchor="bottom" className="mt-1">
-        <div className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200">
+      <PopoverPanel
+        anchor="bottom"
+        className="mt-1 overflow-hidden"
+      >
+        <div className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem] overflow-hidden">
           <div className="flex justify-end">
-            <div className="w-44">
+            <div className="min-w-44 w-full">
+              {/*<FormLabel>{title}</FormLabel>*/}
+              <div className="text-center">{title}</div>
               <Select
-                options={TAB_OPTIONS}
-                value={tab}
-                onChange={setTab}
+                options={VIEW_OPTIONS}
+                value={view}
+                onChange={setView}
               />
             </div>
           </div>
-          {tab.value === ETabs.Simple && (
+          {view.value === EViews.Simple && (
             <SimpleColors
-              value={value}
-              onChange={onChange}
+              value={color.hex}
+              onChange={controller.onChangeHex}
+            />
+          )}
+          {view.value === EViews.HSL && (
+            <HslView
+              h={color.h}
+              s={color.s}
+              l={color.l}
+              onChangeH={controller.onChangeH}
+              onChangeS={controller.onChangeS}
+              onChangeL={controller.onChangeL}
+            />
+          )}
+          {view.value === EViews.RGB && (
+            <RgbView
+              r={color.r}
+              g={color.g}
+              b={color.b}
+              onChangeR={controller.onChangeR}
+              onChangeG={controller.onChangeG}
+              onChangeB={controller.onChangeB}
+            />
+          )}
+          {view.value === EViews.Hex && (
+            <HexView
+              hex={color.hex}
+              onChange={controller.onChangeHex}
+            />
+          )}
+          {view.value === EViews.ColorPicker && (
+            <PickerView
+              h={color.h}
+              s={color.s}
+              l={color.l}
+              onChange={controller.onChangeHSL}
+            />
+          )}
+          {view.value === EViews.Swatches && (
+            <SwatchView
+              onChange={(hex) => controller.onChangeHex(hex, color.opacity)}
             />
           )}
         </div>

@@ -35,26 +35,34 @@ interface IProps {
 }
 
 export default function StockholmPDF({ resume }: IProps) {
+
+  const fontScale = resume.style.fontSize / 16;
+
   return (
     <Document>
       <Page
         size="A4"
-        style={styles.page}
+        style={[styles.page, {
+          fontFamily: resume.style.fontFamily,
+          color: resume.style.primaryColor,
+          fontSize: resume.style.fontSize,
+          lineHeight: resume.style.lineHeight,
+        }]}
       >
         <View
           style={styles.container}
-          debug
+          // debug
         >
           <View style={[styles.section, styles.header]}>
-            <HeaderDetails sections={resume.sections} />
+            <HeaderDetails sections={resume.sections} fontScale={fontScale} />
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
             <View style={[styles.section, { flexGrow: 1 }]}>
               {/*left*/}
-              <MainBody sections={resume.sections} />
+              <MainBody sections={resume.sections} fontScale={fontScale} />
             </View>
-            <View style={[styles.section, { width: '25%', flexShrink: 0 }]}>
-              <SideColumn sections={resume.sections} />
+            <View style={[styles.section, { width: '33%', flexShrink: 0 }]}>
+              <SideColumn sections={resume.sections} fontScale={fontScale} />
             </View>
           </View>
         </View>

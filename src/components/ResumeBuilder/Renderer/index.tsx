@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-// import { jsPDF } from 'jspdf';
 import {
   PDFDownloadLink,
   PDFViewer,
@@ -7,13 +6,11 @@ import {
 } from '@react-pdf/renderer';
 import StockholmPDF from '@/components/ResumeBuilder/Renderer/StockholmPDF';
 import ResumeController from '@/components/ResumeBuilder/Builder/ResumeController';
-import LineHeightPicker from '@/components/ResumeBuilder/Renderer/LineHeightPicker';
-import FontSizePicker from '@/components/ResumeBuilder/Renderer/FontSizePicker';
 import Button from '@/components/Buttton';
 import ColorPicker from '@/components/ResumeBuilder/Renderer/ColorPicker';
+import FontPicker from '@/components/ResumeBuilder/Renderer/FontPicker';
 
 interface IProps {
-  // resume: IResume | null;
   controller: ResumeController;
 }
 
@@ -118,17 +115,14 @@ export default function Renderer({ controller }: IProps) {
     <div className="px-2 py-4 h-full absolute w-full">
       <div className="flex items-end gap-x-2 justify-end">
         <ColorPicker
-          value={styleController.form.primaryColor}
-          onChange={styleController.onChangePrimaryColor}
+          controller={controller.state.primaryColorController}
+          title="Primary Color"
         />
-        <FontSizePicker
-          value={styleController.form.fontSize}
-          onChange={styleController.onChangeFontSize}
+        <ColorPicker
+          controller={controller.state.secondaryColorController}
+          title="Secondary Color"
         />
-        <LineHeightPicker
-          value={styleController.form.lineHeight}
-          onChange={styleController.onChangeLineHeight}
-        />
+        <FontPicker controller={styleController}/>
         <PDFDownloadLink
           document={<Doc />}
           fileName="somename.pdf"
@@ -142,16 +136,8 @@ export default function Renderer({ controller }: IProps) {
             )
           }
         </PDFDownloadLink>
-        {/*<Button*/}
-        {/*  variant="blue"*/}
-        {/*  onClick={onClickCreatePDF}*/}
-        {/*>*/}
-        {/*  Create PDF*/}
-        {/*</Button>*/}
       </div>
-      <div
-        // ref={ref}
-        className="bg-white border rounded-md p-6 mt-2 h-full"
+      <div className="bg-white border rounded-md p-6 mt-2 h-full"
       >
         <PDFViewer
           width="100%"

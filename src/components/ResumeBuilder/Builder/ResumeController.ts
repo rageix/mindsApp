@@ -1,5 +1,5 @@
 import BasicController from '@/util/BasicController';
-import { IResume, newIRBStyle, TVisibleToggle } from '@/types/Resume';
+import { IRBStyle, IResume, newIRBStyle, TVisibleToggle } from '@/types/Resume';
 import { nanoid } from 'nanoid';
 import SectionController from '@/components/ResumeBuilder/Builder/Sections/SectionController';
 import { getApiResumesSession } from '@/requests/api/resumes/session';
@@ -9,6 +9,7 @@ import { postApiResumesFindOne } from '@/requests/api/resumes/findOne';
 import { postApiResumes } from '@/requests/api/resumes';
 import ResumeSettingsFormController from '@/components/ResumeBuilder/ResumeSettingsForm/ResumeSettingsFormController';
 import StyleController from '@/components/ResumeBuilder/Builder/Sections/StyleController';
+import ColorController from '@/components/Color/ColorController';
 
 // type TBuilderFormController = CoursesFormController | CustomFormController | DateFormController | DetailFormController | EducationFormController | CoursesFormController | InternshipFormController | LinkFormController | ReferenceFormController | SkillFormController | SummaryFormController;
 interface IState {
@@ -19,6 +20,8 @@ interface IState {
   settingsController: ResumeSettingsFormController | null;
   current: IResume | null;
   styleController: StyleController;
+  primaryColorController: ColorController;
+  secondaryColorController: ColorController;
   // hiddenSections: THiddenSections;
 }
 
@@ -31,6 +34,8 @@ export function newDefaultState(): IState {
     settingsController: null,
     current: null,
     styleController: new StyleController(),
+    primaryColorController: new ColorController(),
+    secondaryColorController: new ColorController(),
     // hiddenSections: {
     //   [ERBType.Custom]: true,
     //   [ERBType.Course]: true,
@@ -62,6 +67,7 @@ export default class ResumeController extends BasicController<IState> {
   load = (resume: IResume) => {
     const controllers: SectionController[] = [];
 
+    // load sections into their own controllers
     for (const section of resume.sections) {
       const id = this.getUniqueId(controllers);
       const controller = new SectionController(section);
@@ -69,10 +75,15 @@ export default class ResumeController extends BasicController<IState> {
       controllers.push(controller);
     }
 
+    // load geneal settings controller
     const settingsController = new ResumeSettingsFormController();
     settingsController.reset({ name: resume.name });
 
-    this.state.styleController.reset({ ...newIRBStyle(), ...resume.style });
+    // create and load all the style controllers
+    const styleState = { ...newIRBStyle(), ...resume.style };
+    this.state.styleController.reset(styleState);
+    this.state.primaryColorController.onChangeHex(styleState.primaryColor);
+    this.state.secondaryColorController.onChangeHex(styleState.secondaryColor);
 
     this.setState({
       controllers,
@@ -82,15 +93,22 @@ export default class ResumeController extends BasicController<IState> {
       settingsController,
       current: resume,
       styleController: this.state.styleController,
+      primaryColorController: this.state.primaryColorController,
+      secondaryColorController: this.state.secondaryColorController,
     });
   };
 
   value = (): IResume => {
+
+    const style: IRBStyle = this.state.styleController.getForm();
+    style.primaryColor = this.state.primaryColorController.getState().hex;
+    style.secondaryColor = this.state.secondaryColorController.getState().hex;
+
     return {
       _id: this.state.original?._id,
       name: this.state.settingsController?.form.name || '',
       sections: this.state.controllers.map((v) => v.value()),
-      style: this.state.original?.style || newIRBStyle(),
+      style: style,
     };
   };
 

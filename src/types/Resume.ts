@@ -316,23 +316,29 @@ export enum ETemplate {
   Stockholm = 'stockholm'
 }
 
+export enum EResumeFonts {
+  Courier = 'Courier',
+  Helvetica = 'Helvetica',
+  TimesRoman = 'Times-Roman',
+}
+
 export interface IRBStyle {
-  templateId: ETemplate,
-  fontFamily: string;
+  template: ETemplate,
+  fontFamily: EResumeFonts;
   primaryColor: string;
   secondaryColor: string;
-  lineHeight: number;
   fontSize: number;
+  lineHeight: number;
 }
 
 export function newIRBStyle(): IRBStyle {
   return {
-    templateId: ETemplate.Stockholm,
-    fontFamily: 'Helvetica',
+    template: ETemplate.Stockholm,
+    fontFamily: EResumeFonts.Helvetica,
     primaryColor: '#111827',
     secondaryColor: '#3b82f6',
-    lineHeight: 1,
     fontSize: 16,
+    lineHeight: 1,
   };
 }
 
@@ -496,3 +502,4 @@ export interface IResumeSessionResponse {
   token?: string,
   resume: IHasId<IResume>,
 }
+

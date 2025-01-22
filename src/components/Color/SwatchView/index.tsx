@@ -1,5 +1,5 @@
 // https://tailwindcss.com/docs/customizing-colors
-import SwatchLine from '@/components/ImageEditor/Color/SwatchView/SwatchLine';
+import SwatchLine from '@/components/Color/SwatchView/SwatchLine';
 
 const SWATCHES: string[][] = [
   // slate

@@ -3,20 +3,19 @@ import { StyleSheet, Text } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   text: {
-    color: '#111827',
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });
 
-interface IProps extends PropsWithChildren{
+interface IProps extends PropsWithChildren {
+  fontScale: number;
 }
 
-export default function SectionTitle({children}: IProps) {
-
+export default function SectionTitle({ fontScale, children }: IProps) {
   return (
-    <Text style={styles.text}>
+    <Text style={[styles.text, { fontSize: styles.text.fontSize * fontScale }]}>
       {children}
     </Text>
-  )
+  );
 }

@@ -1,4 +1,5 @@
-import SliderItem from '@/components/ImageEditor/Color/SliderItem';
+import SliderItem from '@/components/Color/SliderItem';
+import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
 
 interface IProps {
   h: number;
@@ -24,21 +25,27 @@ export default function HslView({
         value={String(Math.round(h * 360))}
         scaled={h}
         onChangeSlider={(v) => onChangeH(v)}
-        onChangeInput={(v) => onChangeH(parseInt(v) / 360)}
+        onChangeInput={(v) =>
+          onChangeH(limitNumberWithinRange((parseInt(v) / 360) || 0, 0, 1))
+        }
       />
       <SliderItem
         label="Saturation"
         value={String(Math.round(s * 100))}
         scaled={s}
         onChangeSlider={(v) => onChangeS(v)}
-        onChangeInput={(v) => onChangeS(parseInt(v) / 100)}
+        onChangeInput={(v) =>
+          onChangeS(limitNumberWithinRange((parseInt(v) / 100) || 0, 0, 1))
+        }
       />
       <SliderItem
         label="Lightness"
         value={String(Math.round(l * 100))}
         scaled={l}
         onChangeSlider={(v) => onChangeL(v)}
-        onChangeInput={(v) => onChangeL(parseInt(v) / 100)}
+        onChangeInput={(v) =>
+          onChangeL(limitNumberWithinRange((parseInt(v) / 100) || 0, 0, 1))
+        }
       />
     </div>
   );

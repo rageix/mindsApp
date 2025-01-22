@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
 export default class BasicController<T> {
   defaultState: T = undefined as T;
@@ -23,5 +23,13 @@ export default class BasicController<T> {
       return;
     }
     this.defaultState = newState;
+  };
+
+  _getState = (): T => {
+    return this.state || this.defaultState;
+  };
+
+  getState = (): T => {
+    return this._getState();
   };
 }

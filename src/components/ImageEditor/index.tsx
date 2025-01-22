@@ -14,7 +14,6 @@ import ZoomControl from '@/components/ImageEditor/ZoomControl';
 import { MoveHorizontal } from 'lucide-react';
 import Button from '@/components/Buttton';
 import Layout from './LayoutTool';
-import TextEditor from '../TextEditor';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import TextBlock from '@/components/ImageEditor/TextBlock';
 
@@ -309,7 +308,7 @@ export default function ImageEditor({ controller }: IProps) {
                   <CloseIcon />
                 </Button>
               </div>
-              <TextEditor controller={controller} />
+              {/*<TextEditor controller={controller} />*/}
             </div>
           )}
           {/* info bar*/}

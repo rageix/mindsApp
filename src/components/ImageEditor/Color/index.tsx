@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { ISelectOption } from '@/types/SelectOption';
 import Select from '@/components/Select';
-import RgbView from '@/components/ImageEditor/Color/RgbView';
-import HslView from '@/components/ImageEditor/Color/HslView';
-import SliderItem from '@/components/ImageEditor/Color/SliderItem';
-import HexView from '@/components/ImageEditor/Color/HexView';
+import RgbView from '@/components/Color/RgbView';
+import HslView from '@/components/Color/HslView';
+import SliderItem from '@/components/Color/SliderItem';
+import HexView from '@/components/Color/HexView';
 import { IColor } from '@/types/Color';
 import ImageEditorController from '@/components/ImageEditor/ImageEditorController';
-import PickerView from '@/components/ImageEditor/Color/PickerView';
-import SwatchView from '@/components/ImageEditor/Color/SwatchView';
+import PickerView from '@/components/Color/PickerView';
+import SwatchView from '@/components/Color/SwatchView';
 
 enum EView {
   Hsl = 'hsl',

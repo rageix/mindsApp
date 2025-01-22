@@ -7,7 +7,7 @@ interface IProps {
   value: string;
   scaled: number;
   onChangeSlider: (value: number) => void;
-  onChangeInput : (value: string) => void;
+  onChangeInput: (value: string) => void;
 }
 
 export default function SliderItem({
@@ -18,23 +18,23 @@ export default function SliderItem({
   onChangeInput,
 }: IProps) {
   const [inputValue, setInputValue] = useState('0');
+  const [isFocused, setIsFocused] = useState(false);
 
   function onChangeInputValue(e: ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
   }
 
   function onBlurInput() {
-    // const value = limitNumberWithinRange(
-    //   Math.round(parseInt(inputValue) || 0),
-    //   min,
-    //   max,
-    // );
     onChangeInput(inputValue);
+    setIsFocused(false);
   }
 
   useEffect(() => {
-    setInputValue(String(value));
-  }, [value]);
+    const newInputValue = String(value);
+    if (newInputValue !== inputValue && !isFocused) {
+      setInputValue(newInputValue);
+    }
+  }, [value, inputValue, isFocused]);
 
   return (
     <div>
@@ -48,12 +48,13 @@ export default function SliderItem({
             handleSize={16}
           />
         </div>
-        <div className="shrink-0 w-20">
+        <div className="shrink-0 w-24">
           <Input
             type="number"
             value={inputValue}
             onChange={onChangeInputValue}
             onBlur={onBlurInput}
+            onFocus={() => setIsFocused(true)}
           />
         </div>
       </div>

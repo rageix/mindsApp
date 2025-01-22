@@ -1,4 +1,4 @@
-import { IRBStyle, newIRBStyle } from '@/types/Resume';
+import { EResumeFonts, ETemplate, IRBStyle, newIRBStyle } from '@/types/Resume';
 import FormController from '@/util/FormController';
 
 export interface IForm extends IRBStyle {}
@@ -11,7 +11,11 @@ export default class StyleController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
-  onChangeFontFamily = (value: string) => {
+  onChangeTemplate = (value: ETemplate) => {
+    this.onChangeForm({ template: value });
+  };
+
+  onChangeFontFamily = (value: EResumeFonts) => {
     this.onChangeForm({ fontFamily: value });
   };
 

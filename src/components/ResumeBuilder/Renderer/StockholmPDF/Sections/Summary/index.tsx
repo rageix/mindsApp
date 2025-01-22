@@ -13,16 +13,17 @@ const styles = StyleSheet.create({
 
 interface IProps {
   data: IRBSummary;
+  fontScale: number;
 }
 
-export default function Summary({ data }: IProps) {
+export default function Summary({ data, fontScale }: IProps) {
   return (
-    <View debug style={styles.container}>
+    <View style={styles.container}>
       <View>
-        <SectionTitle>Summary</SectionTitle>
+        <SectionTitle fontScale={fontScale}>Summary</SectionTitle>
       </View>
       <View>
-        <ItemTextEditor value={data.description} />
+        <ItemTextEditor value={data.description} fontScale={fontScale} />
       </View>
     </View>
   );

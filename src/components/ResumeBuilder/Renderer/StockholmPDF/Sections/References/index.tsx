@@ -22,12 +22,13 @@ const styles = StyleSheet.create({
 
 interface IProps {
   section: IRBSection;
+  fontScale: number;
 }
 
-export default function References({ section }: IProps) {
+export default function References({ section, fontScale }: IProps) {
   return (
     <View style={styles.container}>
-      <SectionTitle>{section.title}</SectionTitle>
+      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
       <View>
         {section.data.map((v, i) => {
           const item = v as IRBReference;
@@ -41,7 +42,7 @@ export default function References({ section }: IProps) {
 
           return (
             <View key={i}>
-              <ItemTitle>
+              <ItemTitle fontScale={fontScale}>
                 {item.name} at {item.company}
               </ItemTitle>
               {item.email && <Text>{item.email}</Text>}
