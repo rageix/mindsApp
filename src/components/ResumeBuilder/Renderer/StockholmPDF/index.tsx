@@ -3,11 +3,13 @@ import MainBody from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/
 import HeaderDetails from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/HeaderDetails';
 import { Document, Page, StyleSheet, View } from '@react-pdf/renderer';
 import SideColumn from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/SideColumn';
+import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
 
 const styles = StyleSheet.create({
   page: {
     // flexDirection: 'row',
     backgroundColor: '#fff',
+    padding: '.5in',
   },
   section: {
     // margin: 10,
@@ -35,38 +37,38 @@ interface IProps {
 }
 
 export default function StockholmPDF({ resume }: IProps) {
-
-  const fontScale = resume.style.fontSize / 16;
-
   return (
-    <Document>
-      <Page
-        size="A4"
-        style={[styles.page, {
-          fontFamily: resume.style.fontFamily,
-          color: resume.style.primaryColor,
-          fontSize: resume.style.fontSize,
-          lineHeight: resume.style.lineHeight,
-        }]}
-      >
-        <View
-          style={styles.container}
-          // debug
+    <StyleContext.Provider value={resume.style}>
+      <Document>
+        <Page
+          size="LETTER"
+          style={[
+            styles.page,
+            {
+              fontFamily: resume.style.fontFamily,
+              color: resume.style.primaryColor,
+            },
+          ]}
         >
-          <View style={[styles.section, styles.header]}>
-            <HeaderDetails sections={resume.sections} fontScale={fontScale} />
-          </View>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-            <View style={[styles.section, { flexGrow: 1 }]}>
-              {/*left*/}
-              <MainBody sections={resume.sections} fontScale={fontScale} />
+          <View
+            style={styles.container}
+            // debug
+          >
+            <View style={[styles.section, styles.header]}>
+              <HeaderDetails sections={resume.sections} />
             </View>
-            <View style={[styles.section, { width: '33%', flexShrink: 0 }]}>
-              <SideColumn sections={resume.sections} fontScale={fontScale} />
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={[styles.section, { width: '60%' }]}>
+                {/*left*/}
+                <MainBody sections={resume.sections} />
+              </View>
+              <View style={[styles.section, { width: '40%' }]}>
+                <SideColumn sections={resume.sections} />
+              </View>
             </View>
           </View>
-        </View>
-      </Page>
-    </Document>
+        </Page>
+      </Document>
+    </StyleContext.Provider>
   );
 }

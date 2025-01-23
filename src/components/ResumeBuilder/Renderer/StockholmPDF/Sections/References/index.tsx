@@ -1,56 +1,41 @@
 import { IRBReference, IRBSection } from '@/types/Resume';
 import SectionTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionTitle';
 import ItemTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemTitle';
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 5,
-  },
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
+import { View } from '@react-pdf/renderer';
+import SectionWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionWrapper';
+import ItemsWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemsWrapper';
+import MainTextWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/MainTextWrapper';
 
 interface IProps {
   section: IRBSection;
-  fontScale: number;
 }
 
-export default function References({ section, fontScale }: IProps) {
+export default function References({ section }: IProps) {
   return (
-    <View style={styles.container}>
-      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
-      <View>
+    <SectionWrapper>
+      <SectionTitle>{section.title}</SectionTitle>
+      <ItemsWrapper>
         {section.data.map((v, i) => {
           const item = v as IRBReference;
           if (item.byRequestOnly) {
             return (
               <View key={i}>
-                <Text>By Request Only</Text>
+                <MainTextWrapper>By Request Only</MainTextWrapper>
               </View>
             );
           }
 
           return (
             <View key={i}>
-              <ItemTitle fontScale={fontScale}>
+              <ItemTitle>
                 {item.name} at {item.company}
               </ItemTitle>
-              {item.email && <Text>{item.email}</Text>}
-              {item.phone && <Text>{item.phone}</Text>}
+              {item.email && <MainTextWrapper>{item.email}</MainTextWrapper>}
+              {item.phone && <MainTextWrapper>{item.phone}</MainTextWrapper>}
             </View>
           );
         })}
-      </View>
-    </View>
+      </ItemsWrapper>
+    </SectionWrapper>
   );
 }

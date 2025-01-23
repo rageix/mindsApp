@@ -1,7 +1,10 @@
 import { ERBSkillLevel, IRBSection, IRBSkill } from '@/types/Resume';
-import SectionTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionTitle';
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import { View } from '@react-pdf/renderer';
 import { ISelectOption } from '@/types/SelectOption';
+import SidebarTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SidebarTitle';
+import SectionWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionWrapper';
+import ItemsWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemsWrapper';
+import SideBarTextWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SideBarTextWrapper';
 
 const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   {
@@ -31,47 +34,31 @@ const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   },
 ];
 
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 5,
-  },
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
-
 interface IProps {
   section: IRBSection;
-  fontScale: number;
 }
 
-export default function Skills({ section, fontScale }: IProps) {
+export default function Skills({ section }: IProps) {
   return (
-    <View style={styles.container}>
-      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
-      <View>
+    <SectionWrapper>
+      <SidebarTitle>{section.title}</SidebarTitle>
+      <ItemsWrapper>
         {section.data.map((v, i) => {
           const item = v as IRBSkill;
           const option = OPTIONS.find((v) => v.value === item.level);
 
           return (
             <View key={i}>
-              <Text>
+              <SideBarTextWrapper>
                 {item.skill}
-                {option && <Text> - {option.label}</Text>}
-              </Text>
+                {option && (
+                  <SideBarTextWrapper> - {option.label}</SideBarTextWrapper>
+                )}
+              </SideBarTextWrapper>
             </View>
           );
         })}
-      </View>
-    </View>
+      </ItemsWrapper>
+    </SectionWrapper>
   );
 }

@@ -1,19 +1,22 @@
 import { PropsWithChildren, useContext } from 'react';
-import { StyleSheet, Text } from '@react-pdf/renderer';
+import { StyleSheet, View } from '@react-pdf/renderer';
 import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
 import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 14,
-    fontWeight: 'bold',
+  items: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
   },
 });
 
 interface IProps extends PropsWithChildren {}
 
-export default function SectionTitle({ children }: IProps) {
+export default function ItemsWrapper({ children }: IProps) {
   const styleContext = useContext(StyleContext);
 
-  return <Text style={calcStyles(styles.text, styleContext)}>{children}</Text>;
+  return (
+    <View style={calcStyles(styles.items, styleContext)}>{children}</View>
+  );
 }

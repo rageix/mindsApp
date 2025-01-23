@@ -1,10 +1,23 @@
 import { ERBType, IRBDetail, IRBSection } from '@/types/Resume';
-import { StyleSheet, Text } from '@react-pdf/renderer';
+import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import TemplateImage from '@/components/ResumeBuilder/Renderer/TemplateImage';
+import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import { useContext } from 'react';
+import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+  },
+  imgWrapper: {
+    width: 75,
+    borderRadius: '100%',
+    overflow: 'hidden',
+  },
   name: {
-    // fontFamily: 'Courier',
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   title: {
@@ -15,10 +28,10 @@ const styles = StyleSheet.create({
 
 interface IProps {
   sections: IRBSection[];
-  fontScale: number;
 }
 
-export default function HeaderDetails({ sections, fontScale }: IProps) {
+export default function HeaderDetails({ sections }: IProps) {
+  const styleContext = useContext(StyleContext);
   const section = sections.find((v) => v.type === ERBType.Detail);
 
   if (!section) {
@@ -32,17 +45,24 @@ export default function HeaderDetails({ sections, fontScale }: IProps) {
   }
 
   return (
-    <>
-      <Text
-        style={[styles.name, { fontSize: styles.name.fontSize * fontScale }]}
-      >
-        {data.firstName} {data.lastName}
-      </Text>
-      <Text
-        style={[styles.title, { fontSize: styles.title.fontSize * fontScale }]}
-      >
-        {data.title}
-      </Text>
-    </>
+    <View style={calcStyles(styles.wrapper, styleContext)}>
+      {data.photo && (
+        <View style={calcStyles(styles.imgWrapper, styleContext)}>
+          <TemplateImage id={data.photo} />
+        </View>
+      )}
+      <View>
+        <View>
+          <Text style={calcStyles(styles.name, styleContext)}>
+            {data.firstName} {data.lastName}
+          </Text>
+        </View>
+        <View>
+          <Text style={calcStyles(styles.title, styleContext)}>
+            {data.title}
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 }

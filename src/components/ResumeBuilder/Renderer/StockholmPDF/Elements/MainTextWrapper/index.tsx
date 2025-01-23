@@ -4,21 +4,17 @@ import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
 import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
-  text: {
-    fontWeight: 'bold',
+  wrapper: {
     fontSize: 12,
   },
 });
 
-interface IProps extends PropsWithChildren {
-}
+interface IProps extends PropsWithChildren {}
 
-export default function ItemTitle({ children }: IProps) {
+export default function MainTextWrapper({ children }: IProps) {
   const styleContext = useContext(StyleContext);
 
   return (
-    <Text style={calcStyles(styles.text, styleContext)}>
-      {children}
-    </Text>
+    <Text style={calcStyles(styles.wrapper, styleContext)}>{children}</Text>
   );
 }

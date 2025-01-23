@@ -1,26 +1,28 @@
 import { IRBDate } from '@/types/Resume';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import formatResumeDate from '@/util/FormatResumeDate';
 import { StyleSheet, Text } from '@react-pdf/renderer';
+import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 14,
+    fontSize: 10,
   },
 });
 
 interface IProps {
   start: IRBDate | null;
   end: IRBDate | null;
-  fontScale: number;
 }
 
-export default function ItemDateRange({ start, end, fontScale }: IProps) {
+export default function ItemDateRange({ start, end }: IProps) {
+  const styleContext = useContext(StyleContext);
   const startText = useMemo(() => formatResumeDate(start), [start]);
   const endText = useMemo(() => formatResumeDate(end), [end]);
 
   return (
-    <Text style={[styles.text, {fontSize: styles.text.fontSize * fontScale}]}>
+    <Text style={calcStyles(styles.text, styleContext)}>
       {startText} - {endText}
     </Text>
   );

@@ -357,7 +357,7 @@ export interface IRBStyle {
   fontFamily: EResumeFonts;
   primaryColor: string;
   secondaryColor: string;
-  fontSize: number;
+  scale: number;
   lineHeight: number;
 }
 
@@ -367,7 +367,7 @@ export function newIRBStyle(): IRBStyle {
     fontFamily: EResumeFonts.OpenSans,
     primaryColor: '#111827',
     secondaryColor: '#3b82f6',
-    fontSize: 12,
+    scale: 1,
     lineHeight: 1.25,
   };
 }

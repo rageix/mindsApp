@@ -31,7 +31,7 @@ export default class StyleController extends FormController<IForm> {
     this.onChangeForm({ lineHeight: value });
   };
 
-  onChangeFontSize = (value: number) => {
-    this.onChangeForm({ fontSize: value });
+  onChangeScale = (value: number) => {
+    this.onChangeForm({ scale: value });
   };
 }

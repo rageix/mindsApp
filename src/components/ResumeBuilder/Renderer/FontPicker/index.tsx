@@ -27,16 +27,16 @@ interface IProps {
 }
 
 export default function FontPicker({ controller }: IProps) {
-  const { fontFamily, fontSize, lineHeight } = controller.getForm();
+  const { fontFamily, scale, lineHeight } = controller.getForm();
 
   const fontOption = useMemo(
     () => OPTIONS.find((v) => v.value === fontFamily),
     [fontFamily],
   );
 
-  function onChangeFontSize(value: number) {
-    controller.onChangeFontSize(
-      roundTo2Places(limitNumberWithinRange(value, 4, 32)),
+  function onChangeScale(value: number) {
+    controller.onChangeScale(
+      roundTo2Places(limitNumberWithinRange(value, 0.25, 2)),
     );
   }
 
@@ -79,12 +79,12 @@ export default function FontPicker({ controller }: IProps) {
           <div className="flex gap-x-2">
             <div className="flex flex-col gap-y-2 bg-gray-100 rounded-md px-2 py-4">
               <div className="text-center text-sm font-medium leading-6">
-                Base Font Size
+                Scale
               </div>
               <div className="flex gap-x-2 items-center">
                 <Button
                   variant="link"
-                  onClick={() => onChangeFontSize(fontSize - 1)}
+                  onClick={() => onChangeScale(scale -.05)}
                   isInline
                 >
                   <MinusIcon />
@@ -93,11 +93,11 @@ export default function FontPicker({ controller }: IProps) {
                   title="Font Size"
                   className="flex justify-center w-8"
                 >
-                  <div>{fontSize}</div>
+                  <div>{scale}</div>
                 </div>
                 <Button
                   variant="link"
-                  onClick={() => onChangeFontSize(fontSize + 1)}
+                  onClick={() => onChangeScale(scale + .05)}
                   isInline
                 >
                   <PlusIcon />

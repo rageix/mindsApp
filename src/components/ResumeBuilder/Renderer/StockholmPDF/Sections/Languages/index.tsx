@@ -1,35 +1,20 @@
 import { IRBLanguage, IRBSection } from '@/types/Resume';
-import SectionTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionTitle';
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import { View } from '@react-pdf/renderer';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 5,
-  },
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
+import SidebarTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SidebarTitle';
+import SectionWrapper from '../../Elements/SectionWrapper';
+import SideBarTextWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SideBarTextWrapper';
+import ItemsWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemsWrapper';
 
 interface IProps {
   section: IRBSection;
-  fontScale: number;
 }
 
-export default function Languages({ section, fontScale }: IProps) {
+export default function Languages({ section }: IProps) {
   return (
-    <View style={styles.container}>
-      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
-      <View>
+    <SectionWrapper>
+      <SidebarTitle>{section.title}</SidebarTitle>
+      <ItemsWrapper>
         {section.data.map((v, i) => {
           const item = v as IRBLanguage;
           const option = LANGUAGE_OPTIONS.find((v) => v.value === item.level);
@@ -39,14 +24,14 @@ export default function Languages({ section, fontScale }: IProps) {
               key={i}
               style={{ display: 'flex' }}
             >
-              <Text>
+              <SideBarTextWrapper>
                 {item.language}
                 {option && ' - ' + option.label}
-              </Text>
+              </SideBarTextWrapper>
             </View>
           );
         })}
-      </View>
-    </View>
+      </ItemsWrapper>
+    </SectionWrapper>
   );
 }

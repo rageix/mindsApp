@@ -3,57 +3,38 @@ import ItemTextEditor from '@/components/ResumeBuilder/Renderer/StockholmPDF/Ele
 import ItemDateRange from '../../Elements/ItemDateRange';
 import SectionTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionTitle';
 import ItemTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemTitle';
-import { StyleSheet, View } from '@react-pdf/renderer';
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 5,
-  },
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-});
+import { View } from '@react-pdf/renderer';
+import DescriptionWrapper from '../../Elements/DescriptionWrapper';
+import ItemsWrapper from '../../Elements/ItemsWrapper';
+import SectionWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionWrapper';
 
 interface IProps {
   section: IRBSection;
-  fontScale: number;
 }
 
-export default function Internships({ section, fontScale }: IProps) {
+export default function Internships({ section }: IProps) {
   return (
-    <View style={styles.container}>
-      <SectionTitle fontScale={fontScale}>{section.title}</SectionTitle>
-      <View>
+    <SectionWrapper>
+      <SectionTitle>{section.title}</SectionTitle>
+      <ItemsWrapper>
         {section.data.map((v, i) => {
           const item = v as IRBInternship;
           return (
             <View key={i}>
-              <ItemTitle fontScale={fontScale}>
+              <ItemTitle>
                 {item.title} at {item.employer} in {item.city}
               </ItemTitle>
               <ItemDateRange
                 start={item.start}
                 end={item.end}
-                fontScale={fontScale}
               />
-              <View style={{ marginTop: 5 }}>
-                <ItemTextEditor
-                  value={item.description}
-                  fontScale={fontScale}
-                />
-              </View>
+              <DescriptionWrapper>
+                <ItemTextEditor value={item.description} />
+              </DescriptionWrapper>
             </View>
           );
         })}
-      </View>
-    </View>
+      </ItemsWrapper>
+    </SectionWrapper>
   );
 }

@@ -5,20 +5,15 @@ import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
   text: {
-    fontWeight: 'bold',
     fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 
-interface IProps extends PropsWithChildren {
-}
+interface IProps extends PropsWithChildren {}
 
-export default function ItemTitle({ children }: IProps) {
+export default function SidebarTitle({ children }: IProps) {
   const styleContext = useContext(StyleContext);
 
-  return (
-    <Text style={calcStyles(styles.text, styleContext)}>
-      {children}
-    </Text>
-  );
+  return <Text style={calcStyles(styles.text, styleContext)}>{children}</Text>;
 }

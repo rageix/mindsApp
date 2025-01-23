@@ -1,30 +1,23 @@
 import { IRBSummary } from '@/types/Resume';
 import ItemTextEditor from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/ItemTextEditor';
-import { StyleSheet, View } from '@react-pdf/renderer';
+import { View } from '@react-pdf/renderer';
 import SectionTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionTitle';
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 3,
-  },
-});
+import SectionWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SectionWrapper';
+import DescriptionWrapper from '../../Elements/DescriptionWrapper';
 
 interface IProps {
   data: IRBSummary;
-  fontScale: number;
 }
 
-export default function Summary({ data, fontScale }: IProps) {
+export default function Summary({ data }: IProps) {
   return (
-    <View style={styles.container}>
+    <SectionWrapper>
       <View>
-        <SectionTitle fontScale={fontScale}>Summary</SectionTitle>
+        <SectionTitle>Summary</SectionTitle>
       </View>
-      <View>
-        <ItemTextEditor value={data.description} fontScale={fontScale} />
-      </View>
-    </View>
+      <DescriptionWrapper>
+        <ItemTextEditor value={data.description} />
+      </DescriptionWrapper>
+    </SectionWrapper>
   );
 }

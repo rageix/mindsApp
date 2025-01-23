@@ -18,10 +18,9 @@ const styles = StyleSheet.create({
 
 interface IProps {
   sections: IRBSection[];
-  fontScale: number;
 }
 
-export default function MainBody({ sections, fontScale }: IProps) {
+export default function MainBody({ sections }: IProps) {
   return (
     <View
       // debug
@@ -38,7 +37,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Summary
                 key={i}
                 data={v.data[0] as IRBSummary}
-                fontScale={fontScale}
               />
             );
           case ERBType.Employment:
@@ -46,7 +44,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Employment
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           case ERBType.Education:
@@ -54,7 +51,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Education
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           case ERBType.Custom:
@@ -62,7 +58,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Custom
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           case ERBType.Course:
@@ -70,7 +65,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Courses
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           case ERBType.Internship:
@@ -78,7 +72,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <Internships
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           case ERBType.Reference:
@@ -86,7 +79,6 @@ export default function MainBody({ sections, fontScale }: IProps) {
               <References
                 key={i}
                 section={v}
-                fontScale={fontScale}
               />
             );
           default:

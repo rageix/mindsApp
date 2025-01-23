@@ -6,6 +6,9 @@ import { LinkNode } from '@lexical/link';
 import { StyleSheet, View } from '@react-pdf/renderer';
 import Html, { HtmlStyles } from 'react-pdf-html';
 import sanitizeHtml from 'sanitize-html';
+import { useContext } from 'react';
+import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import { calcStyles } from '@/util/CalcStyles';
 
 const stylesheet: HtmlStyles | HtmlStyles[] | undefined = {
   p: {
@@ -30,7 +33,7 @@ const stylesheet: HtmlStyles | HtmlStyles[] | undefined = {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 16,
+    fontSize: 12,
   },
   p: {
     margin: 0,
@@ -51,10 +54,11 @@ const styles = StyleSheet.create({
 
 interface IProps {
   value: string;
-  fontScale: number;
 }
 
-export default function ItemTextEditor({ value, fontScale }: IProps) {
+export default function ItemTextEditor({ value }: IProps) {
+  const styleContext = useContext(StyleContext);
+
   const config = {
     namespace: 'textEditor',
     nodes: [ParagraphNode, TextNode, ListItemNode, ListNode, LinkNode],
@@ -74,7 +78,7 @@ export default function ItemTextEditor({ value, fontScale }: IProps) {
   return (
     <View>
       <Html
-        style={[styles.text, { fontSize: styles.text.fontSize * fontScale }]}
+        style={calcStyles(styles.text, styleContext)}
         stylesheet={stylesheet}
       >
         {editorHTMLString}
