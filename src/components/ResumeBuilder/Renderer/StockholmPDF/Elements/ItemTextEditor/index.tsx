@@ -1,12 +1,51 @@
 import { createHeadlessEditor } from '@lexical/headless';
-import { $getRoot, ParagraphNode, TextNode } from 'lexical';
+import { ParagraphNode, TextNode } from 'lexical';
+import { $generateHtmlFromNodes } from '@lexical/html';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { LinkNode } from '@lexical/link';
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import { StyleSheet, View } from '@react-pdf/renderer';
+import Html, { HtmlStyles } from 'react-pdf-html';
+import sanitizeHtml from 'sanitize-html';
+
+const stylesheet: HtmlStyles | HtmlStyles[] | undefined = {
+  p: {
+    marginTop: 2,
+    marginRight: 0,
+    marginBottom: 2,
+    marginLeft: 0,
+  },
+  ol: {
+    marginTop: 2,
+    marginRight: 0,
+    marginBottom: 2,
+    marginLeft: 0,
+  },
+  ul: {
+    marginTop: 2,
+    marginRight: 0,
+    marginBottom: 2,
+    marginLeft: 0,
+  },
+};
 
 const styles = StyleSheet.create({
   text: {
     fontSize: 16,
+  },
+  p: {
+    margin: 0,
+    marginTop: 0,
+    marginBottom: 0,
+  },
+  ol: {
+    margin: 0,
+    marginTop: 0,
+    marginBottom: 0,
+  },
+  li: {
+    margin: 0,
+    marginTop: 0,
+    marginBottom: 0,
   },
 });
 
@@ -27,14 +66,19 @@ export default function ItemTextEditor({ value, fontScale }: IProps) {
   if (value) {
     editor.setEditorState(editor.parseEditorState(value));
   }
-  // editor.update(() => {
-  //   setHtml($generateHtmlFromNodes(editor));
-  // });
-  const editorStateTextString = editor.read(() => $getRoot().getTextContent());
+
+  const editorHTMLString = sanitizeHtml(
+    editor.read(() => $generateHtmlFromNodes(editor)),
+  );
 
   return (
     <View>
-      <Text style={[styles.text, {fontSize: styles.text.fontSize * fontScale}]}>{editorStateTextString}</Text>
+      <Html
+        style={[styles.text, { fontSize: styles.text.fontSize * fontScale }]}
+        stylesheet={stylesheet}
+      >
+        {editorHTMLString}
+      </Html>
     </View>
   );
 }

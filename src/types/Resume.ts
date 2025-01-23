@@ -317,9 +317,39 @@ export enum ETemplate {
 }
 
 export enum EResumeFonts {
-  Courier = 'Courier',
-  Helvetica = 'Helvetica',
-  TimesRoman = 'Times-Roman',
+  Alegreya='Alegreya',
+  Arvo = 'Arvo',
+  // BioRhyme='BioRhyme', // no italics
+  Bitter = 'Bitter',
+  CormorantGaramond='Cormorant Garamond',
+  CrimsonText = 'Crimson Text',
+  // Eczar='Eczar', // no italics
+  FiraSans = 'Fira Sans',
+  Inter = 'Inter',
+  Lato = 'Lato',
+  // LibreBaskerville = 'Libre Baskerville', // no bold italics
+  LibreFranklin = 'Libre Franklin',
+  Lora = 'Lora',
+  Merriweather = 'Merriweather',
+  Montserrat = 'Montserrat',
+  // Mukta = 'Mukta', // no italics
+  // Neuton='Neuton', // no bold italic
+  NotoSerif = 'Noto Serif',
+  Nunito = 'Nunito',
+  NunitoSans = 'Nunito Sans',
+  OpenSans = 'Open Sans',
+  PlayfairDisplay = 'Playfair Display',
+  Poppins = 'Poppins',
+  PTSerif = 'PT Serif',
+  Quicksand = 'Quicksand',
+  Raleway = 'Raleway',
+  Roboto = 'Roboto',
+  RobotoCondensed = 'Roboto Condensed',
+  Rubik = 'Rubik',
+  Spectral='Spectral',
+  Ubuntu = 'Ubuntu',
+  WorkSans = 'Work Sans',
+  ZillaSlab = 'Zilla Slab',
 }
 
 export interface IRBStyle {
@@ -334,11 +364,11 @@ export interface IRBStyle {
 export function newIRBStyle(): IRBStyle {
   return {
     template: ETemplate.Stockholm,
-    fontFamily: EResumeFonts.Helvetica,
+    fontFamily: EResumeFonts.OpenSans,
     primaryColor: '#111827',
     secondaryColor: '#3b82f6',
-    fontSize: 16,
-    lineHeight: 1,
+    fontSize: 12,
+    lineHeight: 1.25,
   };
 }
 

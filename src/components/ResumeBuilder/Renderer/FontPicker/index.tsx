@@ -10,23 +10,17 @@ import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
 import Button from '@/components/Buttton';
 import FormLabel from '@/components/FormLabel';
 
-const OPTIONS: ISelectOption<EResumeFonts>[] = [
-  {
-    key: EResumeFonts.Courier,
-    value: EResumeFonts.Courier,
-    label: 'Courier',
-  },
-  {
-    key: EResumeFonts.Helvetica,
-    value: EResumeFonts.Helvetica,
-    label: 'Helvetica',
-  },
-  {
-    key: EResumeFonts.TimesRoman,
-    value: EResumeFonts.TimesRoman,
-    label: 'Times Roman',
-  },
-];
+function makeOption(font: EResumeFonts): ISelectOption<EResumeFonts> {
+  return {
+    key: font,
+    value: font,
+    label: font,
+  };
+}
+
+const OPTIONS: ISelectOption<EResumeFonts>[] = Object.entries(EResumeFonts).map(
+  (v) => makeOption(v[1]),
+);
 
 interface IProps {
   controller: StyleController;
@@ -42,7 +36,7 @@ export default function FontPicker({ controller }: IProps) {
 
   function onChangeFontSize(value: number) {
     controller.onChangeFontSize(
-      roundTo2Places(limitNumberWithinRange(value, 12, 32)),
+      roundTo2Places(limitNumberWithinRange(value, 4, 32)),
     );
   }
 

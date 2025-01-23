@@ -9,6 +9,7 @@ import ResumeController from '@/components/ResumeBuilder/Builder/ResumeControlle
 import Button from '@/components/Buttton';
 import ColorPicker from '@/components/ResumeBuilder/Renderer/ColorPicker';
 import FontPicker from '@/components/ResumeBuilder/Renderer/FontPicker';
+import pdfFonts from '@/components/ResumeBuilder/Renderer/PDFFonts';
 
 interface IProps {
   controller: ResumeController;
@@ -106,10 +107,14 @@ export default function Renderer({ controller }: IProps) {
   const styleController = controller.state.styleController;
   styleController.useController();
 
-  const Doc = useMemo(
-    () => (resume ? () => <StockholmPDF resume={resume} /> : () => null),
-    [resume],
-  );
+  const Doc = useMemo(() => {
+    if (!resume) {
+      return () => null;
+    }
+    pdfFonts.load(resume.style.fontFamily);
+    // eslint-disable-next-line react/display-name
+    return () => <StockholmPDF resume={resume} />;
+  }, [resume]);
 
   return (
     <div className="px-2 py-4 h-full absolute w-full">
@@ -122,7 +127,7 @@ export default function Renderer({ controller }: IProps) {
           controller={controller.state.secondaryColorController}
           title="Secondary Color"
         />
-        <FontPicker controller={styleController}/>
+        <FontPicker controller={styleController} />
         <PDFDownloadLink
           document={<Doc />}
           fileName="somename.pdf"
@@ -137,8 +142,7 @@ export default function Renderer({ controller }: IProps) {
           }
         </PDFDownloadLink>
       </div>
-      <div className="bg-white border rounded-md p-6 mt-2 h-full"
-      >
+      <div className="bg-white border rounded-md p-6 mt-2 h-full">
         <PDFViewer
           width="100%"
           height="100%"
