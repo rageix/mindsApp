@@ -13,4 +13,10 @@ export default class SectionItemController<
     // @ts-ignore
     this.onChangeForm({ isExpanded: !this.form.isExpanded });
   };
+
+  getDragNDropValue = () => {
+    return {
+      id: this.id,
+    }
+  }
 }

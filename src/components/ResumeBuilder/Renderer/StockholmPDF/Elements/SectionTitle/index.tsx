@@ -5,7 +5,7 @@ import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
@@ -15,5 +15,18 @@ interface IProps extends PropsWithChildren {}
 export default function SectionTitle({ children }: IProps) {
   const styleContext = useContext(StyleContext);
 
-  return <Text style={calcStyles(styles.text, styleContext)}>{children}</Text>;
+  return (
+    <Text
+      style={[
+        calcStyles(styles.text, styleContext),
+        {
+          fontFamily: styleContext.titleFontFamily
+            ? styleContext.titleFontFamily
+            : undefined,
+        },
+      ]}
+    >
+      {children}
+    </Text>
+  );
 }

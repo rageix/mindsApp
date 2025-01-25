@@ -7,6 +7,7 @@ import Custom from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/Cu
 import Courses from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/Courses';
 import Internships from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/Internships';
 import References from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/References';
+import ExtraCurricular from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/ExtraCurricular';
 
 const styles = StyleSheet.create({
   container: {
@@ -77,6 +78,13 @@ export default function MainBody({ sections }: IProps) {
           case ERBType.Reference:
             return (
               <References
+                key={i}
+                section={v}
+              />
+            );
+          case ERBType.ExtraCurricular:
+            return (
+              <ExtraCurricular
                 key={i}
                 section={v}
               />

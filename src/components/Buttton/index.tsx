@@ -3,7 +3,7 @@ import { TButtonVariant } from '@/types/Variant';
 import { MouseEvent, KeyboardEvent, MutableRefObject, PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
-  ref?: MutableRefObject<any>;
+  elRef?: MutableRefObject<any>;
   type?: 'submit' | 'reset' | 'button' | undefined;
   className?: string;
   disabled?: boolean;
@@ -13,6 +13,7 @@ interface Props extends PropsWithChildren {
   onKeyDown?: (e?: KeyboardEvent) => void;
   submit?: boolean;
   isActive?: boolean;
+  label?: string;
 }
 
 const colors: Record<TButtonVariant, string> = {
@@ -62,7 +63,7 @@ const colorsDisabled: Record<TButtonVariant, string> = {
 };
 
 export default function Button({
-  ref,
+  elRef,
   type = 'button',
   className,
   disabled,
@@ -71,11 +72,12 @@ export default function Button({
   onClick,
   onKeyDown,
   isActive,
+  label,
   children,
 }: Props) {
   return (
     <button
-      ref={ref}
+      ref={elRef}
       type={type}
       className={cn(
         `flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 `,
@@ -87,6 +89,7 @@ export default function Button({
       )}
       onClick={onClick}
       onKeyDown={onKeyDown}
+      aria-label={label}
     >
       {children}
     </button>

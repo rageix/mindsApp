@@ -7,20 +7,19 @@
  */
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
-  $findMatchingParent,
+  // $findMatchingParent,
   $getNearestNodeOfType,
   mergeRegister,
 } from '@lexical/utils';
 import {
   $createParagraphNode,
   $getSelection,
-  $isElementNode,
+  // $isElementNode,
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
-  LexicalNode,
+  // LexicalNode,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -36,9 +35,6 @@ import { $setBlocksType } from '@lexical/selection';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
   Bold,
   Italic,
   LinkIcon,
@@ -52,11 +48,11 @@ import {
 import Button from '@/components/Buttton';
 import { cn } from '@/util/Cn';
 import { getSelectedNode } from '@/util/GetSelectedNode';
-import {
-  IS_ALIGN_CENTER,
-  IS_ALIGN_LEFT,
-  IS_ALIGN_RIGHT,
-} from '@/common/Lexical';
+// import {
+//   IS_ALIGN_CENTER,
+//   IS_ALIGN_LEFT,
+//   IS_ALIGN_RIGHT,
+// } from '@/common/Lexical';
 
 const LowPriority = 1;
 const BUTTON_CLASS_NAME =
@@ -79,7 +75,7 @@ export default function ToolbarPlugin() {
   const [linkUrl, setLinkUrl] = useState('');
   const [isBulletList, setIsBulletList] = useState(false);
   const [isNumberList, setIsNumberList] = useState(false);
-  const [textJustify, setTextJustify] = useState(0);
+  // const [textJustify, setTextJustify] = useState(0);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -125,19 +121,19 @@ export default function ToolbarPlugin() {
         setIsNumberList(false);
       }
 
-      const matchingParent = $findMatchingParent(
-        node,
-        (parentNode: LexicalNode | null | undefined) =>
-          $isElementNode(parentNode) && !parentNode.isInline(),
-      );
+      // const matchingParent = $findMatchingParent(
+      //   node,
+      //   (parentNode: LexicalNode | null | undefined) =>
+      //     $isElementNode(parentNode) && !parentNode.isInline(),
+      // );
 
-      const format = $isElementNode(matchingParent)
-        ? matchingParent.getFormat()
-        : $isElementNode(node)
-          ? node.getFormat()
-          : parent?.getFormat() || IS_ALIGN_LEFT;
-
-      setTextJustify(format);
+      // const format = $isElementNode(matchingParent)
+      //   ? matchingParent.getFormat()
+      //   : $isElementNode(node)
+      //     ? node.getFormat()
+      //     : parent?.getFormat() || IS_ALIGN_LEFT;
+      //
+      // setTextJustify(format);
     }
   }, []);
 
@@ -355,48 +351,48 @@ export default function ToolbarPlugin() {
           <LinkIcon />
         </Button>
       </div>
-      <div className="flex gap-x-4 px-4 py-2">
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-          }}
-          // className="toolbar-item spaced"
-          className={cn(
-            BUTTON_CLASS_NAME,
-            textJustify === IS_ALIGN_LEFT ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Left Align"
-        >
-          <AlignLeft />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            textJustify === IS_ALIGN_CENTER ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Center Align"
-        >
-          <AlignCenter />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            textJustify === IS_ALIGN_RIGHT ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Right Align"
-        >
-          <AlignRight />
-        </Button>
-      </div>
+      {/*<div className="flex gap-x-4 px-4 py-2">*/}
+      {/*  <Button*/}
+      {/*    variant="custom"*/}
+      {/*    onClick={() => {*/}
+      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');*/}
+      {/*    }}*/}
+      {/*    // className="toolbar-item spaced"*/}
+      {/*    className={cn(*/}
+      {/*      BUTTON_CLASS_NAME,*/}
+      {/*      textJustify === IS_ALIGN_LEFT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+      {/*    )}*/}
+      {/*    aria-label="Left Align"*/}
+      {/*  >*/}
+      {/*    <AlignLeft />*/}
+      {/*  </Button>*/}
+      {/*  <Button*/}
+      {/*    variant="custom"*/}
+      {/*    onClick={() => {*/}
+      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');*/}
+      {/*    }}*/}
+      {/*    className={cn(*/}
+      {/*      BUTTON_CLASS_NAME,*/}
+      {/*      textJustify === IS_ALIGN_CENTER ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+      {/*    )}*/}
+      {/*    aria-label="Center Align"*/}
+      {/*  >*/}
+      {/*    <AlignCenter />*/}
+      {/*  </Button>*/}
+      {/*  <Button*/}
+      {/*    variant="custom"*/}
+      {/*    onClick={() => {*/}
+      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');*/}
+      {/*    }}*/}
+      {/*    className={cn(*/}
+      {/*      BUTTON_CLASS_NAME,*/}
+      {/*      textJustify === IS_ALIGN_RIGHT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+      {/*    )}*/}
+      {/*    aria-label="Right Align"*/}
+      {/*  >*/}
+      {/*    <AlignRight />*/}
+      {/*  </Button>*/}
+      {/*</div>*/}
     </div>
   );
 }

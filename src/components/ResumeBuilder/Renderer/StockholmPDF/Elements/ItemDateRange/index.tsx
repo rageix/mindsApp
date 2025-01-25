@@ -21,9 +21,15 @@ export default function ItemDateRange({ start, end }: IProps) {
   const startText = useMemo(() => formatResumeDate(start), [start]);
   const endText = useMemo(() => formatResumeDate(end), [end]);
 
+  if(!startText && !endText) {
+    return null;
+  }
+
   return (
     <Text style={calcStyles(styles.text, styleContext)}>
-      {startText} - {endText}
+      {startText}
+      {startText && endText ? ' - ' : ''}
+      {endText}
     </Text>
   );
 }

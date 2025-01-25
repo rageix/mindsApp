@@ -5,7 +5,7 @@ import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({
   wrapper: {
-    fontSize: 12
+    fontSize: 12,
   },
 });
 

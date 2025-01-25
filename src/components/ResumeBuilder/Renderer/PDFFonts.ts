@@ -7,12 +7,10 @@ export class PDFFonts {
 
     for (const key in loadedFonts) {
       if (key === font) {
-        console.log('already loaded', font);
+        // font is already loaded!
         return;
       }
     }
-
-    console.log('loading', font);
 
     switch (font) {
       case EResumeFonts.Roboto:

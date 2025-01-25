@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 10,
+    alignItems: 'center'
   },
   imgWrapper: {
     width: 75,
@@ -53,7 +54,16 @@ export default function HeaderDetails({ sections }: IProps) {
       )}
       <View>
         <View>
-          <Text style={calcStyles(styles.name, styleContext)}>
+          <Text
+            style={[
+              calcStyles(styles.name, styleContext),
+              {
+                fontFamily: styleContext.titleFontFamily
+                  ? styleContext.titleFontFamily
+                  : undefined,
+              },
+            ]}
+          >
             {data.firstName} {data.lastName}
           </Text>
         </View>

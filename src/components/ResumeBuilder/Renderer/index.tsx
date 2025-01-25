@@ -112,6 +112,9 @@ export default function Renderer({ controller }: IProps) {
       return () => null;
     }
     pdfFonts.load(resume.style.fontFamily);
+    if (resume.style.titleFontFamily) {
+      pdfFonts.load(resume.style.titleFontFamily);
+    }
     // eslint-disable-next-line react/display-name
     return () => <StockholmPDF resume={resume} />;
   }, [resume]);
@@ -123,10 +126,10 @@ export default function Renderer({ controller }: IProps) {
           controller={controller.state.primaryColorController}
           title="Primary Color"
         />
-        <ColorPicker
-          controller={controller.state.secondaryColorController}
-          title="Secondary Color"
-        />
+        {/*<ColorPicker*/}
+        {/*  controller={controller.state.secondaryColorController}*/}
+        {/*  title="Secondary Color"*/}
+        {/*/>*/}
         <FontPicker controller={styleController} />
         <PDFDownloadLink
           document={<Doc />}

@@ -6,6 +6,7 @@ import EmploymentForm from '@/components/ResumeBuilder/Builder/Sections/Employme
 import EmploymentFormController from '@/components/ResumeBuilder/Builder/Sections/Employment/EmploymentForm/EmploymentFormController';
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
+import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
 
 interface IProps {
   controller: SectionController;
@@ -15,7 +16,7 @@ export default function Employment({ controller }: IProps) {
   controller.useController();
 
   return (
-    <div>
+    <SectionWithDraggables controller={controller}>
       <Title title={controller.state.section.title} />
       <Description>
         Show your relevant experience (last 10 years). Use bullet points to note
@@ -33,6 +34,6 @@ export default function Employment({ controller }: IProps) {
         ))}
       </FormList>
       <AddFormButton onClick={controller.onClickAddForm} />
-    </div>
+    </SectionWithDraggables>
   );
 }

@@ -2,15 +2,20 @@ import { PropsWithChildren } from 'react';
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { cn } from '@/util/Cn';
-import useTheme from "@/hooks/UseTheme";
-import { ETheme } from "@/common/Theme";
+// import useTheme from '@/hooks/UseTheme';
+import Button from '@/components/Buttton';
 
 interface IProps extends PropsWithChildren {
   className?: string;
+  buttonClassName?: string;
 }
 
-export default function TableOptionsMenu({ className, children }: IProps) {
-  const theme = useTheme();
+export default function TableOptionsMenu({
+  className,
+  buttonClassName,
+  children,
+}: IProps) {
+  // const theme = useTheme();
 
   return (
     <Menu
@@ -18,16 +23,22 @@ export default function TableOptionsMenu({ className, children }: IProps) {
       className="flex justify-end ms-3"
     >
       <MenuButton
-        className={cn('-m-2.5 block p-2.5 ',
-          theme === ETheme.light ? 'text-gray-500 hover:text-gray-400 focus:ring-blue-600 focus-visible:outline-blue-600' : null,
-          theme === ETheme.dark ? 'text-gray-400 hover:text-white' : null,
-          )}
+        as="div"
+        // className={cn('-m-2.5 block p-2.5 ',
+        //   theme === ETheme.light ? 'text-gray-500 hover:text-gray-400 focus:ring-blue-600 focus-visible:outline-blue-600 hover:bg-blue-100' : null,
+        //   theme === ETheme.dark ? 'text-gray-400 hover:text-white' : null,
+        //   )}
       >
-        <span className="sr-only">Open options</span>
-        <EllipsisVerticalIcon
-          aria-hidden="true"
-          className="h-5 w-5"
-        />
+        <Button
+          variant="link"
+          className={cn('text-gray-500 hover:text-gray-400', buttonClassName)}
+          label="Open options"
+        >
+          <EllipsisVerticalIcon
+            aria-hidden="true"
+            className="h-5 w-5"
+          />
+        </Button>
       </MenuButton>
       <MenuItems
         transition

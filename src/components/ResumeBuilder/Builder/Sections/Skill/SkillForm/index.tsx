@@ -5,13 +5,14 @@ import SkillFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import { ISelectOption } from '@/types/SelectOption';
-import { ERBSkillLevel } from '@/types/Resume';
-import { useMemo } from 'react';
+import { ERBSkillLevel, ERBType } from '@/types/Resume';
+import { useMemo, useRef } from 'react';
 import Select from '@/components/Select';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
+import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 
 const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   {
@@ -53,6 +54,8 @@ export default function SkillForm({
   onDelete,
 }: IProps) {
   controller.useController();
+  const dragRef = useRef<HTMLDivElement | null>(null);
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
 
   const { form, state } = controller;
 
@@ -61,39 +64,47 @@ export default function SkillForm({
   }, [form.level]);
 
   return (
-    <SectionItem>
-      <SectionItemHeader
-        isExpanded={form.isExpanded}
-        onClickHeader={controller.onChangeIsExpanded}
-        onClickDuplicate={onDuplicate}
-        onClickDelete={onDelete}
-      >
-        {form.skill || '(Not specified)'}
-      </SectionItemHeader>
-      <SectionItemBody isExpanded={form.isExpanded}>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="skill">Skill</FormLabel>
-            <Input<IForm>
-              field="skill"
-              errors={state.errors}
-              value={form.skill}
-              onChange={controller.onChangeSkill}
-            />
-          </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="level">Level</FormLabel>
-            <Select<ERBSkillLevel | null, IForm>
-              field="level"
-              options={OPTIONS}
-              value={value}
-              onChange={(option) => controller.onChangeLevel(option.value)}
-              isClearable
-              onClickClear={() => controller.onChangeLevel(null)}
-            />
-          </div>
-        </FormRow>
-      </SectionItemBody>
-    </SectionItem>
+    <DraggableItem
+      dragRef={dragRef}
+      dragHandleRef={dragHandleRef}
+      controller={controller}
+      getValue={() => ({ id: controller.id, type: ERBType.Skill })}
+    >
+      <SectionItem dragRef={dragRef}>
+        <SectionItemHeader
+          dragHandleRef={dragHandleRef}
+          isExpanded={form.isExpanded}
+          onClickHeader={controller.onChangeIsExpanded}
+          onClickDuplicate={onDuplicate}
+          onClickDelete={onDelete}
+        >
+          {form.skill || '(Not specified)'}
+        </SectionItemHeader>
+        <SectionItemBody isExpanded={form.isExpanded}>
+          <FormRow>
+            <div className="flex-1">
+              <FormLabel<IForm> field="skill">Skill</FormLabel>
+              <Input<IForm>
+                field="skill"
+                errors={state.errors}
+                value={form.skill}
+                onChange={controller.onChangeSkill}
+              />
+            </div>
+            <div className="flex-1">
+              <FormLabel<IForm> field="level">Level</FormLabel>
+              <Select<ERBSkillLevel | null, IForm>
+                field="level"
+                options={OPTIONS}
+                value={value}
+                onChange={(option) => controller.onChangeLevel(option.value)}
+                isClearable
+                onClickClear={() => controller.onChangeLevel(null)}
+              />
+            </div>
+          </FormRow>
+        </SectionItemBody>
+      </SectionItem>
+    </DraggableItem>
   );
 }

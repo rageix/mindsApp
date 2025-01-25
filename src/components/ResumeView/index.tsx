@@ -59,7 +59,7 @@ export default function ResumeView() {
       </Container>
       </div>
       <div className="flex-1 min-h-screen h-full relative">
-        <Renderer controller={controller} resume={controller.state.current}/>
+        <Renderer controller={controller}/>
       </div>
     </div>
   );

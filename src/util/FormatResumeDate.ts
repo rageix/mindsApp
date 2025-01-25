@@ -2,21 +2,21 @@ import { IRBDate } from '@/types/Resume';
 import { MONTHS_ABBR } from '@/util/Time';
 
 export default function formatResumeDate(date: IRBDate | null): string {
-
-  if(date?.present) {
+  if (date?.present) {
     return 'Present';
   }
 
   let out = '';
 
-  if(date?.month) {
+  console.log('date?.month', date?.month);
+
+  if (date?.month !== null && date?.month !== undefined) {
     out += MONTHS_ABBR[date.month] + ' ';
   }
 
-  if(date?.year) {
+  if (date?.year) {
     out += date.year;
   }
 
   return out.trim();
-
 }

@@ -13,7 +13,6 @@ export default function ItemTextEditor({ value }: IProps) {
   const [html, setHtml] = useState('');
 
   useEffect(() => {
-    console.log('itemtexteditor', value);
     const config = {
       namespace: 'textEditor',
       nodes: [ParagraphNode, TextNode, ListItemNode, ListNode, LinkNode],

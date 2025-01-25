@@ -145,7 +145,16 @@ export default function Builder({ controller }: IProps) {
               <span>References</span>
             </Switch>
           </div>
-          <div className="flex-1"></div>
+          <div className="flex-1">
+            <Switch
+              checked={isHidden[ERBType.ExtraCurricular]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.ExtraCurricular)
+              }
+            >
+              <span>Extra-curricular Activities</span>
+            </Switch>
+          </div>
         </div>
       </div>
       <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">

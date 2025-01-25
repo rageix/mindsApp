@@ -27,11 +27,17 @@ interface IProps {
 }
 
 export default function FontPicker({ controller }: IProps) {
-  const { fontFamily, scale, lineHeight } = controller.getForm();
+  const { fontFamily, titleFontFamily, scale, lineHeight } =
+    controller.getForm();
 
   const fontOption = useMemo(
     () => OPTIONS.find((v) => v.value === fontFamily),
     [fontFamily],
+  );
+
+  const titleFontOption = useMemo(
+    () => OPTIONS.find((v) => v.value === titleFontFamily),
+    [titleFontFamily],
   );
 
   function onChangeScale(value: number) {
@@ -64,17 +70,25 @@ export default function FontPicker({ controller }: IProps) {
         className="mt-1 overflow-hidden"
       >
         <div className="flex flex-col gap-y-2 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem]">
-          <div className="flex">
-            <div className="w-full">
-              <FormLabel>Font</FormLabel>
-              <Select
-                options={OPTIONS}
-                value={fontOption || null}
-                onChange={(option) =>
-                  controller.onChangeFontFamily(option.value)
-                }
-              />
-            </div>
+          <div className="w-full">
+            <FormLabel>Font</FormLabel>
+            <Select
+              options={OPTIONS}
+              value={fontOption || null}
+              onChange={(option) => controller.onChangeFontFamily(option.value)}
+            />
+          </div>
+          <div className="w-full">
+            <FormLabel>Title Font</FormLabel>
+            <Select
+              options={OPTIONS}
+              value={titleFontOption || null}
+              isClearable
+              onChange={(option) =>
+                controller.onChangeTitleFontFamily(option.value)
+              }
+              onClickClear={() => controller.onChangeTitleFontFamily(null)}
+            />
           </div>
           <div className="flex gap-x-2">
             <div className="flex flex-col gap-y-2 bg-gray-100 rounded-md px-2 py-4">
@@ -84,7 +98,7 @@ export default function FontPicker({ controller }: IProps) {
               <div className="flex gap-x-2 items-center">
                 <Button
                   variant="link"
-                  onClick={() => onChangeScale(scale -.05)}
+                  onClick={() => onChangeScale(scale - 0.05)}
                   isInline
                 >
                   <MinusIcon />
@@ -97,7 +111,7 @@ export default function FontPicker({ controller }: IProps) {
                 </div>
                 <Button
                   variant="link"
-                  onClick={() => onChangeScale(scale + .05)}
+                  onClick={() => onChangeScale(scale + 0.05)}
                   isInline
                 >
                   <PlusIcon />

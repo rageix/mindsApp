@@ -6,6 +6,8 @@ import SkillForm from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillFo
 import SkillFormController from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
+import SectionWithDraggables
+  from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
 
 interface IProps {
   controller: SectionController;
@@ -15,7 +17,7 @@ export default function Skill({ controller }: IProps) {
   controller.useController();
 
   return (
-    <div>
+    <SectionWithDraggables controller={controller}>
       <Title title={controller.state.section.title} />
       <Description>
         Choose 5 important skills that show you fit the position. Make sure they
@@ -33,6 +35,6 @@ export default function Skill({ controller }: IProps) {
         ))}
       </FormList>
       <AddFormButton onClick={controller.onClickAddForm} />
-    </div>
+    </SectionWithDraggables>
   );
 }

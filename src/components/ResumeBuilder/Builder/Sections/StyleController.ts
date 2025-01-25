@@ -19,6 +19,10 @@ export default class StyleController extends FormController<IForm> {
     this.onChangeForm({ fontFamily: value });
   };
 
+  onChangeTitleFontFamily = (value: EResumeFonts | null) => {
+    this.onChangeForm({ titleFontFamily: value });
+  };
+
   onChangePrimaryColor = (value: string) => {
     this.onChangeForm({ primaryColor: value });
   };

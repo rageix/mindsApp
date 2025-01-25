@@ -313,15 +313,15 @@ export type TResumeBuilderSection =
   | IRBReference;
 
 export enum ETemplate {
-  Stockholm = 'stockholm'
+  Stockholm = 'stockholm',
 }
 
 export enum EResumeFonts {
-  Alegreya='Alegreya',
+  Alegreya = 'Alegreya',
   Arvo = 'Arvo',
   // BioRhyme='BioRhyme', // no italics
   Bitter = 'Bitter',
-  CormorantGaramond='Cormorant Garamond',
+  CormorantGaramond = 'Cormorant Garamond',
   CrimsonText = 'Crimson Text',
   // Eczar='Eczar', // no italics
   FiraSans = 'Fira Sans',
@@ -346,15 +346,16 @@ export enum EResumeFonts {
   Roboto = 'Roboto',
   RobotoCondensed = 'Roboto Condensed',
   Rubik = 'Rubik',
-  Spectral='Spectral',
+  Spectral = 'Spectral',
   Ubuntu = 'Ubuntu',
   WorkSans = 'Work Sans',
   ZillaSlab = 'Zilla Slab',
 }
 
 export interface IRBStyle {
-  template: ETemplate,
+  template: ETemplate;
   fontFamily: EResumeFonts;
+  titleFontFamily: EResumeFonts | null;
   primaryColor: string;
   secondaryColor: string;
   scale: number;
@@ -365,6 +366,7 @@ export function newIRBStyle(): IRBStyle {
   return {
     template: ETemplate.Stockholm,
     fontFamily: EResumeFonts.OpenSans,
+    titleFontFamily: null,
     primaryColor: '#111827',
     secondaryColor: '#3b82f6',
     scale: 1,
@@ -392,12 +394,12 @@ export function newTSectionVisibility(): TSectionVisibility {
 }
 
 export interface IResumeSettings {
-  name: string,
+  name: string;
 }
 
 export function newIResumeSettings(): IResumeSettings {
   return {
-   name: '(Not Specified)'
+    name: '(Not Specified)',
   };
 }
 
@@ -529,7 +531,11 @@ export const TOGGLEABLE_TYPES: TVisibleToggle[] = [
 ];
 
 export interface IResumeSessionResponse {
-  token?: string,
-  resume: IHasId<IResume>,
+  token?: string;
+  resume: IHasId<IResume>;
 }
 
+export interface IDragNDropSectionItemValue extends Record<string | symbol, any>{
+  id: string,
+  type: ERBType
+}

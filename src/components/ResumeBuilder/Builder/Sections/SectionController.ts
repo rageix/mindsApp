@@ -29,6 +29,8 @@ import SummaryFormController from '@/components/ResumeBuilder/Builder/Sections/S
 import EducationFormController from '@/components/ResumeBuilder/Builder/Sections/Education/EducationForm/EducationFormController';
 import SkillFormController from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import EmploymentFormController from '@/components/ResumeBuilder/Builder/Sections/Employment/EmploymentForm/EmploymentFormController';
+import { IOnDrag } from '@/types/DragNDrop';
+import { reorderWithEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/reorder-with-edge';
 
 type TBuilderFormController =
   | CourseFormController
@@ -235,6 +237,15 @@ export default class SectionController extends BasicController<IState> {
   onDeleteIndex = (index: number) => {
     const controllers = [...this.state.controllers];
     controllers.splice(index, 1);
+
+    this.setState({ controllers });
+  };
+
+  onDrag = (arg: IOnDrag) => {
+    const controllers = reorderWithEdge({
+      ...arg,
+      list: this.state.controllers,
+    });
 
     this.setState({ controllers });
   };

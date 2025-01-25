@@ -6,6 +6,7 @@ import LinkForm from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm'
 import LinkFormController from '@/components/ResumeBuilder/Builder/Sections/Link/LinkForm/LinkFormController';
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
+import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
 
 interface IProps {
   controller: SectionController;
@@ -15,7 +16,7 @@ export default function Link({ controller }: IProps) {
   controller.useController();
 
   return (
-    <div>
+    <SectionWithDraggables controller={controller}>
       <Title title={controller.state.section.title} />
       <Description>
         You can add links to websites you want hiring managers to see! Perhaps
@@ -33,6 +34,6 @@ export default function Link({ controller }: IProps) {
         ))}
       </FormList>
       <AddFormButton onClick={controller.onClickAddForm} />
-    </div>
+    </SectionWithDraggables>
   );
 }

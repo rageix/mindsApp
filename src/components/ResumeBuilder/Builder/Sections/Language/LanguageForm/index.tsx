@@ -2,8 +2,8 @@
 import FormLabel from '@/components/FormLabel';
 import Input from '@/components/Input';
 import { ISelectOption } from '@/types/SelectOption';
-import { ERBLanguageLevel } from '@/types/Resume';
-import { useMemo } from 'react';
+import { ERBLanguageLevel, ERBType } from '@/types/Resume';
+import { useMemo, useRef } from 'react';
 import Select from '@/components/Select';
 import LanguageFormController, {
   IForm,
@@ -13,6 +13,7 @@ import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/Secti
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
+import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 
 
 interface IProps {
@@ -27,6 +28,8 @@ export default function LanguageForm({
   onDelete,
 }: IProps) {
   controller.useController();
+  const dragRef = useRef<HTMLDivElement | null>(null);
+  const dragHandleRef = useRef<HTMLButtonElement>(null);
 
   const { form, state } = controller;
 
@@ -35,8 +38,15 @@ export default function LanguageForm({
   }, [form.level]);
 
   return (
-    <SectionItem>
-      <SectionItemHeader
+    <DraggableItem
+      dragRef={dragRef}
+      dragHandleRef={dragHandleRef}
+      controller={controller}
+      getValue={() => ({ id: controller.id, type: ERBType.Language })}
+    >
+      <SectionItem dragRef={dragRef}>
+        <SectionItemHeader
+          dragHandleRef={dragHandleRef}
         isExpanded={form.isExpanded}
         onClickHeader={controller.onChangeIsExpanded}
         onClickDuplicate={onDuplicate}
@@ -69,5 +79,6 @@ export default function LanguageForm({
         </FormRow>
       </SectionItemBody>
     </SectionItem>
+    </DraggableItem>
   );
 }
