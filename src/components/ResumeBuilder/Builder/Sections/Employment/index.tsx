@@ -17,19 +17,17 @@ export default function Employment({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <Description>
         Show your relevant experience (last 10 years). Use bullet points to note
         your achievements, if possible - use numbers/facts (Achieved X, measured
         by Y, by doing Z).{' '}
       </Description>
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <EmploymentForm
             key={v.id}
             controller={v as EmploymentFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Loading from '@/components/Loading';
 import Renderer from '@/components/ResumeBuilder/Renderer';
+import ResumeContext from '@/components/ResumeBuilder/Builder/ResumeContext';
 
 export default function ResumeView() {
   const { resumeId } = useParams<{ resumeId: string }>();
@@ -52,15 +53,17 @@ export default function ResumeView() {
   // const isLoggedIn = user.isLoggedIn();
 
   return (
-    <div className="min-h-screen h-full flex">
-      <div className="flex-1">
-      <Container size="3xl">
-        <Builder controller={controller} />
-      </Container>
+    <ResumeContext.Provider value={controller}>
+      <div className="min-h-screen h-full flex">
+        <div className="flex-1">
+          <Container size="3xl">
+            <Builder controller={controller} />
+          </Container>
+        </div>
+        <div className="flex-1 min-h-screen h-full relative">
+          <Renderer controller={controller} />
+        </div>
       </div>
-      <div className="flex-1 min-h-screen h-full relative">
-        <Renderer controller={controller}/>
-      </div>
-    </div>
+    </ResumeContext.Provider>
   );
 }

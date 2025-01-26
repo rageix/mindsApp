@@ -18,14 +18,10 @@ import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/Draggable
 
 interface IProps {
   controller: CourseFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
 export default function CourseForm({
   controller,
-  onDuplicate,
-  onDelete,
 }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
@@ -45,8 +41,8 @@ export default function CourseForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu={true}
+          id={controller.id}
         >
           {form.name || '(Not specified)'}
         </SectionItemHeader>

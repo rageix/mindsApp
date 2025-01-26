@@ -1,27 +1,33 @@
 'use client';
-import { MouseEvent, MutableRefObject, PropsWithChildren } from 'react';
+import { MutableRefObject, PropsWithChildren, useContext } from 'react';
 import MenuItemButton from '@/components/MenuItemButton';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
 import { ChevronDown, ChevronUp, GripVerticalIcon } from 'lucide-react';
 import Button from '@/components/Buttton';
+import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
 
 interface IProps extends PropsWithChildren {
   dragHandleRef?: MutableRefObject<any>;
-
   isExpanded: boolean;
   onClickHeader: () => void;
-  onClickDuplicate?: (e?: MouseEvent) => void;
-  onClickDelete?: (e?: MouseEvent) => void;
+  menu: boolean;
+  id: string;
+  // onClickDuplicate?: (e?: MouseEvent) => void;
+  // onClickDelete?: (e?: MouseEvent) => void;
+  // onClickMoveUp?: (e?: MouseEvent) => void;
+  // onClickMoveDown?: (e?: MouseEvent) => void;
 }
 
 export default function SectionItemHeader({
   dragHandleRef,
   isExpanded,
   onClickHeader,
-  onClickDuplicate,
-  onClickDelete,
+  menu,
+  id,
   children,
 }: IProps) {
+  const sectionController = useContext(SectionContext);
+
   return (
     <div className="flex items-center">
       {dragHandleRef && (
@@ -56,20 +62,28 @@ export default function SectionItemHeader({
           </div>
         </div>
       </Button>
-      <div className="shrink-0">
-        {(onClickDelete || onClickDuplicate) && (
+      {menu && (
+        <div className="shrink-0">
           <TableOptionsMenu buttonClassName="h-10">
-            {onClickDuplicate && (
-              <MenuItemButton onClick={onClickDuplicate}>
-                Duplicate
-              </MenuItemButton>
-            )}
-            {onClickDelete && (
-              <MenuItemButton onClick={onClickDelete}>Delete</MenuItemButton>
-            )}
+            <MenuItemButton onClick={() => sectionController.onMoveUp(id)}>
+              Move Up
+            </MenuItemButton>
+            <MenuItemButton onClick={() => sectionController.onMoveDown(id)}>
+              Move Down
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => sectionController.onDuplicateIndex(id)}
+            >
+              Duplicate
+            </MenuItemButton>
+            <MenuItemButton
+              onClick={() => sectionController.onDeleteIndex(id)}
+            >
+              Delete
+            </MenuItemButton>
           </TableOptionsMenu>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

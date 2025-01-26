@@ -17,19 +17,17 @@ export default function Link({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <Description>
         You can add links to websites you want hiring managers to see! Perhaps
         It will be a link to your portfolio, LinkedIn profile, or personal
         website
       </Description>
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <LinkForm
             key={v.id}
             controller={v as LinkFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

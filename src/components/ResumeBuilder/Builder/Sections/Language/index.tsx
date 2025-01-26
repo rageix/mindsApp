@@ -16,14 +16,13 @@ export default function Language({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <FormList>
         {controller.state.controllers.map((v, i) => (
           <LanguageForm
             key={v.id}
             controller={v as LanguageFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
+            index={i}
           />
         ))}
       </FormList>

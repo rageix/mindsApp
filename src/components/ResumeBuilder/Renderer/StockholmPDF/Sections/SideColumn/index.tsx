@@ -6,7 +6,7 @@ import Skills from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/Sk
 import Details from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/Details';
 import { calcStyles } from '@/util/CalcStyles';
 import { useContext } from 'react';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 
 const styles = StyleSheet.create({
   container: {

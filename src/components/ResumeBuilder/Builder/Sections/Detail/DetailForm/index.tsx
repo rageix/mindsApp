@@ -15,18 +15,14 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import ImageUploadModal from '@/components/ImageUploadModal';
 import { UserAvatar } from '@/components/UserAvatar';
 import { MongoId } from '@/types/MongoDocument';
+import Tooltip from '@/components/Tooltip';
+import TooltipBox from '@/components/TooltipBox';
 
 interface IProps {
   controller: DetailFormController;
-  onDuplicate?: () => void;
-  onDelete?: () => void;
 }
 
-export default function DetailForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function DetailForm({ controller }: IProps) {
   controller.useController();
   const [showMore, setShowMore] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
@@ -38,8 +34,8 @@ export default function DetailForm({
       <SectionItemHeader
         isExpanded={form.isExpanded}
         onClickHeader={controller.onChangeIsExpanded}
-        onClickDuplicate={onDuplicate}
-        onClickDelete={onDelete}
+        menu={false}
+        id={controller.id}
       >
         <div>{form.title || '(Not specified)'}</div>
       </SectionItemHeader>
@@ -57,7 +53,10 @@ export default function DetailForm({
           <div className="flex-1 flex items-end">
             <div className="flex items-center gap-x-3">
               <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
-                <UserAvatar value={form.photo} alt="UserPhoto" />
+                <UserAvatar
+                  value={form.photo}
+                  alt="UserPhoto"
+                />
               </div>
               <div className="grow">
                 <Button
@@ -130,7 +129,7 @@ export default function DetailForm({
             />
           </div>
         </FormRow>
-        <div className={cn(showMore ? null : 'hidden')}>
+        <div className={cn(showMore ? 'flex flex-col gap-y-2' : 'hidden')}>
           <FormRow>
             <div className="flex-1">
               <FormLabel<IForm> field="address">Address</FormLabel>
@@ -153,7 +152,21 @@ export default function DetailForm({
           </FormRow>
           <FormRow>
             <div className="flex-1">
-              <FormLabel<IForm> field="license">License</FormLabel>
+              {/*Include this section if your profession requires a certain type of license. If not, leave it blank.*/}
+              <FormLabel<IForm>
+                field="license"
+                className="flex items-end gap-x-1"
+              >
+                <div>License</div>
+                <div>
+                  <Tooltip size={15}>
+                    <TooltipBox>
+                      Include this only if your profession or application
+                      requires a certain type of license. If not, leave blank.
+                    </TooltipBox>
+                  </Tooltip>
+                </div>
+              </FormLabel>
               <Input<IForm>
                 field="license"
                 errors={state.errors}
@@ -162,7 +175,21 @@ export default function DetailForm({
               />
             </div>
             <div className="flex-1">
-              <FormLabel<IForm> field="nationality">Nationality</FormLabel>
+              <FormLabel<IForm>
+                field="nationality"
+                className="flex items-end gap-x-1"
+              >
+                <div>Nationality</div>
+                <div>
+                  <Tooltip size={15}>
+                    <TooltipBox>
+                      Include this only if your profession or application
+                      requires your nationality to be known. If not, leave
+                      blank.
+                    </TooltipBox>
+                  </Tooltip>
+                </div>
+              </FormLabel>
               <Input<IForm>
                 field="nationality"
                 errors={state.errors}
@@ -173,7 +200,21 @@ export default function DetailForm({
           </FormRow>
           <FormRow>
             <div className="flex-1">
-              <FormLabel<IForm> field="placeOfBirth">Place Of Birth</FormLabel>
+              <FormLabel<IForm>
+                field="placeOfBirth"
+                className="flex items-end gap-x-1"
+              >
+                <div>Place Of Birth</div>
+                <div>
+                  <Tooltip size={15}>
+                    <TooltipBox>
+                      Include this only if your profession or application
+                      requires your place of birth to be known. If not, leave
+                      blank.
+                    </TooltipBox>
+                  </Tooltip>
+                </div>
+              </FormLabel>
               <Input<IForm>
                 field="placeOfBirth"
                 errors={state.errors}
@@ -182,7 +223,21 @@ export default function DetailForm({
               />
             </div>
             <div className="flex-1">
-              <FormLabel<IForm> field="dateOfBirth">Date Of Birth</FormLabel>
+              <FormLabel<IForm>
+                field="dateOfBirth"
+                className="flex items-end gap-x-1"
+              >
+                <div>Date Of Birth</div>
+                <div>
+                  <Tooltip size={15}>
+                    <TooltipBox>
+                      Include this only if your profession or application
+                      requires your date of birth to be known. If not, leave
+                      blank.
+                    </TooltipBox>
+                  </Tooltip>
+                </div>
+              </FormLabel>
               <Input<IForm>
                 field="dateOfBirth"
                 errors={state.errors}

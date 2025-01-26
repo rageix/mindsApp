@@ -539,3 +539,7 @@ export interface IDragNDropSectionItemValue extends Record<string | symbol, any>
   id: string,
   type: ERBType
 }
+
+export interface ISectionTitle {
+  title: string
+}

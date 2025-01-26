@@ -17,15 +17,9 @@ import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/Draggable
 
 interface IProps {
   controller: EmploymentFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
-export default function EmploymentForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function EmploymentForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -44,8 +38,8 @@ export default function EmploymentForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu
+          id={controller.id}
         >
           {form.title || '(Not specified)'}
         </SectionItemHeader>

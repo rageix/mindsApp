@@ -5,8 +5,7 @@ import CourseForm from '@/components/ResumeBuilder/Builder/Sections/Course/Cours
 import CourseFormController from '@/components/ResumeBuilder/Builder/Sections/Course/CourseForm/CourseFormController';
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
-import SectionWithDraggables
-  from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
 
 interface IProps {
   controller: SectionController;
@@ -17,14 +16,12 @@ export default function Course({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <CourseForm
             key={v.id}
             controller={v as CourseFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

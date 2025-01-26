@@ -99,7 +99,6 @@ export default class ResumeController extends BasicController<IState> {
   };
 
   value = (): IResume => {
-
     const style: IRBStyle = this.state.styleController.getForm();
     style.primaryColor = this.state.primaryColorController.getState().hex;
     style.secondaryColor = this.state.secondaryColorController.getState().hex;
@@ -161,5 +160,33 @@ export default class ResumeController extends BasicController<IState> {
     await postApiResumes(resume);
 
     this.setState({ lastSavedAt: new Date(), current: resume });
+  };
+
+  onMoveUpSection = (id: string) => {
+    const index = this.state.controllers.findIndex((v) => v.id === id);
+
+    if (index <= 0) {
+      return;
+    }
+
+    const controllers = [...this.state.controllers];
+    const removed = controllers.splice(index, 1);
+
+    controllers.splice(index - 1, 0, removed[0]);
+    this.setState({ controllers });
+  };
+
+  onMoveDownSection = (id: string) => {
+    const index = this.state.controllers.findIndex((v) => v.id === id);
+
+    if (index >= this.state.controllers.length - 1) {
+      return;
+    }
+
+    const controllers = [...this.state.controllers];
+    const removed = controllers.splice(index, 1);
+
+    controllers.splice(index + 1, 0, removed[0]);
+    this.setState({ controllers });
   };
 }

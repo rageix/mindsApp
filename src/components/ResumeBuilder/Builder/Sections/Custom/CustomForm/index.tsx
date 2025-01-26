@@ -17,14 +17,10 @@ import { useRef } from 'react';
 
 interface IProps {
   controller: CustomFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
 export default function CustomForm({
   controller,
-  onDuplicate,
-  onDelete,
 }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
@@ -44,8 +40,8 @@ export default function CustomForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu={true}
+          id={controller.id}
         >
           {form.title || '(Not specified)'}
         </SectionItemHeader>

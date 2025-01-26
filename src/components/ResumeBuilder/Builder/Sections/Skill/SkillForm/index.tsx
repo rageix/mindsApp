@@ -44,14 +44,10 @@ const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
 
 interface IProps {
   controller: SkillFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
 export default function SkillForm({
   controller,
-  onDuplicate,
-  onDelete,
 }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
@@ -75,8 +71,8 @@ export default function SkillForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu
+          id={controller.id}
         >
           {form.skill || '(Not specified)'}
         </SectionItemHeader>

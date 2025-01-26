@@ -14,15 +14,9 @@ import { ERBType } from '@/types/Resume';
 
 interface IProps {
   controller: LinkFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
-export default function LinkForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function LinkForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -41,8 +35,8 @@ export default function LinkForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu
+          id={controller.id}
         >
           <div>{form.label || '(Not specified)'}</div>
           <div>{form.link || '(Not specified)'}</div>

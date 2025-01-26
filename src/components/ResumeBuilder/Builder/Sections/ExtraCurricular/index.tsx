@@ -16,14 +16,12 @@ export default function ExtraCurricular({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <ExtraCurricularForm
             key={v.id}
             controller={v as ExtraCurricularFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

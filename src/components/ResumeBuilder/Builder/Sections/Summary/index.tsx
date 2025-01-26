@@ -11,11 +11,9 @@ interface IProps {
 }
 
 export default function Summary({ controller }: IProps) {
-  // controller.useController();
-
   return (
     <div>
-      <Title title={controller.state.section.title} />
+      <Title menu={false} />
       <Description>
         Write 2-4 short, energetic sentences about how great you are. Mention
         the role and what you did. What were the big achievements? Describe your

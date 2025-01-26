@@ -15,15 +15,9 @@ import { useRef } from 'react';
 
 interface IProps {
   controller: ReferenceFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
-export default function ReferenceForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function ReferenceForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -42,8 +36,8 @@ export default function ReferenceForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu
+          id={controller.id}
         >
           <div>
             {form.byRequestOnly

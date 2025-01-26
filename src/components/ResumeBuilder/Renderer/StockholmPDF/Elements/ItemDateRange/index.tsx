@@ -2,7 +2,7 @@ import { IRBDate } from '@/types/Resume';
 import { useContext, useMemo } from 'react';
 import formatResumeDate from '@/util/FormatResumeDate';
 import { StyleSheet, Text } from '@react-pdf/renderer';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({

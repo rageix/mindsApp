@@ -27,7 +27,7 @@ export default function FormLabel<T>(props: Props<T>) {
       {...props}
       className={cn(
         'block text-sm font-medium leading-6',
-        props.className ? props.className : '',
+        props.className ? props.className : null,
         props['aria-invalid'] ? 'text-red-700' : null,
       )}
     >

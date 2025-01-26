@@ -20,7 +20,7 @@ export default function TableOptionsMenu({
   return (
     <Menu
       as="div"
-      className="flex justify-end ms-3"
+      className="flex justify-end"
     >
       <MenuButton
         as="div"

@@ -15,18 +15,11 @@ import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 
-
 interface IProps {
   controller: LanguageFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
-export default function LanguageForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function LanguageForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -47,38 +40,38 @@ export default function LanguageForm({
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-        isExpanded={form.isExpanded}
-        onClickHeader={controller.onChangeIsExpanded}
-        onClickDuplicate={onDuplicate}
-        onClickDelete={onDelete}
-      >
-        {form.language || '(Not specified)'}
-      </SectionItemHeader>
-      <SectionItemBody isExpanded={form.isExpanded}>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="language">Language</FormLabel>
-            <Input<IForm>
-              field="language"
-              errors={state.errors}
-              value={form.language}
-              onChange={controller.onChangeLanguage}
-            />
-          </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="level">Level</FormLabel>
-            <Select<ERBLanguageLevel | null, IForm>
-              field="level"
-              options={LANGUAGE_OPTIONS}
-              value={value}
-              onChange={(option) => controller.onChangeLevel(option.value)}
-              isClearable
-              onClickClear={() => controller.onChangeLevel(null)}
-            />
-          </div>
-        </FormRow>
-      </SectionItemBody>
-    </SectionItem>
+          isExpanded={form.isExpanded}
+          onClickHeader={controller.onChangeIsExpanded}
+          menu
+          id={controller.id}
+        >
+          {form.language || '(Not specified)'}
+        </SectionItemHeader>
+        <SectionItemBody isExpanded={form.isExpanded}>
+          <FormRow>
+            <div className="flex-1">
+              <FormLabel<IForm> field="language">Language</FormLabel>
+              <Input<IForm>
+                field="language"
+                errors={state.errors}
+                value={form.language}
+                onChange={controller.onChangeLanguage}
+              />
+            </div>
+            <div className="flex-1">
+              <FormLabel<IForm> field="level">Level</FormLabel>
+              <Select<ERBLanguageLevel | null, IForm>
+                field="level"
+                options={LANGUAGE_OPTIONS}
+                value={value}
+                onChange={(option) => controller.onChangeLevel(option.value)}
+                isClearable
+                onClickClear={() => controller.onChangeLevel(null)}
+              />
+            </div>
+          </FormRow>
+        </SectionItemBody>
+      </SectionItem>
     </DraggableItem>
   );
 }

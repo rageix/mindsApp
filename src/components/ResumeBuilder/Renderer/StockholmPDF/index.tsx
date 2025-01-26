@@ -3,7 +3,7 @@ import MainBody from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/
 import HeaderDetails from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/HeaderDetails';
 import { Document, Page, StyleSheet, View } from '@react-pdf/renderer';
 import SideColumn from '@/components/ResumeBuilder/Renderer/StockholmPDF/Sections/SideColumn';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 
 const styles = StyleSheet.create({
   page: {

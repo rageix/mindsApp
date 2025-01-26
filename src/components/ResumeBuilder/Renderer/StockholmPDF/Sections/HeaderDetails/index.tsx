@@ -1,7 +1,7 @@
 import { ERBType, IRBDetail, IRBSection } from '@/types/Resume';
 import { StyleSheet, Text, View } from '@react-pdf/renderer';
 import TemplateImage from '@/components/ResumeBuilder/Renderer/TemplateImage';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import { useContext } from 'react';
 import { calcStyles } from '@/util/CalcStyles';
 

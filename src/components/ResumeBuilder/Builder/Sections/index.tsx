@@ -12,6 +12,8 @@ import Internship from '@/components/ResumeBuilder/Builder/Sections/Internship';
 import Language from '@/components/ResumeBuilder/Builder/Sections/Language';
 import Reference from '@/components/ResumeBuilder/Builder/Sections/Reference';
 import Employment from '@/components/ResumeBuilder/Builder/Sections/Employment';
+import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
+import { ReactElement } from 'react';
 
 interface IProps {
   controller: SectionController;
@@ -21,31 +23,50 @@ export default function BuilderSection({ controller }: IProps) {
   controller.useController();
   const section = controller.state.section;
   const isHidden = controller.isHidden;
+  let element: ReactElement | null;
 
   switch (section.type) {
     case ERBType.Detail:
-      return <Detail controller={controller} />;
+      element = <Detail controller={controller} />;
+      break;
     case ERBType.Summary:
-      return <Summary controller={controller} />;
+      element = <Summary controller={controller} />;
+      break;
     case ERBType.Employment:
-      return !isHidden ? <Employment controller={controller} /> : null;
+      element = !isHidden ? <Employment controller={controller} /> : null;
+      break;
     case ERBType.Education:
-      return !isHidden ? <Eduction controller={controller} /> : null;
+      element = !isHidden ? <Eduction controller={controller} /> : null;
+      break;
     case ERBType.Link:
-      return !isHidden ? <Link controller={controller} /> : null;
+      element = !isHidden ? <Link controller={controller} /> : null;
+      break;
     case ERBType.Skill:
-      return !isHidden ? <Skill controller={controller} /> : null;
+      element = !isHidden ? <Skill controller={controller} /> : null;
+      break;
     case ERBType.Custom:
-      return !isHidden ? <Custom controller={controller} /> : null;
+      element = !isHidden ? <Custom controller={controller} /> : null;
+      break;
     case ERBType.Course:
-      return !isHidden ? <Course controller={controller} /> : null;
+      element = !isHidden ? <Course controller={controller} /> : null;
+      break;
     case ERBType.ExtraCurricular:
-      return !isHidden ? <ExtraCurricular controller={controller} /> : null;
+      element = !isHidden ? <ExtraCurricular controller={controller} /> : null;
+      break;
     case ERBType.Internship:
-      return !isHidden ? <Internship controller={controller} /> : null;
+      element = !isHidden ? <Internship controller={controller} /> : null;
+      break;
     case ERBType.Language:
-      return !isHidden ? <Language controller={controller} /> : null;
+      element = !isHidden ? <Language controller={controller} /> : null;
+      break;
     case ERBType.Reference:
-      return !isHidden ? <Reference controller={controller} /> : null;
+      element = !isHidden ? <Reference controller={controller} /> : null;
+      break;
   }
+
+  return (
+    <SectionContext.Provider value={controller}>
+      {element}
+    </SectionContext.Provider>
+  );
 }

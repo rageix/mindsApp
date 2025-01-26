@@ -20,6 +20,8 @@ export default function SummaryForm({ controller }: IProps) {
       <SectionItemHeader
         isExpanded={form.isExpanded}
         onClickHeader={controller.onChangeIsExpanded}
+        menu={false}
+        id={controller.id}
       >
         Summary
       </SectionItemHeader>

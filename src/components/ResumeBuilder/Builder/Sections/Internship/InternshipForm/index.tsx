@@ -13,20 +13,13 @@ import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import FormStartEnd from '@/components/ResumeBuilder/Builder/Sections/FormStartEnd';
 import { ERBType } from '@/types/Resume';
 import { useRef } from 'react';
-import DraggableItem
-  from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
+import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 
 interface IProps {
   controller: InternshipFormController;
-  onDuplicate: () => void;
-  onDelete: () => void;
 }
 
-export default function InternshipForm({
-  controller,
-  onDuplicate,
-  onDelete,
-}: IProps) {
+export default function InternshipForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -45,8 +38,8 @@ export default function InternshipForm({
           dragHandleRef={dragHandleRef}
           isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
-          onClickDuplicate={onDuplicate}
-          onClickDelete={onDelete}
+          menu
+          id={controller.id}
         >
           {form.title || '(Not specified)'}
         </SectionItemHeader>

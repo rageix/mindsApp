@@ -7,7 +7,7 @@ import { StyleSheet, View } from '@react-pdf/renderer';
 import Html, { HtmlStyles } from 'react-pdf-html';
 import sanitizeHtml from 'sanitize-html';
 import { useContext } from 'react';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import { calcStyles } from '@/util/CalcStyles';
 
 const stylesheet: HtmlStyles | HtmlStyles[] | undefined = {

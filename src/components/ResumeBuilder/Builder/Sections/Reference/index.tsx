@@ -16,14 +16,12 @@ export default function Reference({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <ReferenceForm
             key={v.id}
             controller={v as ReferenceFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

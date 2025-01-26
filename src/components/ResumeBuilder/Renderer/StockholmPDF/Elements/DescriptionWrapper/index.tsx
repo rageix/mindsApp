@@ -1,6 +1,6 @@
 import { PropsWithChildren, useContext } from 'react';
 import { StyleSheet, View } from '@react-pdf/renderer';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import { calcStyles } from '@/util/CalcStyles';
 
 const styles = StyleSheet.create({

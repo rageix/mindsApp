@@ -15,6 +15,7 @@ import {
   IRBSection,
   IRBSkill,
   IRBSummary,
+  ISectionTitle,
 } from '@/types/Resume';
 import DetailFormController from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import { nanoid } from 'nanoid';
@@ -68,9 +69,12 @@ export default class SectionController extends BasicController<IState> {
   defaultState = newDefaultState();
   isHidden = false;
 
-  constructor(section: IRBSection) {
+  constructor(section?: IRBSection) {
     super();
-    this.load(section);
+
+    if (section) {
+      this.load(section);
+    }
   }
 
   getUniqueId = (controllers: FormController<any>[]) => {
@@ -222,20 +226,64 @@ export default class SectionController extends BasicController<IState> {
     this.isHidden = !this.isHidden;
   };
 
-  onDuplicateIndex = (index: number) => {
+  onDuplicateIndex = (id: string) => {
     const controllers = [...this.state.controllers];
+
+    const index = controllers.findIndex((v) => v.id === id);
+
+    if (index < 0) {
+      return;
+    }
 
     const controller = this.createNewController();
     const form = { ...controllers[index].form };
     controller.reset(form as any);
+    controller.id = this.getUniqueId(controllers);
 
     controllers.splice(index + 1, 0, controller);
 
     this.setState({ controllers });
   };
 
-  onDeleteIndex = (index: number) => {
+  onMoveUp = (id: string) => {
     const controllers = [...this.state.controllers];
+
+    const index = controllers.findIndex((v) => v.id === id);
+
+    if (index <= 0) {
+      return;
+    }
+
+    const removed = controllers.splice(index, 1);
+
+    controllers.splice(index - 1, 0, removed[0]);
+    this.setState({ controllers });
+  };
+
+  onMoveDown = (id: string) => {
+    const controllers = [...this.state.controllers];
+
+    const index = controllers.findIndex((v) => v.id === id);
+
+    if (index >= controllers.length - 1) {
+      return;
+    }
+
+    const removed = controllers.splice(index, 1);
+
+    controllers.splice(index + 1, 0, removed[0]);
+    this.setState({ controllers });
+  };
+
+  onDeleteIndex = (id: string) => {
+    const controllers = [...this.state.controllers];
+
+    const index = controllers.findIndex((v) => v.id === id);
+
+    if (index < 0) {
+      return;
+    }
+
     controllers.splice(index, 1);
 
     this.setState({ controllers });
@@ -248,5 +296,12 @@ export default class SectionController extends BasicController<IState> {
     });
 
     this.setState({ controllers });
+  };
+
+  onChangeTitleForm = (form: ISectionTitle) => {
+    const section = { ...this.state.section };
+    section.title = form.title;
+
+    this.setState({ section });
   };
 }

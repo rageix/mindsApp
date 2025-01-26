@@ -18,18 +18,16 @@ export default function Eduction({ controller }: IProps) {
 
   return (
     <SectionWithDraggables controller={controller}>
-      <Title title={controller.state.section.title} />
+      <Title />
       <Description>
         A varied education on your resume sums up the value that your learnings
         and background will bring to job.
       </Description>
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <EducationForm
             key={v.id}
             controller={v as EducationFormController}
-            onDuplicate={() => controller.onDuplicateIndex(i)}
-            onDelete={() => controller.onDeleteIndex(i)}
           />
         ))}
       </FormList>

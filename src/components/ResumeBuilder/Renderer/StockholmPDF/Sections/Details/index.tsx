@@ -3,7 +3,7 @@ import { Link, StyleSheet, View } from '@react-pdf/renderer';
 import SidebarTitle from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SidebarTitle';
 import { calcStyles } from '@/util/CalcStyles';
 import { useContext } from 'react';
-import StyleContext from '@/components/ResumeBuilder/Renderer/styleContext';
+import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import SideBarSubsection from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SideBarSubsection';
 import SideBarTextWrapper from '@/components/ResumeBuilder/Renderer/StockholmPDF/Elements/SideBarTextWrapper';
 
