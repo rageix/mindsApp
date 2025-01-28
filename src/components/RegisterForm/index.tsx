@@ -48,34 +48,6 @@ export default function SignUpForm() {
           errors={state.errors}
         />
       </div>
-      <div>
-        <FormLabel<IForm> field="password">Password</FormLabel>
-        <Input<IForm>
-          type="password"
-          field="password"
-          errors={state.errors}
-          value={form.password}
-          onChange={controller.onChangePassword}
-        />
-        <FormErrors<IForm>
-          field="password"
-          errors={state.errors}
-        />
-      </div>
-      <div>
-        <FormLabel<IForm> field="passwordAgain">Password (Again)</FormLabel>
-        <Input<IForm>
-          type="password"
-          field="passwordAgain"
-          errors={state.errors}
-          value={form.passwordAgain}
-          onChange={controller.onChangePasswordAgain}
-        />
-        <FormErrors<IForm>
-          field="passwordAgain"
-          errors={state.errors}
-        />
-      </div>
       <div className="mt-2">
         <div className="flex items-center">
           <Checkbox<IForm>
@@ -112,7 +84,7 @@ export default function SignUpForm() {
           className="w-full"
           disabled={!_.isEmpty(state.errors)}
         >
-          Sign up
+          Create account
         </Button>
       </div>
     </Form>

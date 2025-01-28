@@ -2,7 +2,6 @@
 import ImageUploader from '@/components/ImageUploader';
 import userService from '@/services/UserService';
 import UserAccountForm from '@/components/UserAccountForm';
-import UserProfilePasswordForm from '@/components/UserProfilePasswordForm';
 import UserSessionList from '@/components/UserSessionList';
 import { toast } from 'react-toastify';
 import Card from '@/components/Card';
@@ -42,14 +41,6 @@ export default function AccountView() {
         >
           <FormBlockBody>
             <UserAccountForm />
-          </FormBlockBody>
-        </FormBlock>
-        <FormBlock
-          title="Password"
-          description="Change your password."
-        >
-          <FormBlockBody>
-            <UserProfilePasswordForm />
           </FormBlockBody>
         </FormBlock>
         <FormBlock

@@ -10,7 +10,7 @@ export default function RegisterView() {
       <RegisterForm />
       <p className="mt-10 text-center text-sm">
         <FormLink href="/login">
-          Already have an account? Log in instead.
+          Already have an account? Login instead.
         </FormLink>
       </p>
     </FormWrapper>

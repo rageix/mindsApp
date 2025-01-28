@@ -15,7 +15,7 @@ export default function Card({ rounded = 'lg', className, children }: IProps) {
   return (
     <div
       className={cn(
-        'divide-y overflow-hidden shadow',
+        'divide-y overflow-hidden border border-gray-200',
         theme === ETheme.light ? 'divide-gray-200 bg-white' : null,
         theme === ETheme.dark ? 'divide-gray-500 bg-gray-800' : null,
         rounded === 'md' ? 'rounded-md' : null,

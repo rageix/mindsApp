@@ -1,5 +1,6 @@
-import DashboardView from '@/components/DashboardView';
+'use client';
+import DashboardIdView from '@/components/DashboardIdView';
 
 export default function Page() {
-  return <DashboardView />;
+  return <DashboardIdView />;
 }

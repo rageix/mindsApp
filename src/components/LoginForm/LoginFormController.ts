@@ -13,16 +13,16 @@ export interface IForm extends ILoginForm {}
 export function defaultForm(): IForm {
   return {
     email: '',
-    password: '',
+    // password: '',
     rememberMe: true,
   };
 }
 
-const formValidator: z.ZodType<IForm> = z.object({
+const formValidator = z.object({
   email: zEmailValidator,
-  password: z.string().min(6),
+  // password: z.string().min(6),
   rememberMe: z.boolean(),
-});
+}) satisfies z.ZodType<IForm>;
 
 export default class LoginFormController extends FormController<IForm> {
   defaultForm = defaultForm();
@@ -32,9 +32,9 @@ export default class LoginFormController extends FormController<IForm> {
     this.onChangeForm({ email: e.target.value });
   };
 
-  onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ password: e.target.value });
-  };
+  // onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+  //   this.onChangeForm({ password: e.target.value });
+  // };
 
   onChangeRememberMe = () => {
     this.onChangeForm({ rememberMe: !this.form.rememberMe });
