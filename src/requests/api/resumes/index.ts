@@ -11,6 +11,6 @@ export async function postApiResumes(
   return await postJson<IResume, OKResponse>(url, arg);
 }
 
-export async function deleteApiCards(arg: IDeleteRequest): Promise<null> {
+export async function deleteApiResumes(arg: IDeleteRequest): Promise<null> {
   return await deleteJson<IDeleteRequest, null>(url, arg);
 }

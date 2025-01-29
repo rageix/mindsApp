@@ -38,18 +38,18 @@ export default function Loading({ size = 'md', showAfter }: IProps) {
       <span className="sr-only">Loading...</span>
       <div
         className={cn(
-          'bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]',
+          'bg-blue-600 rounded-full animate-bounce [animation-delay:-0.3s]',
           sizes[size],
         )}
       ></div>
       <div
         className={cn(
-          'bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]',
+          'bg-blue-600 rounded-full animate-bounce [animation-delay:-0.15s]',
           sizes[size],
         )}
       ></div>
       <div
-        className={cn('bg-blue-500 rounded-full animate-bounce', sizes[size])}
+        className={cn('bg-blue-600 rounded-full animate-bounce', sizes[size])}
       ></div>
     </div>
   );

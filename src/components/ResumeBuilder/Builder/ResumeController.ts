@@ -141,7 +141,7 @@ export default class ResumeController extends BasicController<IState> {
     }
   };
 
-  loadSession = async () => {
+  loadSession = async (): Promise<MongoId | undefined> => {
     this.setState({ isLoading: true });
 
     const response = await getApiResumesSession();
@@ -152,6 +152,7 @@ export default class ResumeController extends BasicController<IState> {
 
     if (response?.resume) {
       this.load(response.resume);
+      return response.resume._id;
     }
   };
 

@@ -128,7 +128,7 @@ export default function ResponseRatingsList() {
                           <Button
                             variant="blue"
                             isInline
-                            className="w-[5.25rem] !bg-blue-500"
+                            className="w-[5.25rem] !bg-blue-600"
                           >
                             <ThumbsUp />
                             <span className="ms-2">Yes</span>
@@ -138,7 +138,7 @@ export default function ResponseRatingsList() {
                           <Button
                             variant="blue"
                             isInline
-                            className="w-[5.25rem] !bg-blue-500"
+                            className="w-[5.25rem] !bg-blue-600"
                           >
                             <ThumbsDown />
                             <span className="ms-2">No</span>

@@ -32,7 +32,7 @@ export default function Checkbox<T>(props: Props<T>) {
         props.className ? props.className : '',
         props['aria-invalid']
           ? 'border-red-300 text-red-500 focus:ring-red-400'
-          : 'border-gray-300 text-blue-500 focus:ring-blue-400',
+          : 'border-gray-300 text-blue-600 focus:ring-blue-400',
       )}
     />
   );

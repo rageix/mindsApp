@@ -18,7 +18,7 @@ export default function InfoAlert({ className, onClick, children }: Props) {
         <div className="flex-shrink-0">
           <HelpCircleIcon
             aria-hidden="true"
-            className="h-5 w-5 text-blue-500"
+            className="h-5 w-5 text-blue-600"
           />
         </div>
         <div className="ml-3">

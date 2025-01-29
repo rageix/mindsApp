@@ -15,27 +15,28 @@ export interface IPlanPrice extends Record<EPlanInterval, string> {
 }
 
 export enum EPlan {
-  Premium = 'premium',
-  Business = 'business',
-  Enterprise = 'enterprise',
+  Monthly = 'monthly',
+  Yearly = 'yearly',
 }
 
-export const PLANS: Record<EPlan, string> = {
-  [EPlan.Premium]: 'Premium',
-  [EPlan.Business]: 'Business',
-  [EPlan.Enterprise]: 'Enterprise',
-};
+// export const PLANS: Record<EPlan, string> = {
+//   [EPlan.Premium]: 'Premium',
+//   [EPlan.Business]: 'Business',
+//   [EPlan.Enterprise]: 'Enterprise',
+// };
 
-export const PLAN_INTERVALS: Record<EPlanInterval, string> = {
-  [EPlanInterval.Monthly]: 'Monthly',
-  [EPlanInterval.Yearly]: 'Yearly',
-};
+// export const PLAN_INTERVALS: Record<EPlanInterval, string> = {
+//   [EPlanInterval.Monthly]: 'Monthly',
+//   [EPlanInterval.Yearly]: 'Yearly',
+// };
 
 export interface IPlan {
   id: EPlan;
   name: string;
-  price: IPlanPrice;
+  price: string;
+  suffix: string;
   description: string;
   features: string[];
-  mostPopular: boolean;
+  // mostPopular: boolean;
+  bestValue: boolean;
 }

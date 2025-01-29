@@ -21,7 +21,7 @@ export default function FormLink(props: Props) {
         'font-semibold leading-6',
         props.className,
         props['aria-invalid'] ? '!text-red-400 !hover:text-red-300': null,
-        theme === ETheme.light ? 'text-blue-600 hover:text-blue-500' : null,
+        theme === ETheme.light ? 'text-blue-600 hover:text-blue-600' : null,
         theme === ETheme.dark ? 'text-blue-400 hover:text-blue-300' : null,
       )}
     >

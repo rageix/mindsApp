@@ -50,7 +50,7 @@ export default function ResponseRatingForm({ controller }: IProps) {
         <Button
           variant="blue"
           isInline
-          className={cn('w-[5.25rem]', form.thumbsUp ? '!bg-blue-500' : null)}
+          className={cn('w-[5.25rem]', form.thumbsUp ? '!bg-blue-600' : null)}
           onClick={() => controller.onChangeThumbs(true)}
         >
           <ThumbsUp />
@@ -59,7 +59,7 @@ export default function ResponseRatingForm({ controller }: IProps) {
         <Button
           variant="blue"
           isInline
-          className={cn('w-[5.25rem]', !form.thumbsUp ? '!bg-blue-500' : null)}
+          className={cn('w-[5.25rem]', !form.thumbsUp ? '!bg-blue-600' : null)}
           onClick={() => controller.onChangeThumbs(false)}
         >
           <ThumbsDown />

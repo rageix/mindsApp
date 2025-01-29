@@ -5,26 +5,36 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from 'lucide-react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { cn } from '@/util/Cn';
 import Logo from '@/components/Logo';
 import LogoSmall from '@/components/LogoSmall';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
-import useAuthentication from '@/hooks/UseAuthentication';
+import { usePathname } from 'next/navigation';
+import useUser from '@/hooks/UseUser';
+import LoginButton from '@/components/LoginButton';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'Resumes', href: '/resumes', current: false },
+const navItems = [
+  // { name: 'Dashboard', href: '/dashboard', current: true },
+  { name: 'My Resumes', href: '/dashboard/resumes', current: false },
 ];
 
 interface Props extends PropsWithChildren {}
 
 export default function NewDashboardLayout(props: Props) {
-  const authController = useAuthentication();
+  const path = usePathname();
+  const user = useUser();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigation = useMemo(() => {
+    return navItems.map((v) => {
+      v.current = path.indexOf(v.href) === 0;
+      return v;
+    });
+  }, [path]);
 
-  if (!authController.isLoaded()) {
-    return null;
-  }
+  useEffect(() => {
+    setIsLoggedIn(user.isLoggedIn());
+  }, [user.isLoggedIn()]);
 
   return (
     <>
@@ -66,7 +76,7 @@ export default function NewDashboardLayout(props: Props) {
                       aria-current={item.current ? 'page' : undefined}
                       className={cn(
                         item.current
-                          ? 'border-blue-500 text-gray-900'
+                          ? 'border-blue-600 text-gray-900'
                           : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
                         'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
                       )}
@@ -79,7 +89,7 @@ export default function NewDashboardLayout(props: Props) {
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 <button
                   type="button"
-                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
@@ -90,12 +100,13 @@ export default function NewDashboardLayout(props: Props) {
                 </button>
                 {/* Profile dropdown */}
                 <div className="ml-3">
-                  <CurrentUserAvatar />
+                  {!isLoggedIn && <LoginButton />}
+                  {isLoggedIn && <CurrentUserAvatar />}
                 </div>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 {/* Mobile menu button */}
-                <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
                   <MenuIcon
@@ -121,7 +132,7 @@ export default function NewDashboardLayout(props: Props) {
                   aria-current={item.current ? 'page' : undefined}
                   className={cn(
                     item.current
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      ? 'border-blue-600 bg-blue-50 text-blue-700'
                       : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
                     'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
                   )}
@@ -149,7 +160,7 @@ export default function NewDashboardLayout(props: Props) {
                 {/*</div>*/}
                 <button
                   type="button"
-                  className="relative ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="relative ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
@@ -159,7 +170,8 @@ export default function NewDashboardLayout(props: Props) {
                   />
                 </button>
                 <div className="ml-3">
-                  <CurrentUserAvatar />
+                  {!isLoggedIn && <LoginButton />}
+                  {isLoggedIn && <CurrentUserAvatar />}
                 </div>
               </div>
               <div className="mt-3 space-y-1">
@@ -178,7 +190,7 @@ export default function NewDashboardLayout(props: Props) {
           </DisclosurePanel>
         </Disclosure>
 
-        <div className="py-10">
+        <div className="">
           {/*<header>*/}
           {/*  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">*/}
           {/*    <h1 className="text-3xl font-bold tracking-tight text-gray-900">*/}
@@ -187,6 +199,7 @@ export default function NewDashboardLayout(props: Props) {
           {/*  </div>*/}
           {/*</header>*/}
           <main>
+            {/*<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">*/}
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
               {props.children}
             </div>

@@ -8,8 +8,6 @@ export default function formatResumeDate(date: IRBDate | null): string {
 
   let out = '';
 
-  console.log('date?.month', date?.month);
-
   if (date?.month !== null && date?.month !== undefined) {
     out += MONTHS_ABBR[date.month] + ' ';
   }

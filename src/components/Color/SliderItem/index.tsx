@@ -44,7 +44,7 @@ export default function SliderItem({
           <Slider
             value={scaled}
             onChange={onChangeSlider}
-            className="rounded-full h-4 bg-blue-500"
+            className="rounded-full h-4 bg-blue-600"
             handleSize={16}
           />
         </div>

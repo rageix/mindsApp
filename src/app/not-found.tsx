@@ -19,7 +19,7 @@ export default async function NotFound() {
         </p>
         <p className="mt-3">
           <Link
-            className="text-blue-500 hover:text-blue-400 flex justify-center"
+            className="text-blue-600 hover:text-blue-400 flex justify-center"
             href="/"
           >
             <MoveLeftIcon />

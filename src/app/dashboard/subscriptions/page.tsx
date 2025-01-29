@@ -1,4 +1,4 @@
-import SubscriptionsView from '@/components/Settings/SubscriptionsView';
+import SubscriptionsView from '@/components/SubscriptionsView';
 
 export default function Page() {
   return <SubscriptionsView />;

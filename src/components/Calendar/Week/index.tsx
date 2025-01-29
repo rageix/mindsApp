@@ -300,7 +300,7 @@ export default function Week({ week, year }: IProps) {
                   <p className="order-1 font-semibold text-blue-700">
                     Breakfast
                   </p>
-                  <p className="text-blue-500 group-hover:text-blue-700">
+                  <p className="text-blue-600 group-hover:text-blue-700">
                     <time dateTime="2022-01-12T06:00">6:00 AM</time>
                   </p>
                 </a>

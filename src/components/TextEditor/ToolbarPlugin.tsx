@@ -57,7 +57,7 @@ import { getSelectedNode } from '@/util/GetSelectedNode';
 const LowPriority = 1;
 const BUTTON_CLASS_NAME =
   'hover:text-gray-500 focus-visible:outline-blue-600 !p-0 !shadow-none';
-const ACTIVE_BUTTON_CLASS_NAME = '!text-blue-600  hover:!text-blue-500';
+const ACTIVE_BUTTON_CLASS_NAME = '!text-blue-600  hover:!text-blue-600';
 const DISABLED_BUTTON_CLASS_NAME = '!text-gray-200 hover:!text-gray-200';
 
 // interface IProps {}

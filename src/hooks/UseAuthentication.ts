@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import tokenService from '@/services/TokenService';
+// import tokenService from '@/services/TokenService';
 import userService from '@/services/UserService';
 
 /*
@@ -21,7 +21,7 @@ export default function useAuthentication() {
   useEffect(() => {
     if (controller.isLoaded() && !controller.isLoggedIn()) {
       // console.log('push to login!');
-      tokenService.remove();
+      // tokenService.remove();
       router.push('/login');
     }
   }, [controller.isLoaded(), controller.isLoggedIn()]);

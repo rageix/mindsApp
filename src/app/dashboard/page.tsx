@@ -1,6 +1,6 @@
 'use client';
-import DashboardIdView from '@/components/DashboardIdView';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return <DashboardIdView />;
+  redirect('/dashboard/resumes')
 }

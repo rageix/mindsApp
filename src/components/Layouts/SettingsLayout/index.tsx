@@ -98,7 +98,7 @@ export default function SettingsLayout({ children }: Props) {
                 className={
                   path.indexOf(item.href) === 0
                     ? theme === ETheme.light
-                      ? 'text-blue-600 hover:text-blue-500'
+                      ? 'text-blue-600 hover:text-blue-600'
                       : 'text-blue-300 hover:text-white'
                     : ''
                 }
