@@ -12,7 +12,7 @@ export default function CheckoutView() {
     alert(
       'This page did not receive valid values, we are going to redirect you back to the plans page. If this continues to happen please contact support.',
     );
-    router.push(`/plans`);
+    router.push(`/billing/plans`);
     return null;
   }
 

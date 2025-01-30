@@ -3,31 +3,17 @@
 import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
 import useSubscription from '@/hooks/UseCurrentSubscription';
-import { useEffect, useState } from 'react';
-import SettingsPlansView from '@/components/Settings/PlansView';
 import Subscription from '@/components/SubscriptionsView/Subscription';
-
-enum EViews {
-  Plans = 'plans',
-  CurrentSubscription = 'currentSubscription',
-}
+import Card from '@/components/Card';
+import CardBody from '@/components/Card/CardBody';
+import { Wallet } from 'lucide-react';
+import Button from '@/components/Buttton';
+import Link from 'next/link';
 
 export default function SubscriptionsView() {
   const teamId = useTeamId();
-  const [view, setView] = useState<EViews>();
 
   const subscription = useSubscription(teamId);
-
-  useEffect(() => {
-    if (subscription.initLoad) {
-      if (subscription.data) {
-        setView(EViews.CurrentSubscription);
-        return;
-      }
-
-      setView(EViews.Plans);
-    }
-  }, [subscription.initLoad]);
 
   if (!subscription.initLoad) {
     return (
@@ -40,11 +26,37 @@ export default function SubscriptionsView() {
     );
   }
 
-  if (view === EViews.Plans) {
-    return <SettingsPlansView />;
-  }
-
   if (subscription.data) {
     return <Subscription useCurrentSubscription={subscription} />;
   }
+
+  return (
+    <Card>
+      <CardBody>
+        <div className="flex flex-col space-y-3">
+          <div className="flex justify-center">
+            <Wallet
+              className="text-gray-400"
+              size="48"
+            />
+          </div>
+          <div>
+            <p className="text-center font-bold text-2xl">
+              No Subscriptions Found
+            </p>
+            <div className="flex justify-center mt-6">
+              <Link href="/billing/plans">
+                <Button
+                  variant="blue"
+                  isInline
+                >
+                  View Plans
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </Card>
+  );
 }

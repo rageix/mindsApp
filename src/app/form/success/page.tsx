@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import SuccessView from '@/components/SuccessView';
 
 export const metadata: Metadata = {
-  title: 'cluvv - Success',
+  title: 'Hobort - Success',
 };
 
 const message = (

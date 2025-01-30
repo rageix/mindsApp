@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import { IHasId } from '@/types/HasId';
 import { MongoId } from '@/types/MongoDocument';
 import { ISubscription } from '@/types/Subscriptions';
-import { getApiTeamsSubscriptionsCurrent } from '@/requests/api/teams/subscriptions/current';
-import { postApiTeamsSubscriptionsCancel } from '@/requests/api/teams/subscriptions/cancel';
-import { postApiTeamsSubscriptionsResume } from '@/requests/api/teams/subscriptions/resume';
+import { getApiBillingSubscriptionsCurrent } from '@/requests/api/billing/subscriptions/current';
+import { postApiBillingSubscriptionsCancel } from '@/requests/api/billing/subscriptions/cancel';
+import { postApiBillingSubscriptionsResume } from '@/requests/api/billing/subscriptions/resume';
 
 export default function useCurrentSubscription(teamId: MongoId) {
   const [data, setData] = useState<IHasId<ISubscription>>();
@@ -16,7 +16,7 @@ export default function useCurrentSubscription(teamId: MongoId) {
     queryKey: ['/api/teams/subscriptions/current', teamId],
     queryFn: () => {
       setLoading(true);
-      return getApiTeamsSubscriptionsCurrent({ teamId });
+      return getApiBillingSubscriptionsCurrent();
     },
     refetchOnWindowFocus: false,
   });
@@ -31,9 +31,8 @@ export default function useCurrentSubscription(teamId: MongoId) {
 
   async function cancel() {
     if (data) {
-      await postApiTeamsSubscriptionsCancel({
+      await postApiBillingSubscriptionsCancel({
         subscriptionId: data._id,
-        teamId,
       });
       query.refetch();
     }
@@ -41,9 +40,8 @@ export default function useCurrentSubscription(teamId: MongoId) {
 
   async function resume() {
     if (data) {
-      await postApiTeamsSubscriptionsResume({
+      await postApiBillingSubscriptionsResume({
         subscriptionId: data._id,
-        teamId,
       });
       query.refetch();
     }

@@ -13,6 +13,7 @@ import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 import { usePathname } from 'next/navigation';
 import useUser from '@/hooks/UseUser';
 import LoginButton from '@/components/LoginButton';
+import userService from '@/services/UserService';
 
 const navItems = [
   // { name: 'Dashboard', href: '/dashboard', current: true },
@@ -22,6 +23,8 @@ const navItems = [
 interface Props extends PropsWithChildren {}
 
 export default function NewDashboardLayout(props: Props) {
+  const [controller] = useState(userService);
+  controller.useController();
   const path = usePathname();
   const user = useUser();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,23 +71,25 @@ export default function NewDashboardLayout(props: Props) {
                   <Logo className="hidden h-8 w-auto lg:block" />
                   <LogoSmall className="block h-8 w-auto lg:hidden" />
                 </div>
-                <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      aria-current={item.current ? 'page' : undefined}
-                      className={cn(
-                        item.current
-                          ? 'border-blue-600 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
+                {isLoggedIn && (
+                  <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                    {navigation.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        aria-current={item.current ? 'page' : undefined}
+                        className={cn(
+                          item.current
+                            ? 'border-blue-600 text-gray-900'
+                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                          'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
+                        )}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 <button
@@ -123,24 +128,26 @@ export default function NewDashboardLayout(props: Props) {
           </div>
 
           <DisclosurePanel className="sm:hidden">
-            <div className="space-y-1 pb-3 pt-2">
-              {navigation.map((item) => (
-                <DisclosureButton
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  aria-current={item.current ? 'page' : undefined}
-                  className={cn(
-                    item.current
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                    'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
-                  )}
-                >
-                  {item.name}
-                </DisclosureButton>
-              ))}
-            </div>
+            {isLoggedIn && (
+              <div className="space-y-1 pb-3 pt-2">
+                {navigation.map((item) => (
+                  <DisclosureButton
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    aria-current={item.current ? 'page' : undefined}
+                    className={cn(
+                      item.current
+                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
+                      'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
+                    )}
+                  >
+                    {item.name}
+                  </DisclosureButton>
+                ))}
+              </div>
+            )}
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
                 {/*<div className="shrink-0">*/}

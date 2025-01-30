@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MongoId } from '@/types/MongoDocument';
-import { ITeamsInvoicesResponse } from '@/requests/api/teams/invoices/schema';
-import { getApiTeamsInvoices } from '@/requests/api/teams/invoices';
+import { IBillingInvoicesResponse } from '@/requests/api/billing/invoices/schema';
+import { getApiBillingInvoices } from '@/requests/api/billing/invoices';
 
-export default function useInvoices(teamId: MongoId) {
-  const [data, setData] = useState<ITeamsInvoicesResponse>();
+export default function useInvoices() {
+  const [data, setData] = useState<IBillingInvoicesResponse>();
   const [initLoad, setInitLoad] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const query = useQuery({
-    queryKey: ['/api/teams/invoices/:teamId', teamId],
+    queryKey: ['/api/billing/invoices', ],
     queryFn: () => {
       setLoading(true);
-      return getApiTeamsInvoices({ teamId });
+      return getApiBillingInvoices();
     },
     refetchOnWindowFocus: false,
   });

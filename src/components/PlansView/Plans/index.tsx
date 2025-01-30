@@ -3,12 +3,7 @@ import { cn } from '@/util/Cn';
 import { CheckIcon } from 'lucide-react';
 import { EPlan, IPlan } from '@/types/IPlan';
 import Button from '@/components/Buttton';
-import { Merriweather } from 'next/font/google';
-
-const merriweather = Merriweather({
-  weight: ['300', '400', '700', '900'],
-  subsets: ['latin'],
-});
+import { merriweather } from '@/types/Fonts';
 
 const plans: IPlan[] = [
   {

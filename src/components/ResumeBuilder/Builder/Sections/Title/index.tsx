@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { Merriweather } from 'next/font/google';
 import { cn } from '@/util/Cn';
 import TitleFormController from '@/components/ResumeBuilder/Builder/Sections/TitleForm/TitleFormController';
 import TableOptionsMenu from '@/components/TableOptionsMenu';
@@ -8,11 +7,7 @@ import { ISectionTitle } from '@/types/Resume';
 import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
 import TitleFormModal from '@/components/ResumeBuilder/Builder/Sections/TitleFormModal';
 import ResumeContext from '@/components/ResumeBuilder/Builder/ResumeContext';
-
-const merriweather = Merriweather({
-  weight: ['300', '400', '700', '900'],
-  subsets: ['latin'],
-});
+import { merriweather } from '@/types/Fonts';
 
 interface IProps {
   menu?: boolean;

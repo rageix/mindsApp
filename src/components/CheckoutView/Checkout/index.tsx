@@ -1,8 +1,7 @@
 'use client';
 import useCheckoutSession from '@/hooks/UseCheckoutSession';
 import Loading from '@/components/Loading';
-import useTeamId from '@/hooks/UseTeamId';
-import { EPlan, EPlanInterval } from '@/types/IPlan';
+import { EPlan } from '@/types/IPlan';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   EmbeddedCheckout,
@@ -59,9 +58,7 @@ export default function Checkout({ plan }: IProps) {
           options={{
             clientSecret,
             onComplete: () =>
-              router.push(
-                `/checkout/stripe/${stripeSessionId}`,
-              ),
+              router.push(`/billing/checkout/stripe/${stripeSessionId}`),
           }}
         >
           <EmbeddedCheckout />

@@ -39,12 +39,12 @@ export default function CurrentUserAvatar() {
             Account
           </CurrentUserAvatarMenuItem>
           <CurrentUserAvatarMenuItem
-            onClick={() => router.push(`/dashboard/subscriptions`)}
+            onClick={() => router.push(`/dashboard/billing/subscriptions`)}
           >
             Subscriptions
           </CurrentUserAvatarMenuItem>
           <CurrentUserAvatarMenuItem
-            onClick={() => router.push(`/dashboard/invoices`)}
+            onClick={() => router.push(`/dashboard/billing/invoices`)}
           >
             Invoices
           </CurrentUserAvatarMenuItem>

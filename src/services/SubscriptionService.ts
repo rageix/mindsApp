@@ -6,7 +6,7 @@ import useTeamId from '@/hooks/UseTeamId';
 import subscriptionStore, {
   ISubscriptionStore,
 } from '@/stores/CurrentSubscription';
-import { getApiTeamsSubscriptionsCurrent } from '@/requests/api/teams/subscriptions/current';
+import { getApiBillingSubscriptionsCurrent } from '@/requests/api/billing/subscriptions/current';
 import { IHasId } from '@/types/HasId';
 import { ISubscription } from '@/types/Subscriptions';
 
@@ -26,7 +26,7 @@ export class SubscriptionService extends BasicController<ISubscriptionStore> {
 
     this.query = useQuery({
       queryKey: ['/api/teams/subscription/current/:teamId', teamId],
-      queryFn: () => getApiTeamsSubscriptionsCurrent({ teamId }),
+      queryFn: () => getApiBillingSubscriptionsCurrent({ teamId }),
       refetchOnWindowFocus: false,
     });
 

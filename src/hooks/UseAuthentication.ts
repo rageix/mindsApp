@@ -22,7 +22,7 @@ export default function useAuthentication() {
     if (controller.isLoaded() && !controller.isLoggedIn()) {
       // console.log('push to login!');
       // tokenService.remove();
-      router.push('/login');
+      router.push('/login?redirectTo=' + encodeURIComponent(window.location.href));
     }
   }, [controller.isLoaded(), controller.isLoggedIn()]);
 

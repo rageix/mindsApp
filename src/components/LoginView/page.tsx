@@ -1,12 +1,13 @@
 'use client';
 import LoginForm from '../LoginForm';
 import FormWrapper from '@/components/FormWrapper';
-import FormLink from '@/components/Link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import userService from '@/services/UserService';
 import LoginVerifyForm from '@/components/LoginVerifyForm';
 import Alert from '@/components/Alert';
+import Link from 'next/link';
+import Button from '@/components/Buttton';
 
 enum EView {
   Login,
@@ -51,8 +52,10 @@ export default function LoginView() {
       {view === EView.Login && (
         <div>
           <LoginForm onSuccess={onSuccess} />
-          <p className="mt-10 text-center text-sm">
-            <FormLink href="/register">Create a new account</FormLink>
+          <p className="mt-4 text-center text-sm">
+            <Link href="/register">
+              <Button variant="link">Create a new account</Button>
+            </Link>
           </p>
         </div>
       )}

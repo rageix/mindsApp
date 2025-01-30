@@ -29,6 +29,7 @@ import ResumesFiltersController, {
 } from '@/components/ResumesView/ResumesFiltersForm/ResumesFiltersController';
 import useResumes from '@/hooks/UseResumes';
 import ResumesFiltersForm from '@/components/ResumesView/ResumesFiltersForm';
+import { postApiResumesCreate } from '@/requests/api/resumes/create';
 
 function getColumns(
   onClickEditOne: (_id: MongoId) => void,
@@ -159,8 +160,12 @@ export default function ResumesList() {
     }
   }
 
-  function onClickNew() {
-    router.push(`/resumes`);
+  async function onClickNew() {
+    const response = await postApiResumesCreate();
+
+    if (response) {
+      router.push(`/resumes/${response._id}`);
+    }
   }
 
   const columns = useMemo(

@@ -2,18 +2,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Table from '@/components/Table';
 import { useMemo, useState } from 'react';
-import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
 import Card from '@/components/Card';
-import Container from '@/components/Container';
 import CardBody from '@/components/Card/CardBody';
 import { FileTextIcon } from 'lucide-react';
-import { IStripeInvoiceResponse } from '@/requests/api/teams/invoices/schema';
 import FormattedDate from '@/components/FormattedDate';
 import { formatAsMoney } from '@/util/FormatAsMoney';
 import useInvoices from '@/hooks/UseInvoices';
 import Link from 'next/link';
 import Button from '@/components/Buttton';
+import { IStripeInvoiceResponse } from '@/requests/api/billing/invoices/schema';
 
 function getColumns(): ColumnDef<IStripeInvoiceResponse>[] {
   return [
@@ -75,9 +73,8 @@ function getColumns(): ColumnDef<IStripeInvoiceResponse>[] {
 }
 
 export default function InvoicesList() {
-  const teamId = useTeamId();
   const [rowSelection, setRowSelection] = useState({});
-  const invoices = useInvoices(teamId);
+  const invoices = useInvoices();
 
   const columns = useMemo(() => getColumns(), []);
 
@@ -97,23 +94,23 @@ export default function InvoicesList() {
   return (
     <>
       {!hasItems && (
-        <Container size="md">
-          <Card>
-            <CardBody>
-              <div className="flex flex-col space-y-3">
-                <div className="flex justify-center">
-                  <FileTextIcon
-                    className="text-gray-400"
-                    size="48"
-                  />
-                </div>
-                <p className="text-center font-bold text-2xl">
-                  No invoices found
-                </p>
+        // <Container size="md">
+        <Card>
+          <CardBody>
+            <div className="flex flex-col space-y-3">
+              <div className="flex justify-center">
+                <FileTextIcon
+                  className="text-gray-400"
+                  size="48"
+                />
               </div>
-            </CardBody>
-          </Card>
-        </Container>
+              <p className="text-center font-bold text-2xl">
+                No invoices found
+              </p>
+            </div>
+          </CardBody>
+        </Card>
+        // </Container>
       )}
       {hasItems && (
         <div className="max-w-3xl w-full m-auto">

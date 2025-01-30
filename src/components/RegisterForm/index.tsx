@@ -63,7 +63,7 @@ export default function SignUpForm() {
           >
             <span>I have read and accept the </span>
             <FormLink
-              href="https://www.cluvv.com/terms"
+              href="https://www.hobort.com/terms"
               target="_blank"
               aria-invalid={!_.isEmpty(state.errors.terms)}
             >

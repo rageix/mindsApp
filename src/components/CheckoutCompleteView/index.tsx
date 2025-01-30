@@ -6,10 +6,10 @@ import CardBody from '@/components/Card/CardBody';
 import Card from '@/components/Card';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
-import useTeamId from '@/hooks/UseTeamId';
+import { cn } from '@/util/Cn';
+import { merriweather } from '@/types/Fonts';
 
 export default function CheckoutCompleteView() {
-  const teamId = useTeamId();
   const { sessionId } = useParams<{ sessionId: string }>();
   const checkoutStatus = useCheckoutStatus({ stripeSessionId: sessionId });
 
@@ -43,9 +43,9 @@ export default function CheckoutCompleteView() {
                   you continue to see this page please contact support at{' '}
                   <a
                     className="text-blue-600 hover:text-blue-600"
-                    href="mailto:support@cluvv.com"
+                    href="mailto:support@hobort.com"
                   >
-                    support@cluvv.com
+                    support@hobort.com
                   </a>
                   .
                 </p>
@@ -71,16 +71,21 @@ export default function CheckoutCompleteView() {
       <CardBody>
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 text-center">
           <div className="max-w-xl">
-            <h1 className="text-base font-medium text-blue-600">Thank you!</h1>
-            <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="text-lg font-medium text-blue-600">Thank you!</h1>
+            <p className={cn('mt-2 text-4xl font-bold tracking-tight sm:text-5xl', merriweather.className)}>
               Payment success!
             </p>
-            <p className="mt-2 text-base text-gray-500">
+            <p className="mt-2 text-base text-gray-700">
               Your order is now complete. Thank you for your support!
             </p>
-            <p className="mt-6">
-              <Link href={`/dashboard/${teamId}/settings/subscriptions`}>
-                <Button variant="link">View Subscriptions</Button>
+            <p className="mt-6 flex justify-center">
+              <Link href={`/dashboard/billing/subscriptions`}>
+                <Button
+                  variant="link"
+                  isInline
+                >
+                  View Subscriptions
+                </Button>
               </Link>
             </p>
           </div>

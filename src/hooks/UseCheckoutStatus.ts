@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ICheckoutStatusRequest,
   ICheckoutStatusResponse,
-} from '@/requests/api/checkout/status/schema';
-import { postApiCheckoutStatus } from '@/requests/api/checkout/status';
+} from '@/requests/api/billing/checkout/status/schema';
+import { postApiBillingCheckoutStatus } from '@/requests/api/billing/checkout/status';
 
 export default function useCheckoutStatus(value: ICheckoutStatusRequest) {
   const [data, setData] = useState<ICheckoutStatusResponse>();
@@ -15,7 +15,7 @@ export default function useCheckoutStatus(value: ICheckoutStatusRequest) {
     queryKey: ['/api/checkout/status', value.stripeSessionId],
     queryFn: () => {
       setLoading(true);
-      return postApiCheckoutStatus(value);
+      return postApiBillingCheckoutStatus(value);
     },
     refetchOnWindowFocus: false,
   });

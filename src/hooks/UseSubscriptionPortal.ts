@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MongoId } from '@/types/MongoDocument';
-import { ISubscriptionsPortalResponse } from '@/requests/api/teams/subscriptions/portal/schema';
-import { getApiTeamsSubscriptionsPortal } from '@/requests/api/teams/subscriptions/portal';
+import { ISubscriptionsPortalResponse } from '@/requests/api/billing/subscriptions/portal/schema';
+import { getApiBillingSubscriptionsPortal } from '@/requests/api/billing/subscriptions/portal';
 
-export default function useSubscriptionPortal(teamId: MongoId) {
+export default function useSubscriptionPortal() {
   const [data, setData] = useState<ISubscriptionsPortalResponse>();
   const [initLoad, setInitLoad] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const query = useQuery({
-    queryKey: ['/api/subscriptions/portal/:teamId', teamId],
+    queryKey: ['/api/subscriptions/portal'],
     queryFn: () => {
       setLoading(true);
-      return getApiTeamsSubscriptionsPortal({ teamId });
+      return getApiBillingSubscriptionsPortal();
     },
     refetchOnWindowFocus: false,
   });

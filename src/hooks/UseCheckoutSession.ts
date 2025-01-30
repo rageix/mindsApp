@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { postApiCheckoutSession } from '@/requests/api/checkout/session';
+import { postApiBillingCheckoutSession } from '@/requests/api/billing/checkout/session';
 import {
   ICheckoutSessionRequest,
   ICheckoutSessionResponse,
-} from '@/requests/api/checkout/session/schema';
+} from '@/requests/api/billing/checkout/session/schema';
 
 export default function useCheckoutSession(value: ICheckoutSessionRequest) {
   const [data, setData] = useState<ICheckoutSessionResponse>();
@@ -14,13 +14,11 @@ export default function useCheckoutSession(value: ICheckoutSessionRequest) {
   const query = useQuery({
     queryKey: [
       '/api/checkout/session',
-      value.teamId,
       value.plan,
-      value.interval,
     ],
     queryFn: () => {
       setLoading(true);
-      return postApiCheckoutSession(value);
+      return postApiBillingCheckoutSession(value);
     },
     refetchOnWindowFocus: false,
   });

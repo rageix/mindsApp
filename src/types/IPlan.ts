@@ -19,11 +19,10 @@ export enum EPlan {
   Yearly = 'yearly',
 }
 
-// export const PLANS: Record<EPlan, string> = {
-//   [EPlan.Premium]: 'Premium',
-//   [EPlan.Business]: 'Business',
-//   [EPlan.Enterprise]: 'Enterprise',
-// };
+export const PLANS: Record<EPlan, string> = {
+  [EPlan.Monthly]: 'Monthly',
+  [EPlan.Yearly]: 'Yearly',
+};
 
 // export const PLAN_INTERVALS: Record<EPlanInterval, string> = {
 //   [EPlanInterval.Monthly]: 'Monthly',

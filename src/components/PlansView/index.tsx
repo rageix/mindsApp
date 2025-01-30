@@ -9,7 +9,7 @@ export default function PlansView() {
   const router = useRouter();
 
   function onClick(plan: EPlan) {
-    router.push(`/checkout?plan=${plan}`);
+    router.push(`/billing/checkout?plan=${plan}`);
   }
 
   return (

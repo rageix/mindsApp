@@ -38,13 +38,15 @@ export class UserService extends BasicController<IUserStore> {
         return;
       }
 
+      const data = this.query?.data;
+
       userStore.set({
-        user: this.query?.data?.user || null,
+        user: data?.user || null,
         loaded: true,
       });
 
-      if(this.query?.data?.accessToken) {
-        tokenService.save(this.query.data.accessToken);
+      if (data?.accessToken) {
+        tokenService.save(data.accessToken);
       }
     }, [this.query.isFetching]);
   };
