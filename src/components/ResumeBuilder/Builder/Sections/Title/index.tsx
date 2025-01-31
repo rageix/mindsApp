@@ -7,7 +7,7 @@ import { ISectionTitle } from '@/types/Resume';
 import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
 import TitleFormModal from '@/components/ResumeBuilder/Builder/Sections/TitleFormModal';
 import ResumeContext from '@/components/ResumeBuilder/Builder/ResumeContext';
-import { merriweather } from '@/types/Fonts';
+import { merriweather } from '@/util/Fonts';
 
 interface IProps {
   menu?: boolean;

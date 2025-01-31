@@ -7,7 +7,7 @@ import Card from '@/components/Card';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
 import { cn } from '@/util/Cn';
-import { merriweather } from '@/types/Fonts';
+import { merriweather } from '@/util/Fonts';
 
 export default function CheckoutCompleteView() {
   const { sessionId } = useParams<{ sessionId: string }>();

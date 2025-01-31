@@ -72,7 +72,7 @@ export default function LoginForm({onSuccess}: IProps) {
           className="w-full"
           disabled={!_.isEmpty(state.errors)}
         >
-          Login
+          Log in
         </Button>
       </div>
     </Form>

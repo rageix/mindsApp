@@ -3,7 +3,7 @@ import { cn } from '@/util/Cn';
 import { CheckIcon } from 'lucide-react';
 import { EPlan, IPlan } from '@/types/IPlan';
 import Button from '@/components/Buttton';
-import { merriweather } from '@/types/Fonts';
+import { merriweather } from '@/util/Fonts';
 
 const plans: IPlan[] = [
   {

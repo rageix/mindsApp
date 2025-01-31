@@ -7,9 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProviderWrapper from '@/components/ProviderWrapper';
 import OuterPageWrapper from '@/components/OuterPageWrapper';
-import { Nunito_Sans } from 'next/font/google';
-
-const nunitoSans = Nunito_Sans({subsets: ["latin"]});
+import { nunitoSans } from '@/util/Fonts';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

@@ -45,7 +45,7 @@ export default function LoginView() {
     <FormWrapper
       h2={
         view === EView.Login
-          ? 'Login to your account'
+          ? 'Log in to your account'
           : 'Enter Verification Code'
       }
     >
