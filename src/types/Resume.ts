@@ -313,7 +313,8 @@ export type TResumeBuilderSection =
   | IRBReference;
 
 export enum ETemplate {
-  Stockholm = 'stockholm',
+  BirmanRight = 'Birman (Right)',
+  BirmanLeft = 'Birman (Left)',
 }
 
 export enum EResumeFonts {
@@ -364,7 +365,7 @@ export interface IRBStyle {
 
 export function newIRBStyle(): IRBStyle {
   return {
-    template: ETemplate.Stockholm,
+    template: ETemplate.BirmanRight,
     fontFamily: EResumeFonts.OpenSans,
     titleFontFamily: null,
     primaryColor: '#111827',

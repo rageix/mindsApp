@@ -25,8 +25,8 @@ export class SubscriptionService extends BasicController<ISubscriptionStore> {
     }, []);
 
     this.query = useQuery({
-      queryKey: ['/api/teams/subscription/current/:teamId', teamId],
-      queryFn: () => getApiBillingSubscriptionsCurrent({ teamId }),
+      queryKey: ['/api/billing/subscriptions/current', teamId],
+      queryFn: () => getApiBillingSubscriptionsCurrent(),
       refetchOnWindowFocus: false,
     });
 

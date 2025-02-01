@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation';
 import useUser from '@/hooks/UseUser';
 import LoginButton from '@/components/LoginButton';
 import userService from '@/services/UserService';
+import subscriptionService from '@/services/SubscriptionService';
 
 const navItems = [
   // { name: 'Dashboard', href: '/dashboard', current: true },
@@ -23,6 +24,8 @@ const navItems = [
 interface Props extends PropsWithChildren {}
 
 export default function NewDashboardLayout(props: Props) {
+  const [subscriptionServiceController] = useState(subscriptionService);
+  subscriptionServiceController.useController();
   const [controller] = useState(userService);
   controller.useController();
   const path = usePathname();

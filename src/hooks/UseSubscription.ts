@@ -2,10 +2,7 @@
 import { useEffect, useState } from 'react';
 import subscriptionStore from '@/stores/CurrentSubscription';
 import subscriptionService from '@/services/SubscriptionService';
-import { EPlan } from '@/types/IPlan';
 import _ from 'lodash';
-
-const TEAM_PLANS: EPlan[] = [EPlan.Business, EPlan.Enterprise];
 
 export default function useSubscription() {
   const [data, setData] = useState(subscriptionStore.get());
@@ -29,13 +26,6 @@ export default function useSubscription() {
     return !_.isEmpty(data.data);
   }
 
-  function hasTeamPlan(): boolean {
-    if (!data.loaded) {
-      return false;
-    }
-    return TEAM_PLANS.includes(<EPlan>data.data?.plan);
-  }
-
   return {
     data: data.data,
     reload,
@@ -43,6 +33,5 @@ export default function useSubscription() {
     // query,
     isLoaded,
     hasSubscription,
-    hasTeamPlan,
   };
 }

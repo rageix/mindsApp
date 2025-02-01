@@ -158,9 +158,10 @@ export default class ResumeController extends BasicController<IState> {
 
   save = async () => {
     const resume = this.value();
-    await postApiResumes(resume);
+    const response = await postApiResumes(resume);
 
     this.setState({ lastSavedAt: new Date(), current: resume });
+    return response;
   };
 
   onMoveUpSection = (id: string) => {

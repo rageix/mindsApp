@@ -9,11 +9,17 @@ import ResumeContext from '@/components/ResumeBuilder/Builder/ResumeContext';
 import useUser from '@/hooks/UseUser';
 import Alert from '@/components/Alert';
 import LoginButton from '@/components/LoginButton';
+import useSubscription from '@/hooks/UseSubscription';
+import Button from '@/components/Buttton';
+import Link from 'next/link';
+import useWindowSizes from '@/hooks/UseWindowSizes';
 
 export default function ResumeView() {
   const user = useUser();
   const { resumeId } = useParams<{ resumeId: string }>();
+  const subscription = useSubscription();
   const [controller] = useState(new ResumeController());
+  const windowSizes = useWindowSizes();
   controller.useController();
 
   useEffect(() => {
@@ -25,6 +31,9 @@ export default function ResumeView() {
       .loadSession()
       .then((id) => window.history.pushState(null, '', '/resumes/' + id));
   }, []);
+
+  const hasSubscription = subscription.hasSubscription();
+  const renderHeight = windowSizes.windowHeight - 53;
 
   // const [builderController] = useState(defaultBuilder);
 
@@ -59,7 +68,7 @@ export default function ResumeView() {
   return (
     <>
       <div className="flex flex-col gap-y-3 mb-3">
-        {!user.isLoggedIn() && (
+        {user.isLoaded() && !user.isLoggedIn() && (
           <Alert variant="yellow">
             <div className="flex gap-x-2 items-baseline">
               <div>
@@ -67,21 +76,45 @@ export default function ResumeView() {
                 in the future:
               </div>
               <div>
-                <LoginButton label="Login to your account" />
+                <LoginButton label="Log in to your account" />
+              </div>
+            </div>
+          </Alert>
+        )}
+        {subscription.isLoaded() && !hasSubscription && (
+          <Alert
+            variant="yellow"
+            className="sticky"
+          >
+            <div className="flex gap-x-2 items-baseline">
+              <div>
+                You don&apos;t have an active subscription. You can continue to
+                use this tool and work on your resume but exporting is disabled.
+              </div>
+              <div>
+                <Link href="/billing/plans">
+                  <Button variant="blue">See plans</Button>
+                </Link>
               </div>
             </div>
           </Alert>
         )}
       </div>
       <ResumeContext.Provider value={controller}>
-        <div className="min-h-screen h-full flex">
+        <div className="min-h-screen h-full flex gap-x-3">
           <div className="flex-1">
-            <div className="max-w-3xl">
+            <div className="max-w-3xl pb-16">
               <Builder controller={controller} />
             </div>
           </div>
-          <div className="flex-1 min-h-screen h-full relative">
-            <Renderer controller={controller} />
+          <div
+            className="flex-1 border border-gray-200 rounded-lg sticky top-0"
+            style={{ height: renderHeight }}
+          >
+            <Renderer
+              controller={controller}
+              hasSubscription={hasSubscription}
+            />
           </div>
         </div>
       </ResumeContext.Provider>

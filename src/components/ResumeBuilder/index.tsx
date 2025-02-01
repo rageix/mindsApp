@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import Button from '@/components/Buttton';
 import FormattedDate from '@/components/FormattedDate';
 import ResumeSettingsForm from '@/components/ResumeBuilder/ResumeSettingsForm';
+import { toast } from 'react-toastify';
 
 interface IProps {
   controller: ResumeController;
@@ -33,6 +34,13 @@ export default function Builder({ controller }: IProps) {
 
     return out;
   }, [controller.state.controllers]);
+
+  async function onClickSave() {
+    const response = await controller.save();
+    if (response) {
+      toast.success('Resume saved.');
+    }
+  }
 
   return (
     <div>
@@ -174,7 +182,7 @@ export default function Builder({ controller }: IProps) {
           <Button
             variant="blue"
             isInline
-            onClick={controller.save}
+            onClick={onClickSave}
           >
             Save
           </Button>
