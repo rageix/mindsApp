@@ -34,7 +34,7 @@ export default function FilesView() {
       </div>
       <div className="mt-6">
         <Button
-          ref={loadMoreRef}
+          elRef={loadMoreRef}
           variant="blue"
           onClick={pagination.nextPage}
         >

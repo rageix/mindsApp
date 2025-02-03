@@ -1,4 +1,4 @@
-# cluvvApp
+# hobortApp
 
 ## Deploy to Vercel
 
@@ -6,7 +6,7 @@ From windows:
 
 `ubuntu`
 
-`cd /mnt/c/...path/cluvvApp`
+`cd /mnt/c/...path/hobortApp`
 
 `npm install`
 

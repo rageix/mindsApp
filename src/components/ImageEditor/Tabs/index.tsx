@@ -22,7 +22,7 @@ export default function Tabs<T>({ options, value, onChange }: IProps<T>) {
         {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
         <Select<T, unknown>
           options={options}
-          value={selected}
+          value={selected || null}
           onChange={onChange}
         />
       </div>

@@ -1,18 +1,24 @@
-import { ButtonHTMLAttributes } from 'react';
+import { PropsWithChildren } from 'react';
 import Button from '@/components/Buttton';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IProps extends PropsWithChildren {
   onClick: () => void;
+  disabled?: boolean;
 }
 
-export default function TableNavButton(props: Props) {
+export default function TableNavButton({
+  onClick,
+  disabled,
+  children,
+}: IProps) {
   return (
     <div className="w-24">
       <Button
         variant="blue"
-        {...props}
+        onClick={onClick}
+        disabled={disabled}
       >
-        {props.children}
+        {children}
       </Button>
     </div>
   );

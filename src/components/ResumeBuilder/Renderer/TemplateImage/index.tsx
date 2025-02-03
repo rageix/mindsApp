@@ -23,6 +23,7 @@ export default function TemplateImage({ id }: IProps) {
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/alt-text
     <Image src={url} style={{width: "100%", height: "auto"}}/>
   )
 

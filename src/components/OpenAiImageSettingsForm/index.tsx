@@ -140,7 +140,7 @@ export default function OpenAiImageSettingsForm({
           field="model"
           errors={state.errors}
           options={imageModelOptions}
-          value={modelValue}
+          value={modelValue || null}
           onChange={controller.onChangeModel}
           disabled={disabled}
         />
@@ -155,7 +155,7 @@ export default function OpenAiImageSettingsForm({
           field="size"
           errors={state.errors}
           options={sizeOptions}
-          value={sizeValue}
+          value={sizeValue || null}
           onChange={controller.onChangeSize}
           disabled={disabled}
         />
@@ -170,7 +170,7 @@ export default function OpenAiImageSettingsForm({
           field="quality"
           errors={state.errors}
           options={imageQualityOptions}
-          value={qualityValue}
+          value={qualityValue || null}
           onChange={controller.onChangeQuality}
           disabled={disabled}
         />
@@ -185,7 +185,7 @@ export default function OpenAiImageSettingsForm({
           field="style"
           errors={state.errors}
           options={imageStyleOptions}
-          value={styleValue}
+          value={styleValue || null}
           onChange={controller.onChangeStyle}
           disabled={disabled}
         />

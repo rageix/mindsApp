@@ -24,11 +24,10 @@ export default function Skill({ controller }: IProps) {
         applying via an online system).{' '}
       </Description>
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <SkillForm
             key={v.id}
             controller={v as SkillFormController}
-            index={i}
           />
         ))}
       </FormList>

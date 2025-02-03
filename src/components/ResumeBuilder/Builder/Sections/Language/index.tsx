@@ -18,11 +18,10 @@ export default function Language({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <FormList>
-        {controller.state.controllers.map((v, i) => (
+        {controller.state.controllers.map((v) => (
           <LanguageForm
             key={v.id}
             controller={v as LanguageFormController}
-            index={i}
           />
         ))}
       </FormList>

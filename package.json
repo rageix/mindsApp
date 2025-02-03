@@ -1,7 +1,10 @@
 {
-  "name": "hobort",
+  "name": "hobort-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev --experimental-https -H local.hobort.com",
     "build": "next build",
@@ -51,7 +54,7 @@
     "stripe": "17.3.1",
     "tailwindcss": "3.4.14",
     "use-debounce": "10.0.4",
-    "vercel": "37.14.0",
+    "vercel": "40.1.0",
     "zod": "3.23.8"
   },
   "devDependencies": {

@@ -61,7 +61,7 @@ export default function MemberForm({ onUpdated }: IProps) {
         <FormLabel<IForm> field="role">Role</FormLabel>
         <Select
           options={roleSelectOptions}
-          value={selectedRoleOption}
+          value={selectedRoleOption || null}
           onChange={controller.onChangeRole}
           className="w-auto sm:w-28"
         />

@@ -103,7 +103,7 @@ function getColumns(
       cell: ({ row }) => (
         <Select
           options={roleSelectOptions}
-          value={roleSelectOptions.find((v) => v.value === row.original.role)}
+          value={roleSelectOptions.find((v) => v.value === row.original.role) || null}
           onChange={(option) => onChangeRole(row.original._id, option.value)}
           className="w-28 relative z-10"
         />

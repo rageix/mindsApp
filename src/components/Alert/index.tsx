@@ -20,6 +20,7 @@ const colors: Record<TButtonVariant, string> = {
   white: 'bg-white-50 text-gray-800 border-gray-400',
   link: 'text-gray-50',
   text: 'text-gray-500',
+  gray: '',
   custom: '',
 };
 

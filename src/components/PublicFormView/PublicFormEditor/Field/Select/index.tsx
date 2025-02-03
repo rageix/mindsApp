@@ -26,7 +26,7 @@ export default function FieldSelect({ controller }: IProps) {
       errors={state.errors}
       options={options}
       value={
-        (form.values?.[0] || {value: null, label: field.placeholder || 'Please chose...' }) as ISelectOption<string> | undefined
+        (form.values?.[0] || {value: null, label: field.placeholder || 'Please chose...' }) as ISelectOption<string> | undefined || null
       }
       onChange={controller.onChangeSelect}
     />
