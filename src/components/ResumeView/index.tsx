@@ -13,6 +13,11 @@ import useSubscription from '@/hooks/UseSubscription';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
 import useWindowSizes from '@/hooks/UseWindowSizes';
+import FormattedDate from '@/components/FormattedDate';
+import { toast } from 'react-toastify';
+import { cn } from '@/util/Cn';
+
+const SMALL_BREAK_POINT = 1024;
 
 export default function ResumeView() {
   const user = useUser();
@@ -20,6 +25,10 @@ export default function ResumeView() {
   const subscription = useSubscription();
   const [controller] = useState(new ResumeController());
   const windowSizes = useWindowSizes();
+  const [isSmall, setIsSmall] = useState(
+    windowSizes.windowWidth < SMALL_BREAK_POINT,
+  );
+  const [previewIsVisible, setPreviewIsVisible] = useState(!isSmall);
   controller.useController();
 
   useEffect(() => {
@@ -31,6 +40,20 @@ export default function ResumeView() {
       .loadSession()
       .then((id) => window.history.pushState(null, '', '/resumes/' + id));
   }, []);
+
+  useEffect(() => {
+    if (isSmall && windowSizes.windowWidth > SMALL_BREAK_POINT) {
+      setIsSmall(false);
+      setPreviewIsVisible(true);
+      return;
+    }
+
+    if (!isSmall && windowSizes.windowWidth < SMALL_BREAK_POINT) {
+      setIsSmall(true);
+      setPreviewIsVisible(false);
+      return;
+    }
+  }, [windowSizes.windowWidth]);
 
   const hasSubscription = subscription.hasSubscription();
   const renderHeight = windowSizes.windowHeight - 53;
@@ -54,6 +77,13 @@ export default function ResumeView() {
   //     setLoading(false);
   //   }
   // }, [inviteAccept.loading]);
+
+  async function onClickSave() {
+    const response = await controller.save();
+    if (response) {
+      toast.success('Resume saved.');
+    }
+  }
 
   if (controller.state.isLoading) {
     return (
@@ -101,20 +131,61 @@ export default function ResumeView() {
         )}
       </div>
       <ResumeContext.Provider value={controller}>
-        <div className="min-h-screen h-full flex gap-x-3">
-          <div className="flex-1">
-            <div className="max-w-3xl pb-16">
+        <div className={'min-h-screen h-full flex gap-x-3'}>
+          <div
+            className={cn(
+              'max-w-3xl mx-auto flex-1',
+              isSmall && previewIsVisible ? 'hidden' : null,
+            )}
+          >
+            <div className="pb-16">
               <Builder controller={controller} />
             </div>
           </div>
           <div
-            className="flex-1 border border-gray-200 rounded-lg sticky top-0"
+            className={cn(
+              'flex-1 border border-gray-200 rounded-lg sticky top-0',
+              !previewIsVisible ? 'hidden' : null,
+            )}
             style={{ height: renderHeight }}
           >
             <Renderer
               controller={controller}
               hasSubscription={hasSubscription}
+              isVisible={previewIsVisible}
             />
+          </div>
+        </div>
+        <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
+          <div className="grow">
+            <div className="flex flex-col text-sm sm:text-base sm:flex-row gap-x-2">
+              <div>Last saved:</div>
+              {controller.state.lastSavedAt ? (
+                <FormattedDate
+                  value={controller.state.lastSavedAt || undefined}
+                />
+              ) : (
+                'Never'
+              )}
+            </div>
+          </div>
+          <div className="shrink-0 flex gap-x-3">
+            {isSmall && (
+              <Button
+                variant="gray"
+                isInline
+                onClick={() => setPreviewIsVisible(!previewIsVisible)}
+              >
+                {previewIsVisible ? 'Hide' : 'Show'} Preview
+              </Button>
+            )}
+            <Button
+              variant="blue"
+              isInline
+              onClick={onClickSave}
+            >
+              Save
+            </Button>
           </div>
         </div>
       </ResumeContext.Provider>

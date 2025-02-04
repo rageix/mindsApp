@@ -1,4 +1,4 @@
-import { ERBType, IRBSection, IRBSummary } from '@/types/Resume';
+import { ERBType, IRBSection } from '@/types/Resume';
 import Summary from '@/components/ResumeBuilder/Renderer/Templates/Birman/Sections/Summary';
 import Employment from '@/components/ResumeBuilder/Renderer/Templates/Birman/Sections/Employment';
 import { StyleSheet, View } from '@react-pdf/renderer';
@@ -37,7 +37,7 @@ export default function MainBody({ sections }: IProps) {
             return (
               <Summary
                 key={i}
-                data={v.data[0] as IRBSummary}
+                section={v}
               />
             );
           case ERBType.Employment:

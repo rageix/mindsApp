@@ -20,8 +20,7 @@ export default function Eduction({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <Description>
-        A varied education on your resume sums up the value that your learnings
-        and background will bring to job.
+        List all the education institutions you have attended.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

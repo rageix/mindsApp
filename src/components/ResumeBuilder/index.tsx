@@ -7,10 +7,7 @@ import {
 } from '@/types/Resume';
 import Switch from '@/components/Switch';
 import { useMemo } from 'react';
-import Button from '@/components/Buttton';
-import FormattedDate from '@/components/FormattedDate';
 import ResumeSettingsForm from '@/components/ResumeBuilder/ResumeSettingsForm';
-import { toast } from 'react-toastify';
 
 interface IProps {
   controller: ResumeController;
@@ -34,13 +31,6 @@ export default function Builder({ controller }: IProps) {
 
     return out;
   }, [controller.state.controllers]);
-
-  async function onClickSave() {
-    const response = await controller.save();
-    if (response) {
-      toast.success('Resume saved.');
-    }
-  }
 
   return (
     <div>
@@ -163,29 +153,6 @@ export default function Builder({ controller }: IProps) {
               <span>Extra-curricular Activities</span>
             </Switch>
           </div>
-        </div>
-      </div>
-      <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
-        <div className="grow">
-          <div className="flex gap-x-2">
-            <div>Last saved:</div>
-            {controller.state.lastSavedAt ? (
-              <FormattedDate
-                value={controller.state.lastSavedAt || undefined}
-              />
-            ) : (
-              'Never'
-            )}
-          </div>
-        </div>
-        <div className="shrink-0">
-          <Button
-            variant="blue"
-            isInline
-            onClick={onClickSave}
-          >
-            Save
-          </Button>
         </div>
       </div>
     </div>

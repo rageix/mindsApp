@@ -6,6 +6,7 @@ import ExtraCurricularFormController from '@/components/ResumeBuilder/Builder/Se
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import Description from '@/components/ResumeBuilder/Builder/Sections/Description';
 
 interface IProps {
   controller: SectionController;
@@ -17,6 +18,10 @@ export default function ExtraCurricular({ controller }: IProps) {
   return (
     <SectionWithDraggables controller={controller}>
       <Title />
+      <Description>
+        Talk about your favorite hobbies, but only if they directly tie to the
+        job listing.
+      </Description>
       <FormList>
         {controller.state.controllers.map((v) => (
           <ExtraCurricularForm

@@ -6,6 +6,8 @@ import InternshipFormController from '@/components/ResumeBuilder/Builder/Section
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import Description
+  from '@/components/ResumeBuilder/Builder/Sections/Description';
 
 interface IProps {
   controller: SectionController;
@@ -17,6 +19,9 @@ export default function Internship({ controller }: IProps) {
   return (
     <SectionWithDraggables controller={controller}>
       <Title />
+      <Description>
+        List any internships you have had that are relevant to the job posting.
+      </Description>
       <FormList>
         {controller.state.controllers.map((v) => (
           <InternshipForm

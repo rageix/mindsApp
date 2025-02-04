@@ -6,20 +6,14 @@
  *
  */
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import {
-  // $findMatchingParent,
-  $getNearestNodeOfType,
-  mergeRegister,
-} from '@lexical/utils';
+import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
   $getSelection,
-  // $isElementNode,
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   FORMAT_TEXT_COMMAND,
-  // LexicalNode,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -48,6 +42,7 @@ import {
 import Button from '@/components/Buttton';
 import { cn } from '@/util/Cn';
 import { getSelectedNode } from '@/util/GetSelectedNode';
+import useSize from '@/hooks/UseSize';
 // import {
 //   IS_ALIGN_CENTER,
 //   IS_ALIGN_LEFT,
@@ -75,6 +70,9 @@ export default function ToolbarPlugin() {
   const [linkUrl, setLinkUrl] = useState('');
   const [isBulletList, setIsBulletList] = useState(false);
   const [isNumberList, setIsNumberList] = useState(false);
+  const size = useSize(toolbarRef);
+  const isMobile = (size?.width || 450) < 430;
+  const iconSize = isMobile ? 24 : 24;
   // const [textJustify, setTextJustify] = useState(0);
 
   const $updateToolbar = useCallback(() => {
@@ -209,7 +207,7 @@ export default function ToolbarPlugin() {
       className="flex align-middle border-b border-gray-200 divide-x divide-gray-200 divide-solid"
       ref={toolbarRef}
     >
-      <div className="flex gap-x-4 px-4 py-2">
+      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
         <Button
           variant="custom"
           disabled={!canUndo}
@@ -222,7 +220,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Undo"
         >
-          <Undo />
+          <Undo size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -236,10 +234,10 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Redo"
         >
-          <Redo />
+          <Redo size={iconSize} />
         </Button>
       </div>
-      <div className="flex gap-x-4 px-4 py-2">
+      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
         <Button
           variant="custom"
           onClick={() => {
@@ -251,7 +249,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Format Bold"
         >
-          <Bold />
+          <Bold size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -264,7 +262,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Format Italics"
         >
-          <Italic />
+          <Italic size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -277,7 +275,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Format Underline"
         >
-          <Underline />
+          <Underline size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -290,10 +288,10 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Format Strikethrough"
         >
-          <Strikethrough />
+          <Strikethrough size={iconSize} />
         </Button>
       </div>
-      <div className="flex gap-x-4 px-4 py-2">
+      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
         <Button
           variant="custom"
           onClick={() => {
@@ -309,7 +307,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Unordered List"
         >
-          <List />
+          <List size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -326,7 +324,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Ordered List"
         >
-          <ListOrdered />
+          <ListOrdered size={iconSize} />
         </Button>
         <Button
           variant="custom"
@@ -348,7 +346,7 @@ export default function ToolbarPlugin() {
           )}
           aria-label="Link"
         >
-          <LinkIcon />
+          <LinkIcon size={iconSize} />
         </Button>
       </div>
       {/*<div className="flex gap-x-4 px-4 py-2">*/}

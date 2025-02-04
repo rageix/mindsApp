@@ -1,19 +1,29 @@
-import { IRBSummary } from '@/types/Resume';
+import { IRBSection, IRBSummary } from '@/types/Resume';
 import ItemTextEditor from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/ItemTextEditor';
 import { View } from '@react-pdf/renderer';
-import SectionTitle from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/SectionTitle';
 import SectionWrapper from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/SectionWrapper';
 import DescriptionWrapper from '../../Elements/DescriptionWrapper';
+import SidebarTitle from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/SidebarTitle';
 
 interface IProps {
-  data: IRBSummary;
+  section: IRBSection;
 }
 
-export default function Summary({ data }: IProps) {
+export default function Summary({ section }: IProps) {
+  if (section.isHidden) {
+    return null;
+  }
+
+  const data = section.data[0] as IRBSummary;
+
+  if(!data) {
+    return null;
+  }
+
   return (
     <SectionWrapper>
       <View>
-        <SectionTitle>Summary</SectionTitle>
+        <SidebarTitle>{section.title}</SidebarTitle>
       </View>
       <DescriptionWrapper>
         <ItemTextEditor value={data.description} />

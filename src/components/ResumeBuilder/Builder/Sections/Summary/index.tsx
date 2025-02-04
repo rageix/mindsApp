@@ -13,11 +13,11 @@ interface IProps {
 export default function Summary({ controller }: IProps) {
   return (
     <div>
-      <Title menu={false} />
+      <Title />
       <Description>
-        Write 2-4 short, energetic sentences about how great you are. Mention
-        the role and what you did. What were the big achievements? Describe your
-        motivation and list your skills.
+        A couple of sentences telling the reader how great you are. List your
+        role or last role, what you did, what you achieved, and what skills you
+        used or developed.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

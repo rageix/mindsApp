@@ -6,6 +6,8 @@ import LanguageFormController from '@/components/ResumeBuilder/Builder/Sections/
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import Description
+  from '@/components/ResumeBuilder/Builder/Sections/Description';
 
 interface IProps {
   controller: SectionController;
@@ -17,6 +19,9 @@ export default function Language({ controller }: IProps) {
   return (
     <SectionWithDraggables controller={controller}>
       <Title />
+      <Description>
+        List any languages you speak.
+      </Description>
       <FormList>
         {controller.state.controllers.map((v) => (
           <LanguageForm

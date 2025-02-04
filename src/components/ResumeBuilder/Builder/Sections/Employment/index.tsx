@@ -19,9 +19,7 @@ export default function Employment({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <Description>
-        Show your relevant experience (last 10 years). Use bullet points to note
-        your achievements, if possible - use numbers/facts (Achieved X, measured
-        by Y, by doing Z).{' '}
+        List your relevant experience in the lst 10 years or so.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

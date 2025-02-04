@@ -7,6 +7,8 @@ import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
 import SectionWithDraggables
   from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import Description
+  from '@/components/ResumeBuilder/Builder/Sections/Description';
 
 interface IProps {
   controller: SectionController;
@@ -18,6 +20,9 @@ export default function Custom({ controller }: IProps) {
   return (
     <SectionWithDraggables controller={controller}>
       <Title />
+      <Description>
+        This is just an extra section you can use for whatever you want.
+      </Description>
       <FormList>
         {controller.state.controllers.map((v) => (
           <CustomForm

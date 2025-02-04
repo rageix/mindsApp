@@ -17,9 +17,14 @@ import BirmanLeft from '@/components/ResumeBuilder/Renderer/Templates/BirmanLeft
 interface IProps {
   controller: ResumeController;
   hasSubscription: boolean;
+  isVisible: boolean;
 }
 
-export default function Renderer({ controller, hasSubscription }: IProps) {
+export default function Renderer({
+  controller,
+  hasSubscription,
+  isVisible,
+}: IProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const resume = controller.state.current;
   const styleController = controller.state.styleController;
@@ -89,6 +94,10 @@ export default function Renderer({ controller, hasSubscription }: IProps) {
   //   };
   // }, [iframeRef.current]);
 
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <div className="px-2 py-4 flex flex-col h-full w-full">
       <div className="flex items-end gap-x-2 justify-end">
@@ -140,22 +149,12 @@ export default function Renderer({ controller, hasSubscription }: IProps) {
       </div>
       <div className="bg-white flex h-full flex-col">
         <div className="mt-3 border border-gray-200 flex h-full">
-          <div
-            className="w-full"
-            onClick={() => alert('d2')}
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   e.stopPropagation();
-            // }}
-            // onContextMenu={() => false}
-          >
+          <div className="w-full">
             <PDFViewer
               width="100%"
               height="100%"
               showToolbar={false}
               innerRef={iframeRef}
-              // className="pointer-events-none"
-              // style={{ overflow: 'hidden' }}
             >
               <Doc />
             </PDFViewer>
