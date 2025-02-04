@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import SideBarSubsection from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/SideBarSubsection';
 import SideBarTextWrapper from '@/components/ResumeBuilder/Renderer/Templates/Birman/Elements/SideBarTextWrapper';
+import _ from 'lodash';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,20 +33,23 @@ export default function Details({ section }: IProps) {
       <SideBarSubsection>
         <SidebarTitle>Details</SidebarTitle>
         <View>
-          {data.city && <SideBarTextWrapper>{data.city}</SideBarTextWrapper>}
-          {data.country && (
+          {!_.isEmpty(data.city) && (
+            <SideBarTextWrapper>{data.city}</SideBarTextWrapper>
+          )}
+          {!_.isEmpty(data.country) && (
             <SideBarTextWrapper>{data.country}</SideBarTextWrapper>
           )}
-          {data.phone && <SideBarTextWrapper>{data.phone}</SideBarTextWrapper>}
-          {data.email && (
+          {!_.isEmpty(data.phone) && (
+            <SideBarTextWrapper>{data.phone}</SideBarTextWrapper>
+          )}
+          {!_.isEmpty(data.email) && (
             <SideBarTextWrapper>
               <Link href={`mailto:${data.email}`}>{data.email}</Link>
             </SideBarTextWrapper>
           )}
         </View>
       </SideBarSubsection>
-      {/*  date place of birth */}
-      {data.placeOfBirth && (
+      {!_.isEmpty(data.placeOfBirth) && (
         <SideBarSubsection>
           <View>
             <SidebarTitle>Place Of Birth</SidebarTitle>
@@ -55,7 +59,7 @@ export default function Details({ section }: IProps) {
           </View>
         </SideBarSubsection>
       )}
-      {data.dateOfBirth && (
+      {!_.isEmpty(data.dateOfBirth) && (
         <SideBarSubsection>
           <View>
             <SidebarTitle>Date Of Birth</SidebarTitle>
@@ -65,7 +69,7 @@ export default function Details({ section }: IProps) {
           </View>
         </SideBarSubsection>
       )}
-      {data.nationality && (
+      {!_.isEmpty(data.nationality) && (
         <SideBarSubsection>
           <View>
             <SidebarTitle>Nationality</SidebarTitle>
@@ -75,7 +79,7 @@ export default function Details({ section }: IProps) {
           </View>
         </SideBarSubsection>
       )}
-      {data.license && (
+      {!_.isEmpty(data.license) && (
         <SideBarSubsection>
           <View>
             <SidebarTitle>License</SidebarTitle>

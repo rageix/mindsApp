@@ -19,7 +19,7 @@ export default function Employment({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <Description>
-        List your relevant experience in the lst 10 years or so.
+        List your relevant experience in the last 10 years or so.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

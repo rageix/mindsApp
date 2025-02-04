@@ -94,6 +94,8 @@ export default function Renderer({
   //   };
   // }, [iframeRef.current]);
 
+  console.log('isVisible', isVisible);
+
   if (!isVisible) {
     return null;
   }

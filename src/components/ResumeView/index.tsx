@@ -134,7 +134,7 @@ export default function ResumeView() {
         <div className={'min-h-screen h-full flex gap-x-3'}>
           <div
             className={cn(
-              'max-w-3xl mx-auto flex-1',
+              'max-w-2xl mx-auto flex-1',
               isSmall && previewIsVisible ? 'hidden' : null,
             )}
           >
@@ -144,7 +144,7 @@ export default function ResumeView() {
           </div>
           <div
             className={cn(
-              'flex-1 border border-gray-200 rounded-lg sticky top-0',
+              'flex-1 border border-gray-200 rounded-lg sticky top-0 max-w-2xl mx-auto',
               !previewIsVisible ? 'hidden' : null,
             )}
             style={{ height: renderHeight }}

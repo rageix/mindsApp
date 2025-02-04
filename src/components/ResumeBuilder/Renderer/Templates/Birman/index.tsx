@@ -9,7 +9,6 @@ interface IProps extends PropsWithChildren {
 }
 
 export default function Birman({ style, children }: IProps) {
-  console.log('resume.style', style);
   return (
     <StyleContext.Provider value={style}>
       <Document>
