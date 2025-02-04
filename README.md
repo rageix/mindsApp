@@ -8,6 +8,10 @@ From windows:
 
 `cd /mnt/c/...path/hobortApp`
 
+`nvm install 22`
+
+`rm -rf node_modules`
+
 `npm install`
 
 `vercel build`
