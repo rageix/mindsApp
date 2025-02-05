@@ -21,7 +21,7 @@ export default function WarningAlert({ className, onClick, children }: Props) {
             className="h-5 w-5 text-yellow-600"
           />
         </div>
-        <div className="ml-3">
+        <div className="ml-3 grow">
           <p className="text-sm text-yellow-800">{children}</p>
         </div>
       </div>

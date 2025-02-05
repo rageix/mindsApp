@@ -11,7 +11,7 @@ import ColorPicker from '@/components/ResumeBuilder/Renderer/ColorPicker';
 import FontPicker from '@/components/ResumeBuilder/Renderer/FontPicker';
 import pdfFonts from '@/components/ResumeBuilder/Renderer/PDFFonts';
 import TemplatePicker from '@/components/ResumeBuilder/Renderer/TemplatePicker';
-import { ETemplate } from '@/types/Resume';
+import { EResumeFonts, ETemplate } from '@/types/Resume';
 import BirmanLeft from '@/components/ResumeBuilder/Renderer/Templates/BirmanLeft';
 
 interface IProps {
@@ -36,7 +36,11 @@ export default function Renderer({
     }
 
     const form = styleController.getForm();
+    const demo = !hasSubscription;
 
+    if(demo) {
+      pdfFonts.load(EResumeFonts.Merriweather);
+    }
     pdfFonts.load(form.fontFamily);
     if (form.titleFontFamily) {
       pdfFonts.load(form.titleFontFamily);
@@ -48,6 +52,7 @@ export default function Renderer({
           <BirmanRight
             resume={resume}
             style={form}
+            demo={demo}
           />
         );
       case ETemplate.BirmanLeft:
@@ -56,10 +61,11 @@ export default function Renderer({
           <BirmanLeft
             resume={resume}
             style={form}
+            demo={demo}
           />
         );
     }
-  }, [resume, styleController.form]);
+  }, [resume, styleController.form, hasSubscription]);
 
   // useEffect(() => {
   //   // if (iframeRef.current?.contentDocument) {

@@ -7,7 +7,6 @@ import Loading from '@/components/Loading';
 import Renderer from '@/components/ResumeBuilder/Renderer';
 import ResumeContext from '@/components/ResumeBuilder/Builder/ResumeContext';
 import useUser from '@/hooks/UseUser';
-import Alert from '@/components/Alert';
 import LoginButton from '@/components/LoginButton';
 import useSubscription from '@/hooks/UseSubscription';
 import Button from '@/components/Buttton';
@@ -16,6 +15,7 @@ import useWindowSizes from '@/hooks/UseWindowSizes';
 import FormattedDate from '@/components/FormattedDate';
 import { toast } from 'react-toastify';
 import { cn } from '@/util/Cn';
+import WarningAlert from '@/components/Alert/WarningAlert';
 
 const SMALL_BREAK_POINT = 1024;
 
@@ -97,37 +97,38 @@ export default function ResumeView() {
 
   return (
     <>
-      <div className="flex flex-col gap-y-3 mb-3">
+      <div className="max-w-2xl mx-auto lg:max-w-full flex flex-wrap gap-y-2 gap-x-4 mb-3">
         {user.isLoaded() && !user.isLoggedIn() && (
-          <Alert variant="yellow">
-            <div className="flex gap-x-2 items-baseline">
-              <div>
-                You are not logged in. To make sure you can access your resume
-                in the future:
+          <WarningAlert className="max-w-md">
+            <div className="flex flex-wrap justify-between gap-x-2 gap-y-2 w-full">
+              <div className="grow">
+                <div className="max-w-lg">
+                  To continue to be able to access this resume please log in or
+                  create an account, it&apos;s free!
+                </div>
               </div>
-              <div>
+              <div className="shrink-0">
                 <LoginButton label="Log in to your account" />
               </div>
             </div>
-          </Alert>
+          </WarningAlert>
         )}
         {subscription.isLoaded() && !hasSubscription && (
-          <Alert
-            variant="yellow"
-            className="sticky"
-          >
-            <div className="flex gap-x-2 items-baseline">
-              <div>
-                You don&apos;t have an active subscription. You can continue to
-                use this tool and work on your resume but exporting is disabled.
+          <WarningAlert className="max-w-md">
+            <div className="flex flex-wrap justify-between items-center gap-x-2 gap-y-2  w-full">
+              <div className="grow">
+                <div className="max-w-lg">
+                  Demo mode is active. Exporting is disabled and the resume will
+                  contain watermarks. For all features please subscribe.
+                </div>
               </div>
-              <div>
+              <div className="shrink-0">
                 <Link href="/billing/plans">
                   <Button variant="blue">See plans</Button>
                 </Link>
               </div>
             </div>
-          </Alert>
+          </WarningAlert>
         )}
       </div>
       <ResumeContext.Provider value={controller}>

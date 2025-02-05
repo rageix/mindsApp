@@ -9,11 +9,15 @@ import Birman from '@/components/ResumeBuilder/Renderer/Templates/Birman';
 interface IProps {
   resume: IResume;
   style: IRBStyle;
+  demo: boolean;
 }
 
-export default function BirmanRight({ resume, style }: IProps) {
+export default function BirmanRight({ resume, style, demo }: IProps) {
   return (
-    <Birman style={style}>
+    <Birman
+      style={style}
+      demo={demo}
+    >
       <View style={[styles.section, styles.header]}>
         <HeaderDetails sections={resume.sections} />
       </View>

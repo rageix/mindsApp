@@ -33,7 +33,7 @@ export default function Alert({
   return (
     <div
       className={cn(
-        'border-l-4 rounded-md p-4',
+        ' rounded-md p-4',
         colors[variant],
         className ? className : null,
       )}

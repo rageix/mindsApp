@@ -113,7 +113,7 @@ export default function InvoicesList() {
         // </Container>
       )}
       {hasItems && (
-        <div className="max-w-3xl w-full m-auto">
+        <div className=" w-full mx-auto">
           <Table<IStripeInvoiceResponse>
             data={invoices.data?.data || []}
             columns={columns}
