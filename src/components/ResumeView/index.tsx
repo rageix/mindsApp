@@ -42,7 +42,7 @@ export default function ResumeView() {
   }, []);
 
   useEffect(() => {
-    if (isSmall && windowSizes.windowWidth > SMALL_BREAK_POINT) {
+    if (isSmall && windowSizes.windowWidth >= SMALL_BREAK_POINT) {
       setIsSmall(false);
       setPreviewIsVisible(true);
       return;
@@ -97,25 +97,29 @@ export default function ResumeView() {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto lg:max-w-full flex flex-wrap gap-y-2 gap-x-4 mb-3">
+      <div className="max-w-2xl mx-auto lg:max-w-full flex flex-wrap md:flex-nowrap gap-y-2 gap-x-4 mb-3">
         {user.isLoaded() && !user.isLoggedIn() && (
-          <WarningAlert className="max-w-md">
-            <div className="flex flex-wrap justify-between gap-x-2 gap-y-2 w-full">
+          <WarningAlert className="lg:w-1/2">
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-x-2 gap-y-2 w-full">
               <div className="grow">
                 <div className="max-w-lg">
-                  To continue to be able to access this resume please log in or
-                  create an account, it&apos;s free!
+                  To continue accessing this resume please log in or create an
+                  account, it&apos;s free! Anonymous resumes are deleted after
+                  12 hours.
                 </div>
               </div>
               <div className="shrink-0">
-                <LoginButton label="Log in to your account" />
+                <LoginButton
+                  variant="blue"
+                  isInline
+                />
               </div>
             </div>
           </WarningAlert>
         )}
         {subscription.isLoaded() && !hasSubscription && (
-          <WarningAlert className="max-w-md">
-            <div className="flex flex-wrap justify-between items-center gap-x-2 gap-y-2  w-full">
+          <WarningAlert className="lg:w-1/2">
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-x-2 gap-y-2 w-full">
               <div className="grow">
                 <div className="max-w-lg">
                   Demo mode is active. Exporting is disabled and the resume will

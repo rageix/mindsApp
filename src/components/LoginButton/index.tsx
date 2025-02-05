@@ -5,12 +5,13 @@ import { TButtonVariant } from '@/types/Variant';
 interface IProps {
   label?: string;
   variant?: TButtonVariant
+  isInline?: boolean
 }
 
-export default function LoginButton({ label = 'Log in', variant = 'blue' }: IProps) {
+export default function LoginButton({ label = 'Log in', variant = 'blue', isInline }: IProps) {
   return (
     <Link href="/login">
-      <Button variant={variant}>{label}</Button>
+      <Button variant={variant} isInline={isInline}>{label}</Button>
     </Link>
   );
 }

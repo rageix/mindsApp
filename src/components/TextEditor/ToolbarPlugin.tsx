@@ -204,7 +204,7 @@ export default function ToolbarPlugin() {
 
   return (
     <div
-      className="flex align-middle border-b border-gray-200 divide-x divide-gray-200 divide-solid"
+      className="flex align-middle border border-gray-200 divide-x divide-gray-200 divide-solid rounded-tl-md rounded-tr-md border-b-0"
       ref={toolbarRef}
     >
       <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>

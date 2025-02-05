@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProviderWrapper from '@/components/ProviderWrapper';
 import OuterPageWrapper from '@/components/OuterPageWrapper';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { nunitoSans } from '@/util/Fonts';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: Props) {
         <ProviderWrapper>
           <OuterPageWrapper>{children}</OuterPageWrapper>
         </ProviderWrapper>
+        <GoogleAnalytics gaId="G-TK8HQHJF67" />
         <ToastContainer />
       </body>
     </html>
