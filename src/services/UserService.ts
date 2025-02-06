@@ -68,7 +68,7 @@ export class UserService extends BasicController<IUserStore> {
   logout = async () => {
     await getApiUserLogout();
     tokenService.remove();
-    this.reload();
+    // this.reload();
   };
 }
 

@@ -4,7 +4,7 @@ import FormErrors from '../FormErrors';
 import Input from '../Input';
 import Checkbox from '../Checkbox';
 import FormLabel from '@/components/FormLabel';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import RegisterFormController, {
   IForm,
@@ -15,15 +15,22 @@ import Form from '@/components/Form';
 import { postApiUserRegister } from '@/requests/api/user/register';
 import { toast } from 'react-toastify';
 
-export default function SignUpForm() {
+export default function RegisterForm() {
   const [controller] = useState(new RegisterFormController());
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo');
+
   controller.useController(async (values) => {
     const response = await postApiUserRegister(values);
 
     if (response) {
       toast.success('Registration success. You can log into your account.');
-      router.push('/login');
+      const redirect = !_.isEmpty(redirectTo)
+        ? '?redirectTo=' + encodeURIComponent(String(redirectTo))
+        : '';
+      const loginUrl = '/login' + redirect;
+      router.push(loginUrl);
     }
   });
 

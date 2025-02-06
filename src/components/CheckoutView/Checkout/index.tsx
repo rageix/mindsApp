@@ -11,6 +11,7 @@ import Alert from '@/components/Alert';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import { useRouter } from 'next/navigation';
+import useUser from '@/hooks/UseUser';
 
 if (!process.env.NEXT_PUBLIC_STRIPE_KEY) {
   alert('NEXT_PUBLIC_STRIPE_KEY is not set!');
@@ -28,8 +29,9 @@ export default function Checkout({ plan }: IProps) {
   const checkoutSession = useCheckoutSession({
     plan,
   });
+  const user = useUser();
 
-  if (!checkoutSession.initLoad) {
+  if (!user.isLoaded() || !checkoutSession.initLoad) {
     return (
       <div className="flex justify-center items-center mt-16">
         <Loading
@@ -38,6 +40,10 @@ export default function Checkout({ plan }: IProps) {
         />
       </div>
     );
+  }
+
+  if(!user.data) {
+    return null;
   }
 
   if (!checkoutSession.data) {

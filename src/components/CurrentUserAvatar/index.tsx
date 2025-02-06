@@ -14,7 +14,8 @@ export default function CurrentUserAvatar() {
 
   async function onClickLogout() {
     await userService.logout();
-    router.push('/login');
+    // this prevents other api calls from modifying the url
+    window.location.href = '/login';
   }
 
   return (

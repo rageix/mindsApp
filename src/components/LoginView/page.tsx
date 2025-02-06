@@ -2,12 +2,13 @@
 import LoginForm from '../LoginForm';
 import FormWrapper from '@/components/FormWrapper';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import userService from '@/services/UserService';
 import LoginVerifyForm from '@/components/LoginVerifyForm';
 import Alert from '@/components/Alert';
 import Link from 'next/link';
 import Button from '@/components/Buttton';
+import _ from 'lodash';
 
 enum EView {
   Login,
@@ -20,6 +21,8 @@ export default function LoginView() {
   const [view, setView] = useState(EView.Login);
   const [verifyKey, setVerifyKey] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo');
 
   useEffect(() => {
     if (!userService.isLoaded()) {
@@ -41,6 +44,11 @@ export default function LoginView() {
     setView(EView.Verify);
   }
 
+  const redirect = !_.isEmpty(redirectTo)
+    ? '?redirectTo=' + encodeURIComponent(String(redirectTo))
+    : '';
+  const registerUrl = '/register' + redirect;
+
   return (
     <FormWrapper
       h2={
@@ -53,7 +61,9 @@ export default function LoginView() {
         <div>
           <LoginForm onSuccess={onSuccess} />
           <p className="mt-4 text-center text-sm">
-            <Link href="/register">
+            <Link
+              href={registerUrl}
+            >
               <Button variant="link">Create a new account</Button>
             </Link>
           </p>
