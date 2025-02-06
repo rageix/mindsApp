@@ -14,7 +14,11 @@ From windows:
 
 `npm install`
 
+`npm install -g vercel`
+
 `vercel build`
+
+Deploy to staging...
 
 `vercel deploy --prebuilt`
 
