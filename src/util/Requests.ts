@@ -9,17 +9,21 @@ export async function processResponse<T>(
   let responseJson: T;
 
   switch (response.status) {
+    case HttpStatusCodes.UNAUTHORIZED:
+      // toast.error(`Error 404. Route not found: ${response.url}`);
+      window.location.href = '/login?redirectTo=' + encodeURIComponent(window.location.href);
+      return null;
     case HttpStatusCodes.NOT_FOUND:
       toast.error(`Error 404. Route not found: ${response.url}`);
       return null;
     case HttpStatusCodes.BAD_GATEWAY:
-      toast.error("Error 502: Bad gateway. Please try again.");
+      toast.error('Error 502: Bad gateway. Please try again.');
       return null;
     case HttpStatusCodes.SERVICE_UNAVAILABLE:
-      toast.error("Error 503: Service Unavailable. Please try again.");
+      toast.error('Error 503: Service Unavailable. Please try again.');
       return null;
     case HttpStatusCodes.GATEWAY_TIMEOUT:
-      toast.error("Error 504: Gateway timeout. Please try again.");
+      toast.error('Error 504: Gateway timeout. Please try again.');
       return null;
   }
 

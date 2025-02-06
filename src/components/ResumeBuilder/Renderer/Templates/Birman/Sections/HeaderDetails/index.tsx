@@ -4,13 +4,14 @@ import TemplateImage from '@/components/ResumeBuilder/Renderer/TemplateImage';
 import StyleContext from '@/components/ResumeBuilder/Renderer/StyleContext';
 import { useContext } from 'react';
 import { calcStyles } from '@/util/CalcStyles';
+import _ from 'lodash';
 
 const styles = StyleSheet.create({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
     gap: 10,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imgWrapper: {
     width: 75,
@@ -45,6 +46,8 @@ export default function HeaderDetails({ sections }: IProps) {
     return null;
   }
 
+  const name = (data.firstName + ' ' + data.lastName).trim();
+
   return (
     <View style={calcStyles(styles.wrapper, styleContext)}>
       {data.photo && (
@@ -54,23 +57,27 @@ export default function HeaderDetails({ sections }: IProps) {
       )}
       <View>
         <View>
-          <Text
-            style={[
-              calcStyles(styles.name, styleContext),
-              {
-                fontFamily: styleContext.titleFontFamily
-                  ? styleContext.titleFontFamily
-                  : undefined,
-              },
-            ]}
-          >
-            {data.firstName} {data.lastName}
-          </Text>
+          {!_.isEmpty(name) && (
+            <Text
+              style={[
+                calcStyles(styles.name, styleContext),
+                {
+                  fontFamily: styleContext.titleFontFamily
+                    ? styleContext.titleFontFamily
+                    : undefined,
+                },
+              ]}
+            >
+              {name}
+            </Text>
+          )}
         </View>
         <View>
-          <Text style={calcStyles(styles.title, styleContext)}>
-            {data.title}
-          </Text>
+          {!_.isEmpty(data.title) && (
+            <Text style={calcStyles(styles.title, styleContext)}>
+              {data.title}
+            </Text>
+          )}
         </View>
       </View>
     </View>

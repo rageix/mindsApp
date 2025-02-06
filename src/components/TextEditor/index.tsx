@@ -136,7 +136,7 @@ export const defaultEditorState = () => {
   const text = $createTextNode('');
   paragraph.append(text);
   $getRoot().append(paragraph);
-  $getRoot().selectEnd();
+  // $getRoot().selectEnd();
 }
 
 interface IProps {
@@ -158,20 +158,20 @@ export default function TextEditor({ initialState, onChange }: IProps) {
         throw error;
       },
       theme: ExampleTheme,
-      editorState: initialState || defaultEditorState ,
+      editorState: initialState || defaultEditorState,
     }),
     [initialState],
   );
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative w-full rounded-md overflow-hidden">
+      <div className="relative w-full">
         <ToolbarPlugin />
         <div className="relative">
           <RichTextPlugin
             contentEditable={
               <ContentEditable
-                className="editor-input min-h-[10rem] resize-none text-base relative outline-0 px-4 py-2 [&>ul]:list-disc [&>ol]:list-decimal bg-gray-100"
+                className="editor-input min-h-[10rem] resize-none text-base relative outline-0 px-4 py-2 [&>ul]:list-disc [&>ol]:list-decimal bg-gray-100 inset-ring-2 focus:ring-2 focus-visible:ring-2 focus:ring-blue-600 focus-visible:ring-blue-600 focus-visible:mx-0.5 rounded-bl-md rounded-br-md overflow-hidden shadow-none"
                 aria-placeholder={placeholder}
                 placeholder={
                   <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-2 left-4 text-base">{placeholder}</div>

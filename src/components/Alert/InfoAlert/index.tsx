@@ -22,7 +22,7 @@ export default function InfoAlert({ className, onClick, children }: Props) {
           />
         </div>
         <div className="ml-3">
-          <p className="text-sm text-blue-800">{children}</p>
+          <div className="text-sm text-blue-800">{children}</div>
         </div>
       </div>
     </Alert>

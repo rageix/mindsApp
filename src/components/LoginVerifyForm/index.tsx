@@ -28,11 +28,14 @@ export default function LoginVerifyForm({ verifyKey, rememberMe }: IProps) {
   controller.useController(async (form) => {
     const response = await postApiUserLoginVerify({ ...form, key: verifyKey });
 
-    if (response && response.accessToken) {
-      tokenService.save(response.accessToken, rememberMe);
+    if (response) {
+      if (response?.accessToken) {
+        tokenService.save(response.accessToken, rememberMe);
+      }
+
       userService.reload();
 
-      if (redirectTo) {
+      if (!_.isEmpty(redirectTo) && _.isString(redirectTo)) {
         router.push(redirectTo);
         return;
       }
