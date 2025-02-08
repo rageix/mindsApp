@@ -1,10 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
@@ -35,8 +28,8 @@ import {
   List,
   ListOrdered,
   Redo,
-  Strikethrough,
-  Underline,
+  // Strikethrough,
+  // Underline,
   Undo,
 } from 'lucide-react';
 import Button from '@/components/Buttton';
@@ -64,8 +57,8 @@ export default function ToolbarPlugin() {
   const [canRedo, setCanRedo] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
+  // const [isUnderline, setIsUnderline] = useState(false);
+  // const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [isLink, setIsLink] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [isBulletList, setIsBulletList] = useState(false);
@@ -81,8 +74,8 @@ export default function ToolbarPlugin() {
       // Update text format
       setIsBold(selection.hasFormat('bold'));
       setIsItalic(selection.hasFormat('italic'));
-      setIsUnderline(selection.hasFormat('underline'));
-      setIsStrikethrough(selection.hasFormat('strikethrough'));
+      // setIsUnderline(selection.hasFormat('underline'));
+      // setIsStrikethrough(selection.hasFormat('strikethrough'));
       const node = getSelectedNode(selection);
       const parent = node.getParent();
       const linkNode = $isLinkNode(parent)
@@ -264,32 +257,32 @@ export default function ToolbarPlugin() {
         >
           <Italic size={iconSize} />
         </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isUnderline ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Format Underline"
-        >
-          <Underline size={iconSize} />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isStrikethrough ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Format Strikethrough"
-        >
-          <Strikethrough size={iconSize} />
-        </Button>
+        {/*<Button*/}
+        {/*  variant="custom"*/}
+        {/*  onClick={() => {*/}
+        {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');*/}
+        {/*  }}*/}
+        {/*  className={cn(*/}
+        {/*    BUTTON_CLASS_NAME,*/}
+        {/*    isUnderline ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+        {/*  )}*/}
+        {/*  aria-label="Format Underline"*/}
+        {/*>*/}
+        {/*  <Underline size={iconSize} />*/}
+        {/*</Button>*/}
+        {/*<Button*/}
+        {/*  variant="custom"*/}
+        {/*  onClick={() => {*/}
+        {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');*/}
+        {/*  }}*/}
+        {/*  className={cn(*/}
+        {/*    BUTTON_CLASS_NAME,*/}
+        {/*    isStrikethrough ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+        {/*  )}*/}
+        {/*  aria-label="Format Strikethrough"*/}
+        {/*>*/}
+        {/*  <Strikethrough size={iconSize} />*/}
+        {/*</Button>*/}
       </div>
       <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
         <Button

@@ -1,15 +1,21 @@
 import {
   InitialConfigType,
-  LexicalComposer
+  LexicalComposer,
 } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { ListNode, ListItemNode } from "@lexical/list";
-import { LinkNode } from "@lexical/link";
+import { ListItemNode, ListNode } from '@lexical/list';
+import { LinkNode } from '@lexical/link';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
+  ElementTransformer,
+  TRANSFORMERS,
+} from '@lexical/markdown';
 import {
   $createParagraphNode,
   $createTextNode,
@@ -23,7 +29,7 @@ import {
   LexicalEditor,
   LexicalNode,
   ParagraphNode,
-  TextNode
+  TextNode,
 } from 'lexical';
 
 import ExampleTheme from './Theme';
@@ -137,15 +143,29 @@ export const defaultEditorState = () => {
   paragraph.append(text);
   $getRoot().append(paragraph);
   // $getRoot().selectEnd();
-}
+};
 
 interface IProps {
   initialState: string | null;
   onChange: (state: string) => void;
 }
 
-export default function TextEditor({ initialState, onChange }: IProps) {
+export const LINE_BREAK_FIX: ElementTransformer = {
+  dependencies: [ParagraphNode],
+  export: () => {
+    return null;
+  },
+  regExp: /^$/,
+  replace: (textNode, nodes, _, isImport) => {
+    if (isImport && nodes.length === 1) {
+      console.log(textNode);
+      nodes[0].replace($createParagraphNode());
+    }
+  },
+  type: 'element',
+};
 
+export default function TextEditor({ initialState, onChange }: IProps) {
   const editorConfig: InitialConfigType = useMemo(
     () => ({
       html: {
@@ -158,7 +178,13 @@ export default function TextEditor({ initialState, onChange }: IProps) {
         throw error;
       },
       theme: ExampleTheme,
-      editorState: initialState || defaultEditorState,
+      editorState: () =>
+        $convertFromMarkdownString(
+          initialState || '',
+          TRANSFORMERS,
+          undefined,
+          true,
+        ),
     }),
     [initialState],
   );
@@ -174,7 +200,9 @@ export default function TextEditor({ initialState, onChange }: IProps) {
                 className="editor-input min-h-[10rem] resize-none text-base relative outline-0 px-4 py-2 [&>ul]:list-disc [&>ol]:list-decimal bg-gray-100 inset-ring-2 focus:ring-2 focus-visible:ring-2 focus:ring-blue-600 focus-visible:ring-blue-600 focus-visible:mx-0.5 rounded-bl-md rounded-br-md overflow-hidden shadow-none"
                 aria-placeholder={placeholder}
                 placeholder={
-                  <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-2 left-4 text-base">{placeholder}</div>
+                  <div className="text-gray-400 overflow-hidden absolute truncate inline-block pointer-events-none top-2 left-4 text-base">
+                    {placeholder}
+                  </div>
                 }
               />
             }
@@ -182,11 +210,15 @@ export default function TextEditor({ initialState, onChange }: IProps) {
           />
           <HistoryPlugin />
           {/*<AutoFocusPlugin />*/}
-          <ListPlugin/>
-          <LinkPlugin/>
+          <ListPlugin />
+          <LinkPlugin />
           <OnChangePlugin
             onChange={(editorState) => {
-              onChange(JSON.stringify(editorState.toJSON()));
+              const markdown = editorState.read(() =>
+                $convertToMarkdownString(TRANSFORMERS, undefined, true),
+              );
+              onChange(markdown);
+              // onChange(JSON.stringify(editorState.toJSON()));
             }}
           />
         </div>
