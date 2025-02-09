@@ -5,8 +5,9 @@ import { IErrorResponse } from '@/types/ErrorResponse';
 
 export async function processResponse<T>(
   response: Response,
-): Promise<T | null> {
-  let responseJson: T;
+  json = true
+): Promise<T | ArrayBuffer | null> {
+  let responseData: T | ArrayBuffer;
 
   switch (response.status) {
     case HttpStatusCodes.UNAUTHORIZED:
@@ -27,26 +28,36 @@ export async function processResponse<T>(
       return null;
   }
 
-  try {
-    responseJson = await response.json();
-  } catch (e) {
-    console.log('Failed to decode json response: ', e);
-    toast.error('Failed to decode json response, see console for more info.');
-    return null;
+  if(json) {
+    try {
+      responseData = await response.json();
+    } catch (e) {
+      console.log('Failed to decode json response: ', e);
+      toast.error('Failed to decode json response, see console for more info.');
+      return null;
+    }
+  } else {
+    try {
+      responseData = await response.arrayBuffer();
+    } catch (e) {
+      console.log('Failed to decode json response: ', e);
+      toast.error('Failed to decode json response, see console for more info.');
+      return null;
+    }
   }
 
   switch (response.status) {
     case HttpStatusCodes.OK:
     case HttpStatusCodes.CREATED:
-      return responseJson;
+      return responseData;
     case HttpStatusCodes.BAD_REQUEST:
-      for (const error of (responseJson as IErrorResponse).errors || []) {
+      for (const error of (responseData as IErrorResponse).errors || []) {
         toast.error(error);
       }
       break;
 
     case HttpStatusCodes.INTERNAL_SERVER_ERROR:
-      for (const error of (responseJson as IErrorResponse).errors || []) {
+      for (const error of (responseData as IErrorResponse).errors || []) {
         toast.error(error);
       }
       break;
@@ -86,6 +97,21 @@ export async function deleteJson<T, V>(url = '', data: T): Promise<V | null> {
   return await sendData<V>(url, 'DELETE', JSON.stringify(data));
 }
 
+export async function getFile<V>(
+  url = '',
+  data?: Record<string, unknown>,
+): Promise<ArrayBuffer | null> {
+  let query = '';
+  if (data) {
+    query = '?q=' + JSON.stringify(data);
+  }
+  return await sendDataForFile<V>(url + query, 'GET');
+}
+
+export async function postFile<V>(url = '', data: FormData): Promise<ArrayBuffer | null> {
+  return await sendDataForFile<V>(url, 'POST', data);
+}
+
 export async function sendDataMultipart<V>(
   url = '',
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -102,7 +128,7 @@ export async function sendDataMultipart<V>(
       redirect: 'follow',
       body: data,
     });
-    return await processResponse<V>(rawResponse);
+    return await processResponse<V>(rawResponse) as V | null;
   } catch (e) {
     if (e instanceof TypeError) {
       toast.error(`Request error. Unable to connect to url: ${url}`);
@@ -133,7 +159,37 @@ export async function sendData<V>(
       redirect: 'follow',
       body: data,
     });
-    return await processResponse<V>(rawResponse);
+    return await processResponse<V>(rawResponse) as V | null;
+  } catch (e) {
+    if (e instanceof TypeError) {
+      toast.error(`Request error. Unable to connect to url: ${url}`);
+    } else {
+      console.log('Request error. Unknown error: ', e);
+      toast.error(
+        'Request error. Unknown error. See console for more details.',
+      );
+    }
+    return null;
+  }
+}
+
+export async function sendDataForFile<V>(
+  url = '',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  data?: BodyInit,
+  // we want to return null on failure because
+  // tanstack query complains if return data is undefined
+): Promise<ArrayBuffer | null> {
+  try {
+    const rawResponse = await fetch(url, {
+      method: method,
+      headers: {
+        Authorization: tokenService.get(),
+      },
+      redirect: 'follow',
+      body: data,
+    });
+    return await processResponse<V>(rawResponse, false) as ArrayBuffer | null;
   } catch (e) {
     if (e instanceof TypeError) {
       toast.error(`Request error. Unable to connect to url: ${url}`);

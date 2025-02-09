@@ -31,8 +31,13 @@ export default function ResumeView() {
   );
   const [previewIsVisible, setPreviewIsVisible] = useState(!isSmall);
   controller.useController();
+  const userIsLoaded = user.isLoaded();
 
   useEffect(() => {
+    if(!userIsLoaded) {
+      return;
+    }
+
     if (resumeId) {
       controller.loadId(resumeId);
       return;
@@ -40,7 +45,7 @@ export default function ResumeView() {
     controller
       .loadSession()
       .then((id) => window.history.pushState(null, '', '/resumes/' + id));
-  }, []);
+  }, [userIsLoaded]);
 
   useEffect(() => {
     if (isSmall && windowSizes.windowWidth >= SMALL_BREAK_POINT) {
@@ -92,7 +97,7 @@ export default function ResumeView() {
     }
   }
 
-  if (controller.state.isLoading) {
+  if (!userIsLoaded || controller.state.isLoading) {
     return (
       <div className="flex h-screen justify-center items-center">
         <Loading size="lg" />
@@ -166,7 +171,6 @@ export default function ResumeView() {
           >
             <Renderer
               controller={controller}
-              hasSubscription={hasSubscription}
               isVisible={previewIsVisible}
             />
           </div>

@@ -1,37 +1,42 @@
-import { useMemo } from 'react';
-import { PDFDownloadLink, UsePDFInstance } from '@react-pdf/renderer';
-import BirmanRight from '@/components/ResumeBuilder/Renderer/Templates/BirmanRight';
+import { useEffect, useState } from 'react';
 import ResumeController from '@/components/ResumeBuilder/Builder/ResumeController';
-import Button from '@/components/Buttton';
 import ColorPicker from '@/components/ResumeBuilder/Renderer/ColorPicker';
 import FontPicker from '@/components/ResumeBuilder/Renderer/FontPicker';
-import pdfFonts from '@/components/ResumeBuilder/Renderer/PDFFonts';
 import TemplatePicker from '@/components/ResumeBuilder/Renderer/TemplatePicker';
-import { EResumeFonts, ETemplate } from '@/types/Resume';
-import BirmanLeft from '@/components/ResumeBuilder/Renderer/Templates/BirmanLeft';
 import { usePDFSlick } from '@pdfslick/react';
 import '@pdfslick/react/dist/pdf_viewer.css';
 import PDFNavigation from './PDFNavigation';
+import { getFile } from '@/util/Requests';
 
 interface IProps {
   controller: ResumeController;
-  hasSubscription: boolean;
   isVisible: boolean;
 }
 
 export default function Renderer({
   controller,
-  hasSubscription,
   isVisible,
 }: IProps) {
 
+  const [data, setData] = useState<ArrayBuffer>()
 
   // const resume = controller.state.current;
   const styleController = controller.state.styleController;
   styleController.useController();
 
+  useEffect(() => {
+    async function get() {
+      const response = await getFile(`${process.env.NEXT_PUBLIC_API_HOST}/api/resumes/render/${controller.state.original?._id}`);
+      if(response !== null) {
+        setData(response);
+      }
+    }
+
+    get();
+  }, [controller]);
+
   const { viewerRef, usePDFSlickStore, PDFSlickViewer } = usePDFSlick(
-    `${process.env.NEXT_PUBLIC_API_HOST}/api/resumes/render/${controller.state.original?._id}`,
+    data,
     {
       scaleValue: 'page-fit',
       singlePageViewer: true,
