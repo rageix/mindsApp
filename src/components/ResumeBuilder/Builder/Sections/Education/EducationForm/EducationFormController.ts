@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import { IRBDate, IRBEducation, newIRBEducation } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBEducation {}
 
@@ -11,6 +12,11 @@ export function defaultForm(): IForm {
 export default class EducationFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });

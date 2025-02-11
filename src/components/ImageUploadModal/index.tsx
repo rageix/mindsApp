@@ -26,12 +26,14 @@ export default function ImageUploadModal({
       onClose={onClose}
       size="lg"
     >
+      <div className="flex flex-col gap-y-2">
       <ImageUploader
         onUpload={onUpload}
         route={route}
         maxFileSize={maxFileSize}
         maxFiles={maxFiles}
       />
+      </div>
     </Modal>
   );
 }

@@ -3,6 +3,7 @@ import { IRBDetail, newIRBDetail } from '@/types/Resume';
 import SectionItemController
   from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 import { MongoId } from '@/types/MongoDocument';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBDetail {}
 
@@ -13,6 +14,11 @@ export function defaultForm(): IForm {
 export default class DetailFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });
@@ -81,5 +87,9 @@ export default class DetailFormController extends SectionItemController<IForm> {
     }
 
   };
+
+  onClearPhoto =() => {
+    this.onChangeForm({photo: ''})
+  }
 
 }

@@ -1,5 +1,5 @@
 import { PopoverButton, PopoverPanel, Transition } from '@headlessui/react';
-import { PropsWithChildren, useEffect, useRef } from 'react';
+import { PropsWithChildren, ReactElement, useEffect, useRef } from 'react';
 import { CircleHelp } from 'lucide-react';
 // @ts-ignore
 // shows error in ide but compiles fine
@@ -8,13 +8,23 @@ import type { AnchorProps } from '@headlessui/react/dist/internal/floating';
 const DEBOUNCE = 100;
 
 interface IProps extends PropsWithChildren {
-  isOpen: boolean,
-  close: () => void,
-  anchor?: AnchorProps,
-  size?: number
+  isOpen: boolean;
+  close: () => void;
+  anchor?: AnchorProps;
+  size?: number;
+  icon?: ReactElement;
+  buttonClassName?: string,
 }
 
-export default function PopoverHoverer({ children, isOpen, anchor, size, close }: IProps) {
+export default function PopoverHoverer({
+  children,
+  isOpen,
+  anchor,
+  size,
+  close,
+  icon = <CircleHelp size={size} />,
+  buttonClassName,
+}: IProps) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -56,12 +66,19 @@ export default function PopoverHoverer({ children, isOpen, anchor, size, close }
         ref={buttonRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        className={buttonClassName}
       >
-        <CircleHelp size={size} />
+        {icon}
       </PopoverButton>
 
       <Transition show={isOpen}>
-        <PopoverPanel anchor={anchor || 'top'} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <PopoverPanel
+          anchor={anchor || 'top'}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          portal={true}
+          className="z-20"
+        >
           {children}
         </PopoverPanel>
       </Transition>

@@ -17,6 +17,7 @@ import { UserAvatar } from '@/components/UserAvatar';
 import { MongoId } from '@/types/MongoDocument';
 import Tooltip from '@/components/Tooltip';
 import TooltipBox from '@/components/TooltipBox';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 interface IProps {
   controller: DetailFormController;
@@ -53,12 +54,29 @@ export default function DetailForm({ controller }: IProps) {
           <div className="flex-1 flex items-end">
             <div className="flex items-center gap-x-3">
               <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
-                <UserAvatar
-                  value={form.photo}
-                  alt="UserPhoto"
-                />
+                <Popover className="relative">
+                  <PopoverButton as="div">
+                    <UserAvatar
+                      value={form.photo}
+                      alt="UserPhoto"
+                    />
+                  </PopoverButton>
+                  <PopoverPanel
+                    anchor="bottom"
+                    className="mt-1 overflow-hidden"
+                  >
+                    <TooltipBox>
+                      <Button
+                        variant="linkRed"
+                        onClick={() => controller.onClearPhoto()}
+                      >
+                        Remove photo
+                      </Button>
+                    </TooltipBox>
+                  </PopoverPanel>
+                </Popover>
               </div>
-              <div className="grow">
+              <div className="grow flex flex-col gap-y-2">
                 <Button
                   variant="link"
                   onClick={() => setShowImageUpload(true)}

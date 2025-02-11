@@ -32,6 +32,7 @@ import SkillFormController from '@/components/ResumeBuilder/Builder/Sections/Ski
 import EmploymentFormController from '@/components/ResumeBuilder/Builder/Sections/Employment/EmploymentForm/EmploymentFormController';
 import { IOnDrag } from '@/types/DragNDrop';
 import { reorderWithEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/reorder-with-edge';
+import emitter from '@/util/Emitter';
 
 type TBuilderFormController =
   | CourseFormController
@@ -76,6 +77,11 @@ export default class SectionController extends BasicController<IState> {
       this.load(section);
     }
   }
+
+  setState = (state: Partial<IState>) => {
+    this._setState(state);
+    emitter.emitResumeUpdated();
+  };
 
   getUniqueId = (controllers: FormController<any>[]) => {
     while (true) {

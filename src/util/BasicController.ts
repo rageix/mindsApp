@@ -15,7 +15,7 @@ export default class BasicController<T> {
     this._useController();
   };
 
-  setState = (state: Partial<T>) => {
+  _setState = (state: Partial<T>) => {
     const newState: T = { ...(this.state || ({} as T)), ...state };
 
     if (this.updateState) {
@@ -23,6 +23,10 @@ export default class BasicController<T> {
       return;
     }
     this.defaultState = newState;
+  };
+
+  setState = (state: Partial<T>) => {
+    this._setState(state);
   };
 
   _getState = (): T => {

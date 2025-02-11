@@ -11,7 +11,6 @@ import ResumeSettingsFormController from '@/components/ResumeBuilder/ResumeSetti
 import StyleController from '@/components/ResumeBuilder/Builder/Sections/StyleController';
 import ColorController from '@/components/Color/ColorController';
 
-// type TBuilderFormController = CoursesFormController | CustomFormController | DateFormController | DetailFormController | EducationFormController | CoursesFormController | InternshipFormController | LinkFormController | ReferenceFormController | SkillFormController | SummaryFormController;
 interface IState {
   controllers: SectionController[];
   isLoading: boolean;
@@ -22,7 +21,7 @@ interface IState {
   styleController: StyleController;
   primaryColorController: ColorController;
   secondaryColorController: ColorController;
-  // hiddenSections: THiddenSections;
+  dirty: boolean;
 }
 
 export function newDefaultState(): IState {
@@ -36,14 +35,7 @@ export function newDefaultState(): IState {
     styleController: new StyleController(),
     primaryColorController: new ColorController(),
     secondaryColorController: new ColorController(),
-    // hiddenSections: {
-    //   [ERBType.Custom]: true,
-    //   [ERBType.Course]: true,
-    //   [ERBType.ExtraCurricular]: true,
-    //   [ERBType.Internship]: true,
-    //   [ERBType.Language]: true,
-    //   [ERBType.Reference]: true,
-    // },
+    dirty: false,
   };
 }
 
@@ -75,7 +67,7 @@ export default class ResumeController extends BasicController<IState> {
       controllers.push(controller);
     }
 
-    // load geneal settings controller
+    // load general settings controller
     const settingsController = new ResumeSettingsFormController();
     settingsController.reset({ name: resume.name });
 
@@ -160,7 +152,7 @@ export default class ResumeController extends BasicController<IState> {
     const resume = this.value();
     const response = await postApiResumes(resume);
 
-    this.setState({ lastSavedAt: new Date(), current: resume });
+    this.setState({ lastSavedAt: new Date(), current: resume, dirty: false });
     return response;
   };
 
@@ -175,7 +167,7 @@ export default class ResumeController extends BasicController<IState> {
     const removed = controllers.splice(index, 1);
 
     controllers.splice(index - 1, 0, removed[0]);
-    this.setState({ controllers });
+    this.setState({ controllers, dirty: true });
   };
 
   onMoveDownSection = (id: string) => {
@@ -189,6 +181,12 @@ export default class ResumeController extends BasicController<IState> {
     const removed = controllers.splice(index, 1);
 
     controllers.splice(index + 1, 0, removed[0]);
-    this.setState({ controllers });
+    this.setState({ controllers, dirty: true });
+  };
+
+  onResumeUpdated = () => {
+    if (!this.state.dirty) {
+      this.setState({ dirty: true });
+    }
   };
 }

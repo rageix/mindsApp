@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import { IResumeSettings, newIResumeSettings } from '@/types/Resume';
 import FormController from '@/util/FormController';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IResumeSettings {}
 
@@ -11,6 +12,11 @@ export function defaultForm(): IForm {
 export default class ResumeSettingsFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ name: e.target.value });

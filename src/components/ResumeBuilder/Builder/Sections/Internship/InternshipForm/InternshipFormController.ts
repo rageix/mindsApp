@@ -5,6 +5,7 @@ import {
   newIRBInternship,
 } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBInternship {}
 
@@ -15,6 +16,11 @@ export function defaultForm(): IForm {
 export default class InternshipFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });

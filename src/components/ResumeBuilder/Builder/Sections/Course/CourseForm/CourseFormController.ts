@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import { IRBCourse, IRBDate, newIRBCourse } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBCourse {}
 
@@ -11,6 +12,11 @@ export function defaultForm(): IForm {
 export default class CourseFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ name: e.target.value });

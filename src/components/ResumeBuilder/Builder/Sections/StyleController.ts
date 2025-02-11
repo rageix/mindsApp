@@ -1,5 +1,6 @@
 import { EResumeFonts, ETemplate, IRBStyle, newIRBStyle } from '@/types/Resume';
 import FormController from '@/util/FormController';
+import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBStyle {}
 
@@ -10,6 +11,11 @@ export function defaultForm(): IForm {
 export default class StyleController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+
+  onChangeForm = (update: Partial<IForm>, validate = true) => {
+    emitter.emitResumeUpdated();
+    return this._onChangeForm(update, validate);
+  };
 
   onChangeTemplate = (value: ETemplate) => {
     this.onChangeForm({ template: value });

@@ -67,7 +67,7 @@ export default function ColorPicker({ controller, title }: IProps) {
     <Popover className="relative flex">
       <PopoverButton>
         <div
-          className="size-10 rounded-full border-2 border-gray-900"
+          className="size-9 rounded-full border-2 border-gray-900"
           style={{ backgroundColor: color.hex }}
           title={title}
           aria-label={title}

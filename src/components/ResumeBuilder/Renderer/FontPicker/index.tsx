@@ -56,13 +56,13 @@ export default function FontPicker({ controller }: IProps) {
     <Popover className="relative">
       <PopoverButton as="div">
         <Button
-          variant="green"
+          variant="blue"
           // title="Font Size"
           // className="flex justify-center items-center rounded-md hover:bg-blue-100"
           isInline
         >
           {/*{fontOption?.label || 'None selected'}*/}
-          Font Settings
+          Font
         </Button>
       </PopoverButton>
       <PopoverPanel

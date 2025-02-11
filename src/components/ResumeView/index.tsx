@@ -12,10 +12,15 @@ import useSubscription from '@/hooks/UseSubscription';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
 import useWindowSizes from '@/hooks/UseWindowSizes';
-import FormattedDate from '@/components/FormattedDate';
 import { toast } from 'react-toastify';
 import { cn } from '@/util/Cn';
 import WarningAlert from '@/components/Alert/WarningAlert';
+import emitter, { emitterMessage } from '@/util/Emitter';
+import useLeavePageConfirm from '@/hooks/UseLeavePageConfirm';
+import Tooltip from '@/components/Tooltip';
+import TooltipBox from '@/components/TooltipBox';
+import { CircleDashed, CircleIcon } from 'lucide-react';
+import DashboardPageHeader from '@/components/DashboardPageHeader';
 
 const SMALL_BREAK_POINT = 1024;
 
@@ -34,7 +39,7 @@ export default function ResumeView() {
   const userIsLoaded = user.isLoaded();
 
   useEffect(() => {
-    if(!userIsLoaded) {
+    if (!userIsLoaded) {
       return;
     }
 
@@ -62,10 +67,21 @@ export default function ResumeView() {
   }, [windowSizes.windowWidth]);
 
   useEffect(() => {
+    // make sure the window starts at the top of screen after load
     if (builderRef.current) {
       window.scrollTo(0, 0);
     }
   }, [builderRef.current]);
+
+  useEffect(() => {
+    const onResumeUpdated = () => controller.onResumeUpdated();
+
+    emitter.on(emitterMessage.resumeUpdated, onResumeUpdated);
+
+    return () => emitter.off(emitterMessage.resumeUpdated, onResumeUpdated);
+  }, []);
+
+  useLeavePageConfirm(controller.state.dirty);
 
   const hasSubscription = subscription.hasSubscription();
   const renderHeight = windowSizes.windowHeight - 53;
@@ -108,8 +124,9 @@ export default function ResumeView() {
   // const isLoggedIn = user.isLoggedIn();
 
   return (
-    <>
-      <div className="max-w-2xl mx-auto lg:max-w-full flex flex-wrap md:flex-nowrap gap-y-2 gap-x-4 mb-3">
+    <div className="max-w-2xl mx-auto lg:max-w-full">
+      <DashboardPageHeader title="Resume Builder" />
+      <div className="flex flex-wrap md:flex-nowrap gap-y-2 gap-x-4 mb-3">
         {user.isLoaded() && !user.isLoggedIn() && (
           <WarningAlert className="lg:w-1/2">
             <div className="flex flex-wrap md:flex-nowrap items-center gap-x-2 gap-y-2 w-full">
@@ -171,21 +188,42 @@ export default function ResumeView() {
           >
             <Renderer
               controller={controller}
+              hasSubscription={hasSubscription}
               isVisible={previewIsVisible}
             />
           </div>
         </div>
         <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
           <div className="grow">
-            <div className="flex flex-col text-sm sm:text-base sm:flex-row gap-x-2">
-              <div>Last saved:</div>
-              {controller.state.lastSavedAt ? (
-                <FormattedDate
-                  value={controller.state.lastSavedAt || undefined}
-                />
-              ) : (
-                'Never'
-              )}
+            {/*<div>Last saved:</div>*/}
+            <div className="flex gap-x-2 items-center">
+              {/*{controller.state.lastSavedAt ? (*/}
+              {/*  <FormattedDate*/}
+              {/*    value={controller.state.lastSavedAt || undefined}*/}
+              {/*  />*/}
+              {/*) : (*/}
+              {/*  'Never'*/}
+              {/*)}*/}
+              <Tooltip
+                className="flex items-center"
+                icon={
+                  <div className="size-6 ">
+                    {controller.state.dirty ? (
+                      <CircleDashed className="text-yellow-600 w-auto h-full" />
+                    ) : (
+                      <CircleIcon className="w-full h-full text-green-600 " />
+                    )}
+                  </div>
+                }
+              >
+                <TooltipBox>
+                  <div className="text-center">
+                    {controller.state.dirty
+                      ? 'There are unsaved changes.'
+                      : 'Everything is up to date.'}
+                  </div>
+                </TooltipBox>
+              </Tooltip>
             </div>
           </div>
           <div className="shrink-0 flex gap-x-3">
@@ -208,6 +246,6 @@ export default function ResumeView() {
           </div>
         </div>
       </ResumeContext.Provider>
-    </>
+    </div>
   );
 }
