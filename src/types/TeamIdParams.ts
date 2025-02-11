@@ -1,4 +1,4 @@
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import { Params } from 'next/dist/server/request/params';
 
 export interface ITeamIdParams extends Params {
   // [Key: string]: string;
