@@ -73,8 +73,8 @@ export default function Renderer({
           isInline
           onClick={() => setShowTemplates(!showTemplates)}
         >
-          <span className="mr-2">
-            {showTemplates ? 'Templates' : 'Templates'}
+          <span className="mr-1">
+            {showTemplates ? 'Template' : 'Template'}
           </span>
           {showTemplates ? <ChevronDown /> : <ChevronUp />}
         </Button>
