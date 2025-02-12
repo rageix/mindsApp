@@ -315,6 +315,7 @@ export type TResumeBuilderSection =
 export enum ETemplate {
   BirmanRight = 'Birman (Right)',
   BirmanLeft = 'Birman (Left)',
+  ExoticShorthairLeft = 'Exotic Shorthair (Left)',
 }
 
 export enum EResumeFonts {
