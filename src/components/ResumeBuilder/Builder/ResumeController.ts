@@ -88,6 +88,7 @@ export default class ResumeController extends BasicController<IState> {
       primaryColorController: this.state.primaryColorController,
       secondaryColorController: this.state.secondaryColorController,
     });
+    window.scrollTo(0, 0);
   };
 
   value = (): IResume => {

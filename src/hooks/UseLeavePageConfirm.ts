@@ -7,7 +7,6 @@ const useLeavePageConfirm = (active = true) => {
   };
 
   useEffect(() => {
-    console.log('useeffect', active);
     if (active) {
       window.addEventListener('beforeunload', beforeUnloadListener);
     } else {

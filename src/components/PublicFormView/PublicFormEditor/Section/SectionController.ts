@@ -34,7 +34,6 @@ export default class SectionController extends BasicController<IState> {
       console.log(controller.field.type);
       controller.submit = true;
       if(!controller.onValidateForm()) {
-        console.log('FALSE');
        result = false;
       }
     }

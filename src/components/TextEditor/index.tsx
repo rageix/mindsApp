@@ -13,7 +13,6 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
-  ElementTransformer,
   TRANSFORMERS,
 } from '@lexical/markdown';
 import {
@@ -149,21 +148,6 @@ interface IProps {
   initialState: string | null;
   onChange: (state: string) => void;
 }
-
-export const LINE_BREAK_FIX: ElementTransformer = {
-  dependencies: [ParagraphNode],
-  export: () => {
-    return null;
-  },
-  regExp: /^$/,
-  replace: (textNode, nodes, _, isImport) => {
-    if (isImport && nodes.length === 1) {
-      console.log(textNode);
-      nodes[0].replace($createParagraphNode());
-    }
-  },
-  type: 'element',
-};
 
 export default function TextEditor({ initialState, onChange }: IProps) {
   const editorConfig: InitialConfigType = useMemo(

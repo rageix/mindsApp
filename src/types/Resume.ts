@@ -316,6 +316,7 @@ export enum ETemplate {
   BirmanRight = 'Birman (Right)',
   BirmanLeft = 'Birman (Left)',
   ExoticShorthairLeft = 'Exotic Shorthair (Left)',
+  ExoticShorthairRight = 'Exotic Shorthair (Right)',
 }
 
 export enum EResumeFonts {

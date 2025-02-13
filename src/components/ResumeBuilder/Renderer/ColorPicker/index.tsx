@@ -9,6 +9,7 @@ import RgbView from '@/components/Color/RgbView';
 import HexView from '@/components/Color/HexView';
 import PickerView from '@/components/Color/PickerView';
 import SwatchView from '@/components/Color/SwatchView';
+import Button from '@/components/Buttton';
 
 enum EViews {
   Simple,
@@ -65,13 +66,16 @@ export default function ColorPicker({ controller, title }: IProps) {
 
   return (
     <Popover className="relative flex">
-      <PopoverButton>
+      <PopoverButton as="div">
+        <div className="flex gap-x-2 items-center">
         <div
-          className="size-9 rounded-full border-2 border-gray-900"
+          className="size-9 rounded-full border-2 border-gray-900 shrink-0"
           style={{ backgroundColor: color.hex }}
           title={title}
           aria-label={title}
         />
+          <Button variant="link">Change</Button>
+        </div>
       </PopoverButton>
       <PopoverPanel
         anchor="bottom"

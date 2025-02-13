@@ -1,7 +1,7 @@
 'use client';
 import ResumeController from '@/components/ResumeBuilder/Builder/ResumeController';
 import Builder from '@/components/ResumeBuilder';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Loading from '@/components/Loading';
 import Renderer from '@/components/ResumeBuilder/Renderer';
@@ -30,7 +30,6 @@ export default function ResumeView() {
   const subscription = useSubscription();
   const [controller] = useState(new ResumeController());
   const windowSizes = useWindowSizes();
-  const builderRef = useRef<HTMLDivElement>(null);
   const [isSmall, setIsSmall] = useState(
     windowSizes.windowWidth < SMALL_BREAK_POINT,
   );
@@ -65,13 +64,6 @@ export default function ResumeView() {
       return;
     }
   }, [windowSizes.windowWidth]);
-
-  useEffect(() => {
-    // make sure the window starts at the top of screen after load
-    if (builderRef.current) {
-      window.scrollTo(0, 0);
-    }
-  }, [builderRef.current]);
 
   useEffect(() => {
     const onResumeUpdated = () => controller.onResumeUpdated();
@@ -165,10 +157,7 @@ export default function ResumeView() {
         )}
       </div>
       <ResumeContext.Provider value={controller}>
-        <div
-          ref={builderRef}
-          className={'min-h-screen h-full flex gap-x-3'}
-        >
+        <div className={'min-h-screen h-full flex gap-x-3'}>
           <div
             className={cn(
               'max-w-2xl mx-auto flex-1',

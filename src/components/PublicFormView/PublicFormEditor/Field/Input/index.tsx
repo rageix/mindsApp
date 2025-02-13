@@ -11,8 +11,6 @@ export default function FieldInput({ controller }: IProps) {
   // controller.useController();
   const { state, form, field } = controller;
 
-  console.log(form);
-
   return (
     <Input<IForm>
       errors={state.errors}

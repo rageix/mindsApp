@@ -44,8 +44,8 @@ const active: Record<TButtonVariant, string> = {
   yellow: '!bg-yellow-800',
   white: '',
   gray: '!bg-gray-800',
-  link: '',
-  linkRed: '',
+  link: '!bg-blue-100',
+  linkRed: '!bg-red-100',
   text: '',
   custom: '',
 };
@@ -59,8 +59,8 @@ const colorsDisabled: Record<TButtonVariant, string> = {
   yellow: 'bg-yellow-100 text-yellow-400',
   white: 'bg-gray-100 text-gray-400',
   gray: 'bg-gray-100 text-gray-400',
-  link: 'text-gray-100',
-  linkRed: 'text-gray-100',
+  link: 'text-gray-400',
+  linkRed: 'text-gray-400',
   text: 'text-gray-500',
   custom: '',
 };
