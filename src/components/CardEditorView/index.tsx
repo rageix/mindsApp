@@ -18,7 +18,6 @@ import CardFormController, { IForm } from './CardFormController';
 import { postApiCards } from '@/requests/api/cards';
 import useCard from '@/hooks/UseCard';
 import _ from 'lodash';
-import ProfilesSelect from '@/components/ProfilesSelect';
 import FormBlockBody from '@/components/FormBlock/FormBlockBody';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 
@@ -112,13 +111,7 @@ export default function CardEditorView() {
               <FormBlockBody>
                 <FormLabel<IForm> field="profileId">Profile</FormLabel>
                 <div className="mt-2">
-                  <ProfilesSelect<IForm>
-                    field="profileId"
-                    errors={state.errors}
-                    value={form.profileId}
-                    onChange={controller.onChangeProfile}
-                    clearable={true}
-                  />
+                {/*  empty */}
                 </div>
                 <FormErrors<IForm>
                   field="profileId"

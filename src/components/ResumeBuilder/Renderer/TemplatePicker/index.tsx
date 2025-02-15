@@ -51,26 +51,28 @@ export default function TemplatePicker({ controller }: IProps) {
   }
 
   return (
-    <div className="flex items-center gap-x-2 justify-center">
-      <div>
+    <div className="flex min-w-0 items-center gap-x-2">
+      <div className="shrink-0">
         <Button
           variant="link"
           onClick={onClickPrev}
+          isInline
         >
           Prev
         </Button>
       </div>
-      <div>
+      <div className="grow">
         <Select
           options={OPTIONS}
           value={templateOption}
           onChange={(option) => controller.onChangeTemplate(option.value)}
         />
       </div>
-      <div>
+      <div className="shrink-0">
         <Button
           variant="link"
           onClick={onClickNext}
+          isInline
         >
           Next
         </Button>

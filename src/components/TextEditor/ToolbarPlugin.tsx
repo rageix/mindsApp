@@ -28,14 +28,14 @@ import {
   List,
   ListOrdered,
   Redo,
-  // Strikethrough,
-  // Underline,
   Undo,
 } from 'lucide-react';
 import Button from '@/components/Buttton';
 import { cn } from '@/util/Cn';
 import { getSelectedNode } from '@/util/GetSelectedNode';
 import useSize from '@/hooks/UseSize';
+import LinkEditorModal from '@/components/TextEditor/LinkEditorModal';
+import LinkEditorController from '@/components/TextEditor/LinkEditorForm/LinkEditorController';
 // import {
 //   IS_ALIGN_CENTER,
 //   IS_ALIGN_LEFT,
@@ -64,9 +64,30 @@ export default function ToolbarPlugin() {
   const [isBulletList, setIsBulletList] = useState(false);
   const [isNumberList, setIsNumberList] = useState(false);
   const size = useSize(toolbarRef);
+  const [linkEditorController] = useState(new LinkEditorController());
+  const [showLinkEditor, setShowLinkEditor] = useState(false);
   const isMobile = (size?.width || 450) < 430;
   const iconSize = isMobile ? 24 : 24;
+
   // const [textJustify, setTextJustify] = useState(0);
+
+  function onModalClose(url: string | undefined) {
+    setShowLinkEditor(false);
+
+    if (url === undefined) {
+      return;
+    }
+
+    editor.dispatchCommand(
+      TOGGLE_LINK_COMMAND,
+      url.trim() === ''
+        ? null
+        : {
+            url,
+            target: '_blank',
+          },
+    );
+  }
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -196,194 +217,219 @@ export default function ToolbarPlugin() {
   };
 
   return (
-    <div
-      className="flex align-middle border border-gray-200 divide-x divide-gray-200 divide-solid rounded-tl-md rounded-tr-md border-b-0"
-      ref={toolbarRef}
-    >
-      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
-        <Button
-          variant="custom"
-          disabled={!canUndo}
-          onClick={() => {
-            editor.dispatchCommand(UNDO_COMMAND, undefined);
-          }}
+    <>
+      <div
+        className="flex align-middle border border-gray-200 divide-x divide-gray-200 divide-solid rounded-tl-md rounded-tr-md border-b-0"
+        ref={toolbarRef}
+      >
+        <div
           className={cn(
-            BUTTON_CLASS_NAME,
-            canUndo ? null : DISABLED_BUTTON_CLASS_NAME,
+            'flex py-2',
+            isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4',
           )}
-          aria-label="Undo"
         >
-          <Undo size={iconSize} />
-        </Button>
-        <Button
-          variant="custom"
-          disabled={!canRedo}
-          onClick={() => {
-            editor.dispatchCommand(REDO_COMMAND, undefined);
-          }}
+          <Button
+            variant="custom"
+            disabled={!canUndo}
+            onClick={() => {
+              editor.dispatchCommand(UNDO_COMMAND, undefined);
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              canUndo ? null : DISABLED_BUTTON_CLASS_NAME,
+            )}
+            aria-label="Undo"
+          >
+            <Undo size={iconSize} />
+          </Button>
+          <Button
+            variant="custom"
+            disabled={!canRedo}
+            onClick={() => {
+              editor.dispatchCommand(REDO_COMMAND, undefined);
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              canRedo ? null : DISABLED_BUTTON_CLASS_NAME,
+            )}
+            aria-label="Redo"
+          >
+            <Redo size={iconSize} />
+          </Button>
+        </div>
+        <div
           className={cn(
-            BUTTON_CLASS_NAME,
-            canRedo ? null : DISABLED_BUTTON_CLASS_NAME,
+            'flex py-2',
+            isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4',
           )}
-          aria-label="Redo"
         >
-          <Redo size={iconSize} />
-        </Button>
+          <Button
+            variant="custom"
+            onClick={() => {
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              isBold ? ACTIVE_BUTTON_CLASS_NAME : null,
+            )}
+            aria-label="Format Bold"
+          >
+            <Bold size={iconSize} />
+          </Button>
+          <Button
+            variant="custom"
+            onClick={() => {
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              isItalic ? ACTIVE_BUTTON_CLASS_NAME : null,
+            )}
+            aria-label="Format Italics"
+          >
+            <Italic size={iconSize} />
+          </Button>
+          {/*<Button*/}
+          {/*  variant="custom"*/}
+          {/*  onClick={() => {*/}
+          {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');*/}
+          {/*  }}*/}
+          {/*  className={cn(*/}
+          {/*    BUTTON_CLASS_NAME,*/}
+          {/*    isUnderline ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+          {/*  )}*/}
+          {/*  aria-label="Format Underline"*/}
+          {/*>*/}
+          {/*  <Underline size={iconSize} />*/}
+          {/*</Button>*/}
+          {/*<Button*/}
+          {/*  variant="custom"*/}
+          {/*  onClick={() => {*/}
+          {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');*/}
+          {/*  }}*/}
+          {/*  className={cn(*/}
+          {/*    BUTTON_CLASS_NAME,*/}
+          {/*    isStrikethrough ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+          {/*  )}*/}
+          {/*  aria-label="Format Strikethrough"*/}
+          {/*>*/}
+          {/*  <Strikethrough size={iconSize} />*/}
+          {/*</Button>*/}
+        </div>
+        <div
+          className={cn(
+            'flex py-2',
+            isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4',
+          )}
+        >
+          <Button
+            variant="custom"
+            onClick={() => {
+              if (isBulletList) {
+                formatParagraph();
+                return;
+              }
+              editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              isBulletList ? ACTIVE_BUTTON_CLASS_NAME : null,
+            )}
+            aria-label="Unordered List"
+          >
+            <List size={iconSize} />
+          </Button>
+          <Button
+            variant="custom"
+            onClick={() => {
+              if (isNumberList) {
+                formatParagraph();
+                return;
+              }
+              editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              isNumberList ? ACTIVE_BUTTON_CLASS_NAME : null,
+            )}
+            aria-label="Ordered List"
+          >
+            <ListOrdered size={iconSize} />
+          </Button>
+          <Button
+            variant="custom"
+            onClick={() => {
+              linkEditorController.reset({ url: linkUrl });
+              setShowLinkEditor(true);
+
+              // const url = prompt('Enter a url.', linkUrl);
+              // editor.dispatchCommand(
+              //   TOGGLE_LINK_COMMAND,
+              //   !url
+              //     ? null
+              //     : {
+              //         url,
+              //         target: '_blank',
+              //       },
+              // );
+            }}
+            className={cn(
+              BUTTON_CLASS_NAME,
+              isLink ? ACTIVE_BUTTON_CLASS_NAME : null,
+            )}
+            aria-label="Link"
+          >
+            <LinkIcon size={iconSize} />
+          </Button>
+        </div>
+        {/*<div className="flex gap-x-4 px-4 py-2">*/}
+        {/*  <Button*/}
+        {/*    variant="custom"*/}
+        {/*    onClick={() => {*/}
+        {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');*/}
+        {/*    }}*/}
+        {/*    // className="toolbar-item spaced"*/}
+        {/*    className={cn(*/}
+        {/*      BUTTON_CLASS_NAME,*/}
+        {/*      textJustify === IS_ALIGN_LEFT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+        {/*    )}*/}
+        {/*    aria-label="Left Align"*/}
+        {/*  >*/}
+        {/*    <AlignLeft />*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant="custom"*/}
+        {/*    onClick={() => {*/}
+        {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');*/}
+        {/*    }}*/}
+        {/*    className={cn(*/}
+        {/*      BUTTON_CLASS_NAME,*/}
+        {/*      textJustify === IS_ALIGN_CENTER ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+        {/*    )}*/}
+        {/*    aria-label="Center Align"*/}
+        {/*  >*/}
+        {/*    <AlignCenter />*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant="custom"*/}
+        {/*    onClick={() => {*/}
+        {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');*/}
+        {/*    }}*/}
+        {/*    className={cn(*/}
+        {/*      BUTTON_CLASS_NAME,*/}
+        {/*      textJustify === IS_ALIGN_RIGHT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
+        {/*    )}*/}
+        {/*    aria-label="Right Align"*/}
+        {/*  >*/}
+        {/*    <AlignRight />*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
       </div>
-      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isBold ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Format Bold"
-        >
-          <Bold size={iconSize} />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isItalic ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Format Italics"
-        >
-          <Italic size={iconSize} />
-        </Button>
-        {/*<Button*/}
-        {/*  variant="custom"*/}
-        {/*  onClick={() => {*/}
-        {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');*/}
-        {/*  }}*/}
-        {/*  className={cn(*/}
-        {/*    BUTTON_CLASS_NAME,*/}
-        {/*    isUnderline ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
-        {/*  )}*/}
-        {/*  aria-label="Format Underline"*/}
-        {/*>*/}
-        {/*  <Underline size={iconSize} />*/}
-        {/*</Button>*/}
-        {/*<Button*/}
-        {/*  variant="custom"*/}
-        {/*  onClick={() => {*/}
-        {/*    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');*/}
-        {/*  }}*/}
-        {/*  className={cn(*/}
-        {/*    BUTTON_CLASS_NAME,*/}
-        {/*    isStrikethrough ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
-        {/*  )}*/}
-        {/*  aria-label="Format Strikethrough"*/}
-        {/*>*/}
-        {/*  <Strikethrough size={iconSize} />*/}
-        {/*</Button>*/}
-      </div>
-      <div className={cn('flex py-2', isMobile ? 'gap-x-2 px-2' : 'gap-x-4 px-4')}>
-        <Button
-          variant="custom"
-          onClick={() => {
-            if (isBulletList) {
-              formatParagraph();
-              return;
-            }
-            editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isBulletList ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Unordered List"
-        >
-          <List size={iconSize} />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            if (isNumberList) {
-              formatParagraph();
-              return;
-            }
-            editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isNumberList ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Ordered List"
-        >
-          <ListOrdered size={iconSize} />
-        </Button>
-        <Button
-          variant="custom"
-          onClick={() => {
-            const url = prompt('Enter a url.', linkUrl);
-            editor.dispatchCommand(
-              TOGGLE_LINK_COMMAND,
-              !url
-                ? null
-                : {
-                    url,
-                    target: '_blank',
-                  },
-            );
-          }}
-          className={cn(
-            BUTTON_CLASS_NAME,
-            isLink ? ACTIVE_BUTTON_CLASS_NAME : null,
-          )}
-          aria-label="Link"
-        >
-          <LinkIcon size={iconSize} />
-        </Button>
-      </div>
-      {/*<div className="flex gap-x-4 px-4 py-2">*/}
-      {/*  <Button*/}
-      {/*    variant="custom"*/}
-      {/*    onClick={() => {*/}
-      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');*/}
-      {/*    }}*/}
-      {/*    // className="toolbar-item spaced"*/}
-      {/*    className={cn(*/}
-      {/*      BUTTON_CLASS_NAME,*/}
-      {/*      textJustify === IS_ALIGN_LEFT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
-      {/*    )}*/}
-      {/*    aria-label="Left Align"*/}
-      {/*  >*/}
-      {/*    <AlignLeft />*/}
-      {/*  </Button>*/}
-      {/*  <Button*/}
-      {/*    variant="custom"*/}
-      {/*    onClick={() => {*/}
-      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');*/}
-      {/*    }}*/}
-      {/*    className={cn(*/}
-      {/*      BUTTON_CLASS_NAME,*/}
-      {/*      textJustify === IS_ALIGN_CENTER ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
-      {/*    )}*/}
-      {/*    aria-label="Center Align"*/}
-      {/*  >*/}
-      {/*    <AlignCenter />*/}
-      {/*  </Button>*/}
-      {/*  <Button*/}
-      {/*    variant="custom"*/}
-      {/*    onClick={() => {*/}
-      {/*      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');*/}
-      {/*    }}*/}
-      {/*    className={cn(*/}
-      {/*      BUTTON_CLASS_NAME,*/}
-      {/*      textJustify === IS_ALIGN_RIGHT ? ACTIVE_BUTTON_CLASS_NAME : null,*/}
-      {/*    )}*/}
-      {/*    aria-label="Right Align"*/}
-      {/*  >*/}
-      {/*    <AlignRight />*/}
-      {/*  </Button>*/}
-      {/*</div>*/}
-    </div>
+      <LinkEditorModal
+        controller={linkEditorController}
+        open={showLinkEditor}
+        onClose={onModalClose}
+      />
+    </>
   );
 }

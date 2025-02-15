@@ -1,21 +1,25 @@
 import { MenuItem } from '@headlessui/react';
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { PropsWithChildren } from 'react';
 import { cn } from '@/util/Cn';
 
-interface IProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
+interface IProps extends PropsWithChildren {
+  className?: string;
+}
 
-export default function CurrentUserAvatarMenuItem(props: IProps) {
+export default function CurrentUserAvatarMenuItem({
+  className,
+  children,
+}: IProps) {
+
   return (
     <MenuItem>
       <div
-        {...props}
         className={cn(
-          'block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-gray-50 cursor-pointer',
-          props.className,
+          'block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-blue-100 cursor-pointer',
+          className,
         )}
       >
-        {props.children}
+        {children}
       </div>
     </MenuItem>
   );

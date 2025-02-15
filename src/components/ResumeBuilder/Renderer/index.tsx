@@ -71,7 +71,7 @@ export default function Renderer({
   if (!isVisible) {
     return null;
   }
-  
+
   return (
     <div className="px-2 py-4 flex flex-col h-full w-full">
       <div className="grid grid-cols-4 gap-2">
@@ -80,12 +80,13 @@ export default function Renderer({
           isActive={tab === ETabs.Template}
           onClick={() => onClickTab(ETabs.Template)}
         >
-          Template
+          <span className="truncate">Template</span>
         </Button>
         <Button
           variant="link"
           isActive={tab === ETabs.Font}
           onClick={() => onClickTab(ETabs.Font)}
+          className="truncate"
         >
           Font
         </Button>
@@ -93,6 +94,7 @@ export default function Renderer({
           variant="link"
           isActive={tab === ETabs.Color}
           onClick={() => onClickTab(ETabs.Color)}
+          className="truncate"
         >
           Color
         </Button>
@@ -100,6 +102,7 @@ export default function Renderer({
           variant="link"
           disabled={!hasSubscription}
           onClick={onClickDownload}
+          className="truncate"
         >
           Export
         </Button>
@@ -134,7 +137,7 @@ export default function Renderer({
         {/*</Button>*/}
       </div>
       {tab !== null &&
-      <div className="flex justify-center mt-3 rounded-md border border-gray-200 py-4 px-2">
+      <div className="mt-3 rounded-md border border-gray-200 py-4 px-2">
         {tab === ETabs.Template && (
           <TemplatePicker controller={styleController} />
         )}

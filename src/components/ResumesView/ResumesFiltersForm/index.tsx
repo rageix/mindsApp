@@ -6,8 +6,7 @@ import Form from '@/components/Form';
 import Input from '@/components/Input';
 import FormErrors from '@/components/FormErrors';
 import { useClose } from '@headlessui/react';
-import { IForm } from '@/components/FormsView/FormFiltersForm/FormFiltersController';
-import ResumesFiltersController from '@/components/ResumesView/ResumesFiltersForm/ResumesFiltersController';
+import ResumesFiltersController, {IForm} from '@/components/ResumesView/ResumesFiltersForm/ResumesFiltersController';
 
 interface IProps {
   controller: ResumesFiltersController;

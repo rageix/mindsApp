@@ -161,6 +161,7 @@ export default function TextEditor({ initialState, onChange }: IProps) {
       onError(error: Error) {
         throw error;
       },
+
       theme: ExampleTheme,
       editorState: () =>
         $convertFromMarkdownString(
