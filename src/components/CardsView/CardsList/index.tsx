@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
 import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
-import TableOptionsMenu from '@/components/TableOptionsMenu';
+import EllipsisMenu from '../../EllipsisMenu';
 import { MenuItem } from '@headlessui/react';
 import useCards from '@/hooks/UseCards';
 import { ICard } from '@/types/Card';
@@ -98,7 +98,7 @@ function getColumns(
     {
       id: 'options',
       header: ({ table }) => (
-        <TableOptionsMenu>
+        <EllipsisMenu>
           <MenuItem>
             <MenuItemButton
               onClick={() => onClickDeleteSelected(table.getSelectedRowModel())}
@@ -106,10 +106,10 @@ function getColumns(
               Delete Selected
             </MenuItemButton>
           </MenuItem>
-        </TableOptionsMenu>
+        </EllipsisMenu>
       ),
       cell: ({ row }) => (
-        <TableOptionsMenu>
+        <EllipsisMenu>
           <MenuItemButton onClick={() => onClickEditOne(row.original._id)}>
             Edit
           </MenuItemButton>
@@ -128,7 +128,7 @@ function getColumns(
           <MenuItemButton onClick={() => onClickDeleteOne(row.original._id)}>
             Delete
           </MenuItemButton>
-        </TableOptionsMenu>
+        </EllipsisMenu>
       ),
     },
   ];

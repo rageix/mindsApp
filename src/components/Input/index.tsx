@@ -49,7 +49,7 @@ export default function Input<T>(props: Props<T>) {
         {...internal}
         {...newProps}
         className={cn(
-          'block w-full rounded-md bg-gray-100 px-4 py-2 text-xl text-gray-900 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 !border-none',
+          'block w-full rounded-md bg-gray-100 px-4 py-2 text-xl text-gray-900 placeholder:text-gray-400 outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600',
           props.disabled ? '!bg-gray-300 !text-gray-500' : null,
           props.isClearable ? '!pr-10' : null,
           props.className,

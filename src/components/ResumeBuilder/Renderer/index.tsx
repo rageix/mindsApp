@@ -137,7 +137,7 @@ export default function Renderer({
         {/*</Button>*/}
       </div>
       {tab !== null &&
-      <div className="mt-3 rounded-md border border-gray-200 py-4 px-2">
+      <div className="mt-3 flex justify-center rounded-md border border-gray-200 py-4 px-2">
         {tab === ETabs.Template && (
           <TemplatePicker controller={styleController} />
         )}

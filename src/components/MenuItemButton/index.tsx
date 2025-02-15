@@ -19,7 +19,7 @@ const MenuItemButton = forwardRef(function MenuItemButton(
       ref={ref}
       type="button"
       className={cn(
-        'block px-3 py-1 text-sm leading-6 w-full text-left font-normal data-[active]:bg-blue-100 !text-blue-600',
+        'block px-3 py-1 text-sm leading-6 w-full text-left font-normal text-gray-900 data-[focus]:bg-blue-600 data-[focus]:text-white cursor-pointer',
         disabled ? 'text-gray-400' : null,
         className ? className : null,
       )}

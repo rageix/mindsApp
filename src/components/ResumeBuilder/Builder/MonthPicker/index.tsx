@@ -59,7 +59,7 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
   }
 
   return (
-    <div className="bg-white p-3 border rounded-md flex flex-col gap-y-2 my-0.5">
+    <div className="bg-white p-3 border border-gray-200 rounded-md flex flex-col gap-y-2 my-0.5">
       <div className="">
         <div className="flex gap-y-4 items-center text-center text-gray-900">
           <Button

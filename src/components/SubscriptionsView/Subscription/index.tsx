@@ -12,7 +12,7 @@ import useSubscriptionPortal from '@/hooks/UseSubscriptionPortal';
 import CardHeader from '@/components/Card/CardHeader';
 import CardTitle from '@/components/Card/CardTitle';
 import MenuItemButton from '@/components/MenuItemButton';
-import TableOptionsMenu from '@/components/TableOptionsMenu';
+import EllipsisMenu from '../../EllipsisMenu';
 import useTheme from '@/hooks/UseTheme';
 import { cn } from '@/util/Cn';
 import { ETheme } from '@/common/Theme';
@@ -48,7 +48,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
             </p>
           </div>
           <div>
-            <TableOptionsMenu className="!w-36">
+            <EllipsisMenu className="!w-36">
               <a
                 href={portal.data?.url}
                 target="_blank"
@@ -58,7 +58,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                   Update payment
                 </MenuItemButton>
               </a>
-            </TableOptionsMenu>
+            </EllipsisMenu>
           </div>
         </div>
       </CardHeader>

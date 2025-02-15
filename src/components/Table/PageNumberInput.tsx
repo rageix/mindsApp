@@ -38,12 +38,12 @@ export default function PageNumberInput(props: Props) {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex rounded-md shadow-sm">
+      <div className="flex rounded-md">
         <div className="relative flex flex-grow items-stretch focus-within:z-10">
           <input
             name="page"
             id="page"
-            className="block w-20 rounded-none rounded-l-md bg-white text-gray-900 px-3 py-1.5 text-base text-gray-900 ring-1 ring-gray-300 focus:ring-2 focus:ring-inset ring-inset placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6 !border-none"
+            className="block w-20 rounded-none rounded-l-md bg-gray-100 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6 !border-none"
             type="number"
             value={value}
             onChange={onChange}
@@ -51,7 +51,7 @@ export default function PageNumberInput(props: Props) {
         </div>
         <button
           type="submit"
-          className="relative -ml-px inline-flex items-center rounded-r-md px-3 py-2 text-sm font-semibold  bg-blue-700 hover:bg-blue-600 active:bg-blue-800 focus-visible:outline-blue-700 text-white"
+          className="relative -ml-px inline-flex items-center rounded-r-md px-3 py-2 text-sm font-semibold  bg-blue-700 hover:bg-blue-600 text-white"
         >
           <SearchIcon
             className="-ml-0.5 h-5 w-5"

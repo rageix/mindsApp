@@ -23,9 +23,9 @@ export default function CurrentUserAvatar() {
         as="div"
         className="relative"
       >
-        <MenuButton className="-m-1.5 flex items-center p-1.5">
+        <MenuButton className="flex items-center cursor-pointer">
           <span className="sr-only">Open user menu</span>
-          <div className="h-8 w-8 rounded-full overflow-hidden bg-gray-500">
+          <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-500">
             <UserAvatar value={user.data?.avatar} />
           </div>
         </MenuButton>

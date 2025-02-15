@@ -10,7 +10,7 @@ interface IProps extends PropsWithChildren {
   buttonClassName?: string;
 }
 
-export default function TableOptionsMenu({
+export default function EllipsisMenu({
   className,
   buttonClassName,
   children,

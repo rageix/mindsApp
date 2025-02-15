@@ -28,11 +28,11 @@ export default function Checkbox<T>(props: Props<T>) {
       {...props}
       type="checkbox"
       className={cn(
-        'h-4 w-4 rounded',
+        'h-4 w-4 rounded enabled:cursor-pointer',
         props.className ? props.className : '',
         props['aria-invalid']
-          ? 'border-red-300 text-red-500 focus:ring-red-400'
-          : 'border-gray-300 text-blue-600 focus:ring-blue-400',
+          ? 'border-red-200  hover:border-red-200  checked:border-red-600 checked:bg-red-600'
+          : 'border-gray-200 hover:border-gray-200 bg-white checked:border-blue-600 checked:bg-blue-600',
       )}
     />
   );

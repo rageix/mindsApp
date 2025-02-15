@@ -55,7 +55,7 @@ export default function DetailForm({ controller }: IProps) {
             <div className="flex items-center gap-x-3">
               <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
                 <Popover className="relative">
-                  <PopoverButton as="div">
+                  <PopoverButton as="div" className="cursor-pointer">
                     <UserAvatar
                       value={form.photo}
                       alt="UserPhoto"

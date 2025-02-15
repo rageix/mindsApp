@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
 import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
-import TableOptionsMenu from '@/components/TableOptionsMenu';
+import EllipsisMenu from '../../EllipsisMenu';
 import { MenuItem } from '@headlessui/react';
 import Link from 'next/link';
 import FilterPopover from '@/components/FilterPopover';
@@ -41,7 +41,7 @@ function getColumns(
       id: 'select',
       header: ({ table }) => (
         <div
-          className="cursor-pointer"
+          className="flex w-full items-center justify-center"
           onClick={table.getToggleAllRowsSelectedHandler()}
         >
           <Checkbox
@@ -54,7 +54,7 @@ function getColumns(
       ),
       cell: ({ row }) => (
         <div
-          className="cursor-pointer"
+          className="flex w-full items-center justify-center"
           onClick={row.getToggleSelectedHandler()}
         >
           <Checkbox
@@ -96,7 +96,7 @@ function getColumns(
     {
       id: 'options',
       header: ({ table }) => (
-        <TableOptionsMenu>
+        <EllipsisMenu>
           <MenuItem>
             <MenuItemButton
               onClick={() => onClickDeleteSelected(table.getSelectedRowModel())}
@@ -104,17 +104,17 @@ function getColumns(
               Delete Selected
             </MenuItemButton>
           </MenuItem>
-        </TableOptionsMenu>
+        </EllipsisMenu>
       ),
       cell: ({ row }) => (
-        <TableOptionsMenu>
+        <EllipsisMenu>
           <MenuItemButton onClick={() => onClickEditOne(row.original._id)}>
             Edit
           </MenuItemButton>
           <MenuItemButton onClick={() => onClickDeleteOne(row.original._id)}>
             Delete
           </MenuItemButton>
-        </TableOptionsMenu>
+        </EllipsisMenu>
       ),
     },
   ];

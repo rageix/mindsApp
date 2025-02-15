@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { cn } from '@/util/Cn';
 import TitleFormController from '@/components/ResumeBuilder/Builder/Sections/TitleForm/TitleFormController';
-import TableOptionsMenu from '@/components/TableOptionsMenu';
+import EllipsisMenu from '../../../../EllipsisMenu';
 import MenuItemButton from '@/components/MenuItemButton';
 import { ISectionTitle } from '@/types/Resume';
 import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
@@ -43,7 +43,7 @@ export default function Title({ menu = true }: IProps) {
         <div className="grow">{title}</div>
         {menu && (
           <div className="shrink-0">
-            <TableOptionsMenu buttonClassName="h-10">
+            <EllipsisMenu buttonClassName="h-10">
               <MenuItemButton onClick={onClickEditTitle}>
                 Edit Title
               </MenuItemButton>
@@ -61,7 +61,7 @@ export default function Title({ menu = true }: IProps) {
               >
                 Move Down
               </MenuItemButton>
-            </TableOptionsMenu>
+            </EllipsisMenu>
           </div>
         )}
       </div>

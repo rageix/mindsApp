@@ -15,7 +15,7 @@ export default function CurrentUserAvatarMenuItem({
     <MenuItem>
       <div
         className={cn(
-          'block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-blue-100 cursor-pointer',
+          'block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-blue-600 data-[focus]:text-white cursor-pointer',
           className,
         )}
       >

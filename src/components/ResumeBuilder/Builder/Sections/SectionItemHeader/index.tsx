@@ -1,7 +1,7 @@
 'use client';
 import { MutableRefObject, PropsWithChildren, useContext } from 'react';
 import MenuItemButton from '@/components/MenuItemButton';
-import TableOptionsMenu from '@/components/TableOptionsMenu';
+import EllipsisMenu from '../../../../EllipsisMenu';
 import { ChevronDown, ChevronUp, GripVerticalIcon } from 'lucide-react';
 import Button from '@/components/Buttton';
 import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
@@ -64,7 +64,7 @@ export default function SectionItemHeader({
       </Button>
       {menu && (
         <div className="shrink-0">
-          <TableOptionsMenu buttonClassName="h-10">
+          <EllipsisMenu buttonClassName="h-10">
             <MenuItemButton onClick={() => sectionController.onMoveUp(id)}>
               Move Up
             </MenuItemButton>
@@ -81,7 +81,7 @@ export default function SectionItemHeader({
             >
               Delete
             </MenuItemButton>
-          </TableOptionsMenu>
+          </EllipsisMenu>
         </div>
       )}
     </div>

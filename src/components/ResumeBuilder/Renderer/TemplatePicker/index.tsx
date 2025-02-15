@@ -51,7 +51,7 @@ export default function TemplatePicker({ controller }: IProps) {
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-x-2">
+    <div className="flex max-w-md items-center gap-x-2">
       <div className="shrink-0">
         <Button
           variant="link"

@@ -98,12 +98,12 @@ export default function Table<T>(props: Props<T>) {
                       colSpan={header.colSpan}
                       scope="col"
                       className={cn(
-                        'py-3.5 text-left text-sm font-semibold ',
+                        'py-3.5 text-sm font-semibold ',
                         theme === ETheme.light ? 'text-gray-500' : null,
                         theme === ETheme.dark ? 'text-gray-400' : null,
                         props.hasCheckbox && i === 0
-                          ? 'w-10 text-center'
-                          : 'px-3',
+                          ? 'text-center w-10 '
+                          : 'text-left px-3',
                       )}
                     >
                       {header.isPlaceholder ? null : (
@@ -146,13 +146,13 @@ export default function Table<T>(props: Props<T>) {
               <tr
                 key={row.id}
                 className={cn(
-                  'cursor-pointer border-t ',
+                  'border-t ',
                   theme === ETheme.light ? 'border-gray-200' : null,
                   theme === ETheme.dark ? 'border-gray-700' : null,
                 )}
-                onDoubleClick={() =>
-                  props.onClickEdit ? props.onClickEdit(row.original) : null
-                }
+                // onDoubleClick={() =>
+                //   props.onClickEdit ? props.onClickEdit(row.original) : null
+                // }
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
@@ -171,7 +171,7 @@ export default function Table<T>(props: Props<T>) {
             className={cn(
               'flex gap-x-6 items-center justify-between py-3 px-3',
               theme === ETheme.light
-                ? 'bg-gray-50 text-gray-900 border-t border-gray-200'
+                ? 'bg-white text-gray-900 border-t border-gray-200'
                 : null,
               theme === ETheme.dark ? 'bg-gray-700 text-gray-400' : null,
             )}

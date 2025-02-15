@@ -1,6 +1,11 @@
 import { cn } from '@/util/Cn';
 import { TButtonVariant } from '@/types/Variant';
-import { MouseEvent, KeyboardEvent, MutableRefObject, PropsWithChildren } from 'react';
+import {
+  KeyboardEvent,
+  MouseEvent,
+  MutableRefObject,
+  PropsWithChildren,
+} from 'react';
 
 interface Props extends PropsWithChildren {
   elRef?: MutableRefObject<any>;
@@ -30,7 +35,8 @@ const colors: Record<TButtonVariant, string> = {
   white: 'bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white',
   gray: 'bg-gray-700 hover:bg-gray-600 active:bg-gray-800 focus-visible:outline-gray-700 text-white',
   link: 'text-blue-600 hover:bg-blue-100 focus-visible:outline-blue-600 !shadow-none',
-  linkRed: 'text-red-600 hover:bg-red-100 focus-visible:outline-red-600 !shadow-none',
+  linkRed:
+    'text-red-600 hover:bg-red-100 focus-visible:outline-red-600 !shadow-none',
   text: 'text-gray-400 hover:text-gray-300 focus-visible:outline-gray-400 !shadow-none',
   custom: '',
 };
@@ -83,12 +89,12 @@ export default function Button({
       ref={elRef}
       type={type}
       className={cn(
-        `flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 `,
+        `justify-center items-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6`,
         disabled ? '!cursor-auto' : colors[variant],
-        className ? className : null,
         disabled ? colorsDisabled[variant] : null,
-        isInline ? 'inline' : 'w-full',
+        isInline ? 'inline-flex' : 'flex w-full',
         isActive ? active[variant] : null,
+        className ? className : null,
       )}
       onClick={onClick}
       onKeyDown={onKeyDown}
