@@ -20,6 +20,7 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   id = nanoid();
   defaultState = newIHtmlForm<T>();
   lastUpdate: Date | undefined;
+  currentForm: T | null = null;
 
   constructor(arg?: T) {
     super();
@@ -27,6 +28,7 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
     if (arg) {
       this.resetForm = arg;
       this.defaultForm = arg;
+      this.currentForm = arg;
     }
   }
 
@@ -60,6 +62,7 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   };
 
   _setForm = (form: T) => {
+    this.currentForm = form;
     this.lastUpdate = new Date();
     if (this.updateForm) {
       this.updateForm(form);

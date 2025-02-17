@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import SimpleColors from '@/components/ResumeBuilder/Renderer/ColorPicker/SimpleColors';
 import { ISelectOption } from '@/types/SelectOption';
@@ -10,6 +10,7 @@ import HexView from '@/components/Color/HexView';
 import PickerView from '@/components/Color/PickerView';
 import SwatchView from '@/components/Color/SwatchView';
 import Button from '@/components/Buttton';
+import emitter from '@/util/Emitter';
 
 enum EViews {
   Simple,
@@ -60,9 +61,23 @@ interface IProps {
 
 export default function ColorPicker({ controller, title }: IProps) {
   const [view, setView] = useState<ISelectOption<EViews>>(VIEW_OPTIONS[0]);
+  const [isVisible, setIsVisible] = useState(false);
   controller.useController();
-
   const color = controller.state;
+
+  const [popoverElement, setPopoverElement] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (popoverElement) {
+      setIsVisible(true);
+      return;
+    }
+
+    if(isVisible) {
+      emitter.emitSaveResume();
+    }
+    setIsVisible(false);
+  }, [popoverElement])
 
   return (
     <Popover className="relative flex">
@@ -81,7 +96,7 @@ export default function ColorPicker({ controller, title }: IProps) {
         anchor="bottom"
         className="mt-1 overflow-hidden"
       >
-        <div className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem] overflow-hidden">
+        <div ref={setPopoverElement} className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem] overflow-hidden">
           <div className="flex justify-end">
             <div className="min-w-44 w-full">
               {/*<FormLabel>{title}</FormLabel>*/}

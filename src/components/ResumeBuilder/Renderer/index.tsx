@@ -30,10 +30,12 @@ export default function Renderer({
   const [data, setData] = useState<ArrayBuffer>();
   const [time, setTime] = useState<string>('');
   const [tab, setTab] = useState<ETabs | null>(null);
+  const [init, setInit] = useState(false);
 
   // const resume = controller.state.current;
   const styleController = controller.state.styleController;
   styleController.useController();
+  const style = styleController.getForm();
 
   useEffect(() => {
     async function get() {
@@ -48,6 +50,14 @@ export default function Renderer({
 
     get();
   }, [controller.state.lastSavedAt]);
+
+  useEffect(() => {
+    if(!init) {
+      setInit(true);
+      return;
+    }
+    controller.save();
+  }, [style]);
 
   function onClickTab(value: ETabs) {
     if (tab === value) {

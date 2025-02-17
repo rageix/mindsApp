@@ -67,10 +67,15 @@ export default function ResumeView() {
 
   useEffect(() => {
     const onResumeUpdated = () => controller.onResumeUpdated();
+    const onSaveResume = () => controller.save();
 
     emitter.on(emitterMessage.resumeUpdated, onResumeUpdated);
+    emitter.on(emitterMessage.saveResume, onSaveResume);
 
-    return () => emitter.off(emitterMessage.resumeUpdated, onResumeUpdated);
+    return () => {
+      emitter.off(emitterMessage.resumeUpdated, onResumeUpdated);
+      emitter.off(emitterMessage.saveResume, onSaveResume);
+    };
   }, []);
 
   useLeavePageConfirm(controller.state.dirty);
