@@ -48,6 +48,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
             </p>
           </div>
           <div>
+            {portal.data?.url &&
             <EllipsisMenu className="!w-36">
               <a
                 href={portal.data?.url}
@@ -59,6 +60,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                 </MenuItemButton>
               </a>
             </EllipsisMenu>
+            }
           </div>
         </div>
       </CardHeader>
@@ -99,6 +101,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                   <FormattedDate
                     value={subscription.canceledAt}
                     time={false}
+                    year={true}
                   />
                 </TextBlock>
               )}
@@ -107,6 +110,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                   <FormattedDate
                     value={subscription.expiresAt}
                     time={false}
+                    year={true}
                   />
                 </TextBlock>
               )}

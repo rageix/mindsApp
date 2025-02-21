@@ -5,7 +5,7 @@ export default function ResumesView() {
   return (
     <>
       <div className="max-w-3xl m-auto">
-        <DashboardPageHeader title="Resumes" />
+        <DashboardPageHeader title="My Resumes" />
         <ResumesList />
       </div>
     </>
