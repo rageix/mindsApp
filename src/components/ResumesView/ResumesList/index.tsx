@@ -30,9 +30,10 @@ import ResumesFiltersController, {
 import useResumes from '@/hooks/UseResumes';
 import ResumesFiltersForm from '@/components/ResumesView/ResumesFiltersForm';
 import { postApiResumesCreate } from '@/requests/api/resumes/create';
+import { postApiResumesDuplicate } from '@/requests/api/resumes/duplicate';
 
 function getColumns(
-  onClickEditOne: (_id: MongoId) => void,
+  onClickDuplicateOne: (_id: MongoId) => void,
   onClickDeleteOne: (_id: MongoId) => void,
   onClickDeleteSelected: (arg: RowModel<IHasId<IResume>>) => void,
 ): ColumnDef<IHasId<IResume>>[] {
@@ -108,8 +109,8 @@ function getColumns(
       ),
       cell: ({ row }) => (
         <EllipsisMenu>
-          <MenuItemButton onClick={() => onClickEditOne(row.original._id)}>
-            Edit
+          <MenuItemButton onClick={() => onClickDuplicateOne(row.original._id)}>
+            Duplicate
           </MenuItemButton>
           <MenuItemButton onClick={() => onClickDeleteOne(row.original._id)}>
             Delete
@@ -131,7 +132,7 @@ export default function ResumesList() {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const forms = useResumes({
+  const resumes = useResumes({
     ...pagination,
     ...filter,
   });
@@ -140,13 +141,17 @@ export default function ResumesList() {
     router.push(`/resumes/${item._id}`);
   }
 
-  function onClickEditOne(_id: MongoId) {
-    router.push(`/resumes/${_id}`);
+  async function onDuplicateOne(_id: MongoId) {
+    const result = await postApiResumesDuplicate({ _id });
+
+    if (result) {
+      resumes.query.refetch();
+    }
   }
 
   async function onClickDeleteOne(_id: MongoId) {
     if (confirm(CONFIRM_DELETE_ONE)) {
-      await forms.deleteItems([_id]);
+      await resumes.deleteItems([_id]);
       setRowSelection({});
     }
   }
@@ -155,7 +160,7 @@ export default function ResumesList() {
     const ids = arg.rows.map((v) => v.original._id);
 
     if (ids.length > 0 && confirm(CONFIRM_DELETE_SELECTED)) {
-      await forms.deleteItems(ids);
+      await resumes.deleteItems(ids);
       setRowSelection({});
     }
   }
@@ -169,11 +174,11 @@ export default function ResumesList() {
   }
 
   const columns = useMemo(
-    () => getColumns(onClickEditOne, onClickDeleteOne, onClickDeleteSelected),
+    () => getColumns(onDuplicateOne, onClickDeleteOne, onClickDeleteSelected),
     [],
   );
 
-  if (!forms.initLoad) {
+  if (!resumes.initLoad) {
     return (
       <div className="flex justify-center items-center mt-16">
         <Loading
@@ -184,7 +189,7 @@ export default function ResumesList() {
     );
   }
 
-  const hasItems = (forms.data?.data || []).length > 0;
+  const hasItems = (resumes.data?.data || []).length > 0;
 
   return (
     <div className="space-y-3">
@@ -247,7 +252,7 @@ export default function ResumesList() {
         <div className="max-w-3xl m-auto">
           <div className="mt-3">
             <Table<IHasId<IResume>>
-              data={forms.data?.data || []}
+              data={resumes.data?.data || []}
               pagination={pagination}
               setPagination={setPagination}
               sorting={sorting}
@@ -256,7 +261,7 @@ export default function ResumesList() {
               dataFetchFn={() => []}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
-              count={forms.data?.count || 0}
+              count={resumes.data?.count || 0}
               onClickEdit={(item) => onEdit(item)}
               hasCheckbox
             />

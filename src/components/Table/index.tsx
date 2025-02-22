@@ -68,7 +68,7 @@ export default function Table<T>(props: Props<T>) {
   return (
     <div className="overflow-x-auto">
       <div className={cn(
-             'rounded-lg overflow-hidden shadow-sm',
+             'rounded-lg overflow-hidden',
              theme === ETheme.light ? 'border border-gray-200' : null,
              theme === ETheme.dark ? '' : null,
            )}

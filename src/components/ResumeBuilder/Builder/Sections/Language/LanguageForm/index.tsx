@@ -40,7 +40,6 @@ export default function LanguageForm({ controller }: IProps) {
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-          isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
           menu
           id={controller.id}

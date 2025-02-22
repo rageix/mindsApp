@@ -36,7 +36,6 @@ export default function EducationForm({ controller }: IProps) {
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-          isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
           menu
           id={controller.id}

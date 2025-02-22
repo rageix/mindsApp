@@ -2,13 +2,12 @@
 import { MutableRefObject, PropsWithChildren, useContext } from 'react';
 import MenuItemButton from '@/components/MenuItemButton';
 import EllipsisMenu from '../../../../EllipsisMenu';
-import { ChevronDown, ChevronUp, GripVerticalIcon } from 'lucide-react';
+import { ChevronDown, GripVerticalIcon } from 'lucide-react';
 import Button from '@/components/Buttton';
 import SectionContext from '@/components/ResumeBuilder/Builder/Sections/SectionContext';
 
 interface IProps extends PropsWithChildren {
   dragHandleRef?: MutableRefObject<any>;
-  isExpanded: boolean;
   onClickHeader: () => void;
   menu: boolean;
   id: string;
@@ -20,7 +19,6 @@ interface IProps extends PropsWithChildren {
 
 export default function SectionItemHeader({
   dragHandleRef,
-  isExpanded,
   onClickHeader,
   menu,
   id,
@@ -58,7 +56,7 @@ export default function SectionItemHeader({
         <div className="flex w-full items-center">
           <div className="grow text-left">{children}</div>
           <div className="shrink-0 text-gray-500">
-            {isExpanded ? <ChevronDown /> : <ChevronUp />}
+            <ChevronDown />
           </div>
         </div>
       </Button>

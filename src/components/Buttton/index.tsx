@@ -23,17 +23,17 @@ interface Props extends PropsWithChildren {
 
 const colors: Record<TButtonVariant, string> = {
   indigo:
-    'bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 focus-visible:outline-indigo-700 text-white',
-  blue: 'bg-blue-700 hover:bg-blue-600 active:bg-blue-800 focus-visible:outline-blue-700 text-white',
-  red: 'bg-red-700 hover:bg-red-600 active:bg-red-800 focus-visible:outline-red-700 text-white',
+    'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-800 focus-visible:outline-indigo-700 text-white',
+  blue: 'bg-blue-600 hover:bg-blue-500 active:bg-blue-800 focus-visible:outline-blue-700 text-white',
+  red: 'bg-red-600 hover:bg-red-500 active:bg-red-800 focus-visible:outline-red-700 text-white',
   purple:
-    'bg-purple-700 hover:bg-purple-600 active:bg-purple-800 focus-visible:outline-purple-700 text-white',
+    'bg-purple-600 hover:bg-purple-500 active:bg-purple-800 focus-visible:outline-purple-700 text-white',
   green:
-    'bg-green-700 hover:bg-green-600 active:bg-green-800 focus-visible:outline-green-700 text-white',
+    'bg-green-600 hover:bg-green-500 active:bg-green-800 focus-visible:outline-green-700 text-white',
   yellow:
-    'bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-800 focus-visible:outline-yellow-700 text-white',
+    'bg-yellow-600 hover:bg-yellow-500 active:bg-yellow-800 focus-visible:outline-yellow-700 text-white',
   white: 'bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white',
-  gray: 'bg-gray-700 hover:bg-gray-600 active:bg-gray-800 focus-visible:outline-gray-700 text-white',
+  gray: 'bg-gray-600 hover:bg-gray-500 active:bg-gray-800 focus-visible:outline-gray-700 text-white',
   link: 'text-blue-600 hover:bg-blue-100 focus-visible:outline-blue-600 !shadow-none',
   linkRed:
     'text-red-600 hover:bg-red-100 focus-visible:outline-red-600 !shadow-none',

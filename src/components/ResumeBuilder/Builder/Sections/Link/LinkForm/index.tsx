@@ -33,7 +33,6 @@ export default function LinkForm({ controller }: IProps) {
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-          isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
           menu
           id={controller.id}

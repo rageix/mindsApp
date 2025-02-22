@@ -11,7 +11,7 @@ import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/Secti
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import ImageUploadModal from '@/components/ImageUploadModal';
 import { UserAvatar } from '@/components/UserAvatar';
 import { MongoId } from '@/types/MongoDocument';
@@ -33,7 +33,6 @@ export default function DetailForm({ controller }: IProps) {
   return (
     <SectionItem>
       <SectionItemHeader
-        isExpanded={form.isExpanded}
         onClickHeader={controller.onChangeIsExpanded}
         menu={false}
         id={controller.id}
@@ -55,7 +54,10 @@ export default function DetailForm({ controller }: IProps) {
             <div className="flex items-center gap-x-3">
               <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
                 <Popover className="relative">
-                  <PopoverButton as="div" className="cursor-pointer">
+                  <PopoverButton
+                    as="div"
+                    className="cursor-pointer"
+                  >
                     <UserAvatar
                       value={form.photo}
                       alt="UserPhoto"
@@ -274,7 +276,7 @@ export default function DetailForm({ controller }: IProps) {
               {showMore ? 'Show less fields' : 'Show more fields'}
             </div>
             <div className="shrink-0 text-gray-500">
-              {showMore ? <ChevronDown /> : <ChevronUp />}
+              <ChevronDown />
             </div>
           </div>
         </Button>

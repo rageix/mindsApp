@@ -69,7 +69,6 @@ export default function SkillForm({
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-          isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
           menu
           id={controller.id}

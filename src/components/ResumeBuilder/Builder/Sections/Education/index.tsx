@@ -6,8 +6,7 @@ import EducationForm from '@/components/ResumeBuilder/Builder/Sections/Education
 import EducationFormController from '@/components/ResumeBuilder/Builder/Sections/Education/EducationForm/EducationFormController';
 import FormList from '../FormList';
 import AddFormButton from '@/components/ResumeBuilder/Builder/Sections/AddFormButton';
-import SectionWithDraggables
-  from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
+import SectionWithDraggables from '@/components/ResumeBuilder/Builder/Sections/SectionWithDraggables';
 
 interface IProps {
   controller: SectionController;

@@ -20,9 +20,7 @@ interface IProps {
   controller: CourseFormController;
 }
 
-export default function CourseForm({
-  controller,
-}: IProps) {
+export default function CourseForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -39,7 +37,6 @@ export default function CourseForm({
       <SectionItem dragRef={dragRef}>
         <SectionItemHeader
           dragHandleRef={dragHandleRef}
-          isExpanded={form.isExpanded}
           onClickHeader={controller.onChangeIsExpanded}
           menu={true}
           id={controller.id}

@@ -36,7 +36,7 @@ export default function Title({ menu = true }: IProps) {
     <>
       <div
         className={cn(
-          'font-bold text-2xl flex items-center',
+          'font-bold text-2xl flex items-center text-blue-900',
           merriweather.className,
         )}
       >
