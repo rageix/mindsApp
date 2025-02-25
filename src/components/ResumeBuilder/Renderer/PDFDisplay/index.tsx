@@ -12,11 +12,9 @@ export default function PDFDisplay({ data }: IProps) {
   });
 
   return (
-    <div className="absolute inset-0 bg-gray-300 pdfSlick rounded-md overflow-hidden border border-gray-200">
-      <div className="flex-1 relative h-full">
-        <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} />
-        <PDFNavigation {...{ usePDFSlickStore }} />
-      </div>
-    </div>
+    <>
+      <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} />
+      <PDFNavigation {...{ usePDFSlickStore }} />
+    </>
   );
 }

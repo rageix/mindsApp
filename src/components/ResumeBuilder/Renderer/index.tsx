@@ -8,6 +8,7 @@ import PDFDisplay from '@/components/ResumeBuilder/Renderer/PDFDisplay';
 import Button from '@/components/Buttton';
 import FontSettings from '@/components/ResumeBuilder/Renderer/FontSettings';
 import ColorSettings from '@/components/ResumeBuilder/Renderer/ColorSettings';
+import DangerAlert from '@/components/Alert/DangerAlert';
 
 enum ETabs {
   Template,
@@ -42,17 +43,19 @@ export default function Renderer({
       const response = await getFile(
         `${process.env.NEXT_PUBLIC_API_HOST}/api/resumes/render/${controller.state.original?._id}`,
       );
-      if (response !== null) {
+      if (response === null) {
+        setData(undefined);
+      } else {
         setData(response);
-        setTime(String(unixTimestamp()));
       }
+      setTime(String(unixTimestamp()));
     }
 
     get();
   }, [controller.state.lastSavedAt]);
 
   useEffect(() => {
-    if(!init) {
+    if (!init) {
       setInit(true);
       return;
     }
@@ -146,28 +149,36 @@ export default function Renderer({
         {/*  Export*/}
         {/*</Button>*/}
       </div>
-      {tab !== null &&
-      <div className="mt-3 flex justify-center rounded-md border border-gray-200 py-4 px-2">
-        {tab === ETabs.Template && (
-          <TemplatePicker controller={styleController} />
-        )}
-        {tab === ETabs.Font && (
-          <FontSettings controller={styleController} />
-        )}
-        {tab === ETabs.Color && (
-          <ColorSettings controller={controller} />
-        )}
-      </div>
-      }
+      {tab !== null && (
+        <div className="mt-3 flex justify-center rounded-md border border-gray-200 py-4 px-2">
+          {tab === ETabs.Template && (
+            <TemplatePicker controller={styleController} />
+          )}
+          {tab === ETabs.Font && <FontSettings controller={styleController} />}
+          {tab === ETabs.Color && <ColorSettings controller={controller} />}
+        </div>
+      )}
       <div className="bg-white flex h-full flex-col">
         <div className="mt-3 flex h-full">
           <div className="w-full relative">
-            {data && (
-              <PDFDisplay
-                key={String(time)}
-                data={data}
-              />
-            )}
+            <div className="absolute inset-0 bg-gray-300 pdfSlick rounded-md overflow-hidden border border-gray-200">
+              <div className="flex-1 relative h-full">
+                {data && (
+                  <PDFDisplay
+                    key={String(time)}
+                    data={data}
+                  />
+                )}
+                {time !== '' && !data && (
+                  <div className="flex w-full h-full justify-center items-center">
+                    <DangerAlert>
+                      <div>Failed to load preview.</div>
+                      <div>If this continues contact support.</div>
+                    </DangerAlert>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
