@@ -45,9 +45,9 @@ export default function TitleForm({
             The form has errors. Please fix them and try to save again.
           </Alert>
         )}
-        <div className="flex items-center justify-end gap-x-6">
+        <div className="flex items-center justify-end gap-x-2">
           <Button
-            variant="text"
+            variant="link"
             onClick={onClickCancel}
             isInline
           >

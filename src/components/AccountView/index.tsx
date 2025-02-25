@@ -28,7 +28,7 @@ export default function AccountView() {
                 toast.success('Avatar uploaded successfully.');
               }}
               route={'/api/user/current/avatar'}
-              maxFileSize={2000000}
+              maxFileSize={2097152}
             />
             <div className="h-16 w-16 flex-none overflow-hidden rounded-full bg-gray-500 m-auto">
               <UserAvatar value={user?.data?.avatar} />

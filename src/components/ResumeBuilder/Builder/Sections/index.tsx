@@ -30,7 +30,7 @@ export default function BuilderSection({ controller }: IProps) {
       element = <Detail controller={controller} />;
       break;
     case ERBType.Summary:
-      element = <Summary controller={controller} />;
+      element = !isHidden ? <Summary controller={controller} /> : null;
       break;
     case ERBType.Employment:
       element = !isHidden ? <Employment controller={controller} /> : null;

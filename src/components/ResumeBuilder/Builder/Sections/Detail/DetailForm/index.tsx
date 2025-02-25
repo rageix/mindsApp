@@ -289,7 +289,7 @@ export default function DetailForm({ controller }: IProps) {
           setShowImageUpload(false);
         }}
         route="/api/resumes/photo"
-        maxFileSize={2000000}
+        maxFileSize={2097152}
       />
     </SectionItem>
   );

@@ -51,6 +51,16 @@ export default function Builder({ controller }: IProps) {
         <div className="flex">
           <div className="flex-1">
             <Switch
+              checked={isHidden[ERBType.Summary]}
+              onChange={() =>
+                controller.onChangeSectionIsHidden(ERBType.Summary)
+              }
+            >
+              <span>Summary</span>
+            </Switch>
+          </div>
+          <div className="flex-1">
+            <Switch
               checked={isHidden[ERBType.Employment]}
               onChange={() =>
                 controller.onChangeSectionIsHidden(ERBType.Employment)
@@ -59,6 +69,8 @@ export default function Builder({ controller }: IProps) {
               <span>Employment</span>
             </Switch>
           </div>
+        </div>
+        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Education]}
@@ -69,8 +81,6 @@ export default function Builder({ controller }: IProps) {
               <span>Education</span>
             </Switch>
           </div>
-        </div>
-        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Link]}
@@ -79,6 +89,8 @@ export default function Builder({ controller }: IProps) {
               <span>Links</span>
             </Switch>
           </div>
+        </div>
+        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Skill]}
@@ -87,8 +99,6 @@ export default function Builder({ controller }: IProps) {
               <span>Skills</span>
             </Switch>
           </div>
-        </div>
-        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Custom]}
@@ -99,6 +109,8 @@ export default function Builder({ controller }: IProps) {
               <span>Custom Section</span>
             </Switch>
           </div>
+        </div>
+        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Course]}
@@ -109,8 +121,6 @@ export default function Builder({ controller }: IProps) {
               <span>Courses</span>
             </Switch>
           </div>
-        </div>
-        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Internship]}
@@ -121,6 +131,8 @@ export default function Builder({ controller }: IProps) {
               <span>Internships</span>
             </Switch>
           </div>
+        </div>
+        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Language]}
@@ -131,8 +143,6 @@ export default function Builder({ controller }: IProps) {
               <span>Languages</span>
             </Switch>
           </div>
-        </div>
-        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.Reference]}
@@ -143,6 +153,8 @@ export default function Builder({ controller }: IProps) {
               <span>References</span>
             </Switch>
           </div>
+        </div>
+        <div className="flex">
           <div className="flex-1">
             <Switch
               checked={isHidden[ERBType.ExtraCurricular]}
@@ -153,6 +165,7 @@ export default function Builder({ controller }: IProps) {
               <span>Extra-curricular Activities</span>
             </Switch>
           </div>
+          <div className="flex-1"/>
         </div>
       </div>
     </div>

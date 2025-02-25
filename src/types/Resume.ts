@@ -516,6 +516,7 @@ export function newIResumeBuilder(): IResume {
 }
 
 export type TVisibleToggle =
+  | ERBType.Summary
   | ERBType.Employment
   | ERBType.Education
   | ERBType.Link
@@ -541,11 +542,12 @@ export interface IResumeSessionResponse {
   resume: IHasId<IResume>;
 }
 
-export interface IDragNDropSectionItemValue extends Record<string | symbol, any>{
-  id: string,
-  type: ERBType
+export interface IDragNDropSectionItemValue
+  extends Record<string | symbol, any> {
+  id: string;
+  type: ERBType;
 }
 
 export interface ISectionTitle {
-  title: string
+  title: string;
 }
