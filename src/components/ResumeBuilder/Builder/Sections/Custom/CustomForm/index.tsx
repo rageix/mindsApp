@@ -19,9 +19,7 @@ interface IProps {
   controller: CustomFormController;
 }
 
-export default function CustomForm({
-  controller,
-}: IProps) {
+export default function CustomForm({ controller }: IProps) {
   controller.useController();
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
@@ -53,6 +51,7 @@ export default function CustomForm({
                 errors={state.errors}
                 value={form.title}
                 onChange={controller.onChangeTitle}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -62,6 +61,7 @@ export default function CustomForm({
                 errors={state.errors}
                 value={form.city}
                 onChange={controller.onChangeCity}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -73,6 +73,7 @@ export default function CustomForm({
                   value={form.start}
                   onChange={controller.onChangeStart}
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
               <div className="flex-1">
@@ -82,6 +83,7 @@ export default function CustomForm({
                   onChange={controller.onChangeEnd}
                   showPresent
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
             </FormStartEnd>
@@ -93,6 +95,7 @@ export default function CustomForm({
               <TextEditor
                 initialState={form.description}
                 onChange={controller.onChangeDescription}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>

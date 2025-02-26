@@ -96,10 +96,12 @@ export default class ResumeController extends BasicController<IState> {
     style.primaryColor = this.state.primaryColorController.getState().hex;
     style.secondaryColor = this.state.secondaryColorController.getState().hex;
 
+    const state = this.currentState;
+
     return {
-      _id: this.state.original?._id,
-      name: this.state.settingsController?.form.name || '',
-      sections: this.state.controllers.map((v) => v.value()),
+      _id: state?.original?._id,
+      name: state?.settingsController?.getForm().name || '',
+      sections: state?.controllers.map((v) => v.value()) || [],
       style: style,
     };
   };
@@ -114,6 +116,7 @@ export default class ResumeController extends BasicController<IState> {
     if (index > -1) {
       controllers[index].onChangeHidden();
       this.setState({ controllers });
+      this.save();
       return;
     }
 
@@ -154,6 +157,16 @@ export default class ResumeController extends BasicController<IState> {
     const response = await postApiResumes(resume);
 
     this.setState({ lastSavedAt: new Date(), current: resume, dirty: false });
+    // reset the dirty flag on all sub-forms
+    for(const section of this.state.controllers) {
+      for(const form of section.state.controllers) {
+        form.isDirty = false;
+      }
+    }
+    if(this.state.settingsController) {
+      this.state.settingsController.isDirty = false;
+    }
+
     return response;
   };
 
@@ -169,6 +182,7 @@ export default class ResumeController extends BasicController<IState> {
 
     controllers.splice(index - 1, 0, removed[0]);
     this.setState({ controllers, dirty: true });
+    this.save();
   };
 
   onMoveDownSection = (id: string) => {
@@ -183,6 +197,7 @@ export default class ResumeController extends BasicController<IState> {
 
     controllers.splice(index + 1, 0, removed[0]);
     this.setState({ controllers, dirty: true });
+    this.save();
   };
 
   onResumeUpdated = () => {

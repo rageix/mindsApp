@@ -13,11 +13,6 @@ export default class CustomFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
-  onChangeForm = (update: Partial<IForm>, validate = true) => {
-    emitter.emitResumeUpdated();
-    return this._onChangeForm(update, validate);
-  };
-
   onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ title: e.target.value });
   };
@@ -28,10 +23,16 @@ export default class CustomFormController extends SectionItemController<IForm> {
 
   onChangeStart = (value: IRBDate | null) => {
     this.onChangeForm({ start: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeEnd = (value: IRBDate | null) => {
     this.onChangeForm({ end: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeDescription = (value: string) => {

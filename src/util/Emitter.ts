@@ -2,7 +2,8 @@ import { EventEmitter } from 'eventemitter3';
 
 export enum emitterMessage {
   resumeUpdated = 'resumeUpdated',
-  saveResume= 'saveResume',
+  saveResume = 'saveResume',
+  inputBlur = 'saveRinputBluresume',
 }
 
 export class Emitter {
@@ -22,6 +23,10 @@ export class Emitter {
 
   emitSaveResume = () => {
     this.emitter.emit(emitterMessage.saveResume);
+  };
+
+  emitResumeInputBlur = () => {
+    this.emitter.emit(emitterMessage.inputBlur);
   };
 }
 

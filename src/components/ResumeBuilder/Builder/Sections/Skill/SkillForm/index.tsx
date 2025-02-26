@@ -6,13 +6,14 @@ import SkillFormController, {
 } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import { ISelectOption } from '@/types/SelectOption';
 import { ERBSkillLevel, ERBType } from '@/types/Resume';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Select from '@/components/Select';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
+import emitter from '@/util/Emitter';
 
 const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   {
@@ -59,6 +60,17 @@ export default function SkillForm({
     return OPTIONS.find((v) => v.value === form.level) || null;
   }, [form.level]);
 
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    if(init) {
+      emitter.emitSaveResume();
+      return;
+    }
+
+    setInit(true);
+  }, [form.level]);
+
   return (
     <DraggableItem
       dragRef={dragRef}
@@ -84,6 +96,7 @@ export default function SkillForm({
                 errors={state.errors}
                 value={form.skill}
                 onChange={controller.onChangeSkill}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">

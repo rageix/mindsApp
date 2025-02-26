@@ -147,9 +147,10 @@ export const defaultEditorState = () => {
 interface IProps {
   initialState: string | null;
   onChange: (state: string) => void;
+  onBlur?: () => void;
 }
 
-export default function TextEditor({ initialState, onChange }: IProps) {
+export default function TextEditor({ initialState, onChange, onBlur }: IProps) {
   const editorConfig: InitialConfigType = useMemo(
     () => ({
       html: {
@@ -161,7 +162,6 @@ export default function TextEditor({ initialState, onChange }: IProps) {
       onError(error: Error) {
         throw error;
       },
-
       theme: ExampleTheme,
       editorState: () =>
         $convertFromMarkdownString(
@@ -189,6 +189,7 @@ export default function TextEditor({ initialState, onChange }: IProps) {
                     {placeholder}
                   </div>
                 }
+                onBlur={onBlur}
               />
             }
             ErrorBoundary={LexicalErrorBoundary}
@@ -198,7 +199,9 @@ export default function TextEditor({ initialState, onChange }: IProps) {
           <ListPlugin />
           <LinkPlugin />
           <OnChangePlugin
+            ignoreSelectionChange={true}
             onChange={(editorState) => {
+              console.log('onchange');
               const markdown = editorState.read(() =>
                 $convertToMarkdownString(TRANSFORMERS, undefined, true),
               );

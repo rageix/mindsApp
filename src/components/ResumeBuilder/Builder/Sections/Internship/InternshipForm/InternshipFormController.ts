@@ -1,9 +1,5 @@
 import { ChangeEvent } from 'react';
-import {
-  IRBDate,
-  IRBInternship,
-  newIRBInternship,
-} from '@/types/Resume';
+import { IRBDate, IRBInternship, newIRBInternship } from '@/types/Resume';
 import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 import emitter from '@/util/Emitter';
 
@@ -16,11 +12,6 @@ export function defaultForm(): IForm {
 export default class InternshipFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
-
-  onChangeForm = (update: Partial<IForm>, validate = true) => {
-    emitter.emitResumeUpdated();
-    return this._onChangeForm(update, validate);
-  };
 
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });
@@ -36,10 +27,16 @@ export default class InternshipFormController extends SectionItemController<IFor
 
   onChangeStart = (value: IRBDate | null) => {
     this.onChangeForm({ start: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeEnd = (value: IRBDate | null) => {
     this.onChangeForm({ end: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {

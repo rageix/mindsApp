@@ -12,8 +12,10 @@ export function defaultForm(): IForm {
 export default class ResumeSettingsFormController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
+  isDirty = false;
 
   onChangeForm = (update: Partial<IForm>, validate = true) => {
+    this.isDirty = true;
     emitter.emitResumeUpdated();
     return this._onChangeForm(update, validate);
   };
@@ -21,4 +23,10 @@ export default class ResumeSettingsFormController extends FormController<IForm> 
   onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ name: e.target.value });
   };
+
+  onBlurInput = () => {
+    if (this.isDirty) {
+      emitter.emitSaveResume();
+    }
+  }
 }

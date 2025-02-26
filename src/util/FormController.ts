@@ -176,7 +176,7 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   };
 
   _getForm = (): T => {
-    return this.form || this.defaultForm;
+    return this.currentForm || this.defaultForm;
   }
 
   getForm = (): T => {

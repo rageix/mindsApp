@@ -6,6 +6,14 @@ export default class BasicController<T> {
   state: T = this.defaultState;
   updateState: Dispatch<SetStateAction<T>> | undefined;
   id = nanoid();
+  currentState: T | null = null;
+
+  constructor(arg?: T) {
+    if (arg) {
+      this.defaultState = arg;
+      this.currentState = arg;
+    }
+  }
 
   _useController = () => {
     [this.state, this.updateState] = useState<T>(this.defaultState);
@@ -17,6 +25,7 @@ export default class BasicController<T> {
 
   _setState = (state: Partial<T>) => {
     const newState: T = { ...(this.state || ({} as T)), ...state };
+    this.currentState = newState;
 
     if (this.updateState) {
       this.updateState(newState);
@@ -30,7 +39,7 @@ export default class BasicController<T> {
   };
 
   _getState = (): T => {
-    return this.state || this.defaultState;
+    return this.currentState || this.defaultState;
   };
 
   getState = (): T => {

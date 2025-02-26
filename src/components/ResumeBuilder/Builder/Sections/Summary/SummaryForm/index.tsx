@@ -30,6 +30,7 @@ export default function SummaryForm({ controller }: IProps) {
             <TextEditor
               initialState={form.description}
               onChange={controller.onChangeDescription}
+              onBlur={controller.onBlurInput}
             />
           </div>
         </FormRow>

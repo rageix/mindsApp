@@ -1,7 +1,7 @@
 'use client';
 import { IRBDate } from '@/types/Resume';
 import { MONTHS_ABBR } from '@/util/Time';
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import Input from '@/components/Input';
 import MonthPicker from '@/components/ResumeBuilder/Builder/MonthPicker';
@@ -15,6 +15,7 @@ interface IProps<T> {
   showPresent?: boolean;
   isClearable?: boolean;
   field?: keyof T;
+  onBlur?: () => void;
 }
 
 export default function MonthYearInput<T>({
@@ -23,7 +24,12 @@ export default function MonthYearInput<T>({
   showPresent,
   isClearable,
   field,
+  onBlur,
 }: IProps<T>) {
+  const [popoverElement, setPopoverElement] = useState<HTMLDivElement | null>(
+    null,
+  );
+  const [isVisible, setIsVisible] = useState(false);
   const inputValue: string = useMemo(() => {
     if (value?.present) {
       return 'Present';
@@ -46,6 +52,18 @@ export default function MonthYearInput<T>({
     e?.stopPropagation();
     onChange(null);
   }
+
+  useEffect(() => {
+    if (popoverElement) {
+      setIsVisible(true);
+      return;
+    }
+
+    if (isVisible && onBlur) {
+      onBlur();
+    }
+    setIsVisible(false);
+  }, [popoverElement]);
 
   return (
     <Popover className="relative">
@@ -81,11 +99,13 @@ export default function MonthYearInput<T>({
         anchor="bottom"
         className="flex flex-col"
       >
-        <MonthPicker
-          value={value}
-          onChange={onChange}
-          showPresent={showPresent}
-        />
+        <div ref={setPopoverElement}>
+          <MonthPicker
+            value={value}
+            onChange={onChange}
+            showPresent={showPresent}
+          />
+        </div>
       </PopoverPanel>
     </Popover>
   );

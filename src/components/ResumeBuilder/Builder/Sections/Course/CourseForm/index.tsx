@@ -52,6 +52,7 @@ export default function CourseForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.name}
                 onChange={controller.onChangeName}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -61,6 +62,7 @@ export default function CourseForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.institution}
                 onChange={controller.onChangeInstitution}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -72,6 +74,7 @@ export default function CourseForm({ controller }: IProps) {
                   value={form.start}
                   onChange={controller.onChangeStart}
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
               <div className="flex-1">
@@ -81,6 +84,7 @@ export default function CourseForm({ controller }: IProps) {
                   onChange={controller.onChangeEnd}
                   showPresent
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
             </FormStartEnd>
@@ -92,6 +96,7 @@ export default function CourseForm({ controller }: IProps) {
               <TextEditor
                 initialState={form.description}
                 onChange={controller.onChangeDescription}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>

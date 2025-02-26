@@ -35,6 +35,7 @@ export default function ResumeSettingsForm({ controller }: IProps) {
         errors={state.errors}
         value={form.name}
         onChange={controller.onChangeName}
+        onBlur={controller.onBlurInput}
       />
     </div>
   );

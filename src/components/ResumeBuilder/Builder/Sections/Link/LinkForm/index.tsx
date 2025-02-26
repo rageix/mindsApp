@@ -49,6 +49,7 @@ export default function LinkForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.label}
                 onChange={controller.onChangeLabel}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -58,6 +59,7 @@ export default function LinkForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.link}
                 onChange={controller.onChangeLink}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>

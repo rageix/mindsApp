@@ -3,7 +3,7 @@ import FormLabel from '@/components/FormLabel';
 import Input from '@/components/Input';
 import { ISelectOption } from '@/types/SelectOption';
 import { ERBLanguageLevel, ERBType } from '@/types/Resume';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Select from '@/components/Select';
 import LanguageFormController, {
   IForm,
@@ -14,6 +14,7 @@ import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/Section
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
+import emitter from '@/util/Emitter';
 
 interface IProps {
   controller: LanguageFormController;
@@ -28,6 +29,17 @@ export default function LanguageForm({ controller }: IProps) {
 
   const value: ISelectOption<ERBLanguageLevel | null> | null = useMemo(() => {
     return LANGUAGE_OPTIONS.find((v) => v.value === form.level) || null;
+  }, [form.level]);
+
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    if(init) {
+      emitter.emitSaveResume();
+      return;
+    }
+
+    setInit(true);
   }, [form.level]);
 
   return (
@@ -55,6 +67,7 @@ export default function LanguageForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.language}
                 onChange={controller.onChangeLanguage}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">

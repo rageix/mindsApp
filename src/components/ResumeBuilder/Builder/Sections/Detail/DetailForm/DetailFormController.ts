@@ -1,9 +1,7 @@
 import { ChangeEvent } from 'react';
 import { IRBDetail, newIRBDetail } from '@/types/Resume';
-import SectionItemController
-  from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
+import SectionItemController from '@/components/ResumeBuilder/Builder/Sections/SectionItem/SectionItemController';
 import { MongoId } from '@/types/MongoDocument';
-import emitter from '@/util/Emitter';
 
 export interface IForm extends IRBDetail {}
 
@@ -14,11 +12,6 @@ export function defaultForm(): IForm {
 export default class DetailFormController extends SectionItemController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
-
-  onChangeForm = (update: Partial<IForm>, validate = true) => {
-    emitter.emitResumeUpdated();
-    return this._onChangeForm(update, validate);
-  };
 
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });
@@ -81,15 +74,12 @@ export default class DetailFormController extends SectionItemController<IForm> {
   };
 
   onImageUpload = (ids?: MongoId[]) => {
-
-    if(ids && ids.length > 0) {
+    if (ids && ids.length > 0) {
       this.onChangeForm({ photo: String(ids[0] || '') });
     }
-
   };
 
-  onClearPhoto =() => {
-    this.onChangeForm({photo: ''})
-  }
-
+  onClearPhoto = () => {
+    this.onChangeForm({ photo: '' });
+  };
 }

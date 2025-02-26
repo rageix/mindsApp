@@ -13,11 +13,6 @@ export default class EducationFormController extends SectionItemController<IForm
   resetForm = defaultForm();
   defaultForm = defaultForm();
 
-  onChangeForm = (update: Partial<IForm>, validate = true) => {
-    emitter.emitResumeUpdated();
-    return this._onChangeForm(update, validate);
-  };
-
   onChangeIsExpanded = () => {
     this.onChangeForm({ isExpanded: !this.form.isExpanded });
   };
@@ -32,10 +27,16 @@ export default class EducationFormController extends SectionItemController<IForm
 
   onChangeStart = (value: IRBDate | null) => {
     this.onChangeForm({ start: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeEnd = (value: IRBDate | null) => {
     this.onChangeForm({ end: value });
+    if(value === null) {
+      emitter.emitSaveResume();
+    }
   };
 
   onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {

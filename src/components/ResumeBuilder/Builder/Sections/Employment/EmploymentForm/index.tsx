@@ -51,6 +51,7 @@ export default function EmploymentForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.title}
                 onChange={controller.onChangeTitle}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -60,6 +61,7 @@ export default function EmploymentForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.employer}
                 onChange={controller.onChangeEmployer}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -71,6 +73,7 @@ export default function EmploymentForm({ controller }: IProps) {
                   value={form.start}
                   onChange={controller.onChangeStart}
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
               <div className="flex-1">
@@ -80,6 +83,7 @@ export default function EmploymentForm({ controller }: IProps) {
                   onChange={controller.onChangeEnd}
                   showPresent
                   isClearable
+                  onBlur={controller.onBlurInput}
                 />
               </div>
             </FormStartEnd>
@@ -90,6 +94,7 @@ export default function EmploymentForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.city}
                 onChange={controller.onChangeCity}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -99,6 +104,7 @@ export default function EmploymentForm({ controller }: IProps) {
               <TextEditor
                 initialState={form.description}
                 onChange={controller.onChangeDescription}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>

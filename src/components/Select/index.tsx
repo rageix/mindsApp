@@ -25,6 +25,7 @@ interface IProps<T, F> {
   portal?: boolean;
   isClearable?: boolean;
   placeholder?: string;
+  onBlur?: () => void;
 }
 
 export default function Select<T, F>({
@@ -39,6 +40,7 @@ export default function Select<T, F>({
   buttonClassName,
   portal,
   isClearable,
+  onBlur,
   placeholder = 'Chose an option...',
 }: IProps<T, F>) {
   const ref = useRef(null);
@@ -114,6 +116,7 @@ export default function Select<T, F>({
           anchor={{ to: 'bottom' }}
           style={{ width: size?.width }}
           portal={portal}
+          onBlur={onBlur}
         >
           {options.map((option) => (
             <ListboxOption

@@ -4,7 +4,7 @@ import DetailFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import Input from '@/components/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/util/Cn';
 import Button from '@/components/Buttton';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
@@ -18,6 +18,7 @@ import { MongoId } from '@/types/MongoDocument';
 import Tooltip from '@/components/Tooltip';
 import TooltipBox from '@/components/TooltipBox';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import emitter from '@/util/Emitter';
 
 interface IProps {
   controller: DetailFormController;
@@ -29,6 +30,17 @@ export default function DetailForm({ controller }: IProps) {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const { form, state } = controller;
+
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    if (init) {
+      emitter.emitSaveResume();
+      return;
+    }
+
+    setInit(true);
+  }, [form.photo]);
 
   return (
     <SectionItem>
@@ -48,6 +60,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.title}
               onChange={controller.onChangeTitle}
+              onBlur={controller.onBlurInput}
             />
           </div>
           <div className="flex-1 flex items-end">
@@ -97,6 +110,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.firstName}
               onChange={controller.onChangeFirstName}
+              onBlur={controller.onBlurInput}
             />
           </div>
           <div className="flex-1">
@@ -106,6 +120,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.lastName}
               onChange={controller.onChangeLastName}
+              onBlur={controller.onBlurInput}
             />
           </div>
         </FormRow>
@@ -117,6 +132,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.email}
               onChange={controller.onChangeEmail}
+              onBlur={controller.onBlurInput}
             />
           </div>
           <div className="flex-1">
@@ -126,6 +142,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.phone}
               onChange={controller.onChangePhone}
+              onBlur={controller.onBlurInput}
             />
           </div>
         </FormRow>
@@ -137,6 +154,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.country}
               onChange={controller.onChangeCountry}
+              onBlur={controller.onBlurInput}
             />
           </div>
           <div className="flex-1">
@@ -146,6 +164,7 @@ export default function DetailForm({ controller }: IProps) {
               errors={state.errors}
               value={form.city}
               onChange={controller.onChangeCity}
+              onBlur={controller.onBlurInput}
             />
           </div>
         </FormRow>
@@ -158,6 +177,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.address}
                 onChange={controller.onChangeAddress}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -167,6 +187,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.postalCode}
                 onChange={controller.onChangePostalCode}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -192,6 +213,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.license}
                 onChange={controller.onChangeLicense}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -215,6 +237,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.nationality}
                 onChange={controller.onChangeNationality}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>
@@ -240,6 +263,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.placeOfBirth}
                 onChange={controller.onChangePlaceOfBirth}
+                onBlur={controller.onBlurInput}
               />
             </div>
             <div className="flex-1">
@@ -263,6 +287,7 @@ export default function DetailForm({ controller }: IProps) {
                 errors={state.errors}
                 value={form.dateOfBirth}
                 onChange={controller.onChangeDateOfBirth}
+                onBlur={controller.onBlurInput}
               />
             </div>
           </FormRow>

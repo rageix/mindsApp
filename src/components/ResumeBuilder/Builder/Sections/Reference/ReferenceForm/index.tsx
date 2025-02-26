@@ -11,7 +11,8 @@ import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/Section
 import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { ERBType } from '@/types/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import emitter from '@/util/Emitter';
 
 interface IProps {
   controller: ReferenceFormController;
@@ -23,6 +24,17 @@ export default function ReferenceForm({ controller }: IProps) {
   const dragHandleRef = useRef<HTMLButtonElement>(null);
 
   const { form, state } = controller;
+
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    if(init) {
+      emitter.emitSaveResume();
+      return;
+    }
+
+    setInit(true);
+  }, [form.byRequestOnly]);
 
   return (
     <DraggableItem
@@ -64,6 +76,7 @@ export default function ReferenceForm({ controller }: IProps) {
                     errors={state.errors}
                     value={form.name}
                     onChange={controller.onChangeName}
+                    onBlur={controller.onBlurInput}
                   />
                 </div>
                 <div className="flex-1">
@@ -73,6 +86,7 @@ export default function ReferenceForm({ controller }: IProps) {
                     errors={state.errors}
                     value={form.company}
                     onChange={controller.onChangeCompany}
+                    onBlur={controller.onBlurInput}
                   />
                 </div>
               </FormRow>
@@ -84,6 +98,7 @@ export default function ReferenceForm({ controller }: IProps) {
                     errors={state.errors}
                     value={form.phone}
                     onChange={controller.onChangePhone}
+                    onBlur={controller.onBlurInput}
                   />
                 </div>
                 <div className="flex-1">
@@ -93,6 +108,7 @@ export default function ReferenceForm({ controller }: IProps) {
                     errors={state.errors}
                     value={form.email}
                     onChange={controller.onChangeEmail}
+                    onBlur={controller.onBlurInput}
                   />
                 </div>
               </FormRow>

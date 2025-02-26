@@ -213,12 +213,12 @@ export default class SectionController extends BasicController<IState> {
   };
 
   value = (): IRBSection => {
-    const state = this.state || this.defaultState;
+    const state = this.currentState || this.defaultState;
 
     return {
       ...state.section,
       isHidden: this.isHidden,
-      data: state.controllers.map((v) => (v.form ? v.form : v.defaultForm)),
+      data: state.controllers.map((v) => v.getForm()),
     };
   };
 
@@ -249,6 +249,7 @@ export default class SectionController extends BasicController<IState> {
     controllers.splice(index + 1, 0, controller);
 
     this.setState({ controllers });
+    emitter.emitSaveResume();
   };
 
   onMoveUp = (id: string) => {
@@ -264,6 +265,7 @@ export default class SectionController extends BasicController<IState> {
 
     controllers.splice(index - 1, 0, removed[0]);
     this.setState({ controllers });
+    emitter.emitSaveResume();
   };
 
   onMoveDown = (id: string) => {
@@ -279,6 +281,7 @@ export default class SectionController extends BasicController<IState> {
 
     controllers.splice(index + 1, 0, removed[0]);
     this.setState({ controllers });
+    emitter.emitSaveResume();
   };
 
   onDeleteIndex = (id: string) => {
@@ -293,6 +296,7 @@ export default class SectionController extends BasicController<IState> {
     controllers.splice(index, 1);
 
     this.setState({ controllers });
+    emitter.emitSaveResume();
   };
 
   onDrag = (arg: IOnDrag) => {
@@ -302,6 +306,7 @@ export default class SectionController extends BasicController<IState> {
     });
 
     this.setState({ controllers });
+    emitter.emitSaveResume();
   };
 
   onChangeTitleForm = (form: ISectionTitle) => {
@@ -309,5 +314,6 @@ export default class SectionController extends BasicController<IState> {
     section.title = form.title;
 
     this.setState({ section });
+    emitter.emitSaveResume();
   };
 }
