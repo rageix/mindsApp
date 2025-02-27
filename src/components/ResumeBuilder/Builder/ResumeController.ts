@@ -22,6 +22,7 @@ interface IState {
   primaryColorController: ColorController;
   secondaryColorController: ColorController;
   dirty: boolean;
+  isFullScreen: boolean;
 }
 
 export function newDefaultState(): IState {
@@ -36,6 +37,7 @@ export function newDefaultState(): IState {
     primaryColorController: new ColorController(),
     secondaryColorController: new ColorController(),
     dirty: false,
+    isFullScreen: false,
   };
 }
 
@@ -158,12 +160,12 @@ export default class ResumeController extends BasicController<IState> {
 
     this.setState({ lastSavedAt: new Date(), current: resume, dirty: false });
     // reset the dirty flag on all sub-forms
-    for(const section of this.state.controllers) {
-      for(const form of section.state.controllers) {
+    for (const section of this.state.controllers) {
+      for (const form of section.state.controllers) {
         form.isDirty = false;
       }
     }
-    if(this.state.settingsController) {
+    if (this.state.settingsController) {
       this.state.settingsController.isDirty = false;
     }
 
@@ -204,5 +206,9 @@ export default class ResumeController extends BasicController<IState> {
     if (!this.state.dirty) {
       this.setState({ dirty: true });
     }
+  };
+
+  onChangeFullScreen = (isFullScreen: boolean) => {
+    this.setState({ isFullScreen });
   };
 }

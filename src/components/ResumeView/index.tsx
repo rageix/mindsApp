@@ -12,14 +12,10 @@ import useSubscription from '@/hooks/UseSubscription';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
 import useWindowSizes from '@/hooks/UseWindowSizes';
-import { toast } from 'react-toastify';
 import { cn } from '@/util/Cn';
 import WarningAlert from '@/components/Alert/WarningAlert';
 import emitter, { emitterMessage } from '@/util/Emitter';
 import useLeavePageConfirm from '@/hooks/UseLeavePageConfirm';
-import Tooltip from '@/components/Tooltip';
-import TooltipBox from '@/components/TooltipBox';
-import { CircleDashed, CircleIcon } from 'lucide-react';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
 
 const SMALL_BREAK_POINT = 1024;
@@ -35,6 +31,7 @@ export default function ResumeView() {
   );
   const [previewIsVisible, setPreviewIsVisible] = useState(!isSmall);
   controller.useController();
+  const isFullScreen = controller.state.isFullScreen;
   const userIsLoaded = user.isLoaded();
 
   useEffect(() => {
@@ -81,7 +78,7 @@ export default function ResumeView() {
   useLeavePageConfirm(controller.state.dirty);
 
   const hasSubscription = subscription.hasSubscription();
-  const renderHeight = windowSizes.windowHeight - 53;
+  const renderHeight = windowSizes.windowHeight;
 
   // const [builderController] = useState(defaultBuilder);
 
@@ -103,12 +100,12 @@ export default function ResumeView() {
   //   }
   // }, [inviteAccept.loading]);
 
-  async function onClickSave() {
-    const response = await controller.save();
-    if (response) {
-      toast.success('Resume saved.');
-    }
-  }
+  // async function onClickSave() {
+  //   const response = await controller.save();
+  //   if (response) {
+  //     toast.success('Resume saved.');
+  //   }
+  // }
 
   if (!userIsLoaded || controller.state.isLoading) {
     return (
@@ -175,52 +172,35 @@ export default function ResumeView() {
           </div>
           <div
             className={cn(
-              'flex-1 border border-gray-200 rounded-lg sticky top-0 max-w-2xl mx-auto',
+              'flex-1 sticky top-0 max-w-2xl mx-auto',
               !previewIsVisible ? 'hidden' : null,
             )}
             style={{ height: renderHeight }}
           >
             <Renderer
               controller={controller}
+              isFullScreen={isFullScreen}
               hasSubscription={hasSubscription}
               isVisible={previewIsVisible}
             />
           </div>
         </div>
-        <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
-          <div className="grow">
-            {/*<div>Last saved:</div>*/}
-            <div className="flex gap-x-2 items-center">
-              {/*{controller.state.lastSavedAt ? (*/}
-              {/*  <FormattedDate*/}
-              {/*    value={controller.state.lastSavedAt || undefined}*/}
-              {/*  />*/}
-              {/*) : (*/}
-              {/*  'Never'*/}
-              {/*)}*/}
-              <Tooltip
-                className="flex items-center"
-                icon={
-                  <div className="size-6 ">
-                    {controller.state.dirty ? (
-                      <CircleDashed className="text-yellow-600 w-auto h-full" />
-                    ) : (
-                      <CircleIcon className="w-full h-full text-green-600 " />
-                    )}
-                  </div>
-                }
-              >
-                <TooltipBox>
-                  <div className="text-center">
-                    {controller.state.dirty
-                      ? 'There are unsaved changes.'
-                      : 'Everything is up to date.'}
-                  </div>
-                </TooltipBox>
-              </Tooltip>
-            </div>
-          </div>
-          <div className="shrink-0 flex gap-x-3">
+        {!isFullScreen && (
+          <div className="w-full fixed bottom-0 left-0 px-4 py-2 flex justify-end items-center z-10">
+            {/*<div className="grow">*/}
+            {/*  /!*<div>Last saved:</div>*!/*/}
+            {/*  <div className="flex gap-x-2 items-center">*/}
+            {/*    /!*{controller.state.lastSavedAt ? (*!/*/}
+            {/*    /!*  <FormattedDate*!/*/}
+            {/*    /!*    value={controller.state.lastSavedAt || undefined}*!/*/}
+            {/*    /!*  />*!/*/}
+            {/*    /!*) : (*!/*/}
+            {/*    /!*  'Never'*!/*/}
+            {/*    /!*)}*!/*/}
+
+            {/*  </div>*/}
+            {/*</div>*/}
+            {/*<div className="shrink-0 flex gap-x-3">*/}
             {isSmall && (
               <Button
                 variant="gray"
@@ -230,15 +210,36 @@ export default function ResumeView() {
                 {previewIsVisible ? 'Hide' : 'Show'} Preview
               </Button>
             )}
-            <Button
-              variant="blue"
-              isInline
-              onClick={onClickSave}
-            >
-              Save
-            </Button>
+            {/*<Tooltip*/}
+            {/*  className="flex items-center"*/}
+            {/*  icon={*/}
+            {/*    <div className="size-6 ">*/}
+            {/*      {controller.state.dirty ? (*/}
+            {/*        <CircleDashed className="text-yellow-600 w-auto h-full" />*/}
+            {/*      ) : (*/}
+            {/*        <CircleIcon className="w-full h-full text-green-600 " />*/}
+            {/*      )}*/}
+            {/*    </div>*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <TooltipBox>*/}
+            {/*    <div className="text-center">*/}
+            {/*      {controller.state.dirty*/}
+            {/*        ? 'There are unsaved changes.'*/}
+            {/*        : 'Everything is up to date.'}*/}
+            {/*    </div>*/}
+            {/*  </TooltipBox>*/}
+            {/*</Tooltip>*/}
+            {/*<Button*/}
+            {/*  variant="blue"*/}
+            {/*  isInline*/}
+            {/*  onClick={onClickSave}*/}
+            {/*>*/}
+            {/*  Save*/}
+            {/*</Button>*/}
+            {/*</div>*/}
           </div>
-        </div>
+        )}
       </ResumeContext.Provider>
     </div>
   );
