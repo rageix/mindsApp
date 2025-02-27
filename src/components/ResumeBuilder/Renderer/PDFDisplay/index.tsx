@@ -7,13 +7,13 @@ interface IProps {
 
 export default function PDFDisplay({ data }: IProps) {
   const { viewerRef, usePDFSlickStore, PDFSlickViewer } = usePDFSlick(data, {
-    scaleValue: 'page-fit',
+    scaleValue: 'fit-page',
     singlePageViewer: true,
   });
 
   return (
     <>
-      <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} />
+      <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} className="!overflow-y-scroll" />
       <PDFNavigation {...{ usePDFSlickStore }} />
     </>
   );
