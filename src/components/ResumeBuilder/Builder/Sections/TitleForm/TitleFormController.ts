@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react';
 import { ISectionTitle } from '@/types/Resume';
 import FormController from '@/util/FormController';
-import emitter from '@/util/Emitter';
 
 export interface IForm extends ISectionTitle {}
 
