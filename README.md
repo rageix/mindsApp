@@ -10,7 +10,7 @@ From windows:
 
 `nvm install 22`
 
-`rm -rf node_modules`
+(optional) `rm -rf node_modules`
 
 `npm install`
 
