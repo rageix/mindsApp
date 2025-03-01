@@ -11,7 +11,7 @@ export default function HexView({ hex, onChange }: IProps) {
     <div>
       <FormLabel>Hex</FormLabel>
       <BlurInput
-        value={{ value: hex }}
+        value={hex}
         onChange={onChange}
       />
     </div>

@@ -35,6 +35,12 @@ export default function ResumeView() {
   const userIsLoaded = user.isLoaded();
 
   useEffect(() => {
+    if(isSmall && isFullScreen) {
+      setPreviewIsVisible(true);
+    }
+  }, [isSmall]);
+
+  useEffect(() => {
     if (!userIsLoaded) {
       return;
     }

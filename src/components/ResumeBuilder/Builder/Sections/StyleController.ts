@@ -1,6 +1,7 @@
 import { EResumeFonts, ETemplate, IRBStyle, newIRBStyle } from '@/types/Resume';
 import FormController from '@/util/FormController';
 import emitter from '@/util/Emitter';
+import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
 
 export interface IForm extends IRBStyle {}
 
@@ -19,6 +20,30 @@ export default class StyleController extends FormController<IForm> {
 
   onChangeTemplate = (value: ETemplate) => {
     this.onChangeForm({ template: value });
+  };
+
+  onChangePagePadding = (value: string) => {
+    const int = parseInt(value);
+
+    if (int !== this.form.pagePadding) {
+      this.onChangeForm({ pagePadding: !int ? 0 : limitNumberWithinRange(int, 0, 100) });
+    }
+  };
+
+  onChangeSectionGap = (value: string) => {
+    const int = parseInt(value);
+
+    if (int !== this.form.sectionGap) {
+      this.onChangeForm({ sectionGap: !int ? 0 : limitNumberWithinRange(int, 0, 100) });
+    }
+  };
+
+  onChangeColumnWidth = (value: string) => {
+    const int = parseInt(value);
+
+    if (int !== this.form.columnWidth) {
+      this.onChangeForm({ columnWidth: !int ? 0 : limitNumberWithinRange(int, 0, 50) });
+    }
   };
 
   onChangeFontFamily = (value: EResumeFonts) => {

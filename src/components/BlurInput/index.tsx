@@ -6,12 +6,8 @@ import {
 } from 'react';
 import Input from '@/components/Input';
 
-interface IValue {
-  value: string
-}
-
 interface IProps {
-  value: IValue;
+  value: string;
   onChange: (value: string) => void;
   type?: HTMLInputTypeAttribute | undefined;
 }
@@ -28,8 +24,8 @@ export default function BlurInput({ value, onChange, type }: IProps) {
   }
 
   useEffect(() => {
-    if (value.value !== inputValue) {
-      setInputValue(value.value);
+    if (value !== inputValue) {
+      setInputValue(value);
     }
   }, [value]);
 

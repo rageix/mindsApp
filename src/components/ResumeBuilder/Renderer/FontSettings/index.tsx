@@ -50,9 +50,9 @@ export default function FontSettings({ controller }: IProps) {
       roundTo2Places(limitNumberWithinRange(value, 0.25, 2)),
     );
   }
-  
+
   return (
-    <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full">
+    <div className="grid grid-cols-2 gap-y-2 gap-x-4 max-w-xl w-full mx-auto">
       <div className="w-full">
         <FormLabel>Font</FormLabel>
         <Select

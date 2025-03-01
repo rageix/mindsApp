@@ -360,6 +360,9 @@ export enum EResumeFonts {
 
 export interface IRBStyle {
   template: ETemplate;
+  pagePadding: number;
+  sectionGap: number;
+  columnWidth: number;
   fontFamily: EResumeFonts;
   titleFontFamily: EResumeFonts | null;
   primaryColor: string;
@@ -371,6 +374,9 @@ export interface IRBStyle {
 export function newIRBStyle(): IRBStyle {
   return {
     template: ETemplate.BirmanRight,
+    pagePadding: 36,
+    sectionGap: 15,
+    columnWidth: 35,
     fontFamily: EResumeFonts.OpenSans,
     titleFontFamily: null,
     primaryColor: '#111827',
