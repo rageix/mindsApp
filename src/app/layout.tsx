@@ -30,6 +30,7 @@ export default function RootLayout({ children }: Props) {
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         />
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="wlPyvpkqwFV5xrCfpd2trg" async/>
       </head>
       <body className={cn('min-h-screen', nunitoSans.className)}>
         <ProviderWrapper>

@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import { ReactElement, useEffect, useState } from 'react';
+import {
+  CloseButton,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from '@headlessui/react';
 import SimpleColors from '@/components/ResumeBuilder/Renderer/ColorPicker/SimpleColors';
 import { ISelectOption } from '@/types/SelectOption';
 import Select from '@/components/Select';
@@ -56,16 +61,19 @@ const VIEW_OPTIONS: ISelectOption<EViews>[] = [
 
 interface IProps {
   controller: ColorController;
-  title: string;
+  title: ReactElement | string;
+  titleText: string;
 }
 
-export default function ColorPicker({ controller, title }: IProps) {
+export default function ColorPicker({ controller, title, titleText }: IProps) {
   const [view, setView] = useState<ISelectOption<EViews>>(VIEW_OPTIONS[0]);
   const [isVisible, setIsVisible] = useState(false);
   controller.useController();
   const color = controller.state;
 
-  const [popoverElement, setPopoverElement] = useState<HTMLDivElement | null>(null);
+  const [popoverElement, setPopoverElement] = useState<HTMLDivElement | null>(
+    null,
+  );
 
   useEffect(() => {
     if (popoverElement) {
@@ -73,22 +81,22 @@ export default function ColorPicker({ controller, title }: IProps) {
       return;
     }
 
-    if(isVisible) {
+    if (isVisible) {
       emitter.emitSaveResume();
     }
     setIsVisible(false);
-  }, [popoverElement])
+  }, [popoverElement]);
 
   return (
     <Popover className="relative flex">
       <PopoverButton as="div">
         <div className="flex gap-x-2 items-center">
-        <div
-          className="size-9 rounded-full border-2 border-gray-900 shrink-0"
-          style={{ backgroundColor: color.hex }}
-          title={title}
-          aria-label={title}
-        />
+          <div
+            className="size-9 rounded-full border-2 border-gray-900 shrink-0"
+            style={{ backgroundColor: color.hex }}
+            title={titleText}
+            aria-label={titleText}
+          />
           <Button variant="link">Change</Button>
         </div>
       </PopoverButton>
@@ -96,7 +104,10 @@ export default function ColorPicker({ controller, title }: IProps) {
         anchor="bottom"
         className="mt-1 overflow-hidden"
       >
-        <div ref={setPopoverElement} className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem] overflow-hidden">
+        <div
+          ref={setPopoverElement}
+          className="flex flex-col gap-y-3 bg-white rounded-md px-2 py-4 border border-gray-200 min-w-[15rem] overflow-hidden"
+        >
           <div className="flex justify-end">
             <div className="min-w-44 w-full">
               {/*<FormLabel>{title}</FormLabel>*/}
@@ -153,6 +164,9 @@ export default function ColorPicker({ controller, title }: IProps) {
               onChange={(hex) => controller.onChangeHex(hex, color.opacity)}
             />
           )}
+          <CloseButton as="div">
+            <Button variant="blue">OK</Button>
+          </CloseButton>
         </div>
       </PopoverPanel>
     </Popover>

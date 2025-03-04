@@ -16,6 +16,7 @@ export default function ColorSettings({ controller }: IProps) {
         <ColorPicker
           controller={primaryColorController}
           title="Primary color"
+          titleText="Primary color"
         />
       </div>
       <div>
@@ -23,6 +24,7 @@ export default function ColorSettings({ controller }: IProps) {
         <ColorPicker
           controller={secondaryColorController}
           title="Scondary color"
+          titleText="Scondary color"
         />
       </div>
     </div>

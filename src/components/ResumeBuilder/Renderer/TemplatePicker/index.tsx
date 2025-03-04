@@ -8,6 +8,7 @@ import BlurInput from '@/components/BlurInput';
 import FormLabel from '@/components/FormLabel';
 import Tooltip from '@/components/Tooltip';
 import TooltipBox from '@/components/TooltipBox';
+import emitter from '@/util/Emitter';
 
 const OPTIONS: ISelectOption<ETemplate>[] = Object.entries(ETemplate).map(
   (v) => {
@@ -52,6 +53,10 @@ export default function TemplatePicker({ controller }: IProps) {
     }
 
     controller.onChangeTemplate(OPTIONS[newIndex].value);
+  }
+
+  function onChangeInputValue() {
+    emitter.emitResumeUpdated();
   }
 
   return (
@@ -104,6 +109,7 @@ export default function TemplatePicker({ controller }: IProps) {
             type="number"
             value={String(pagePadding)}
             onChange={controller.onChangePagePadding}
+            onChangeInputValue={onChangeInputValue}
           />
         </div>
         <div>
@@ -126,6 +132,7 @@ export default function TemplatePicker({ controller }: IProps) {
             type="number"
             value={String(sectionGap)}
             onChange={controller.onChangeSectionGap}
+            onChangeInputValue={onChangeInputValue}
           />
         </div>
         <div>
@@ -146,6 +153,7 @@ export default function TemplatePicker({ controller }: IProps) {
             type="number"
             value={String(columnWidth)}
             onChange={controller.onChangeColumnWidth}
+            onChangeInputValue={onChangeInputValue}
           />
         </div>
       </div>

@@ -2,9 +2,10 @@
 import { IRBDate } from '@/types/Resume';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { MONTHS_ABBR } from '@/util/Time';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/Buttton';
 import { cn } from '@/util/Cn';
+import { CloseButton } from '@headlessui/react';
 
 interface IProps {
   value: IRBDate | null;
@@ -13,55 +14,80 @@ interface IProps {
 }
 
 export default function MonthPicker({ value, onChange, showPresent }: IProps) {
-  const year: number = useMemo(() => {
-    if (value?.year) {
-      return value.year;
-    }
+  const [year, setYear] = useState<number>(new Date().getFullYear());
 
-    return new Date().getFullYear();
+  useEffect(() => {
+    if(value?.year && value.year !== year) {
+      setYear(value.year);
+    }
   }, [value?.year]);
 
   function onClickYear() {
+    if(value?.month) {
+      onChange({
+        month: null,
+        year: year,
+        present: false,
+      });
+      return;
+    }
+
+
     onChange({
-      month: value?.month || null,
-      year: year,
+      month: null,
+      year: value?.year ? null : year,
       present: false,
     });
   }
 
   function onClickPrevYear() {
-    onChange({
-      month: value?.month || null,
-      year: year - 1,
-      present: value?.present || false,
-    });
+    setYear(year - 1);
+    // onChange({
+    //   month: value?.month || null,
+    //   year: year - 1,
+    //   present: value?.present || false,
+    // });
   }
 
   function onClickNextYear() {
-    onChange({
-      month: value?.month || null,
-      year: year + 1,
-      present: value?.present || false,
-    });
+    setYear(year + 1);
+    // onChange({
+    //   month: value?.month || null,
+    //   year: year + 1,
+    //   present: value?.present || false,
+    // });
   }
 
   function onClickMonth(month: number) {
-    const newMonth: number | null = value?.month === month ? null : month;
-    onChange({ month: newMonth, year, present: false });
+    if (month === value?.month && year === value?.year) {
+      onChange({ month: null, year: null, present: false });
+      return;
+    }
+
+    onChange({ month, year, present: false });
   }
 
   function onClickPresent() {
+    if (value?.present) {
+      onChange({
+        month: null,
+        year: null,
+        present: false,
+      });
+      return;
+    }
+
     onChange({
       month: null,
-      year: year,
-      present: !value?.present,
+      year: null,
+      present: true,
     });
   }
 
   return (
     <div className="bg-white p-3 border border-gray-200 rounded-md flex flex-col gap-y-2 my-0.5">
       <div className="">
-        <div className="flex gap-y-4 items-center text-center text-gray-900">
+        <div className="flex gap-x-2 gap-y-4 items-center text-center text-gray-900">
           <Button
             variant="custom"
             className="flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-blue-600 focus-visible:outline-blue-600"
@@ -77,6 +103,11 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
           <div className="flex-auto text-sm font-semibold">
             <Button
               variant="link"
+              className={cn(
+                value?.year === year && value?.month === null && !value?.present
+                  ? 'bg-blue-100'
+                  : null,
+              )}
               onClick={onClickYear}
             >
               {year}
@@ -100,7 +131,9 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
         {MONTHS_ABBR.map((v, i) => (
           <Button
             variant="link"
-            className={cn(value?.month === i ? 'bg-blue-100' : null)}
+            className={cn(
+              value?.month === i && value?.year === year ? 'bg-blue-100' : null,
+            )}
             key={i}
             onClick={() => onClickMonth(i)}
           >
@@ -109,9 +142,9 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
         ))}
       </div>
       {showPresent && (
-        <div className="flex mt-3">
+        <div className="flex">
           <Button
-            variant="blue"
+            variant="link"
             isActive={value?.present}
             onClick={onClickPresent}
           >
@@ -119,6 +152,9 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
           </Button>
         </div>
       )}
+      <CloseButton as="div">
+        <Button variant="blue">OK</Button>
+      </CloseButton>
     </div>
   );
 }

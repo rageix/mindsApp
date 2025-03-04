@@ -9,14 +9,26 @@ import Input from '@/components/Input';
 interface IProps {
   value: string;
   onChange: (value: string) => void;
+  onChangeInputValue?: (value: string) => void;
   type?: HTMLInputTypeAttribute | undefined;
+  isAcceptable?: boolean;
 }
 
-export default function BlurInput({ value, onChange, type }: IProps) {
+export default function BlurInput({
+  value,
+  onChange,
+  onChangeInputValue,
+  type,
+  isAcceptable,
+}: IProps) {
   const [inputValue, setInputValue] = useState('');
 
   function onChangeValue(e: ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value);
+    const value = e.target.value;
+    setInputValue(value);
+    if (onChangeInputValue) {
+      onChangeInputValue(value);
+    }
   }
 
   function onBlur() {
@@ -35,6 +47,7 @@ export default function BlurInput({ value, onChange, type }: IProps) {
       value={inputValue}
       onChange={onChangeValue}
       onBlur={onBlur}
+      isAcceptable={isAcceptable}
     />
   );
 }

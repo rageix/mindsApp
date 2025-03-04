@@ -75,7 +75,7 @@ export default function FontSettings({ controller }: IProps) {
       </div>
       <div className="w-full">
         <FormLabel>Scale</FormLabel>
-        <div className="flex gap-x-2 items-center justify-center w-full bg-gray-100 rounded-md px-2 py-4">
+        <div className="flex gap-x-2 items-center justify-center w-full bg-gray-100 rounded-md px-2 py-1">
           <Button
             variant="link"
             onClick={() => onChangeScale(scale - 0.05)}
@@ -100,7 +100,7 @@ export default function FontSettings({ controller }: IProps) {
       </div>
       <div className="w-full">
         <FormLabel>Line Height</FormLabel>
-        <div className="flex gap-x-2 items-center justify-center bg-gray-100 rounded-md px-2 py-4">
+        <div className="flex gap-x-2 items-center justify-center bg-gray-100 rounded-md px-2 py-1">
           <Button
             variant="link"
             onClick={() => onChangeLineHeight(lineHeight - 0.25)}

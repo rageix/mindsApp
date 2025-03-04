@@ -13,7 +13,7 @@ export default function PDFDisplay({ data }: IProps) {
 
   return (
     <>
-      <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} className="!overflow-y-scroll" />
+      <PDFSlickViewer {...{ viewerRef, usePDFSlickStore }} />
       <PDFNavigation {...{ usePDFSlickStore }} />
     </>
   );

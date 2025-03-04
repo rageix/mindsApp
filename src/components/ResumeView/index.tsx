@@ -85,32 +85,16 @@ export default function ResumeView() {
     };
   }, []);
 
-  useLeavePageConfirm(controller.state.dirty);
+  const isDirty = controller.state.dirty;
+  useLeavePageConfirm(isDirty);
 
   const hasSubscription = subscription.hasSubscription();
   const renderHeight = windowSizes.windowHeight - 53;
 
-  // const [builderController] = useState(defaultBuilder);
-
-  // const [loading, setLoading] = useState(true);
-  // const [invite, setInvite] = useState<IHasId<IMember>>();
-  // const user = useUser();
-  // const { inviteId } = useParams<{ inviteId: string }>();
-  // const inviteAccept = useInviteAccept(inviteId);
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!inviteAccept.loading && !inviteAccept.data) {
-  //     router.push('/login');
-  //     return;
-  //   }
-  //   if (!inviteAccept.loading && inviteAccept.data) {
-  //     setInvite(inviteAccept.data);
-  //     setLoading(false);
-  //   }
-  // }, [inviteAccept.loading]);
-
   async function onClickSave() {
+    if (isDirty) {
+      controller.save();
+    }
     toast.success('Resume saved.');
   }
 
@@ -121,8 +105,6 @@ export default function ResumeView() {
       </div>
     );
   }
-
-  // const isLoggedIn = user.isLoggedIn();
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-full">
@@ -195,15 +177,7 @@ export default function ResumeView() {
         {!isFullScreen && (
           <div className="w-full fixed bottom-0 left-0 px-4 py-2 bg-white border-t border-gray-200 flex items-center z-10">
             <div className="grow">
-              {/*<div>Last saved:</div>*/}
               <div className="flex gap-x-2 items-center">
-                {/*{controller.state.lastSavedAt ? (*/}
-                {/*  <FormattedDate*/}
-                {/*    value={controller.state.lastSavedAt || undefined}*/}
-                {/*  />*/}
-                {/*) : (*/}
-                {/*  'Never'*/}
-                {/*)}*/}
                 <Tooltip
                   className="flex items-center"
                   icon={

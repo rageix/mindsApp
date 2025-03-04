@@ -75,7 +75,7 @@ export default function MonthYearInput<T>({
         <Input
           field={field}
           value={inputValue}
-          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600 focus:ring-blue-600"
+          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600 focus:ring-blue-600 cursor-pointer"
           onChange={() => null}
         />
         {isClearable && (
