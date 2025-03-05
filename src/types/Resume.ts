@@ -411,7 +411,7 @@ export interface IResumeSettings {
 
 export function newIResumeSettings(): IResumeSettings {
   return {
-    name: '(Not Specified)',
+    name: 'New Resume',
   };
 }
 

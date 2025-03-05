@@ -19,8 +19,8 @@ export default function ExtraCurricular({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <Description>
-        Talk about your favorite hobbies, but only if they directly tie to the
-        job listing.
+        List things like activities, interests, hobbies, etc... but only if
+        they directly tie to the job listing.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

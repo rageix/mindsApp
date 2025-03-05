@@ -48,48 +48,9 @@ export default function DetailForm({ controller }: IProps) {
         menu={false}
         id={controller.id}
       >
-        <div>{form.title || '(Not specified)'}</div>
+        <div>{(form.firstName + ' ' + form.lastName).trim() || '(Not specified)'}</div>
       </SectionItemHeader>
       <SectionItemBody isExpanded={form.isExpanded}>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="title">Title</FormLabel>
-            <Input<IForm>
-              field="title"
-              errors={state.errors}
-              value={form.title}
-              onChange={controller.onChangeTitle}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-          <div className="flex-1 flex items-end">
-            <div className="flex items-center gap-x-3">
-              <div className="size-[4.25rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
-                <UserAvatar
-                  value={form.photo}
-                  alt="UserPhoto"
-                />
-              </div>
-              <div className="grow flex flex-col gap-y-2">
-                {!form.photo ? (
-                  <Button
-                    variant="link"
-                    onClick={() => setShowImageUpload(true)}
-                  >
-                    Upload photo
-                  </Button>
-                ) : (
-                  <Button
-                    variant="linkRed"
-                    onClick={() => controller.onClearPhoto()}
-                  >
-                    Remove photo
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </FormRow>
         <FormRow>
           <div className="flex-1">
             <FormLabel<IForm> field="firstName">First Name</FormLabel>
@@ -110,6 +71,56 @@ export default function DetailForm({ controller }: IProps) {
               onChange={controller.onChangeLastName}
               onBlur={controller.onBlurInput}
             />
+          </div>
+        </FormRow>
+        <FormRow>
+          <div className="flex-1">
+            <FormLabel<IForm> field="title">Title</FormLabel>
+            <Input<IForm>
+              field="title"
+              errors={state.errors}
+              value={form.title}
+              onChange={controller.onChangeTitle}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div className="flex-1">
+            <FormLabel<IForm> field="title" className="flex gap-x-1">
+              <span>Photo</span>
+                <Tooltip size={15}>
+                  <TooltipBox>
+                    It&apos;s generally recommended NOT
+                    to include a photo on your resume. If you do, crop it to
+                    a square before you try and upload it. If not we will
+                    attempt to crop it to a square.
+                  </TooltipBox>
+                </Tooltip>
+            </FormLabel>
+            <div className="flex items-center gap-x-3">
+              <div className="size-[2.75rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
+                <UserAvatar
+                  value={form.photo}
+                  alt="UserPhoto"
+                />
+              </div>
+              <div className="grow flex gap-2 items-center">
+                {!form.photo ? (
+                  <Button
+                    variant="link"
+                    onClick={() => setShowImageUpload(true)}
+                  >
+                    Upload photo
+                  </Button>
+                ) : (
+                  <Button
+                    variant="linkRed"
+                    onClick={() => controller.onClearPhoto()}
+                  >
+                    Remove photo
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         </FormRow>
         <FormRow>
@@ -146,7 +157,7 @@ export default function DetailForm({ controller }: IProps) {
             />
           </div>
           <div className="flex-1">
-            <FormLabel<IForm> field="city">City</FormLabel>
+            <FormLabel<IForm> field="city">City & State</FormLabel>
             <Input<IForm>
               field="city"
               errors={state.errors}
@@ -286,7 +297,7 @@ export default function DetailForm({ controller }: IProps) {
         >
           <div className="flex w-full">
             <div className="grow text-left">
-              {showMore ? 'Show less fields' : 'Show more fields'}
+              {showMore ? 'Show less' : 'Show more'}
             </div>
             <div className="shrink-0 text-gray-500">
               <ChevronDown />

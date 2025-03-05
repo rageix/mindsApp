@@ -11,7 +11,7 @@ interface Props extends PropsWithChildren {
   target?: HTMLAttributeAnchorTarget;
 }
 
-export default function FormLink(props: Props) {
+export default function InlineLink(props: Props) {
   const theme = useTheme();
 
   return (

@@ -1,5 +1,5 @@
 'use client';
-import FormLink from '../Link';
+import InlineLink from '../InlineLink';
 import FormErrors from '../FormErrors';
 import Input from '../Input';
 import Checkbox from '../Checkbox';
@@ -69,13 +69,13 @@ export default function RegisterForm() {
             className="ml-3"
           >
             <span>I have read and accept the </span>
-            <FormLink
+            <InlineLink
               href="https://www.hobort.com/terms"
               target="_blank"
               aria-invalid={!_.isEmpty(state.errors.terms)}
             >
               terms of service
-            </FormLink>
+            </InlineLink>
             .
           </FormLabel>
         </div>

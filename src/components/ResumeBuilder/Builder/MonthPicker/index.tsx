@@ -2,10 +2,12 @@
 import { IRBDate } from '@/types/Resume';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { MONTHS_ABBR } from '@/util/Time';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '@/components/Buttton';
 import { cn } from '@/util/Cn';
 import { CloseButton } from '@headlessui/react';
+import Input from '@/components/Input';
+import FormLabel from '@/components/FormLabel';
 
 interface IProps {
   value: IRBDate | null;
@@ -15,15 +17,35 @@ interface IProps {
 
 export default function MonthPicker({ value, onChange, showPresent }: IProps) {
   const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [yearInput, setYearInput] = useState('');
 
   useEffect(() => {
-    if(value?.year && value.year !== year) {
+    if (value?.year && value.year !== year) {
       setYear(value.year);
     }
   }, [value?.year]);
 
+  useEffect(() => {
+    if (String(year) !== yearInput) {
+      setYearInput(String(year));
+    }
+  }, [year]);
+
+  function onChangeYearInput(e: ChangeEvent<HTMLInputElement>) {
+    setYearInput(e.target.value);
+
+    const value = e.target.valueAsNumber;
+    setYear(value);
+
+    onChange({
+      month: null,
+      year: value,
+      present: false,
+    });
+  }
+
   function onClickYear() {
-    if(value?.month) {
+    if (value?.month !== null) {
       onChange({
         month: null,
         year: year,
@@ -31,7 +53,6 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
       });
       return;
     }
-
 
     onChange({
       month: null,
@@ -127,29 +148,45 @@ export default function MonthPicker({ value, onChange, showPresent }: IProps) {
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        {MONTHS_ABBR.map((v, i) => (
-          <Button
-            variant="link"
-            className={cn(
-              value?.month === i && value?.year === year ? 'bg-blue-100' : null,
-            )}
-            key={i}
-            onClick={() => onClickMonth(i)}
-          >
-            {v}
-          </Button>
-        ))}
-      </div>
-      {showPresent && (
-        <div className="flex">
-          <Button
-            variant="link"
-            isActive={value?.present}
-            onClick={onClickPresent}
-          >
-            Present
-          </Button>
+      {(value?.present || value?.month !== null || !value?.year) && (
+        <>
+          <div className="grid grid-cols-4 gap-4">
+            {MONTHS_ABBR.map((v, i) => (
+              <Button
+                variant="link"
+                className={cn(
+                  value?.month === i && value?.year === year
+                    ? 'bg-blue-100'
+                    : null,
+                )}
+                key={i}
+                onClick={() => onClickMonth(i)}
+              >
+                {v}
+              </Button>
+            ))}
+          </div>
+          {showPresent && (
+            <div className="flex">
+              <Button
+                variant="link"
+                isActive={value?.present}
+                onClick={onClickPresent}
+              >
+                Present
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+      {!value?.present && value?.year && value?.month === null && (
+        <div className="max-w-[15.625rem] mb-2">
+          <FormLabel>Change Year To</FormLabel>
+          <Input
+            type="number"
+            value={yearInput}
+            onChange={onChangeYearInput}
+          />
         </div>
       )}
       <CloseButton as="div">

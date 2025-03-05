@@ -134,8 +134,8 @@ export default function ResumeView() {
             <div className="flex flex-wrap md:flex-nowrap items-center gap-x-2 gap-y-2 w-full">
               <div className="grow">
                 <div className="max-w-lg">
-                  Demo mode is active. Exporting is disabled and the resume will
-                  contain watermarks. For all features please subscribe.
+                  Demo mode is active. Exporting is disabled and the preview
+                  will contain watermarks. For all features please subscribe.
                 </div>
               </div>
               <div className="shrink-0">

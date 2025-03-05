@@ -51,7 +51,7 @@ export default function PageNumberInput(props: Props) {
         </div>
         <button
           type="submit"
-          className="relative -ml-px inline-flex items-center rounded-r-md px-3 py-2 text-sm font-semibold  bg-blue-700 hover:bg-blue-600 text-white"
+          className="relative -ml-px inline-flex items-center rounded-r-md px-3 py-2 text-sm font-semibold  bg-blue-600 hover:bg-blue-500 text-white"
         >
           <SearchIcon
             className="-ml-0.5 h-5 w-5"

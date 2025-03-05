@@ -15,6 +15,9 @@ import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import emitter from '@/util/Emitter';
+import TooltipBox from '@/components/TooltipBox';
+import Tooltip from '@/components/Tooltip';
+import InlineLink from '@/components/InlineLink';
 
 interface IProps {
   controller: LanguageFormController;
@@ -34,7 +37,7 @@ export default function LanguageForm({ controller }: IProps) {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    if(init) {
+    if (init) {
       emitter.emitSaveResume();
       return;
     }
@@ -71,7 +74,25 @@ export default function LanguageForm({ controller }: IProps) {
               />
             </div>
             <div className="flex-1">
-              <FormLabel<IForm> field="level">Level</FormLabel>
+              <FormLabel<IForm>
+                field="level"
+                className="flex gap-x-1"
+              >
+                <span>Level</span>
+                <Tooltip size={15}>
+                  <TooltipBox>
+                    In general you can use the first 4 options. The other
+                    options reference{' '}
+                    <InlineLink
+                      href="https://www.europassitalian.com/blog/cefr-levels/"
+                      target="_blank"
+                    >
+                      CEFR
+                    </InlineLink>
+                    .
+                  </TooltipBox>
+                </Tooltip>
+              </FormLabel>
               <Select<ERBLanguageLevel | null, IForm>
                 field="level"
                 options={LANGUAGE_OPTIONS}

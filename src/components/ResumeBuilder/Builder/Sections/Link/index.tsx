@@ -19,7 +19,8 @@ export default function Link({ controller }: IProps) {
     <SectionWithDraggables controller={controller}>
       <Title />
       <Description>
-        Links to places you want the hiring manager to be aware of.
+        Links to places you want the hiring manager to be aware of like a
+        personal portfolio page, employer website, etc.
       </Description>
       <FormList>
         {controller.state.controllers.map((v) => (

@@ -88,7 +88,7 @@ export default function InternshipForm({ controller }: IProps) {
               </div>
             </FormStartEnd>
             <div className="flex-1">
-              <FormLabel<IForm> field="city">City</FormLabel>
+              <FormLabel<IForm> field="city">City & State</FormLabel>
               <Input<IForm>
                 field="city"
                 errors={state.errors}

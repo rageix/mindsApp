@@ -61,8 +61,9 @@ export default function TemplatePicker({ controller }: IProps) {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex max-w-md mx-auto items-center gap-x-2">
+      <div className="flex w-full items-center gap-x-2">
         <div className="shrink-0">
+          <FormLabel>&nbsp;</FormLabel>
           <Button
             variant="link"
             onClick={onClickPrev}
@@ -72,6 +73,20 @@ export default function TemplatePicker({ controller }: IProps) {
           </Button>
         </div>
         <div className="grow">
+          <FormLabel className="flex items-end gap-x-1">
+            <div>Template</div>
+            <div>
+              <Tooltip size={15}>
+                <TooltipBox>
+                  <div>
+                    It&apos;s recommended that you use a 1 column template.
+                    These are typically easier to parse for online systems.
+                    However, we provide a variety of templates.
+                  </div>
+                </TooltipBox>
+              </Tooltip>
+            </div>
+          </FormLabel>
           <Select
             options={OPTIONS}
             value={templateOption}
@@ -79,6 +94,7 @@ export default function TemplatePicker({ controller }: IProps) {
           />
         </div>
         <div className="shrink-0">
+          <FormLabel>&nbsp;</FormLabel>
           <Button
             variant="link"
             onClick={onClickNext}
@@ -96,7 +112,7 @@ export default function TemplatePicker({ controller }: IProps) {
               <Tooltip size={15}>
                 <TooltipBox>
                   <div>
-                    This is the main padding value that goes around the outside
+                    This is the main padding that goes around the outside
                     of the page as well as some internal elements. Based on 72
                     Dots Per Inch.
                   </div>

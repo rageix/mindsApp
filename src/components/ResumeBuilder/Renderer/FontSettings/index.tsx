@@ -8,6 +8,8 @@ import roundTo2Places from '@/util/RoundTo2Place';
 import { limitNumberWithinRange } from '@/util/LimitNumberWithinRange';
 import Button from '@/components/Buttton';
 import FormLabel from '@/components/FormLabel';
+import Tooltip from '@/components/Tooltip';
+import TooltipBox from '@/components/TooltipBox';
 
 function makeOption(font: EResumeFonts): ISelectOption<EResumeFonts> {
   return {
@@ -54,7 +56,24 @@ export default function FontSettings({ controller }: IProps) {
   return (
     <div className="grid grid-cols-2 gap-y-2 gap-x-4 max-w-xl w-full mx-auto">
       <div className="w-full">
-        <FormLabel>Font</FormLabel>
+        <FormLabel className="flex gap-x-1">
+          <span>Font</span>
+          <Tooltip size={15}>
+            <TooltipBox>
+              <div>
+                We provide a variety of fonts for your convenience, I encourage
+                you to experiment.
+              </div>
+              <div className="mt-3">Recommendations:</div>
+              <ul className="mt-1 list-disc">
+                <li>Nunito Sans</li>
+                <li>Open Sans</li>
+                <li>Work Sans</li>
+                <li>Roboto</li>
+              </ul>
+            </TooltipBox>
+          </Tooltip>
+        </FormLabel>
         <Select
           options={OPTIONS}
           value={fontOption || null}
@@ -62,7 +81,26 @@ export default function FontSettings({ controller }: IProps) {
         />
       </div>
       <div className="w-full">
-        <FormLabel>Title Font</FormLabel>
+        <FormLabel className="flex gap-x-1">
+          <span>Title Font</span>
+          <Tooltip size={15}>
+            <TooltipBox>
+              <div>
+                <div>
+                  You can create some nice contrast by using a different font
+                  for the title. If this is not set then it will use what you
+                  have set in the other font field.
+                </div>
+                <div className="mt-3">Recommendations:</div>
+              </div>
+              <ul className="mt-1 list-disc">
+                <li>Merriweather</li>
+                <li>Lora</li>
+                <li>PT Serif</li>
+              </ul>
+            </TooltipBox>
+          </Tooltip>
+        </FormLabel>
         <Select
           options={OPTIONS}
           value={titleFontOption || null}

@@ -55,7 +55,7 @@ export default function CustomForm({ controller }: IProps) {
               />
             </div>
             <div className="flex-1">
-              <FormLabel<IForm> field="city">City</FormLabel>
+              <FormLabel<IForm> field="city">City & State</FormLabel>
               <Input<IForm>
                 field="city"
                 errors={state.errors}
