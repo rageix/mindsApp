@@ -2,3 +2,6 @@
 .env.development
 .idea/
 certificates/
+# this is needed because we need to ignore the ./node_modules directory
+# easiest thing to do is just pull in the entire .gitignore file
+!.gitignore
