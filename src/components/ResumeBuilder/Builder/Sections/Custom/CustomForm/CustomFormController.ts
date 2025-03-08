@@ -21,6 +21,10 @@ export default class CustomFormController extends SectionItemController<IForm> {
     this.onChangeForm({ city: e.target.value });
   };
 
+  onChangeState = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ state: e.target.value });
+  };
+
   onChangeStart = (value: IRBDate | null) => {
     this.onChangeForm({ start: value });
     if(value === null) {

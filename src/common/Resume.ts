@@ -3,24 +3,19 @@ import { ERBLanguageLevel } from '@/types/Resume';
 
 export const LANGUAGE_OPTIONS: ISelectOption<ERBLanguageLevel | null>[] = [
   {
-    key: String(ERBLanguageLevel.NativeSpeaker),
-    value: ERBLanguageLevel.NativeSpeaker,
-    label: 'Native speaker',
+    key: String(ERBLanguageLevel.Beginner),
+    value: ERBLanguageLevel.Beginner,
+    label: 'Beginner',
   },
   {
-    key: String(ERBLanguageLevel.HighlyProficient),
-    value: ERBLanguageLevel.HighlyProficient,
-    label: 'Highly proficient',
+    key: String(ERBLanguageLevel.Intermediate),
+    value: ERBLanguageLevel.Intermediate,
+    label: 'Intermediate',
   },
   {
-    key: String(ERBLanguageLevel.VeryGoodCommand),
-    value: ERBLanguageLevel.VeryGoodCommand,
-    label: 'Very good command',
-  },
-  {
-    key: String(ERBLanguageLevel.WorkingKnowledge),
-    value: ERBLanguageLevel.WorkingKnowledge,
-    label: 'Working knowledge',
+    key: String(ERBLanguageLevel.Advanced),
+    value: ERBLanguageLevel.Advanced,
+    label: 'Advanced',
   },
   {
     key: String(ERBLanguageLevel.C2),

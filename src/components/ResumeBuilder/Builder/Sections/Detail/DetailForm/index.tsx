@@ -10,7 +10,6 @@ import Button from '@/components/Buttton';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { ChevronDown } from 'lucide-react';
 import ImageUploadModal from '@/components/ImageUploadModal';
 import { UserAvatar } from '@/components/UserAvatar';
@@ -48,262 +47,218 @@ export default function DetailForm({ controller }: IProps) {
         menu={false}
         id={controller.id}
       >
-        <div>{(form.firstName + ' ' + form.lastName).trim() || '(Not specified)'}</div>
+        <div>
+          {(form.firstName + ' ' + form.lastName).trim() || '(Not specified)'}
+        </div>
       </SectionItemHeader>
       <SectionItemBody isExpanded={form.isExpanded}>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="firstName">First Name</FormLabel>
+        <div>
+          <FormLabel<IForm> field="firstName">First Name</FormLabel>
+          <Input<IForm>
+            field="firstName"
+            errors={state.errors}
+            value={form.firstName}
+            onChange={controller.onChangeFirstName}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="title">Last Name</FormLabel>
+          <Input<IForm>
+            field="lastName"
+            errors={state.errors}
+            value={form.lastName}
+            onChange={controller.onChangeLastName}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="title">Title</FormLabel>
+          <Input<IForm>
+            field="title"
+            errors={state.errors}
+            value={form.title}
+            onChange={controller.onChangeTitle}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm>
+            field="title"
+            className="flex gap-x-1"
+          >
+            <span>Photo</span>
+            <Tooltip size={15}>
+              <TooltipBox>
+                It&apos;s generally recommended NOT to include a photo on your
+                resume. If you do, crop it to a square before you try and upload
+                it. If not, we will attempt to crop it to a square.
+              </TooltipBox>
+            </Tooltip>
+          </FormLabel>
+          <div className="flex items-center gap-x-3">
+            <div className="size-[2.75rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
+              <UserAvatar
+                value={form.photo}
+                alt="UserPhoto"
+              />
+            </div>
+            <div className="grow flex gap-2 items-center">
+              {!form.photo ? (
+                <Button
+                  variant="link"
+                  onClick={() => setShowImageUpload(true)}
+                >
+                  Upload photo
+                </Button>
+              ) : (
+                <Button
+                  variant="linkRed"
+                  onClick={() => controller.onClearPhoto()}
+                >
+                  Remove photo
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div>
+          <FormLabel<IForm> field="email">Email</FormLabel>
+          <Input<IForm>
+            field="email"
+            errors={state.errors}
+            value={form.email}
+            onChange={controller.onChangeEmail}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="phone">Phone</FormLabel>
+          <Input<IForm>
+            field="phone"
+            errors={state.errors}
+            value={form.phone}
+            onChange={controller.onChangePhone}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="city">City </FormLabel>
+          <Input<IForm>
+            field="city"
+            errors={state.errors}
+            value={form.city}
+            onChange={controller.onChangeCity}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="state">State</FormLabel>
+          <Input<IForm>
+            field="state"
+            errors={state.errors}
+            value={form.state}
+            onChange={controller.onChangeState}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div>
+          <FormLabel<IForm> field="country">Country</FormLabel>
+          <Input<IForm>
+            field="country"
+            errors={state.errors}
+            value={form.country}
+            onChange={controller.onChangeCountry}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
+        <div></div>
+        <div
+          className={cn(
+            showMore ? 'col-span-2 grid grid-cols-2 gap-2' : 'hidden',
+          )}
+        >
+          <div>
+            <FormLabel<IForm> field="address">Address Line 1</FormLabel>
             <Input<IForm>
-              field="firstName"
+              field="address"
               errors={state.errors}
-              value={form.firstName}
-              onChange={controller.onChangeFirstName}
+              value={form.address}
+              onChange={controller.onChangeAddress}
               onBlur={controller.onBlurInput}
             />
           </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="title">Last Name</FormLabel>
+          <div>
+            <FormLabel<IForm> field="address2">Address Line 2</FormLabel>
             <Input<IForm>
-              field="lastName"
+              field="address"
               errors={state.errors}
-              value={form.lastName}
-              onChange={controller.onChangeLastName}
+              value={form.address2}
+              onChange={controller.onChangeAddress2}
               onBlur={controller.onBlurInput}
             />
           </div>
-        </FormRow>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="title">Title</FormLabel>
+          <div>
+            <FormLabel<IForm> field="postalCode">Postal Code</FormLabel>
             <Input<IForm>
-              field="title"
+              field="postalCode"
               errors={state.errors}
-              value={form.title}
-              onChange={controller.onChangeTitle}
+              value={form.postalCode}
+              onChange={controller.onChangePostalCode}
               onBlur={controller.onBlurInput}
             />
           </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="title" className="flex gap-x-1">
-              <span>Photo</span>
+          <div>
+            {/*Include this section if your profession requires a certain type of license. If not, leave it blank.*/}
+            <FormLabel<IForm> field="linkedIn">Linkedin Url</FormLabel>
+            <Input<IForm>
+              field="linkedIn"
+              errors={state.errors}
+              value={form.linkedIn}
+              onChange={controller.onChangeLinkedIn}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm>
+              field="other"
+              className="flex items-end gap-x-1"
+            >
+              <div>Other</div>
+              <div>
                 <Tooltip size={15}>
                   <TooltipBox>
-                    It&apos;s generally recommended NOT
-                    to include a photo on your resume. If you do, crop it to
-                    a square before you try and upload it. If not we will
-                    attempt to crop it to a square.
+                    This will appear in the details section as it&apos;s own
+                    line. You can place any text in it. For example visa/work
+                    sponsorship status...
                   </TooltipBox>
                 </Tooltip>
+              </div>
             </FormLabel>
-            <div className="flex items-center gap-x-3">
-              <div className="size-[2.75rem] rounded-full overflow-hidden bg-gray-100 shrink-0">
-                <UserAvatar
-                  value={form.photo}
-                  alt="UserPhoto"
-                />
-              </div>
-              <div className="grow flex gap-2 items-center">
-                {!form.photo ? (
-                  <Button
-                    variant="link"
-                    onClick={() => setShowImageUpload(true)}
-                  >
-                    Upload photo
-                  </Button>
-                ) : (
-                  <Button
-                    variant="linkRed"
-                    onClick={() => controller.onClearPhoto()}
-                  >
-                    Remove photo
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </FormRow>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="email">Email</FormLabel>
             <Input<IForm>
-              field="email"
+              field="other"
               errors={state.errors}
-              value={form.email}
-              onChange={controller.onChangeEmail}
+              value={form.other}
+              onChange={controller.onChangeOther}
               onBlur={controller.onBlurInput}
             />
           </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="phone">Phone</FormLabel>
-            <Input<IForm>
-              field="phone"
-              errors={state.errors}
-              value={form.phone}
-              onChange={controller.onChangePhone}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-        </FormRow>
-        <FormRow>
-          <div className="flex-1">
-            <FormLabel<IForm> field="country">Country</FormLabel>
-            <Input<IForm>
-              field="country"
-              errors={state.errors}
-              value={form.country}
-              onChange={controller.onChangeCountry}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-          <div className="flex-1">
-            <FormLabel<IForm> field="city">City & State</FormLabel>
-            <Input<IForm>
-              field="city"
-              errors={state.errors}
-              value={form.city}
-              onChange={controller.onChangeCity}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-        </FormRow>
-        <div className={cn(showMore ? 'flex flex-col gap-y-2' : 'hidden')}>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel<IForm> field="address">Address</FormLabel>
-              <Input<IForm>
-                field="address"
-                errors={state.errors}
-                value={form.address}
-                onChange={controller.onChangeAddress}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div className="flex-1">
-              <FormLabel<IForm> field="postalCode">Postal Code</FormLabel>
-              <Input<IForm>
-                field="postalCode"
-                errors={state.errors}
-                value={form.postalCode}
-                onChange={controller.onChangePostalCode}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormRow>
-          <FormRow>
-            <div className="flex-1">
-              {/*Include this section if your profession requires a certain type of license. If not, leave it blank.*/}
-              <FormLabel<IForm>
-                field="license"
-                className="flex items-end gap-x-1"
-              >
-                <div>License</div>
-                <div>
-                  <Tooltip size={15}>
-                    <TooltipBox>
-                      Include this only if your profession or application
-                      requires a certain type of license. If not, leave blank.
-                    </TooltipBox>
-                  </Tooltip>
-                </div>
-              </FormLabel>
-              <Input<IForm>
-                field="license"
-                errors={state.errors}
-                value={form.license}
-                onChange={controller.onChangeLicense}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div className="flex-1">
-              <FormLabel<IForm>
-                field="nationality"
-                className="flex items-end gap-x-1"
-              >
-                <div>Nationality</div>
-                <div>
-                  <Tooltip size={15}>
-                    <TooltipBox>
-                      Include this only if your profession or application
-                      requires your nationality to be known. If not, leave
-                      blank.
-                    </TooltipBox>
-                  </Tooltip>
-                </div>
-              </FormLabel>
-              <Input<IForm>
-                field="nationality"
-                errors={state.errors}
-                value={form.nationality}
-                onChange={controller.onChangeNationality}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormRow>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel<IForm>
-                field="placeOfBirth"
-                className="flex items-end gap-x-1"
-              >
-                <div>Place Of Birth</div>
-                <div>
-                  <Tooltip size={15}>
-                    <TooltipBox>
-                      Include this only if your profession or application
-                      requires your place of birth to be known. If not, leave
-                      blank.
-                    </TooltipBox>
-                  </Tooltip>
-                </div>
-              </FormLabel>
-              <Input<IForm>
-                field="placeOfBirth"
-                errors={state.errors}
-                value={form.placeOfBirth}
-                onChange={controller.onChangePlaceOfBirth}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div className="flex-1">
-              <FormLabel<IForm>
-                field="dateOfBirth"
-                className="flex items-end gap-x-1"
-              >
-                <div>Date Of Birth</div>
-                <div>
-                  <Tooltip size={15}>
-                    <TooltipBox>
-                      Include this only if your profession or application
-                      requires your date of birth to be known. If not, leave
-                      blank.
-                    </TooltipBox>
-                  </Tooltip>
-                </div>
-              </FormLabel>
-              <Input<IForm>
-                field="dateOfBirth"
-                errors={state.errors}
-                value={form.dateOfBirth}
-                onChange={controller.onChangeDateOfBirth}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormRow>
         </div>
-        <Button
-          variant="link"
-          onClick={() => setShowMore(!showMore)}
-        >
-          <div className="flex w-full">
-            <div className="grow text-left">
-              {showMore ? 'Show less' : 'Show more'}
+        <div className="col-span-2">
+          <Button
+            variant="link"
+            onClick={() => setShowMore(!showMore)}
+          >
+            <div className="flex w-full">
+              <div className="grow text-left">
+                {showMore ? 'Show less' : 'Show more'}
+              </div>
+              <div className="shrink-0 text-gray-500">
+                <ChevronDown />
+              </div>
             </div>
-            <div className="shrink-0 text-gray-500">
-              <ChevronDown />
-            </div>
-          </div>
-        </Button>
+          </Button>
+        </div>
       </SectionItemBody>
       <ImageUploadModal
         open={showImageUpload}

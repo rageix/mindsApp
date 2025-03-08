@@ -25,22 +25,30 @@ export default class EducationFormController extends SectionItemController<IForm
     this.onChangeForm({ degree: e.target.value });
   };
 
+  onChangeMajor = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ major: e.target.value });
+  };
+
   onChangeStart = (value: IRBDate | null) => {
     this.onChangeForm({ start: value });
-    if(value === null) {
+    if (value === null) {
       emitter.emitSaveResume();
     }
   };
 
   onChangeEnd = (value: IRBDate | null) => {
     this.onChangeForm({ end: value });
-    if(value === null) {
+    if (value === null) {
       emitter.emitSaveResume();
     }
   };
 
   onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ city: e.target.value });
+  };
+
+  onChangeState = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ state: e.target.value });
   };
 
   onChangeDescription = (value: string) => {

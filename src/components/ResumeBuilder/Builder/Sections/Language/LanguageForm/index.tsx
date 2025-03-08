@@ -11,7 +11,6 @@ import LanguageFormController, {
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { LANGUAGE_OPTIONS } from '@/common/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import emitter from '@/util/Emitter';
@@ -62,47 +61,45 @@ export default function LanguageForm({ controller }: IProps) {
           {form.language || '(Not specified)'}
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel<IForm> field="language">Language</FormLabel>
-              <Input<IForm>
-                field="language"
-                errors={state.errors}
-                value={form.language}
-                onChange={controller.onChangeLanguage}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div className="flex-1">
-              <FormLabel<IForm>
-                field="level"
-                className="flex gap-x-1"
-              >
-                <span>Level</span>
-                <Tooltip size={15}>
-                  <TooltipBox>
-                    In general you can use the first 4 options. The other
-                    options reference{' '}
-                    <InlineLink
-                      href="https://www.europassitalian.com/blog/cefr-levels/"
-                      target="_blank"
-                    >
-                      CEFR
-                    </InlineLink>
-                    .
-                  </TooltipBox>
-                </Tooltip>
-              </FormLabel>
-              <Select<ERBLanguageLevel | null, IForm>
-                field="level"
-                options={LANGUAGE_OPTIONS}
-                value={value}
-                onChange={(option) => controller.onChangeLevel(option.value)}
-                isClearable
-                onClickClear={() => controller.onChangeLevel(null)}
-              />
-            </div>
-          </FormRow>
+          <div className="flex-1">
+            <FormLabel<IForm> field="language">Language</FormLabel>
+            <Input<IForm>
+              field="language"
+              errors={state.errors}
+              value={form.language}
+              onChange={controller.onChangeLanguage}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm>
+              field="level"
+              className="flex gap-x-1"
+            >
+              <span>Level</span>
+              <Tooltip size={15}>
+                <TooltipBox>
+                  In general you can use the first 3 options. The other options
+                  reference{' '}
+                  <InlineLink
+                    href="https://www.europassitalian.com/blog/cefr-levels/"
+                    target="_blank"
+                  >
+                    CEFR
+                  </InlineLink>
+                  .
+                </TooltipBox>
+              </Tooltip>
+            </FormLabel>
+            <Select<ERBLanguageLevel | null, IForm>
+              field="level"
+              options={LANGUAGE_OPTIONS}
+              value={value}
+              onChange={(option) => controller.onChangeLevel(option.value)}
+              isClearable
+              onClickClear={() => controller.onChangeLevel(null)}
+            />
+          </div>
         </SectionItemBody>
       </SectionItem>
     </DraggableItem>

@@ -8,7 +8,6 @@ import Switch from '@/components/Switch';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { ERBType } from '@/types/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import { useEffect, useRef, useState } from 'react';
@@ -28,7 +27,7 @@ export default function ReferenceForm({ controller }: IProps) {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    if(init) {
+    if (init) {
       emitter.emitSaveResume();
       return;
     }
@@ -57,7 +56,7 @@ export default function ReferenceForm({ controller }: IProps) {
           </div>
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
-          <div className="flex item">
+          <div className="col-span-2 flex item">
             <Switch
               checked={form.byRequestOnly}
               onChange={controller.onChangeByRequestOnly}
@@ -68,50 +67,47 @@ export default function ReferenceForm({ controller }: IProps) {
           </div>
           {!form.byRequestOnly && (
             <>
-              <FormRow>
-                <div className="flex-1">
-                  <FormLabel<IForm> field="name">Name</FormLabel>
-                  <Input<IForm>
-                    field="name"
-                    errors={state.errors}
-                    value={form.name}
-                    onChange={controller.onChangeName}
-                    onBlur={controller.onBlurInput}
-                  />
-                </div>
-                <div className="flex-1">
-                  <FormLabel<IForm> field="company">Company</FormLabel>
-                  <Input<IForm>
-                    field="company"
-                    errors={state.errors}
-                    value={form.company}
-                    onChange={controller.onChangeCompany}
-                    onBlur={controller.onBlurInput}
-                  />
-                </div>
-              </FormRow>
-              <FormRow>
-                <div className="flex-1">
-                  <FormLabel<IForm> field="phone">Phone</FormLabel>
-                  <Input<IForm>
-                    field="phone"
-                    errors={state.errors}
-                    value={form.phone}
-                    onChange={controller.onChangePhone}
-                    onBlur={controller.onBlurInput}
-                  />
-                </div>
-                <div className="flex-1">
-                  <FormLabel<IForm> field="email">Email</FormLabel>
-                  <Input<IForm>
-                    field="email"
-                    errors={state.errors}
-                    value={form.email}
-                    onChange={controller.onChangeEmail}
-                    onBlur={controller.onBlurInput}
-                  />
-                </div>
-              </FormRow>
+              <div>
+                <FormLabel<IForm> field="name">Name</FormLabel>
+                <Input<IForm>
+                  field="name"
+                  errors={state.errors}
+                  value={form.name}
+                  onChange={controller.onChangeName}
+                  onBlur={controller.onBlurInput}
+                />
+              </div>
+              <div>
+                <FormLabel<IForm> field="company">Company</FormLabel>
+                <Input<IForm>
+                  field="company"
+                  errors={state.errors}
+                  value={form.company}
+                  onChange={controller.onChangeCompany}
+                  onBlur={controller.onBlurInput}
+                />
+              </div>
+
+              <div>
+                <FormLabel<IForm> field="phone">Phone</FormLabel>
+                <Input<IForm>
+                  field="phone"
+                  errors={state.errors}
+                  value={form.phone}
+                  onChange={controller.onChangePhone}
+                  onBlur={controller.onBlurInput}
+                />
+              </div>
+              <div>
+                <FormLabel<IForm> field="email">Email</FormLabel>
+                <Input<IForm>
+                  field="email"
+                  errors={state.errors}
+                  value={form.email}
+                  onChange={controller.onChangeEmail}
+                  onBlur={controller.onBlurInput}
+                />
+              </div>
             </>
           )}
         </SectionItemBody>

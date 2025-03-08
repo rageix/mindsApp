@@ -43,6 +43,10 @@ export default class ExtraCurricularFormController extends SectionItemController
     this.onChangeForm({ city: e.target.value });
   };
 
+  onChangeState = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ state: e.target.value });
+  };
+
   onChangeDescription = (value: string) => {
     this.onChangeForm({ description: value });
   };

@@ -7,7 +7,6 @@ import LinkFormController, {
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import { useRef } from 'react';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import { ERBType } from '@/types/Resume';
@@ -41,28 +40,26 @@ export default function LinkForm({ controller }: IProps) {
           <div>{form.link || '(Not specified)'}</div>
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel<IForm> field="label">Label</FormLabel>
-              <Input<IForm>
-                field="label"
-                errors={state.errors}
-                value={form.label}
-                onChange={controller.onChangeLabel}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div className="flex-1">
-              <FormLabel<IForm> field="link">Link</FormLabel>
-              <Input<IForm>
-                field="link"
-                errors={state.errors}
-                value={form.link}
-                onChange={controller.onChangeLink}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormRow>
+          <div>
+            <FormLabel<IForm> field="label">Label</FormLabel>
+            <Input<IForm>
+              field="label"
+              errors={state.errors}
+              value={form.label}
+              onChange={controller.onChangeLabel}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm> field="link">Link</FormLabel>
+            <Input<IForm>
+              field="link"
+              errors={state.errors}
+              value={form.link}
+              onChange={controller.onChangeLink}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
         </SectionItemBody>
       </SectionItem>
     </DraggableItem>

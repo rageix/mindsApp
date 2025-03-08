@@ -49,28 +49,28 @@ export default class DetailFormController extends SectionItemController<IForm> {
     this.onChangeForm({ city: e.target.value });
   };
 
+  onChangeState = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ state: e.target.value });
+  };
+
   onChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ address: e.target.value });
+  };
+
+  onChangeAddress2 = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ address2: e.target.value });
   };
 
   onChangePostalCode = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ postalCode: e.target.value });
   };
 
-  onChangeLicense = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ license: e.target.value });
+  onChangeLinkedIn = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ linkedIn: e.target.value });
   };
 
-  onChangeNationality = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ nationality: e.target.value });
-  };
-
-  onChangePlaceOfBirth = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ placeOfBirth: e.target.value });
-  };
-
-  onChangeDateOfBirth = (e: ChangeEvent<HTMLInputElement>) => {
-    this.onChangeForm({ dateOfBirth: e.target.value });
+  onChangeOther = (e: ChangeEvent<HTMLInputElement>) => {
+    this.onChangeForm({ other: e.target.value });
   };
 
   onImageUpload = (ids?: MongoId[]) => {

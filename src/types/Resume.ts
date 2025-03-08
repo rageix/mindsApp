@@ -43,13 +43,17 @@ export interface IRBDetail extends IRBSectionItem {
   phone: string;
   country: string;
   city: string;
+  state: string;
   // hidden
   address: string;
+  address2: string;
   postalCode: string;
-  license: string;
-  nationality: string;
-  placeOfBirth: string;
-  dateOfBirth: string;
+  linkedIn: string;
+  other: string;
+  // license: string;
+  // nationality: string;
+  // placeOfBirth: string;
+  // dateOfBirth: string;
 }
 
 export function newIRBDetail(): IRBDetail {
@@ -63,13 +67,17 @@ export function newIRBDetail(): IRBDetail {
     phone: '',
     country: '',
     city: '',
+    state: '',
     // hidden
     address: '',
+    address2: '',
     postalCode: '',
-    license: '',
-    nationality: '',
-    placeOfBirth: '',
-    dateOfBirth: '',
+    linkedIn: '',
+    other: '',
+    // license: '',
+    // nationality: '',
+    // placeOfBirth: '',
+    // dateOfBirth: '',
   };
 }
 
@@ -104,6 +112,7 @@ export interface IRBEmployment extends IRBSectionItem {
   start: IRBDate | null;
   end: IRBDate | null;
   city: string;
+  state: string;
   description: string;
 }
 
@@ -116,6 +125,7 @@ export function newIRBEmployment(): IRBEmployment {
     start: null,
     end: null,
     city: '',
+    state: '',
     description: '',
   };
 }
@@ -123,9 +133,11 @@ export function newIRBEmployment(): IRBEmployment {
 export interface IRBEducation extends IRBSectionItem {
   school: string;
   degree: string;
+  major: string;
   start: IRBDate | null;
   end: IRBDate | null;
   city: string;
+  state: string;
   description: string;
 }
 
@@ -134,9 +146,11 @@ export function newIRBEducation(): IRBEducation {
     ...newIRBSectionItem(),
     school: '',
     degree: '',
+    major: '',
     start: null,
     end: null,
     city: '',
+    state: '',
     description: '',
   };
 }
@@ -155,11 +169,9 @@ export function newIRBLink(): IRBLink {
 }
 
 export enum ERBSkillLevel {
-  Novice = 1,
-  Beginner = 2,
-  Skillfull = 3,
-  Experienced = 4,
-  Expert = 5,
+  Beginner = 1,
+  Intermediate = 2,
+  Advanced = 3,
 }
 
 export interface IRBSkill extends IRBSectionItem {
@@ -178,6 +190,7 @@ export function newIRBSkill(): IRBSkill {
 export interface IRBCustom extends IRBSectionItem {
   title: string;
   city: string;
+  state: string;
   start: IRBDate | null;
   end: IRBDate | null;
   description: string;
@@ -188,6 +201,7 @@ export function newIRBCustom(): IRBCustom {
     ...newIRBSectionItem(),
     title: '',
     city: '',
+    state: '',
     start: null,
     end: null,
     description: '',
@@ -218,6 +232,7 @@ export interface IRBExtraCurricular extends IRBSectionItem {
   start: IRBDate | null;
   end: IRBDate | null;
   city: string;
+  state: string;
   description: string;
 }
 
@@ -228,6 +243,7 @@ export function newIRBExtraCurricular(): IRBExtraCurricular {
     start: null,
     end: null,
     city: '',
+    state: '',
     description: '',
   };
 }
@@ -238,6 +254,7 @@ export interface IRBInternship extends IRBSectionItem {
   start: IRBDate | null;
   end: IRBDate | null;
   city: string;
+  state: string;
   description: string;
 }
 
@@ -249,21 +266,21 @@ export function newIRBInternship(): IRBInternship {
     start: null,
     end: null,
     city: '',
+    state: '',
     description: '',
   };
 }
 
 export enum ERBLanguageLevel {
-  NativeSpeaker,
-  HighlyProficient,
-  VeryGoodCommand,
-  WorkingKnowledge,
-  C2,
-  C1,
-  B2,
-  B1,
-  A2,
-  A1,
+  Beginner = 1,
+  Intermediate = 2,
+  Advanced = 3,
+  C2 = 4,
+  C1 = 5,
+  B2 = 6,
+  B1 = 7,
+  A2 = 8,
+  A1 = 9,
 }
 
 export interface IRBLanguage extends IRBSectionItem {

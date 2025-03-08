@@ -3,7 +3,6 @@ import SummaryFormController from '@/components/ResumeBuilder/Builder/Sections/S
 import TextEditor from '@/components/TextEditor';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 
 interface IProps {
@@ -25,15 +24,13 @@ export default function SummaryForm({ controller }: IProps) {
         Summary
       </SectionItemHeader>
       <SectionItemBody isExpanded={form.isExpanded}>
-        <FormRow>
-          <div className="flex-1">
-            <TextEditor
-              initialState={form.description}
-              onChange={controller.onChangeDescription}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-        </FormRow>
+        <div className="col-span-2">
+          <TextEditor
+            initialState={form.description}
+            onChange={controller.onChangeDescription}
+            onBlur={controller.onBlurInput}
+          />
+        </div>
       </SectionItemBody>
     </SectionItem>
   );

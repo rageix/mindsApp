@@ -16,6 +16,18 @@ import {
   IRBSkill,
   IRBSummary,
   ISectionTitle,
+  newIRBCourse,
+  newIRBCustom,
+  newIRBDetail,
+  newIRBEducation,
+  newIRBEmployment,
+  newIRBExtraCurricular,
+  newIRBInternship,
+  newIRBLanguage,
+  newIRBLink,
+  newIRBReference,
+  newIRBSkill,
+  newIRBSummary,
 } from '@/types/Resume';
 import DetailFormController from '@/components/ResumeBuilder/Builder/Sections/Detail/DetailForm/DetailFormController';
 import { nanoid } from 'nanoid';
@@ -102,51 +114,60 @@ export default class SectionController extends BasicController<IState> {
       switch (section.type) {
         case ERBType.Detail:
           controller = new DetailFormController();
-          controller.reset(data as IRBDetail);
+          controller.reset({ ...newIRBDetail(), ...(data as IRBDetail) });
           break;
         case ERBType.Summary:
           controller = new SummaryFormController();
-          controller.reset(data as IRBSummary);
+          controller.reset({ ...newIRBSummary(), ...(data as IRBSummary) });
           break;
         case ERBType.Employment:
           controller = new EmploymentFormController();
-          controller.reset(data as IRBEmployment);
+          controller.reset({
+            ...newIRBEmployment(),
+            ...(data as IRBEmployment),
+          });
           break;
         case ERBType.Education:
           controller = new EducationFormController();
-          controller.reset(data as IRBEducation);
+          controller.reset({ ...newIRBEducation(), ...(data as IRBEducation) });
           break;
         case ERBType.Link:
           controller = new LinkFormController();
-          controller.reset(data as IRBLink);
+          controller.reset({ ...newIRBLink(), ...(data as IRBLink) });
           break;
         case ERBType.Skill:
           controller = new SkillFormController();
-          controller.reset(data as IRBSkill);
+          controller.reset({ ...newIRBSkill(), ...(data as IRBSkill) });
           break;
         case ERBType.Custom:
           controller = new CustomFormController();
-          controller.reset(data as IRBCustom);
+          controller.reset({ ...newIRBCustom(), ...(data as IRBCustom) });
           break;
         case ERBType.Course:
           controller = new CourseFormController();
-          controller.reset(data as IRBCourse);
+          controller.reset({ ...newIRBCourse(), ...(data as IRBCourse) });
           break;
         case ERBType.ExtraCurricular:
           controller = new ExtraCurricularFormController();
-          controller.reset(data as IRBExtraCurricular);
+          controller.reset({
+            ...newIRBExtraCurricular(),
+            ...(data as IRBExtraCurricular),
+          });
           break;
         case ERBType.Internship:
           controller = new InternshipFormController();
-          controller.reset(data as IRBInternship);
+          controller.reset({
+            ...newIRBInternship(),
+            ...(data as IRBInternship),
+          });
           break;
         case ERBType.Language:
           controller = new LanguageFormController();
-          controller.reset(data as IRBLanguage);
+          controller.reset({ ...newIRBLanguage(), ...(data as IRBLanguage) });
           break;
         case ERBType.Reference:
           controller = new ReferenceFormController();
-          controller.reset(data as IRBReference);
+          controller.reset({ ...newIRBReference(), ...(data as IRBReference) });
           break;
       }
 

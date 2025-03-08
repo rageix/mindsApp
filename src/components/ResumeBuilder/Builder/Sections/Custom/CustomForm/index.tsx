@@ -9,7 +9,6 @@ import CustomFormController, {
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import FormRow from '@/components/ResumeBuilder/Builder/Sections/FormRow';
 import FormStartEnd from '@/components/ResumeBuilder/Builder/Sections/FormStartEnd';
 import { ERBType } from '@/types/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
@@ -43,62 +42,65 @@ export default function CustomForm({ controller }: IProps) {
           {form.title || '(Not specified)'}
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel<IForm> field="title">Title</FormLabel>
-              <Input<IForm>
-                field="title"
-                errors={state.errors}
-                value={form.title}
-                onChange={controller.onChangeTitle}
+          <div>
+            <FormLabel<IForm> field="title">Title</FormLabel>
+            <Input<IForm>
+              field="title"
+              errors={state.errors}
+              value={form.title}
+              onChange={controller.onChangeTitle}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm> field="city">City</FormLabel>
+            <Input<IForm>
+              field="city"
+              errors={state.errors}
+              value={form.city}
+              onChange={controller.onChangeCity}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm> field="state">State</FormLabel>
+            <Input<IForm>
+              field="state"
+              errors={state.errors}
+              value={form.state}
+              onChange={controller.onChangeState}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <FormStartEnd>
+            <div>
+              <FormLabel<IForm> field="start">Start</FormLabel>
+              <MonthYearInput
+                value={form.start}
+                onChange={controller.onChangeStart}
+                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>
-            <div className="flex-1">
-              <FormLabel<IForm> field="city">City & State</FormLabel>
-              <Input<IForm>
-                field="city"
-                errors={state.errors}
-                value={form.city}
-                onChange={controller.onChangeCity}
+            <div>
+              <FormLabel<IForm> field="end">End</FormLabel>
+              <MonthYearInput
+                value={form.end}
+                onChange={controller.onChangeEnd}
+                showPresent
+                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>
-          </FormRow>
-          <FormRow>
-            <FormStartEnd>
-              <div className="flex-1">
-                <FormLabel<IForm> field="start">Start</FormLabel>
-                <MonthYearInput
-                  value={form.start}
-                  onChange={controller.onChangeStart}
-                  isClearable
-                  onBlur={controller.onBlurInput}
-                />
-              </div>
-              <div className="flex-1">
-                <FormLabel<IForm> field="end">End</FormLabel>
-                <MonthYearInput
-                  value={form.end}
-                  onChange={controller.onChangeEnd}
-                  showPresent
-                  isClearable
-                  onBlur={controller.onBlurInput}
-                />
-              </div>
-            </FormStartEnd>
-            <div className="flex-1"></div>
-          </FormRow>
-          <FormRow>
-            <div className="flex-1">
-              <FormLabel>Description</FormLabel>
-              <TextEditor
-                initialState={form.description}
-                onChange={controller.onChangeDescription}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormRow>
+          </FormStartEnd>
+          <div className="col-span-2">
+            <FormLabel>Description</FormLabel>
+            <TextEditor
+              initialState={form.description}
+              onChange={controller.onChangeDescription}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
         </SectionItemBody>
       </SectionItem>
     </DraggableItem>
