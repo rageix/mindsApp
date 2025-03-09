@@ -1,6 +1,5 @@
 'use client';
 import FormLabel from '@/components/FormLabel';
-import Input from '@/components/Input';
 import SkillFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
@@ -13,6 +12,8 @@ import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/Secti
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import emitter from '@/util/Emitter';
+import EZDynamicCombobox from '@/components/EZDynamicCombobox';
+import { SKILLS_OPTIONS } from '@/common/Resume';
 
 const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
   {
@@ -77,13 +78,18 @@ export default function SkillForm({ controller }: IProps) {
         <SectionItemBody isExpanded={form.isExpanded}>
           <div>
             <FormLabel<IForm> field="skill">Skill</FormLabel>
-            <Input<IForm>
+            <EZDynamicCombobox<string, IForm>
               field="skill"
-              errors={state.errors}
-              value={form.skill}
               onChange={controller.onChangeSkill}
-              onBlur={controller.onBlurInput}
+              options={SKILLS_OPTIONS}
             />
+            {/*<Input<IForm>*/}
+            {/*  field="skill"*/}
+            {/*  errors={state.errors}*/}
+            {/*  value={form.skill}*/}
+            {/*  onChange={controller.onChangeSkill}*/}
+            {/*  onBlur={controller.onBlurInput}*/}
+            {/*/>*/}
           </div>
           <div>
             <FormLabel<IForm> field="level">Level</FormLabel>
