@@ -91,7 +91,7 @@ export default function EZDynamicCombobox<T, F>({
       comparison={(value, option) => {
         return String(value?.value) === String(option.value);
       }}
-      clearable={clearable}
+      isClearable={clearable}
       onClickClear={onClickClear}
       immediate
     />

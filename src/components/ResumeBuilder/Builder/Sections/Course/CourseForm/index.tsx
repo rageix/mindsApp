@@ -69,7 +69,6 @@ export default function CourseForm({ controller }: IProps) {
               <MonthYearInput
                 value={form.start}
                 onChange={controller.onChangeStart}
-                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>
@@ -79,7 +78,6 @@ export default function CourseForm({ controller }: IProps) {
                 value={form.end}
                 onChange={controller.onChangeEnd}
                 showPresent
-                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>

@@ -4,31 +4,31 @@ import SkillFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/SkillFormController';
 import { ISelectOption } from '@/types/SelectOption';
-import { ERBSkillLevel, ERBType } from '@/types/Resume';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Select from '@/components/Select';
+import { ERBType } from '@/types/Resume';
+import { useRef } from 'react';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
-import emitter from '@/util/Emitter';
-import EZDynamicCombobox from '@/components/EZDynamicCombobox';
-import { SKILLS_OPTIONS } from '@/common/Resume';
+import LazyDynamicCombobox from '@/components/LazyDynamicCombobox';
+import TooltipBox from '@/components/TooltipBox';
+import Tooltip from '@/components/Tooltip';
+import { SKILLS_OPTIONS } from '@/components/ResumeBuilder/Builder/Sections/Skill/SkillForm/Options';
 
-const OPTIONS: ISelectOption<ERBSkillLevel | null>[] = [
+const OPTIONS: ISelectOption<string>[] = [
   {
-    key: String(ERBSkillLevel.Beginner),
-    value: ERBSkillLevel.Beginner,
+    key: '1',
+    value: 'Beginner',
     label: 'Beginner',
   },
   {
-    key: String(ERBSkillLevel.Intermediate),
-    value: ERBSkillLevel.Intermediate,
+    key: '2',
+    value: 'Intermediate',
     label: 'Intermediate',
   },
   {
-    key: String(ERBSkillLevel.Advanced),
-    value: ERBSkillLevel.Advanced,
+    key: '3',
+    value: 'Advanced',
     label: 'Advanced',
   },
 ];
@@ -42,22 +42,7 @@ export default function SkillForm({ controller }: IProps) {
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
 
-  const { form, state } = controller;
-
-  const value: ISelectOption<ERBSkillLevel | null> | null = useMemo(() => {
-    return OPTIONS.find((v) => v.value === form.level) || null;
-  }, [form.level]);
-
-  const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    if (init) {
-      emitter.emitSaveResume();
-      return;
-    }
-
-    setInit(true);
-  }, [form.level]);
+  const { form } = controller;
 
   return (
     <DraggableItem
@@ -77,29 +62,47 @@ export default function SkillForm({ controller }: IProps) {
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
           <div>
-            <FormLabel<IForm> field="skill">Skill</FormLabel>
-            <EZDynamicCombobox<string, IForm>
+            <FormLabel<IForm>
+              field="skill"
+              className="flex items-end gap-x-1"
+            >
+              <span>Skill</span>
+              <Tooltip size={15}>
+                <TooltipBox>
+                  I&apos;ve provided a number of soft skills you can chose from.
+                  If they don&apos;t work for you feel free to provide your own.
+                </TooltipBox>
+              </Tooltip>
+            </FormLabel>
+            <LazyDynamicCombobox<IForm>
               field="skill"
               onChange={controller.onChangeSkill}
               options={SKILLS_OPTIONS}
+              onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.skill}
             />
-            {/*<Input<IForm>*/}
-            {/*  field="skill"*/}
-            {/*  errors={state.errors}*/}
-            {/*  value={form.skill}*/}
-            {/*  onChange={controller.onChangeSkill}*/}
-            {/*  onBlur={controller.onBlurInput}*/}
-            {/*/>*/}
           </div>
           <div>
-            <FormLabel<IForm> field="level">Level</FormLabel>
-            <Select<ERBSkillLevel | null, IForm>
+            <FormLabel<IForm>
               field="level"
+              className="flex items-end gap-x-1"
+            >
+              <span>Level</span>
+              <Tooltip size={15}>
+                <TooltipBox>
+                  I recommend using the provided values, but if not keep it
+                  simple. Think good, better, best.
+                </TooltipBox>
+              </Tooltip>
+            </FormLabel>
+            <LazyDynamicCombobox<IForm>
+              field="level"
+              onChange={controller.onChangeLevel}
               options={OPTIONS}
-              value={value}
-              onChange={(option) => controller.onChangeLevel(option.value)}
-              isClearable
-              onClickClear={() => controller.onChangeLevel(null)}
+              onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.level}
             />
           </div>
         </SectionItemBody>

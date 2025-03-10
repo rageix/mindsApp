@@ -176,14 +176,14 @@ export enum ERBSkillLevel {
 
 export interface IRBSkill extends IRBSectionItem {
   skill: string;
-  level: ERBSkillLevel | null;
+  level: string;
 }
 
 export function newIRBSkill(): IRBSkill {
   return {
     ...newIRBSectionItem(),
     skill: '',
-    level: null,
+    level: '',
   };
 }
 
@@ -285,14 +285,14 @@ export enum ERBLanguageLevel {
 
 export interface IRBLanguage extends IRBSectionItem {
   language: string;
-  level: ERBLanguageLevel | null;
+  level: string;
 }
 
 export function newIRBLanguage(): IRBLanguage {
   return {
     ...newIRBSectionItem(),
     language: '',
-    level: null,
+    level: '',
   };
 }
 

@@ -68,7 +68,6 @@ export default function InternshipForm({ controller }: IProps) {
               <MonthYearInput
                 value={form.start}
                 onChange={controller.onChangeStart}
-                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>
@@ -78,7 +77,6 @@ export default function InternshipForm({ controller }: IProps) {
                 value={form.end}
                 onChange={controller.onChangeEnd}
                 showPresent
-                isClearable
                 onBlur={controller.onBlurInput}
               />
             </div>

@@ -1,22 +1,22 @@
 'use client';
 import FormLabel from '@/components/FormLabel';
-import Input from '@/components/Input';
-import { ISelectOption } from '@/types/SelectOption';
-import { ERBLanguageLevel, ERBType } from '@/types/Resume';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Select from '@/components/Select';
+import { ERBType } from '@/types/Resume';
+import { useRef } from 'react';
 import LanguageFormController, {
   IForm,
 } from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/LanguageFormController';
 import SectionItem from '@/components/ResumeBuilder/Builder/Sections/SectionItem';
 import SectionItemHeader from '@/components/ResumeBuilder/Builder/Sections/SectionItemHeader';
 import SectionItemBody from '@/components/ResumeBuilder/Builder/Sections/SectionItemBody';
-import { LANGUAGE_OPTIONS } from '@/common/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
-import emitter from '@/util/Emitter';
 import TooltipBox from '@/components/TooltipBox';
 import Tooltip from '@/components/Tooltip';
 import InlineLink from '@/components/InlineLink';
+import LazyDynamicCombobox from '@/components/LazyDynamicCombobox';
+import {
+  LANGUAGE_LEVEL_OPTIONS,
+  LANGUAGE_OPTIONS,
+} from '@/components/ResumeBuilder/Builder/Sections/Language/LanguageForm/Options';
 
 interface IProps {
   controller: LanguageFormController;
@@ -27,22 +27,7 @@ export default function LanguageForm({ controller }: IProps) {
   const dragRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement>(null);
 
-  const { form, state } = controller;
-
-  const value: ISelectOption<ERBLanguageLevel | null> | null = useMemo(() => {
-    return LANGUAGE_OPTIONS.find((v) => v.value === form.level) || null;
-  }, [form.level]);
-
-  const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    if (init) {
-      emitter.emitSaveResume();
-      return;
-    }
-
-    setInit(true);
-  }, [form.level]);
+  const { form } = controller;
 
   return (
     <DraggableItem
@@ -62,13 +47,25 @@ export default function LanguageForm({ controller }: IProps) {
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
           <div className="flex-1">
-            <FormLabel<IForm> field="language">Language</FormLabel>
-            <Input<IForm>
+            <FormLabel<IForm>
               field="language"
-              errors={state.errors}
-              value={form.language}
+              className="flex gap-x-1"
+            >
+              <span>Language</span>
+              <Tooltip size={15}>
+                <TooltipBox>
+                  I&apos;ve provided a list of the most spoken languages. If not
+                  listed feel free to provide your own.
+                </TooltipBox>
+              </Tooltip>
+            </FormLabel>
+            <LazyDynamicCombobox<IForm>
+              field="language"
               onChange={controller.onChangeLanguage}
+              options={LANGUAGE_OPTIONS}
               onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.language}
             />
           </div>
           <div>
@@ -79,7 +76,7 @@ export default function LanguageForm({ controller }: IProps) {
               <span>Level</span>
               <Tooltip size={15}>
                 <TooltipBox>
-                  In general you can use the first 3 options. The other options
+                  In general you can use the first 4 options. The other options
                   reference{' '}
                   <InlineLink
                     href="https://www.europassitalian.com/blog/cefr-levels/"
@@ -88,16 +85,19 @@ export default function LanguageForm({ controller }: IProps) {
                     CEFR
                   </InlineLink>
                   .
+                  <br />
+                  <br />
+                  Feel free to provide your own if nothing fits.
                 </TooltipBox>
               </Tooltip>
             </FormLabel>
-            <Select<ERBLanguageLevel | null, IForm>
+            <LazyDynamicCombobox<IForm>
               field="level"
-              options={LANGUAGE_OPTIONS}
-              value={value}
-              onChange={(option) => controller.onChangeLevel(option.value)}
-              isClearable
-              onClickClear={() => controller.onChangeLevel(null)}
+              onChange={controller.onChangeLevel}
+              options={LANGUAGE_LEVEL_OPTIONS}
+              onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.level}
             />
           </div>
         </SectionItemBody>

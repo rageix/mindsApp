@@ -8,6 +8,7 @@ import MonthPicker from '@/components/ResumeBuilder/Builder/MonthPicker';
 import { XIcon } from 'lucide-react';
 import Button from '@/components/Buttton';
 import _ from 'lodash';
+import { cn } from '@/util/Cn';
 
 interface IProps<T> {
   value: IRBDate | null;
@@ -75,7 +76,10 @@ export default function MonthYearInput<T>({
         <Input
           field={field}
           value={inputValue}
-          className="group-data-[active]:ring-2 group-data-[active]:ring-blue-600 focus:ring-blue-600 cursor-pointer"
+          className={cn(
+            'group-data-[active]:ring-2 group-data-[active]:ring-blue-600 focus:ring-blue-600 cursor-pointer',
+            isClearable ? 'pr-10' : null,
+          )}
           onChange={() => null}
         />
         {isClearable && (

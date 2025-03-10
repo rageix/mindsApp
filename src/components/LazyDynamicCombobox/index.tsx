@@ -2,27 +2,37 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { ISelectOption } from '@/types/SelectOption';
 import DynamicCombobox from '@/components/DynamicCombobox';
 
-interface IProps<T, F> {
+interface IProps<F> {
   field?: keyof F;
   errors?: Record<keyof F, string[]>;
-  onChange: (value: T | null) => void;
+  onChange: (value: string | null) => void;
   isClearable?: boolean;
-  options: ISelectOption<T>[];
-  value?: T | null;
+  options: ISelectOption<string>[];
+  value?: string | null;
+  onBlur?: () => void;
+  placeholder?: string;
+  debug?: boolean;
 }
 
-export default function LazyDynamicCombobox<T, F>({
+/***
+ The difference between the LazyDynamicCombobox and the EZDynamicCombobox
+ is the Lazy one allows you to enter your own value as well.
+ ***/
+
+export default function LazyDynamicCombobox<F>({
   field,
   errors,
   onChange,
   isClearable,
   options,
   value,
-}: IProps<T, F>) {
+  onBlur,
+  placeholder,
+}: IProps<F>) {
   const [inputValue, setInputValue] = useState('');
   const [filteredOptions, setFilteredOptions] =
-    useState<ISelectOption<T>[]>(options);
-  const [selectedOption, setSelectedOption] = useState<ISelectOption<T>>();
+    useState<ISelectOption<string>[]>(options);
+  const [selectedOption, setSelectedOption] = useState<ISelectOption<string>>();
 
   useEffect(() => {
     const option = options.find((v) => v.value === value);
@@ -34,25 +44,28 @@ export default function LazyDynamicCombobox<T, F>({
     }
 
     setSelectedOption(undefined);
-    if(value !== inputValue) {
-      setInputValue(value);
+    if (value !== inputValue) {
+      setInputValue(value || '');
     }
   }, [value]);
 
-  function onInputBlur() {
-    if (selectedOption && inputValue !== selectedOption.label) {
-      setInputValue(String(selectedOption.label));
-    }
-  }
+  // function onInputBlur() {
+  //   if (selectedOption && inputValue !== selectedOption.label) {
+  //     setInputValue(String(selectedOption.label));
+  //   }
+  // }
 
   function onClickClear() {
     setSelectedOption(undefined);
     setFilteredOptions(options);
     setInputValue('');
     onChange(null);
+    if (onBlur) {
+      onBlur();
+    }
   }
 
-  function onChangeSelected(option: ISelectOption<T> | null) {
+  function onChangeSelected(option: ISelectOption<string> | null) {
     if (!option) {
       // setSelectedOption(undefined);
       // setInputValue('');
@@ -62,18 +75,29 @@ export default function LazyDynamicCombobox<T, F>({
     setSelectedOption(option);
     setInputValue(String(option?.label) || '');
     onChange(option.value);
+    if (onBlur) {
+      onBlur();
+    }
     // const re = new RegExp(String(value?.value), "i");
     // const result =  String(option.label).search(re);
   }
 
   function onInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value.trim();
+    const value = event.target.value;
+    onChange(value);
     if (value.length > 0) {
       const re = new RegExp(event.target.value, 'i');
       setInputValue(value);
-      setFilteredOptions(
-        options.filter((v) => String(v.label).search(re) > -1),
+      const filteredOptions = options.filter(
+        (v) => String(v.label).search(re) > -1,
       );
+
+      if (filteredOptions.length === 0) {
+        setFilteredOptions(options);
+      } else {
+        setFilteredOptions(filteredOptions);
+      }
+
       return;
     }
     setInputValue(value);
@@ -81,7 +105,7 @@ export default function LazyDynamicCombobox<T, F>({
   }
 
   return (
-    <DynamicCombobox<T, F>
+    <DynamicCombobox<string, F>
       field={field}
       errors={errors}
       options={filteredOptions}
@@ -89,13 +113,14 @@ export default function LazyDynamicCombobox<T, F>({
       onChange={onChangeSelected}
       inputValue={inputValue}
       onInputChange={onInputChange}
-      onInputBlur={onInputBlur}
+      onInputBlur={onBlur}
       comparison={(value, option) => {
         return String(value?.value) === String(option.value);
       }}
-      clearable={isClearable}
+      isClearable={isClearable}
       onClickClear={onClickClear}
       immediate
+      placeholder={placeholder}
     />
   );
 }
