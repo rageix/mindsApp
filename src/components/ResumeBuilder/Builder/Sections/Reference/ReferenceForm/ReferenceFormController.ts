@@ -31,4 +31,8 @@ export default class ReferenceFormController extends SectionItemController<IForm
   onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     this.onChangeForm({ email: e.target.value });
   };
+
+  onChangeRelationship = (value: string | null) => {
+    this.onChangeForm({ relationship: value || '' });
+  };
 }

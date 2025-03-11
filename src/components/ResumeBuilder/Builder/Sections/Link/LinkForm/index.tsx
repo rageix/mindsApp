@@ -37,7 +37,6 @@ export default function LinkForm({ controller }: IProps) {
           id={controller.id}
         >
           <div>{form.label || '(Not specified)'}</div>
-          <div>{form.link || '(Not specified)'}</div>
         </SectionItemHeader>
         <SectionItemBody isExpanded={form.isExpanded}>
           <div>

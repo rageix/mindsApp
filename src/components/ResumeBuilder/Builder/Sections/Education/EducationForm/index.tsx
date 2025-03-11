@@ -15,6 +15,11 @@ import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/Draggable
 import { useRef } from 'react';
 import TooltipBox from '@/components/TooltipBox';
 import Tooltip from '@/components/Tooltip';
+import LazyDynamicCombobox from '@/components/LazyDynamicCombobox';
+import {
+  DEGREE_OPTIONS,
+  MAJOR_OPTIONS,
+} from '@/components/ResumeBuilder/Builder/Sections/Education/EducationForm/Options';
 
 interface IProps {
   controller: EducationFormController;
@@ -63,17 +68,16 @@ export default function EducationForm({ controller }: IProps) {
               <Tooltip size={15}>
                 <TooltipBox>
                   A degree is what you earn at the end of completing your major.
-                  Usually is Associate, Bachelor&apos;s, Master&apos;s, or
-                  Doctoral.
                 </TooltipBox>
               </Tooltip>
             </FormLabel>
-            <Input<IForm>
+            <LazyDynamicCombobox<IForm>
               field="degree"
-              errors={state.errors}
-              value={form.degree}
               onChange={controller.onChangeDegree}
+              options={DEGREE_OPTIONS}
               onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.degree}
             />
           </div>
           <div>
@@ -84,16 +88,38 @@ export default function EducationForm({ controller }: IProps) {
               <span>Major</span>
               <Tooltip size={15}>
                 <TooltipBox>
-                  The specific area you studied like Biology, Computer Science,
-                  Economics, etc...
+                  The specific area you studied.
+                  I&apos;ve compiled a list of majors, but there are way more
+                  than this, so feel free to provide your own if not listed.
                 </TooltipBox>
               </Tooltip>
             </FormLabel>
-            <Input<IForm>
+            <LazyDynamicCombobox<IForm>
               field="major"
-              errors={state.errors}
-              value={form.major}
               onChange={controller.onChangeMajor}
+              options={MAJOR_OPTIONS}
+              onBlur={controller.onBlurInput}
+              placeholder=""
+              value={form.major}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm> field="city">City</FormLabel>
+            <Input<IForm>
+              field="city"
+              errors={state.errors}
+              value={form.city}
+              onChange={controller.onChangeCity}
+              onBlur={controller.onBlurInput}
+            />
+          </div>
+          <div>
+            <FormLabel<IForm> field="state">State</FormLabel>
+            <Input<IForm>
+              field="state"
+              errors={state.errors}
+              value={form.state}
+              onChange={controller.onChangeState}
               onBlur={controller.onBlurInput}
             />
           </div>
@@ -116,26 +142,6 @@ export default function EducationForm({ controller }: IProps) {
               />
             </div>
           </FormStartEnd>
-          <div>
-            <FormLabel<IForm> field="city">City</FormLabel>
-            <Input<IForm>
-              field="city"
-              errors={state.errors}
-              value={form.city}
-              onChange={controller.onChangeCity}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
-          <div>
-            <FormLabel<IForm> field="state">State</FormLabel>
-            <Input<IForm>
-              field="state"
-              errors={state.errors}
-              value={form.state}
-              onChange={controller.onChangeState}
-              onBlur={controller.onBlurInput}
-            />
-          </div>
           <div className="col-span-2">
             <FormLabel>Description</FormLabel>
             <TextEditor

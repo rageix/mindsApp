@@ -302,6 +302,7 @@ export interface IRBReference extends IRBSectionItem {
   company: string;
   phone: string;
   email: string;
+  relationship: string;
 }
 
 export function newIRBReference(): IRBReference {
@@ -312,6 +313,7 @@ export function newIRBReference(): IRBReference {
     company: '',
     phone: '',
     email: '',
+    relationship: ''
   };
 }
 

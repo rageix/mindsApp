@@ -62,26 +62,6 @@ export default function EmploymentForm({ controller }: IProps) {
               onBlur={controller.onBlurInput}
             />
           </div>
-
-          <FormStartEnd>
-            <div>
-              <FormLabel<IForm> field="start">Start</FormLabel>
-              <MonthYearInput
-                value={form.start}
-                onChange={controller.onChangeStart}
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-            <div>
-              <FormLabel<IForm> field="end">End</FormLabel>
-              <MonthYearInput
-                value={form.end}
-                onChange={controller.onChangeEnd}
-                showPresent
-                onBlur={controller.onBlurInput}
-              />
-            </div>
-          </FormStartEnd>
           <div>
             <FormLabel<IForm> field="city">City</FormLabel>
             <Input<IForm>
@@ -102,6 +82,25 @@ export default function EmploymentForm({ controller }: IProps) {
               onBlur={controller.onBlurInput}
             />
           </div>
+          <FormStartEnd>
+            <div>
+              <FormLabel<IForm> field="start">Start</FormLabel>
+              <MonthYearInput
+                value={form.start}
+                onChange={controller.onChangeStart}
+                onBlur={controller.onBlurInput}
+              />
+            </div>
+            <div>
+              <FormLabel<IForm> field="end">End</FormLabel>
+              <MonthYearInput
+                value={form.end}
+                onChange={controller.onChangeEnd}
+                showPresent
+                onBlur={controller.onBlurInput}
+              />
+            </div>
+          </FormStartEnd>
           <div className="col-span-2">
             <FormLabel>Description</FormLabel>
             <TextEditor

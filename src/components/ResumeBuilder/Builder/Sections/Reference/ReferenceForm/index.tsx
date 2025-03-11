@@ -12,6 +12,8 @@ import { ERBType } from '@/types/Resume';
 import DraggableItem from '@/components/ResumeBuilder/Builder/Sections/DraggableItem';
 import { useEffect, useRef, useState } from 'react';
 import emitter from '@/util/Emitter';
+import LazyDynamicCombobox from '@/components/LazyDynamicCombobox';
+import { RELATIONSHIP_OPTIONS } from '@/components/ResumeBuilder/Builder/Sections/Reference/ReferenceForm/Options';
 
 interface IProps {
   controller: ReferenceFormController;
@@ -87,15 +89,15 @@ export default function ReferenceForm({ controller }: IProps) {
                   onBlur={controller.onBlurInput}
                 />
               </div>
-
               <div>
-                <FormLabel<IForm> field="phone">Phone</FormLabel>
-                <Input<IForm>
-                  field="phone"
-                  errors={state.errors}
-                  value={form.phone}
-                  onChange={controller.onChangePhone}
+                <FormLabel<IForm> field="relationship">Relationship</FormLabel>
+                <LazyDynamicCombobox<IForm>
+                  field="relationship"
+                  onChange={controller.onChangeRelationship}
+                  options={RELATIONSHIP_OPTIONS}
                   onBlur={controller.onBlurInput}
+                  placeholder=""
+                  value={form.relationship}
                 />
               </div>
               <div>
@@ -105,6 +107,16 @@ export default function ReferenceForm({ controller }: IProps) {
                   errors={state.errors}
                   value={form.email}
                   onChange={controller.onChangeEmail}
+                  onBlur={controller.onBlurInput}
+                />
+              </div>
+              <div>
+                <FormLabel<IForm> field="phone">Phone</FormLabel>
+                <Input<IForm>
+                  field="phone"
+                  errors={state.errors}
+                  value={form.phone}
+                  onChange={controller.onChangePhone}
                   onBlur={controller.onBlurInput}
                 />
               </div>
