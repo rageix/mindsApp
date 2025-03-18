@@ -4,7 +4,7 @@ import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 
 interface Props extends PropsWithChildren {
-  h2: string;
+  h1: string;
 }
 
 export default function FormWrapper(props: Props) {
@@ -14,9 +14,9 @@ export default function FormWrapper(props: Props) {
         <CardBody>
           <div className="">
             <Logo className="h-20 mx-auto" />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
-              {props.h2}
-            </h2>
+            <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
+              {props.h1}
+            </h1>
           </div>
 
           <div className="mt-10 ">

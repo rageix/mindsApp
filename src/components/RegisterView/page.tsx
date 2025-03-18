@@ -15,7 +15,7 @@ export default function RegisterView() {
   const loginUrl = '/login' + redirect;
 
   return (
-    <FormWrapper h2="Create new account">
+    <FormWrapper h1="Create new account">
       <RegisterForm />
       <p className="mt-4 text-center text-sm">
         <Link href={loginUrl}>

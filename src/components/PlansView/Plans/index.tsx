@@ -45,9 +45,9 @@ export default function Plans({ onClick }: IProps) {
     <div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-lg md:text-3xl font-semibold text-blue-600">
+          <h1 className="text-lg md:text-3xl font-semibold text-blue-600">
             Plans
-          </h2>
+          </h1>
           <p
             className={cn(
               'mt-2 text-balance text-3xl sm:text-5xl font-semibold tracking-tight text-gray-900 md:text-6xl',
