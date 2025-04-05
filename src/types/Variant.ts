@@ -1,6 +1,7 @@
 export type TButtonVariant =
   | 'indigo'
   | 'blue'
+  | 'sky'
   | 'red'
   | 'purple'
   | 'green'

@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { cn } from '@/util/Cn';
-import { merriweather } from '@/util/Fonts';
 import Button from '@/components/Buttton';
 
 export const metadata: Metadata = {
@@ -14,10 +12,9 @@ export default async function NotFound() {
       <div className="text-center">
         <p className="text-2xl font-semibold text-gray-400">404</p>
         <h1
-          className={cn(
-            'mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl',
-            merriweather.className,
-          )}
+          className={
+            'mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl'
+          }
         >
           Page not found
         </h1>

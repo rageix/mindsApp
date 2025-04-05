@@ -25,6 +25,7 @@ const colors: Record<TButtonVariant, string> = {
   indigo:
     'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-800 focus-visible:outline-indigo-700 text-white',
   blue: 'bg-blue-600 hover:bg-blue-500 active:bg-blue-800 focus-visible:outline-blue-700 text-white',
+  sky: 'bg-sky-600 hover:bg-sky-500 active:bg-sky-800 focus-visible:outline-sky-700 text-white',
   red: 'bg-red-600 hover:bg-red-500 active:bg-red-800 focus-visible:outline-red-700 text-white',
   purple:
     'bg-purple-600 hover:bg-purple-500 active:bg-purple-800 focus-visible:outline-purple-700 text-white',
@@ -44,6 +45,7 @@ const colors: Record<TButtonVariant, string> = {
 const active: Record<TButtonVariant, string> = {
   indigo: '!bg-indigo-800',
   blue: '!bg-blue-800',
+  sky: '!bg-sky-800',
   red: 'bg-red-700 hover:bg-red-600 active:bg-red-800 focus-visible:outline-red-700 text-white',
   purple: '!bg-purple-800',
   green: '!bg-green-800',
@@ -59,6 +61,7 @@ const active: Record<TButtonVariant, string> = {
 const colorsDisabled: Record<TButtonVariant, string> = {
   indigo: 'bg-indigo-100 text-indigo-400',
   blue: 'bg-blue-100 text-blue-400',
+  sky: 'bg-sky-100 text-sky-400',
   red: 'bg-red-100 text-red-400',
   purple: 'bg-purple-100 text-purple-400',
   green: 'bg-green-100 text-green-400',

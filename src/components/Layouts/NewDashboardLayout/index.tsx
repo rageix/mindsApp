@@ -17,8 +17,7 @@ import userService from '@/services/UserService';
 import subscriptionService from '@/services/SubscriptionService';
 
 const navItems = [
-  // { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'My Resumes', href: '/dashboard/resumes', current: false },
+  { name: 'Chat', href: '/dashboard/chat', current: false },
 ];
 
 interface Props extends PropsWithChildren {}

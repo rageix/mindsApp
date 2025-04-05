@@ -8,11 +8,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProviderWrapper from '@/components/ProviderWrapper';
 import OuterPageWrapper from '@/components/OuterPageWrapper';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { nunitoSans } from '@/util/Fonts';
+import { inter } from '@/util/Fonts';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Hobort',
+    title: 'gigabrainai',
   };
 }
 
@@ -30,9 +30,9 @@ export default function RootLayout({ children }: Props) {
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         />
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="wlPyvpkqwFV5xrCfpd2trg" async/>
+        {/*<script src="https://analytics.ahrefs.com/analytics.js" data-key="wlPyvpkqwFV5xrCfpd2trg" async/>*/}
       </head>
-      <body className={cn('min-h-screen', nunitoSans.className)}>
+      <body className={cn('min-h-screen', inter.className)}>
         <ProviderWrapper>
           <OuterPageWrapper>{children}</OuterPageWrapper>
         </ProviderWrapper>

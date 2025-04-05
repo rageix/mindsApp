@@ -8,24 +8,24 @@ interface IProps {
 
 export function ModelResponse({ modelResponse }: IProps) {
   return (
-    <div>
+    <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-3">
         <div className="shrink-0">
-          <div className="rounded-full bg-white size-10">
-            <UserIcon className="h-full w-auto" />
+          <div className="rounded-full bg-sky-900 text-white size-10 flex justify-center items-center">
+            <UserIcon className="size-5" />
           </div>
         </div>
-        <div className="grow">
+        <div className="grow rounded bg-sky-50 items-center py-2 px-4">
           <ModelContent content={modelResponse.input} />
         </div>
       </div>
       <div className="flex gap-x-3">
         <div className="shrink-0">
-          <div className="rounded-full bg-white size-10">
-            <BotIcon className="h-full w-auto" />
+          <div className="rounded-full bg-sky-900 text-white size-10 flex justify-center items-center">
+            <BotIcon className="size-5" />
           </div>
         </div>
-        <div className="grow">
+        <div className="grow rounded bg-sky-100 items-center py-2 px-4">
           <ModelContent content={modelResponse.output} />
         </div>
       </div>

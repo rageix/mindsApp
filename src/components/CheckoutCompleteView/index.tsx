@@ -6,8 +6,6 @@ import CardBody from '@/components/Card/CardBody';
 import Card from '@/components/Card';
 import Button from '@/components/Buttton';
 import Link from 'next/link';
-import { cn } from '@/util/Cn';
-import { merriweather } from '@/util/Fonts';
 
 export default function CheckoutCompleteView() {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -72,7 +70,7 @@ export default function CheckoutCompleteView() {
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 text-center">
           <div className="max-w-xl">
             <h1 className="text-lg font-medium text-blue-600">Thank you!</h1>
-            <p className={cn('mt-2 text-4xl font-bold tracking-tight sm:text-5xl', merriweather.className)}>
+            <p className={'mt-2 text-4xl font-bold tracking-tight sm:text-5xl'}>
               Payment success!
             </p>
             <p className="mt-2 text-base text-gray-700">

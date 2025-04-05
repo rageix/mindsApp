@@ -3,7 +3,6 @@ import { cn } from '@/util/Cn';
 import { CheckIcon } from 'lucide-react';
 import { EPlan, IPlan } from '@/types/IPlan';
 import Button from '@/components/Buttton';
-import { merriweather } from '@/util/Fonts';
 
 const plans: IPlan[] = [
   {
@@ -16,9 +15,9 @@ const plans: IPlan[] = [
     features: [
       'Unlimited resumes and exports',
       'Full access to all current products',
-      'Priority support',
+      'Priority support'
     ],
-    bestValue: false,
+    bestValue: false
   },
   {
     id: EPlan.Yearly,
@@ -30,10 +29,10 @@ const plans: IPlan[] = [
     features: [
       'Unlimited resumes and exports',
       'Full access to all current products',
-      'Priority support',
+      'Priority support'
     ],
-    bestValue: true,
-  },
+    bestValue: true
+  }
 ];
 
 interface IProps {
@@ -49,21 +48,22 @@ export default function Plans({ onClick }: IProps) {
             Plans
           </h1>
           <p
-            className={cn(
-              'mt-2 text-balance text-3xl sm:text-5xl font-semibold tracking-tight text-gray-900 md:text-6xl',
-              merriweather.className,
-            )}
+            className={
+              'mt-2 text-balance text-3xl sm:text-5xl font-semibold tracking-tight text-gray-900 md:text-6xl'
+            }
           >
             Straight forward pricing, no bull.
           </p>
         </div>
-        <p className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
+        <p
+          className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
           We offer 2 very straight forward plans, the only difference is the
           length. Your subscription gives you all access to all tools currently
           available on our platform. When we add new tools you automatically get
           full access to them at no additional cost.
         </p>
-        <p className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
+        <p
+          className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
           Cancel anytime with just one click. It&apos;s seriously that easy.
         </p>
         <div className="flex justify-center">
@@ -75,7 +75,7 @@ export default function Plans({ onClick }: IProps) {
                   plan.bestValue
                     ? 'ring-2 ring-blue-600'
                     : 'ring-1 ring-gray-200',
-                  'rounded-3xl p-8 xl:p-10 max-w-sm',
+                  'rounded-3xl p-8 xl:p-10 max-w-sm'
                 )}
               >
                 <div className="flex items-center justify-between gap-x-4">
@@ -86,7 +86,8 @@ export default function Plans({ onClick }: IProps) {
                     {plan.name}
                   </h3>
                   {plan.bestValue ? (
-                    <p className="rounded-full bg-blue-600 px-2.5 py-1 text-xs/5 font-semibold text-white">
+                    <p
+                      className="rounded-full bg-blue-600 px-2.5 py-1 text-xs/5 font-semibold text-white">
                       Best value!
                     </p>
                   ) : null}
@@ -96,7 +97,8 @@ export default function Plans({ onClick }: IProps) {
                 </p>
                 <p className="mt-6 flex items-baseline gap-x-1">
                   <>
-                    <span className="text-4xl font-semibold tracking-tight text-gray-900">
+                    <span
+                      className="text-4xl font-semibold tracking-tight text-gray-900">
                       {plan.price}
                     </span>
                     <span className="text-sm/6 font-semibold text-gray-700">
