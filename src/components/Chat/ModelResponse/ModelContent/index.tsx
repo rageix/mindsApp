@@ -1,5 +1,5 @@
 import { EModelContentType, IModelContent } from '@/types/HistoryItem';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Alert from '@/components/Alert';
 import ProtectedImage from '@/components/ProtectedImage';
 import { cn } from '@/util/Cn';
@@ -12,6 +12,10 @@ export function ModelContent({ content }: IProps) {
   const [text, setText] = useState<IModelContent[]>([]);
   const [images, setImages] = useState<IModelContent[]>([]);
   const [refusals, setRefusals] = useState<IModelContent[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
+  // const [selectionController] = useState(new SelectionController());
+  // selectionController.useController();
+  // const { state } = selectionController;
 
   useEffect(() => {
     const text = content.filter((v) => v.type === EModelContentType.Text);
@@ -25,8 +29,14 @@ export function ModelContent({ content }: IProps) {
     setRefusals(refusals);
   }, [content]);
 
+  // console.log(state);
+
   return (
-    <div className="flex flex-col gap-y-4">
+    <div
+      ref={ref}
+      className="flex flex-col gap-y-4"
+      // onMouseUp={() => selectionController.onMouseUp(ref)}
+    >
       <div
         className={cn(
           'flex flex-col gap-y-2',
@@ -68,6 +78,12 @@ export function ModelContent({ content }: IProps) {
           </ProtectedImage>
         ))}
       </div>
+      {/*<div*/}
+      {/*  className={cn('absolute', !state.visible ? 'hidden' : null)}*/}
+      {/*  style={{ top: `${state.x}px`, left: `${state.y}px` }}*/}
+      {/*>*/}
+      {/*  <Button variant="sky">Add it</Button>*/}
+      {/*</div>*/}
     </div>
   );
 }

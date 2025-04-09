@@ -8,7 +8,7 @@ interface IProps {
 
 export function ModelResponse({ modelResponse }: IProps) {
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-2 relative">
       <div className="flex gap-x-3">
         <div className="shrink-0">
           <div className="rounded-full bg-sky-900 text-white size-10 flex justify-center items-center">
