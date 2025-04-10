@@ -7,11 +7,11 @@ import { EModel } from '@/types/Model';
 import { useParams } from 'next/navigation';
 import SelectionController from '@/components/Chat/SelectionController';
 import SelectionPopover from '@/components/Chat/SelectionPopover';
-import SnippetsController from '@/components/Snippets/SnippetsController';
+import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
 
 interface IProps {
   model: EModel;
-  snippetsController: SnippetsController;
+  snippetsController: IdeaBoardController;
 }
 
 export function Chat({ model, snippetsController }: IProps) {

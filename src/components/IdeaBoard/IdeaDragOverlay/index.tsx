@@ -1,11 +1,11 @@
-import SnippetInputController from '@/components/Snippets/SnippetItem/SnippetInputController';
+import IdeaController from '@/components/IdeaBoard/IdeaItem/IdeaController';
 
 interface IProps {
-  controller: SnippetInputController;
+  controller: IdeaController;
 }
 
-export function SnippetDragOverlay({ controller }: IProps) {
-  controller.useController();
+export function IdeaDragOverlay({ controller }: IProps) {
+  // controller.useController();
 
   const { form } = controller;
 

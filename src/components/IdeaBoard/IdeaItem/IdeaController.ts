@@ -2,6 +2,7 @@ import FormController from '@/util/FormController';
 import { z } from 'zod';
 import { ChangeEvent } from 'react';
 import { zStringRequiredValidator } from '@/util/Validators';
+import { IIdeaItem } from '@/types/IdeaBoard';
 
 export interface IForm {
   text: string;
@@ -18,7 +19,7 @@ const formValidator = () =>
     text: zStringRequiredValidator,
   }) satisfies z.ZodType<IForm>;
 
-export default class SnippetInputController extends FormController<IForm> {
+export default class IdeaController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
   formValidator = formValidator;
@@ -28,6 +29,14 @@ export default class SnippetInputController extends FormController<IForm> {
   };
 
   setText = (text: string) => {
-    this.onChangeForm({text});
-  }
+    this.onChangeForm({ text });
+  };
+
+  getValue = (): IIdeaItem => {
+    const form = this.getForm();
+    return {
+      id: this.id,
+      text: form.text,
+    };
+  };
 }

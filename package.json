@@ -14,8 +14,8 @@
     "type-check": "tsc --noEmit -p tsconfig.json --composite false"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/core": "6.3.1",
+    "@dnd-kit/sortable": "10.0.0",
     "@headlessui/react": "2.2.0",
     "@lexical/headless": "0.29.0",
     "@lexical/react": "0.29.0",
@@ -38,6 +38,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-dropzone": "14.3.8",
+    "react-textarea-autosize": "8.5.9",
     "react-toastify": "11.0.5",
     "sanitize-html": "2.15.0",
     "stripe": "17.7.0",

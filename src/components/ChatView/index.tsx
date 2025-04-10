@@ -4,8 +4,9 @@ import { EModel } from '@/types/Model';
 import { useState } from 'react';
 import SidebarItem from '@/components/ChatView/SidebarItem';
 import { Chat } from '@/components/Chat';
-import SnippetsController from '@/components/Snippets/SnippetsController';
-import Snippets from '@/components/Snippets';
+import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
+import Button from '@/components/Buttton';
+import { IdeaBoard } from '../IdeaBoard';
 
 const modelOptions: ISelectOption<EModel>[] = [
   {
@@ -22,7 +23,7 @@ const modelOptions: ISelectOption<EModel>[] = [
 
 export default function ChatView() {
   const [model, setModel] = useState<EModel>(EModel.ChatGPT4o);
-  const [snippetsController] = useState(new SnippetsController());
+  const [ideaBoardController] = useState(new IdeaBoardController());
 
   return (
     <div className="absolute h-[calc(100%-64px)] w-full top-[64px] left-0 right-0">
@@ -39,12 +40,27 @@ export default function ChatView() {
             ))}
           </div>
           <div className="grow">
-            <Chat model={model} snippetsController={snippetsController} />
+            <Chat
+              model={model}
+              snippetsController={ideaBoardController}
+            />
             {/*  todo: add previous chats to load here */}
           </div>
-          <div className="shrink-0 w-88 flex flex-col gap-y-3 p-3 border border-gray-200 mb-3 bg-white overflow-y-auto">
-            <h2>Snippets</h2>
-            <Snippets controller={snippetsController}/>
+          <div className="shrink-0 w-88 flex flex-col gap-y-3 p-3 border border-gray-200 mb-3 bg-white">
+            <div className="shrink-0">
+              <h2>Idea Board</h2>
+            </div>
+            <div className="flex flex-col gap-y-3 overflow-y-auto grow">
+              <IdeaBoard controller={ideaBoardController} />
+            </div>
+            <div className="shrink-0">
+              <Button
+                variant="sky"
+                onClick={() => ideaBoardController.onAdd('')}
+              >
+                Add Item
+              </Button>
+            </div>
           </div>
         </div>
       </div>

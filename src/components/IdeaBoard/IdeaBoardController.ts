@@ -1,20 +1,27 @@
 import BasicController from '@/util/BasicController';
-import SnippetInputController from '@/components/Snippets/SnippetItem/SnippetInputController';
+import IdeaController from '@/components/IdeaBoard/IdeaItem/IdeaController';
 import uniqueId from '@/util/UniqueId';
 import { DragEndEvent } from '@dnd-kit/core';
 import _ from 'lodash';
+import { MongoId } from '@/types/MongoDocument';
+import { postApiIdeaBoardsFindOne } from '@/requests/api/ideaBoards/findOne';
+import { toast } from 'react-toastify';
+import { ChangeEvent } from 'react';
+import { IIdeaBoard } from '@/types/IdeaBoard';
 
 export interface IState {
-  controllers: SnippetInputController[];
+  name: string,
+  controllers: IdeaController[];
 }
 
 export function newIState(): IState {
   return {
+    name: '',
     controllers: [],
   };
 }
 
-export default class SnippetsController extends BasicController<IState> {
+export default class IdeaBoardController extends BasicController<IState> {
   defaultState = newIState();
 
   onMoveUpItem = (id: string) => {
@@ -47,7 +54,7 @@ export default class SnippetsController extends BasicController<IState> {
 
   onAdd = (text: string) => {
     const newId = uniqueId(this.state.controllers.map((v) => v.id));
-    const newController = new SnippetInputController();
+    const newController = new IdeaController();
     newController.id = newId;
     newController.setForm({ text });
 
@@ -90,4 +97,41 @@ export default class SnippetsController extends BasicController<IState> {
 
     this.setState({ controllers });
   };
+
+  onAddNew = () => {
+    this.onAdd('');
+  };
+
+  loadId = async (_id: MongoId) => {
+    const ideaBoard = await postApiIdeaBoardsFindOne({ _id });
+
+    if (!ideaBoard) {
+      toast.error('Failed to load Idea Board!');
+      return;
+    }
+
+    const controllers: IdeaController[] = [];
+
+    for (const item of ideaBoard.items) {
+      const newId = uniqueId(controllers.map((v) => v.id));
+      const newController = new IdeaController();
+      newController.id = newId;
+      newController.setForm({ text: item.text });
+      controllers.push(newController);
+    }
+
+    this.setState({ controllers });
+  };
+
+  onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ name: e.target.value });
+  };
+
+  getValue = (): IIdeaBoard => {
+    const state  = this.getState();
+    return {
+      name: state.name,
+      items: state.controllers.map((v) => v.getValue())
+    }
+  }
 }

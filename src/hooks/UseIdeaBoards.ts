@@ -3,21 +3,21 @@ import { useQuery } from '@tanstack/react-query';
 import { IHasId } from '@/types/HasId';
 import { IPaginatedResponse } from '@/types/Pagination';
 import { MongoId } from '@/types/MongoDocument';
-import { IResumesFilter } from '@/requests/api/resumes/paginated/schema';
-import { IResume } from '@/types/Resume';
-import { postApiResumesPaginated } from '@/requests/api/resumes/paginated';
-import { deleteApiResumes } from '@/requests/api/resumes';
+import { IIdeaBoardFilter } from '@/requests/api/ideaBoards/paginated/schema';
+import { postApiIdeaBoardsPaginated } from '@/requests/api/ideaBoards/paginated';
+import { deleteApiIdeaBoards } from '@/requests/api/ideaBoards';
+import { IIdeaBoard } from '@/types/IdeaBoard';
 
-export default function useResumes(filters: IResumesFilter) {
-  const [data, setData] = useState<IPaginatedResponse<IHasId<IResume>>>();
+export default function useIdeaBoards(filters: IIdeaBoardFilter) {
+  const [data, setData] = useState<IPaginatedResponse<IHasId<IIdeaBoard>>>();
   const [initLoad, setInitLoad] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const query = useQuery({
-    queryKey: ['/api/resumes/paginated', filters],
+    queryKey: ['/api/ideaBoards/paginated', filters],
     queryFn: () => {
       setLoading(true);
-      return postApiResumesPaginated(filters);
+      return postApiIdeaBoardsPaginated(filters);
     },
     refetchOnWindowFocus: false,
   });
@@ -31,7 +31,7 @@ export default function useResumes(filters: IResumesFilter) {
   }, [query.data]);
 
   async function deleteItems(ids: MongoId[]) {
-    await deleteApiResumes({ ids });
+    await deleteApiIdeaBoards({ ids });
     query.refetch();
   }
 
