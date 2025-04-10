@@ -2,7 +2,6 @@ import { PropsWithChildren } from 'react';
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { cn } from '@/util/Cn';
-// import useTheme from '@/hooks/UseTheme';
 import Button from '@/components/Buttton';
 
 interface IProps extends PropsWithChildren {
@@ -35,8 +34,7 @@ export default function EllipsisMenu({
           label="Open options"
         >
           <EllipsisVerticalIcon
-            aria-hidden="true"
-            className="h-5 w-5"
+            className="size-5"
           />
         </Button>
       </MenuButton>

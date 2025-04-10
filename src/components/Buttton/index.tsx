@@ -39,6 +39,7 @@ const colors: Record<TButtonVariant, string> = {
   linkRed:
     'text-red-600 hover:bg-red-100 focus-visible:outline-red-600 !shadow-none',
   text: 'text-gray-400 hover:text-gray-300 focus-visible:outline-gray-400 !shadow-none',
+  menu: 'text-gray-500 hover:text-gray-400 hover:bg-sky-100 !shadow-none',
   custom: '',
 };
 
@@ -55,6 +56,7 @@ const active: Record<TButtonVariant, string> = {
   link: '!bg-blue-100',
   linkRed: '!bg-red-100',
   text: '',
+  menu: '',
   custom: '',
 };
 
@@ -71,6 +73,7 @@ const colorsDisabled: Record<TButtonVariant, string> = {
   link: 'text-gray-400',
   linkRed: 'text-gray-400',
   text: 'text-gray-500',
+  menu: '',
   custom: '',
 };
 

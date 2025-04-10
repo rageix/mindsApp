@@ -5,7 +5,6 @@ import { zStringRequiredValidator } from '@/util/Validators';
 
 export interface IForm {
   text: string;
-  fileId?: string;
 }
 
 export function defaultForm(): IForm {
@@ -19,7 +18,7 @@ const formValidator = () =>
     text: zStringRequiredValidator,
   }) satisfies z.ZodType<IForm>;
 
-export default class ChatInputController extends FormController<IForm> {
+export default class SnippetInputController extends FormController<IForm> {
   resetForm = defaultForm();
   defaultForm = defaultForm();
   formValidator = formValidator;
@@ -31,8 +30,4 @@ export default class ChatInputController extends FormController<IForm> {
   setText = (text: string) => {
     this.onChangeForm({text});
   }
-
-  onChangeFile = (fileId: string) => {
-    this.onChangeForm({ fileId });
-  };
 }

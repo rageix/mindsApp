@@ -11,6 +11,7 @@ export type TButtonVariant =
   | 'white'
   | 'gray'
   | 'text'
+  | 'menu'
   | 'custom';
 
 export type TModalVariant = 'success' | 'danger' | 'warning';

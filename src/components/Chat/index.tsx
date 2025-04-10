@@ -5,15 +5,16 @@ import { ModelResponse } from '@/components/Chat/ModelResponse';
 import ItemsController from '@/components/Chat/ItemsController';
 import { EModel } from '@/types/Model';
 import { useParams } from 'next/navigation';
-import SelectionController
-  from '@/components/Chat/SelectionController';
+import SelectionController from '@/components/Chat/SelectionController';
 import SelectionPopover from '@/components/Chat/SelectionPopover';
+import SnippetsController from '@/components/Snippets/SnippetsController';
 
 interface IProps {
   model: EModel;
+  snippetsController: SnippetsController;
 }
 
-export function Chat({ model }: IProps) {
+export function Chat({ model, snippetsController }: IProps) {
   const { chatId } = useParams<{ chatId?: string }>();
   const [inputController] = useState(new ChatInputController());
   const [itemsController] = useState(new ItemsController(chatId));
@@ -35,7 +36,11 @@ export function Chat({ model }: IProps) {
             modelResponse={v}
           />
         ))}
-        <SelectionPopover controller={selectionController} />
+        <SelectionPopover
+          controller={selectionController}
+          onClickMessage={inputController.setText}
+          onClickClip={snippetsController.onAdd}
+        />
       </div>
       <div className="shrink-0 py-4 relative z-20 bg-white">
         <ChatInput
