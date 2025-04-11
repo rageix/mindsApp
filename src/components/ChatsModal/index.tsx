@@ -1,6 +1,6 @@
 import Modal from '@/components/Modal';
-import IdeaBoardsList from '../MyIdeaBoardsView/IdeaBoardsList';
 import { MongoId } from '@/types/MongoDocument';
+import ChatsList from '@/components/MyChatsView/ChatsList';
 
 interface IProps {
   open: boolean;
@@ -9,20 +9,18 @@ interface IProps {
   onNew: () => void;
 }
 
-export default function IdeaBoardsModal({
-  open,
-  onClose,
-  onOpenId,
-  onNew
-}: IProps) {
+export default function ChatsModal({ open, onClose, onOpenId, onNew }: IProps) {
   return (
     <Modal
-      title="Idea Boards"
+      title="Chats"
       open={open}
       onClose={onClose}
       size="lg"
     >
-      <IdeaBoardsList onOpenId={onOpenId} onNew={onNew} />
+      <ChatsList
+        onOpenId={onOpenId}
+        onNew={onNew}
+      />
     </Modal>
   );
 }

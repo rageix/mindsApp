@@ -64,7 +64,7 @@ export function IdeaItem({
           >
             <GripVerticalIcon className="size-5" />
           </div>
-          <div className="grow flex items-center">
+          <div className="grow flex items-center border-r-1 border-r-gray-200">
             <TextareaAutosize
               className="w-full focus:border-2 focus:border-sky-400 focus-visible:outline-0 h-full p-3"
               value={form.text}
@@ -72,7 +72,7 @@ export function IdeaItem({
               placeholder="Add some text"
             />
           </div>
-          <div className="shrink-0 pt-3 pr-3">
+          <div className="shrink-0 p-3">
             <EllipsisMenu className="!w-36">
               <MenuItemButton
                 onClick={() => parentController.onRemove(controller.id)}

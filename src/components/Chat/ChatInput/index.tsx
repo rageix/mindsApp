@@ -2,17 +2,15 @@ import ChatInputController, {
   IForm,
 } from '@/components/Chat/ChatInput/ChatInputController';
 import Textarea from '@/components/Textarea';
-import { EModel } from '@/types/Model';
 import Button from '@/components/Buttton';
 
 interface IProps {
-  model: EModel;
   controller: ChatInputController;
-  onSubmit: (model: EModel, text: string, fileId?: string) => void;
+  onSubmit: () => void;
 }
 
-export function ChatInput({ model, controller, onSubmit }: IProps) {
-  controller.useController((form) => onSubmit(model, form.text, form.fileId));
+export function ChatInput({ controller, onSubmit }: IProps) {
+  controller.useController(() => onSubmit());
 
   const { form, state } = controller;
 

@@ -12,6 +12,7 @@ interface Props extends PropsWithChildren {
 
 const colors: Record<TButtonVariant, string> = {
   indigo: 'bg-indigo-50 text-indigo-800 border-indigo-400',
+  sky: 'bg-sky-50 text-sky-800 border-sky-400',
   blue: 'bg-blue-50 text-blue-800 border-blue-400',
   red: 'bg-red-50 text-red-800 border-red-400',
   purple: 'bg-purple-50 text-purple-800 border-purple-400',
@@ -23,6 +24,7 @@ const colors: Record<TButtonVariant, string> = {
   text: 'text-gray-500',
   gray: '',
   custom: '',
+  menu: '',
 };
 
 export default function Alert({

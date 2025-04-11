@@ -7,7 +7,7 @@ import Input from '@/components/Input';
 import FormErrors from '@/components/FormErrors';
 import { useClose } from '@headlessui/react';
 import IdeaBoardFilterFormController, {IForm}
-  from '@/components/IdeaBoardsView/IdeaBoardsFilterForm/IdeaBoardFilterFormController';
+  from '@/components/MyIdeaBoardsView/IdeaBoardsFilterForm/IdeaBoardFilterFormController';
 
 interface IProps {
   controller: IdeaBoardFilterFormController;

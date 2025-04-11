@@ -5,7 +5,6 @@ import { useState } from 'react';
 import SidebarItem from '@/components/ChatView/SidebarItem';
 import { Chat } from '@/components/Chat';
 import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
-import Button from '@/components/Buttton';
 import { IdeaBoard } from '../IdeaBoard';
 
 const modelOptions: ISelectOption<EModel>[] = [
@@ -42,7 +41,7 @@ export default function ChatView() {
           <div className="grow">
             <Chat
               model={model}
-              snippetsController={ideaBoardController}
+              ideaBoardController={ideaBoardController}
             />
             {/*  todo: add previous chats to load here */}
           </div>
@@ -50,17 +49,7 @@ export default function ChatView() {
             <div className="shrink-0">
               <h2>Idea Board</h2>
             </div>
-            <div className="flex flex-col gap-y-3 overflow-y-auto grow">
-              <IdeaBoard controller={ideaBoardController} />
-            </div>
-            <div className="shrink-0">
-              <Button
-                variant="sky"
-                onClick={() => ideaBoardController.onAdd('')}
-              >
-                Add Item
-              </Button>
-            </div>
+            <IdeaBoard controller={ideaBoardController} />
           </div>
         </div>
       </div>

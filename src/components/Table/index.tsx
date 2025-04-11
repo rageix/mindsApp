@@ -67,11 +67,12 @@ export default function Table<T>(props: Props<T>) {
 
   return (
     <div className="overflow-x-auto">
-      <div className={cn(
-             'rounded-lg overflow-hidden',
-             theme === ETheme.light ? 'border border-gray-200' : null,
-             theme === ETheme.dark ? '' : null,
-           )}
+      <div
+        className={cn(
+          'rounded-lg overflow-hidden',
+          theme === ETheme.light ? 'border border-gray-200' : null,
+          theme === ETheme.dark ? '' : null,
+        )}
       >
         <table
           ref={ref}
@@ -178,7 +179,12 @@ export default function Table<T>(props: Props<T>) {
             aria-label="Pagination"
             style={{ width: size?.width }}
           >
-            <div className="hidden shrink-0 sm:block">
+            <div
+              className={cn(
+                'hidden shrink-0',
+                (size?.width || 0) >= 640 ? 'block' : null,
+              )}
+            >
               <p className="text-sm">
                 Showing <span className="font-medium">{countStart}</span>
                 &nbsp;to{' '}
@@ -189,7 +195,12 @@ export default function Table<T>(props: Props<T>) {
                 <span className="font-medium">{props.count}</span> results
               </p>
             </div>
-            <div className="flex flex-1 gap-x-3 justify-between sm:justify-end">
+            <div
+              className={cn(
+                'flex flex-1 gap-x-3 justify-between',
+                (size?.width || 0) >= 640 ? 'justify-end' : null,
+              )}
+            >
               <TableNavButton
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}

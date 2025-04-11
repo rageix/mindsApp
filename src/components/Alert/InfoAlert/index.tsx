@@ -10,7 +10,7 @@ interface Props extends PropsWithChildren {
 export default function InfoAlert({ className, onClick, children }: Props) {
   return (
     <Alert
-      variant="blue"
+      variant="sky"
       onClick={onClick}
       className={className}
     >
@@ -18,11 +18,11 @@ export default function InfoAlert({ className, onClick, children }: Props) {
         <div className="flex-shrink-0">
           <HelpCircleIcon
             aria-hidden="true"
-            className="h-5 w-5 text-blue-600"
+            className="h-5 w-5 text-sky-600"
           />
         </div>
         <div className="ml-3">
-          <div className="text-sm text-blue-800">{children}</div>
+          <div className="text-sm text-sky-800">{children}</div>
         </div>
       </div>
     </Alert>

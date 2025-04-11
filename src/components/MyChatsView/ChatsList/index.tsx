@@ -9,32 +9,28 @@ import Checkbox from '@/components/Checkbox';
 import Table from '@/components/Table';
 import { useMemo, useState } from 'react';
 import { IHasId } from '@/types/HasId';
-import FormattedDate from '@/components/FormattedDate';
 import Loading from '@/components/Loading';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import Button from '@/components/Buttton';
-import { PlusIcon, Rows4Icon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { MessageCircleIcon, PlusIcon } from 'lucide-react';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
 import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
 import EllipsisMenu from '../../EllipsisMenu';
 import { MenuItem } from '@headlessui/react';
 import FilterPopover from '@/components/FilterPopover';
-import IdeaBoardFilterForm from '@/components/IdeaBoardsView/IdeaBoardsFilterForm/IdeaBoardFilterFormController';
-import useIdeaBoards from '@/hooks/UseIdeaBoards';
-import { postApiIdeaBoardsDuplicate } from '@/requests/api/ideaBoards/duplicate';
-import { IIdeaBoard } from '@/types/IdeaBoard';
+import IdeaBoardFilterForm from '@/components/MyIdeaBoardsView/IdeaBoardsFilterForm/IdeaBoardFilterFormController';
 import { IIdeaBoardFilter } from '@/requests/api/ideaBoards/paginated/schema';
-import IdeaBoardsFilterForm from '@/components/IdeaBoardsView/IdeaBoardsFilterForm';
+import IdeaBoardsFilterForm from '../../MyIdeaBoardsView/IdeaBoardsFilterForm';
+import useChats from '@/hooks/UseChats';
+import { IChat } from '@/types/Chat';
 
 function getColumns(
-  onClickDuplicateOne: (_id: MongoId) => void,
   onClickDeleteOne: (_id: MongoId) => void,
-  onClickDeleteSelected: (arg: RowModel<IHasId<IIdeaBoard>>) => void,
+  onClickDeleteSelected: (arg: RowModel<IHasId<IChat>>) => void,
   onClickOpen: (_id: MongoId) => void,
-): ColumnDef<IHasId<IIdeaBoard>>[] {
+): ColumnDef<IHasId<IChat>>[] {
   return [
     {
       id: 'select',
@@ -73,12 +69,6 @@ function getColumns(
       enableSorting: false,
     },
     {
-      id: 'updatedAt',
-      header: () => 'Updated At',
-      cell: ({ row }) => <FormattedDate value={row.original.updatedAt} />,
-      enableSorting: false,
-    },
-    {
       id: 'open',
       header: () => <div></div>,
       cell: ({ row }) => (
@@ -106,9 +96,6 @@ function getColumns(
       ),
       cell: ({ row }) => (
         <EllipsisMenu>
-          <MenuItemButton onClick={() => onClickDuplicateOne(row.original._id)}>
-            Duplicate
-          </MenuItemButton>
           <MenuItemButton onClick={() => onClickDeleteOne(row.original._id)}>
             Delete
           </MenuItemButton>
@@ -120,10 +107,10 @@ function getColumns(
 
 interface IProps {
   onOpenId: (_id: MongoId) => void;
+  onNew: () => void;
 }
 
-export default function IdeaBoardsList({ onOpenId }: IProps) {
-  const router = useRouter();
+export default function ChatsList({ onOpenId, onNew }: IProps) {
   const [filterController] = useState(new IdeaBoardFilterForm());
   const [filter, setFilter] = useState<IIdeaBoardFilter>(
     filterController.defaultForm,
@@ -135,45 +122,29 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const ideaBoards = useIdeaBoards({
+  const chats = useChats({
     ...pagination,
     ...filter,
   });
 
-  function onEdit(item: IHasId<IIdeaBoard>) {
-    router.push(`/resumes/${item._id}`);
-  }
-
-  async function onDuplicateOne(_id: MongoId) {
-    const result = await postApiIdeaBoardsDuplicate({ _id });
-
-    if (result) {
-      ideaBoards.query.refetch();
-    }
-  }
-
   async function onClickDeleteOne(_id: MongoId) {
     if (confirm(CONFIRM_DELETE_ONE)) {
-      await ideaBoards.deleteItems([_id]);
+      await chats.deleteItems([_id]);
       setRowSelection({});
     }
   }
 
-  async function onClickDeleteSelected(arg: RowModel<IHasId<IIdeaBoard>>) {
+  async function onClickDeleteSelected(arg: RowModel<IHasId<IChat>>) {
     const ids = arg.rows.map((v) => v.original._id);
 
     if (ids.length > 0 && confirm(CONFIRM_DELETE_SELECTED)) {
-      await ideaBoards.deleteItems(ids);
+      await chats.deleteItems(ids);
       setRowSelection({});
     }
   }
 
   async function onClickNew() {
-    // const response = await postApiResumesCreate();
-    //
-    // if (response) {
-    //   router.push(`/resumes/${response._id}`);
-    // }
+    onNew();
   }
 
   async function onClickOpen(_id: MongoId) {
@@ -183,7 +154,6 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
   const columns = useMemo(
     () =>
       getColumns(
-        onDuplicateOne,
         onClickDeleteOne,
         onClickDeleteSelected,
         onClickOpen,
@@ -191,7 +161,7 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
     [],
   );
 
-  if (!ideaBoards.initLoad) {
+  if (!chats.initLoad) {
     return (
       <div className="flex justify-center items-center mt-16">
         <Loading
@@ -202,7 +172,7 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
     );
   }
 
-  const hasItems = (ideaBoards.data?.data || []).length > 0;
+  const hasItems = (chats.data?.data || []).length > 0;
 
   return (
     <div className="space-y-3">
@@ -230,7 +200,7 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
           isInline
         >
           <PlusIcon size={16} />
-          <span className="ms-1">New Idea Board</span>
+          <span className="ms-1">New Chat</span>
         </Button>
       </div>
       {!hasItems && (
@@ -238,14 +208,14 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
           <CardBody>
             <div className="flex flex-col space-y-3">
               <div className="flex justify-center">
-                <Rows4Icon
+                <MessageCircleIcon
                   className="text-gray-400"
                   size="48"
                 />
               </div>
               <div>
                 <p className="text-center font-bold text-2xl">
-                  No Idea Boards Found
+                  No Chats found.
                 </p>
                 {/*<div className="flex justify-center mt-6">*/}
                 {/*  <Button*/}
@@ -264,8 +234,8 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
       {hasItems && (
         <div className="max-w-3xl m-auto">
           <div className="mt-3">
-            <Table<IHasId<IIdeaBoard>>
-              data={ideaBoards.data?.data || []}
+            <Table<IHasId<IChat>>
+              data={chats.data?.data || []}
               pagination={pagination}
               setPagination={setPagination}
               sorting={sorting}
@@ -274,8 +244,8 @@ export default function IdeaBoardsList({ onOpenId }: IProps) {
               dataFetchFn={() => []}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
-              count={ideaBoards.data?.count || 0}
-              onClickEdit={(item) => onEdit(item)}
+              count={chats.data?.count || 0}
+              onClickEdit={() => null}
               hasCheckbox
             />
           </div>

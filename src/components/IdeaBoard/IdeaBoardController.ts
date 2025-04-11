@@ -8,15 +8,17 @@ import { postApiIdeaBoardsFindOne } from '@/requests/api/ideaBoards/findOne';
 import { toast } from 'react-toastify';
 import { ChangeEvent } from 'react';
 import { IIdeaBoard } from '@/types/IdeaBoard';
+import { postApiIdeaBoards } from '@/requests/api/ideaBoards';
 
 export interface IState {
-  name: string,
+  _id?: MongoId;
+  name: string;
   controllers: IdeaController[];
 }
 
 export function newIState(): IState {
   return {
-    name: '',
+    name: 'New Idea Board',
     controllers: [],
   };
 }
@@ -120,7 +122,7 @@ export default class IdeaBoardController extends BasicController<IState> {
       controllers.push(newController);
     }
 
-    this.setState({ controllers });
+    this.setState({ _id: ideaBoard._id, controllers, name: ideaBoard.name });
   };
 
   onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -128,10 +130,29 @@ export default class IdeaBoardController extends BasicController<IState> {
   };
 
   getValue = (): IIdeaBoard => {
-    const state  = this.getState();
+    const state = this.getState();
     return {
+      _id: state._id,
       name: state.name,
-      items: state.controllers.map((v) => v.getValue())
+      items: state.controllers.map((v) => v.getValue()),
+    };
+  };
+
+  onSave = async (notice = true) => {
+    const value = this.getValue();
+    const response = await postApiIdeaBoards(value);
+
+    if (response && !this.state._id) {
+      this.setState({ _id: response._id });
     }
-  }
+
+    if (notice) {
+      toast.success('Idea board saved.');
+    }
+  };
+
+  onNew = async () => {
+    await this.onSave(false);
+    this.setState(newIState());
+  };
 }
