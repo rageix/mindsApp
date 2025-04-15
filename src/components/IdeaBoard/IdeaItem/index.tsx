@@ -66,7 +66,7 @@ export function IdeaItem({
           </div>
           <div className="grow flex items-center border-r-1 border-r-gray-200">
             <TextareaAutosize
-              className="w-full focus:border-2 focus:border-sky-400 focus-visible:outline-0 h-full p-3"
+              className="w-full focus:border-2 focus:border-blue-400 focus-visible:outline-0 h-full p-3"
               value={form.text}
               onChange={controller.onChangeText}
               placeholder="Add some text"

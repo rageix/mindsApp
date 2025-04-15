@@ -74,7 +74,7 @@ export function IdeaBoard({ controller }: IProps) {
           Save
         </Button>
         <Button
-          variant="sky"
+          variant="blue"
           isInline
           onClick={() => setShowModal(true)}
         >
@@ -122,7 +122,7 @@ export function IdeaBoard({ controller }: IProps) {
       )}
       <div className="shrink-0">
         <Button
-          variant="sky"
+          variant="blue"
           onClick={() => controller.onAdd('')}
         >
           Add Item

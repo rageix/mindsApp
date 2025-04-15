@@ -82,7 +82,7 @@ export function ModelContent({ content }: IProps) {
       {/*  className={cn('absolute', !state.visible ? 'hidden' : null)}*/}
       {/*  style={{ top: `${state.x}px`, left: `${state.y}px` }}*/}
       {/*>*/}
-      {/*  <Button variant="sky">Add it</Button>*/}
+      {/*  <Button variant="blue">Add it</Button>*/}
       {/*</div>*/}
     </div>
   );

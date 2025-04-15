@@ -1,7 +1,5 @@
 import BasicController from '@/util/BasicController';
-import {
-  IModelResponse,
-} from '@/types/HistoryItem';
+import { IModelResponse } from '@/types/HistoryItem';
 import { MongoId } from '@/types/MongoDocument';
 import { postApiResponsesPaginated } from '@/requests/api/responses/paginated';
 import { IHasId } from '@/types/HasId';
@@ -9,14 +7,16 @@ import { IHasId } from '@/types/HasId';
 export interface IState {
   items: IHasId<IModelResponse>[];
   page: number;
-  loading: boolean;
+  isItemLoading: boolean;
+  loadingItemText: string;
 }
 
 export function newIState(): IState {
   return {
     items: [],
     page: 0,
-    loading: false,
+    isItemLoading: false,
+    loadingItemText: '',
   };
 }
 
@@ -34,7 +34,7 @@ export default class ItemsController extends BasicController<IState> {
   }
 
   getPage = async (pageIndex: number) => {
-    this.setState({ loading: true });
+    this.setState({ isItemLoading: true });
 
     const items = await postApiResponsesPaginated({
       chatId: this.chatId,
@@ -43,9 +43,11 @@ export default class ItemsController extends BasicController<IState> {
 
     if (items) {
       const mergedItems = this.mergeItems(items.data.reverse());
-      console.log('mergedItems', mergedItems);
-
-      this.setState({ items: mergedItems, page: items.pageIndex, loading: false });
+      this.setState({
+        items: mergedItems,
+        page: items.pageIndex,
+        isItemLoading: false,
+      });
     }
   };
 
@@ -53,13 +55,32 @@ export default class ItemsController extends BasicController<IState> {
    * Adds new items to items we already have but removes any duplicates.
    * @param newItems
    */
-  mergeItems = (newItems: IHasId<IModelResponse>[]): IHasId<IModelResponse>[] => {
-    const toAdd = newItems.filter((v) => this.state.items.findIndex(i => i._id === v._id) === -1);
-    console.log('toAdd', toAdd);
+  mergeItems = (
+    newItems: IHasId<IModelResponse>[],
+  ): IHasId<IModelResponse>[] => {
+    const toAdd = newItems.filter(
+      (v) => this.state.items.findIndex((i) => i._id === v._id) === -1,
+    );
     return [...this.state.items, ...toAdd];
-  }
+  };
 
-  addItems = (items:  IHasId<IModelResponse>[]) => {
-    this.setState({items: this.mergeItems(items)});
+  addItems = (items: IHasId<IModelResponse>[]) => {
+    this.setState({ items: this.mergeItems(items) });
+  };
+
+  onItemIsLoading = (loadingItemText: string) => {
+    this.setState({ isItemLoading: true, loadingItemText });
+  };
+
+  onAddLoadingItem = (item: IHasId<IModelResponse>) => {
+    this.setState({
+      items: this.mergeItems([item]),
+      isItemLoading: false,
+      loadingItemText: '',
+    });
+  };
+
+  onReset = () => {
+    this.setState(newIState());
   }
 }

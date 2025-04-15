@@ -53,7 +53,7 @@ export default function Input<T>(props: Props<T>) {
         {...internal}
         {...newProps}
         className={cn(
-          'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 focus:outline-sky-600',
+          'block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 focus:outline-blue-600',
           props.disabled ? '!bg-gray-300 !text-gray-500' : null,
           props.isClearable ? '!pr-10' : null,
           props.isAcceptable ? '!pr-10' : null,
@@ -66,7 +66,7 @@ export default function Input<T>(props: Props<T>) {
           {props.isClearable && (
             <Button
               variant="custom"
-              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer focus:ring-sky-600 focus-visible:outline-sky-600"
+              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer focus:ring-blue-600 focus-visible:outline-blue-600"
               onClick={props.onClear}
               onKeyDown={(e) => e?.stopPropagation()}
             >
@@ -80,7 +80,7 @@ export default function Input<T>(props: Props<T>) {
           {props.isAcceptable && (
             <Button
               variant="custom"
-              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer focus:ring-sky-600 focus-visible:outline-sky-600"
+              className="flex items-center rounded-r-md px-2 focus:outline-none text-gray-400 hover:text-gray-300 cursor-pointer focus:ring-blue-600 focus-visible:outline-blue-600"
               onClick={props.onAccept}
               onKeyDown={(e) => e?.stopPropagation()}
             >

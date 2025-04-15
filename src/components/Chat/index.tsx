@@ -32,7 +32,9 @@ export function Chat({ model, ideaBoardController }: IProps) {
     controller.onChangeModel(model);
   }, [model]);
 
-  const items = state.itemsController.state.items || [];
+  const { items, isItemLoading, loadingItemText } = state.itemsController.state;
+
+  console.log('items', items);
 
   return (
     <div className="h-full flex flex-col gap-y-3">
@@ -49,7 +51,7 @@ export function Chat({ model, ideaBoardController }: IProps) {
           Save
         </Button>
         <Button
-          variant="sky"
+          variant="blue"
           isInline
           onClick={() => setShowModal(true)}
         >
@@ -61,15 +63,22 @@ export function Chat({ model, ideaBoardController }: IProps) {
         className="grow overflow-auto flex flex-col gap-y-6"
         onScroll={selectionController.onUpdate}
       >
-        {items.length === 0 &&
-        <InfoAlert>There are no messages in this chat.</InfoAlert>
-        }
-        {items.length > 0 && items.map((v) => (
+        {items.length === 0 && (
+          <InfoAlert>There are no messages in this chat.</InfoAlert>
+        )}
+        {items.length > 0 &&
+          items.map((v) => (
+            <ModelResponse
+              key={String(v._id)}
+              modelResponse={v}
+            />
+          ))}
+        {isItemLoading && (
           <ModelResponse
-            key={String(v._id)}
-            modelResponse={v}
+            inputText={loadingItemText}
+            isLoading={isItemLoading}
           />
-        ))}
+        )}
         <SelectionPopover
           controller={selectionController}
           onClickMessage={state.inputController.setText}

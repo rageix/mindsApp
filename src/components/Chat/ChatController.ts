@@ -16,6 +16,7 @@ export interface IState {
   model: EModel;
   itemsController: ItemsController;
   inputController: ChatInputController;
+  isLoadingResponse: boolean;
 }
 
 export function newIState(): IState {
@@ -24,6 +25,7 @@ export function newIState(): IState {
     model: EModel.ChatGPT4o,
     itemsController: new ItemsController(),
     inputController: new ChatInputController(),
+    isLoadingResponse: false
   };
 }
 
@@ -43,16 +45,19 @@ export default class ChatController extends BasicController<IState> {
   sendInput = async () => {
     let chatId = this.state._id;
 
-    if(!chatId) {
+    if (!chatId) {
       chatId = await this.onSave(false);
 
-      if(!chatId) {
+      if (!chatId) {
         toast.error('Failed to create chat!');
         return;
       }
     }
 
     const inputForm = this.state.inputController.getForm();
+
+    this.state.itemsController.onItemIsLoading(inputForm.text);
+    this.state.inputController.reset();
 
     const response = await postApiRequests({
       chatId: chatId,
@@ -65,7 +70,7 @@ export default class ChatController extends BasicController<IState> {
       return;
     }
 
-    this.state.itemsController.addItems([response]);
+    this.state.itemsController.onAddLoadingItem(response);
   };
 
   loadId = async (_id: MongoId) => {
@@ -111,12 +116,13 @@ export default class ChatController extends BasicController<IState> {
       toast.success('Chat saved.');
     }
 
-    return response?._id
+    return response?._id;
   };
 
   onNew = async () => {
-    // await this.onSave(false);
-    this.setState(newIState());
+    this.state.itemsController.onReset();
+
+    this.setState({ name: 'New Chat' });
   };
 
   onChangeModel = (model: EModel) => {

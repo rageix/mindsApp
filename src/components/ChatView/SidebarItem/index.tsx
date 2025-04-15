@@ -12,7 +12,7 @@ interface IProps {
 export default function SidebarItem({ option, isSelected, onClick }: IProps) {
   return (
     <Button
-      variant="sky"
+      variant="blue"
       onClick={onClick}
       isActive={isSelected}
     >

@@ -16,6 +16,7 @@ export default class BasicController<T> {
   }
 
   _useController = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     [this.state, this.updateState] = useState<T>(this.defaultState);
   };
 

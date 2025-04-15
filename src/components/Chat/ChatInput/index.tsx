@@ -25,7 +25,7 @@ export function ChatInput({ controller, onSubmit }: IProps) {
       ></Textarea>
       <div className="flex justify-end mt-3">
         <Button
-          variant="sky"
+          variant="blue"
           onClick={() => controller.onClickSubmit()}
           isInline
         >
