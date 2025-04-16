@@ -33,7 +33,12 @@ export default class ItemsController extends BasicController<IState> {
     }
   }
 
-  getPage = async (pageIndex: number) => {
+  loadChatId = async (chatId: MongoId) => {
+    this.chatId = chatId;
+    this.getPage(0, true);
+  }
+
+  getPage = async (pageIndex: number, clear = false) => {
     this.setState({ isItemLoading: true });
 
     const items = await postApiResponsesPaginated({
@@ -42,9 +47,16 @@ export default class ItemsController extends BasicController<IState> {
     });
 
     if (items) {
-      const mergedItems = this.mergeItems(items.data.reverse());
+      let newItems: IHasId<IModelResponse>[] = [];
+
+      if (clear) {
+        newItems = items.data.reverse();
+      } else {
+         newItems = this.mergeItems(items.data.reverse());
+      }
+
       this.setState({
-        items: mergedItems,
+        items: newItems,
         page: items.pageIndex,
         isItemLoading: false,
       });
@@ -82,5 +94,9 @@ export default class ItemsController extends BasicController<IState> {
 
   onReset = () => {
     this.setState(newIState());
+  }
+
+  onChangeItems = (items: IHasId<IModelResponse>[]) => {
+    this.setState({items})
   }
 }

@@ -25,7 +25,7 @@ export function newIState(): IState {
     model: EModel.ChatGPT4o,
     itemsController: new ItemsController(),
     inputController: new ChatInputController(),
-    isLoadingResponse: false
+    isLoadingResponse: false,
   };
 }
 
@@ -80,14 +80,12 @@ export default class ChatController extends BasicController<IState> {
       toast.error('Failed to load Chat!');
       return;
     }
-    const itemsController = new ItemsController(chat._id);
-    const inputController = new ChatInputController();
+
+    this.state.itemsController.loadChatId(_id);
 
     this.setState({
       _id: chat._id,
       name: chat.name,
-      itemsController,
-      inputController,
     });
   };
 
