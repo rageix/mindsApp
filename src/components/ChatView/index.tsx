@@ -17,11 +17,13 @@ const modelOptions: ISelectOption<EModel>[] = [
     key: EModel.Gemini2,
     value: EModel.Gemini2,
     label: 'Gemini 2.0',
-  },{
+  },
+  {
     key: EModel.Claude37Sonnet,
     value: EModel.Claude37Sonnet,
     label: 'Claude 3.7 Sonnet',
-  },{
+  },
+  {
     key: EModel.NovaPro,
     value: EModel.NovaPro,
     label: 'Amazon Nova Pro',
