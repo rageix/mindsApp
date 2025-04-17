@@ -46,4 +46,12 @@ export default class BasicController<T> {
   getState = (): T => {
     return this._getState();
   };
+
+  cacheState = () => {
+    this.defaultState = this.state
+  }
+
+  cache = () => {
+    this.cacheState();
+  }
 }

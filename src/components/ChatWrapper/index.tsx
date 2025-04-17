@@ -1,0 +1,119 @@
+'use client';
+import { Chat } from '@/components/Chat';
+import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
+import ChatController from '@/components/Chat/ChatController';
+import { MenuItem } from '@headlessui/react';
+import MenuItemButton from '@/components/MenuItemButton';
+import EllipsisMenu from '@/components/EllipsisMenu';
+import Button from '@/components/Buttton';
+import { Maximize2Icon, Minimize2Icon } from 'lucide-react';
+import { cn } from '@/util/Cn';
+import ChatsModal from '@/components/ChatsModal';
+import { useRef, useState } from 'react';
+import useSize from '@/hooks/UseSize';
+import RenameFormController from '@/components/RenameForm/RenameFormController';
+import RenameModal from '@/components/RenameModal';
+
+interface IProps {
+  controller: ChatController;
+  ideaBoardController: IdeaBoardController;
+  onClickRemove: () => void;
+  onClickMaximize: () => void;
+  isMaximized?: boolean;
+}
+
+export default function ChatWrapper({
+  controller,
+  ideaBoardController,
+  onClickRemove,
+  onClickMaximize,
+  isMaximized,
+}: IProps) {
+  const ref = useRef(null);
+  const size = useSize(ref);
+  const [isChatModalVisible, setIsChatModalVisible] = useState(false);
+  const [isRenameModalVisible, setIsRenameModalVisible] = useState(false);
+  const [renameController] = useState(new RenameFormController());
+  controller.useController();
+  const { state } = controller;
+
+  return (
+    <>
+      <div
+        ref={ref}
+        className={cn(
+          'flex flex-col rounded-lg border border-gray-200 shadow-md h-full overflow-hidden',
+          state.maximize ? 'absolute top-0 left-0 right-0 bottom-0' : null,
+        )}
+      >
+        <div className="bg-100 flex px-3 py-2 bg-gray-200 items-center">
+          <div className="grow truncate">{state.name || 'Chat'}</div>
+          <div className="shink-0 flex gap-x-1">
+            <div>
+              <Button
+                variant="link"
+                onClick={onClickMaximize}
+              >
+                {!isMaximized ? (
+                  <Maximize2Icon className="size-5" />
+                ) : (
+                  <Minimize2Icon className="size-5" />
+                )}
+              </Button>
+            </div>
+            <EllipsisMenu>
+              <MenuItem>
+                <MenuItemButton onClick={controller.onNew}>New</MenuItemButton>
+              </MenuItem>
+              <MenuItem>
+                <MenuItemButton
+                  onClick={() => {
+                    setIsChatModalVisible(true);
+                  }}
+                >
+                  Open
+                </MenuItemButton>
+              </MenuItem>
+              <MenuItem>
+                <MenuItemButton
+                  onClick={() => {
+                    renameController.defaultForm = { name: state.name };
+                    setIsRenameModalVisible(true);
+                  }}
+                >
+                  Rename
+                </MenuItemButton>
+              </MenuItem>
+              <MenuItem>
+                <MenuItemButton onClick={onClickRemove}>Remove</MenuItemButton>
+              </MenuItem>
+            </EllipsisMenu>
+          </div>
+        </div>
+        <div style={{ height: size?.height ? size.height - 49 : '100%' }}>
+          <Chat
+            controller={controller}
+            ideaBoardController={ideaBoardController}
+          />
+        </div>
+      </div>
+      <ChatsModal
+        open={isChatModalVisible}
+        onClose={() => setIsChatModalVisible(false)}
+        onOpenId={(_id) => {
+          setIsChatModalVisible(false);
+          controller.loadId(_id);
+        }}
+      />
+      <RenameModal
+        controller={renameController}
+        open={isRenameModalVisible}
+        onClose={() => setIsRenameModalVisible(false)}
+        onSubmit={(name: string) => {
+          controller.onChangeName(name);
+          setIsRenameModalVisible(false);
+        }}
+      />
+    </>
+  );
+}

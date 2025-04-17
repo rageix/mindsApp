@@ -12,8 +12,6 @@ import subscriptionService from '@/services/SubscriptionService';
 import userService from '@/services/UserService';
 import useUser from '@/hooks/UseUser';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
-import ChatsModal from '@/components/ChatsModal';
-import emitter, { emitterMessage } from '@/util/Emitter';
 
 interface Props extends PropsWithChildren {}
 
@@ -25,7 +23,6 @@ export default function DashboardLayout({ children }: Props) {
   controller.useController();
   const user = useUser();
   const [_isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showChatsModal, setShowChatsModal] = useState(false);
   // const navigation = useMemo(() => {
   //   return navItems.map((v) => {
   //     v.current = path.indexOf(v.href) === 0;
@@ -36,18 +33,6 @@ export default function DashboardLayout({ children }: Props) {
   useEffect(() => {
     setIsLoggedIn(user.isLoggedIn());
   }, [user.isLoggedIn()]);
-
-  const onShowChatModal = () => {
-    setShowChatsModal(true);
-  }
-
-  useEffect(() => {
-    emitter.on(emitterMessage.showChatsModal, onShowChatModal);
-
-    return () => {
-      emitter.off(emitterMessage.showChatsModal, onShowChatModal);
-    }
-  }, []);
 
   return (
     <div className={'min-h-screen'}>
@@ -113,14 +98,6 @@ export default function DashboardLayout({ children }: Props) {
           <div className="px-4 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
-      <ChatsModal
-        open={showChatsModal}
-        onClose={() => setShowChatsModal(false)}
-        onOpenId={(_id) => {
-          setShowChatsModal(false);
-          emitter.emitLoadChatId(_id);
-        }}
-      />
     </div>
   );
 }

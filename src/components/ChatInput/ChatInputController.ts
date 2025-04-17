@@ -3,10 +3,12 @@ import { z } from 'zod';
 import { ChangeEvent } from 'react';
 import { zStringRequiredValidator } from '@/util/Validators';
 
-export interface IForm {
+export interface IChatInput {
   text: string;
   fileId?: string;
 }
+
+export interface IForm extends IChatInput {}
 
 export function defaultForm(): IForm {
   return {
@@ -29,10 +31,14 @@ export default class ChatInputController extends FormController<IForm> {
   };
 
   setText = (text: string) => {
-    this.onChangeForm({text});
-  }
+    this.onChangeForm({ text });
+  };
 
   onChangeFile = (fileId: string) => {
     this.onChangeForm({ fileId });
+  };
+
+  onResetForm = () => {
+    this.setForm(defaultForm());
   };
 }

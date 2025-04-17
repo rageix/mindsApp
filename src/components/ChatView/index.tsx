@@ -3,8 +3,12 @@ import { useState } from 'react';
 import { Chat } from '@/components/Chat';
 import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
 import { IdeaBoard } from '../IdeaBoard';
+import { useParams } from 'next/navigation';
+import ChatController from '@/components/Chat/ChatController';
 
 export default function ChatView() {
+  const { chatId } = useParams<{ chatId?: string }>();
+  const [controller] = useState(new ChatController(chatId));
   const [ideaBoardController] = useState(new IdeaBoardController());
 
   return (
@@ -13,7 +17,7 @@ export default function ChatView() {
         <div className="flex h-full">
           <div className="grow">
             <div className="max-w-2xl mx-auto grow h-full">
-              <Chat ideaBoardController={ideaBoardController} />
+              <Chat controller={controller} ideaBoardController={ideaBoardController} />
             </div>
           </div>
           <div className="shrink-0 w-88 flex flex-col gap-y-3 p-3 border-l border-gray-200 bg-white">

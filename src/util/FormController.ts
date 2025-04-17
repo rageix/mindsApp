@@ -182,4 +182,13 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
   getForm = (): T => {
     return this._getForm();
   }
+
+  cacheForm = () => {
+    this.defaultForm = this.form
+  }
+
+  cache = () => {
+    this.cacheState();
+    this.cacheForm();
+  }
 }

@@ -1,14 +1,20 @@
 import { cn } from '@/util/Cn';
-import { INavItem } from '@/types/NavItem';
 import useTheme from '@/hooks/UseTheme';
 import { ETheme } from '@/common/Theme';
+import { PropsWithChildren, ReactElement } from 'react';
 
-interface Props {
-  item: INavItem;
+interface Props extends PropsWithChildren {
+  icon: ReactElement;
+  onClick?: () => void;
   active?: boolean;
 }
 
-export default function SidebarItem({ item, active }: Props) {
+export default function SidebarItem({
+  children,
+  icon,
+  onClick,
+  active,
+}: Props) {
   const theme = useTheme();
 
   return (
@@ -24,10 +30,10 @@ export default function SidebarItem({ item, active }: Props) {
               : 'text-gray-400 hover:bg-gray-800 hover:text-white',
           'group flex gap-x-3 rounded-xl py-2 px-4 text-sm font-semibold leading-6 w-full',
         )}
-        onClick={item.onClick}
+        onClick={onClick}
       >
-        <div>{item.icon}</div>
-        <div>{item.name}</div>
+        <div>{icon}</div>
+        <div>{children}</div>
       </button>
     </div>
   );

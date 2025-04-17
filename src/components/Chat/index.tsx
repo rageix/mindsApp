@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChatInput } from '@/components/Chat/ChatInput';
+import { ChatInput } from '../ChatInput';
 import { ModelResponse } from '@/components/Chat/ModelResponse';
-import { useParams } from 'next/navigation';
 import SelectionController from '@/components/Chat/SelectionController';
 import SelectionPopover from '@/components/Chat/SelectionPopover';
 import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
@@ -14,18 +13,16 @@ import { MongoId } from '@/types/MongoDocument';
 
 interface IProps {
   ideaBoardController: IdeaBoardController;
+  controller: ChatController;
 }
 
-export function Chat({ ideaBoardController }: IProps) {
-  const { chatId } = useParams<{ chatId?: string }>();
-  const [controller] = useState(new ChatController(chatId));
-  controller.useController();
+export function Chat({ ideaBoardController, controller }: IProps) {
+  // controller.useController();
   const { state } = controller;
   state.itemsController.useController();
   state.inputController.useController();
   const ref = useRef<HTMLDivElement>(null);
   const [selectionController] = useState(new SelectionController(ref));
-  // const [showModal, setShowModal] = useState(false);
 
   const onLoadId = (_id: MongoId) => {
     controller.loadId(_id);
@@ -48,14 +45,12 @@ export function Chat({ ideaBoardController }: IProps) {
   const { items, isItemLoading, loadingItemText } = state.itemsController.state;
 
   return (
-    <div className="h-full flex flex-col gap-y-3 px-3">
-      <div className="mt-3 flex gap-x-3">
-        <div>
+    <div className="h-full flex flex-col gap-y-3 px-3 pb-3">
+      <div className="mt-3 flex gap-x-3 shrink-0">
           <ModelPicker
             value={state.model}
             onChange={controller.onChangeModel}
           />
-        </div>
       </div>
       {/*<div className="shrink-0 flex gap-x-3">*/}
       {/*  <Input*/}
@@ -109,13 +104,13 @@ export function Chat({ ideaBoardController }: IProps) {
       </div>
       <div
         className={cn(
-          'py-3 relative z-20 bg-white',
+          'relative z-20 bg-white',
           items.length === 0 ? 'h-full flex items-center' : 'shrink-0',
         )}
       >
         <ChatInput
           controller={state.inputController}
-          onSubmit={controller.sendInput}
+          onSubmit={controller.onClickSendInput}
         />
       </div>
     </div>

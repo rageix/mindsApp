@@ -4,16 +4,18 @@ import { EModel } from '@/types/Model';
 import { IChat } from '@/types/Chat';
 import { toast } from 'react-toastify';
 import { postApiChats } from '@/requests/api/chats';
-import { ChangeEvent } from 'react';
 import { postApiChatsFindOne } from '@/requests/api/chats/findOne';
 import ItemsController from '@/components/Chat/ItemsController';
-import ChatInputController from '@/components/Chat/ChatInput/ChatInputController';
+import ChatInputController, {
+  IChatInput,
+} from '@/components/ChatInput/ChatInputController';
 import { postApiRequests } from '@/requests/api/responses';
 
 export interface IState {
   _id?: MongoId;
   name: string;
   model: EModel;
+  maximize: boolean;
   itemsController: ItemsController;
   inputController: ChatInputController;
   isLoadingResponse: boolean;
@@ -21,8 +23,9 @@ export interface IState {
 
 export function newIState(): IState {
   return {
-    name: 'New Chat',
+    name: '',
     model: EModel.ChatGPT4o,
+    maximize: false,
     itemsController: new ItemsController(),
     inputController: new ChatInputController(),
     isLoadingResponse: false,
@@ -42,11 +45,22 @@ export default class ChatController extends BasicController<IState> {
     }
   }
 
-  sendInput = async () => {
+  sendInput = async (input: IChatInput) => {
     let chatId = this.state._id;
 
     if (!chatId) {
-      chatId = await this.onSave(false);
+      const value = this.getValue();
+
+      if (value.name.trim() === '') {
+        value.name = input.text.substring(0, 24);
+      }
+
+      const response = await postApiChats(value);
+
+      if (response && !this.state._id) {
+        // this.setState({ _id: response._id });
+        chatId = response._id;
+      }
 
       if (!chatId) {
         toast.error('Failed to create chat!');
@@ -54,16 +68,13 @@ export default class ChatController extends BasicController<IState> {
       }
     }
 
-    const inputForm = this.state.inputController.getForm();
-
-    this.state.itemsController.onItemIsLoading(inputForm.text);
-    this.state.inputController.reset();
+    this.state.itemsController.onItemIsLoading(input.text);
 
     const response = await postApiRequests({
       chatId: chatId,
       model: this.state.model,
-      text: inputForm.text,
-      fileId: inputForm.fileId,
+      text: input.text,
+      fileId: input.fileId,
     });
 
     if (!response) {
@@ -71,6 +82,13 @@ export default class ChatController extends BasicController<IState> {
     }
 
     this.state.itemsController.onAddLoadingItem(response);
+  };
+
+  onClickSendInput = async () => {
+    const input = this.state.inputController.getForm();
+    this.state.inputController.onResetForm();
+
+    this.sendInput(input);
   };
 
   loadId = async (_id: MongoId) => {
@@ -89,8 +107,12 @@ export default class ChatController extends BasicController<IState> {
     });
   };
 
-  onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ name: e.target.value });
+  onChangeName = async (name: string) => {
+    this.setState({ name });
+
+    if (this.state._id) {
+      await postApiChats({ _id: this.state._id, name });
+    }
   };
 
   getValue = (): IChat => {
@@ -102,28 +124,19 @@ export default class ChatController extends BasicController<IState> {
     };
   };
 
-  onSave = async (notice = true): Promise<MongoId | undefined> => {
-    const value = this.getValue();
-    const response = await postApiChats(value);
-
-    if (response && !this.state._id) {
-      this.setState({ _id: response._id });
-    }
-
-    if (notice) {
-      toast.success('Chat saved.');
-    }
-
-    return response?._id;
-  };
-
   onNew = async () => {
     this.state.itemsController.onReset();
 
-    this.setState({ name: 'New Chat' });
+    this.setState({ name: '' });
   };
 
   onChangeModel = (model: EModel) => {
     this.setState({ model });
+  };
+
+  onCache = () => {
+    this.cache();
+    this.state.inputController.cache();
+    this.state.itemsController.cache();
   };
 }

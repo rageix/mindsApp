@@ -1,23 +1,33 @@
 import SidebarItem from '../SidebarItem';
-import { FolderUpIcon, MessageCircleIcon } from 'lucide-react';
-import { INavItem } from '@/types/NavItem';
+import { MessageCircleIcon } from 'lucide-react';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
+import { usePathname, useRouter } from 'next/navigation';
 import emitter from '@/util/Emitter';
 
-const mainNav: INavItem[] = [
-  {
-    name: 'New Chat',
-    icon: <MessageCircleIcon className="h-6 w-6 shrink-0 text-gray-500" />,
-    onClick: () => emitter.emitNewChat(),
-  },
-  {
-    name: 'Open Chat',
-    icon: <FolderUpIcon className="h-6 w-6 shrink-0 text-gray-500" />,
-    onClick: () => emitter.emitShowChatsModal(),
-  },
-];
+// const mainNav: INavItem[] = [
+//   {
+//     name: 'New Chat',
+//     icon: <MessageCircleIcon className="h-6 w-6 shrink-0 text-gray-500" />,
+//     onClick: () => {
+//
+//     },
+//   },
+// ];
 
 export default function SidebarNav() {
+  const path = usePathname();
+  const router = useRouter();
+
+  const onClickNewChat = () => {
+    console.log(path);
+    if (path !== '/dashboard/chat') {
+      router.push('/dashboard/chat');
+      return;
+    }
+
+    emitter.emitNewChat();
+  };
+
   return (
     <nav className="flex flex-1 flex-col">
       <ul
@@ -29,13 +39,13 @@ export default function SidebarNav() {
             role="list"
             className="-mx-2 space-y-1"
           >
-            {mainNav.map((item) => (
-              <SidebarItem
-                key={item.name}
-                item={item}
-                active={false}
-              />
-            ))}
+            <SidebarItem
+              icon={
+                <MessageCircleIcon className="h-6 w-6 shrink-0 text-gray-500" />
+              }
+              onClick={onClickNewChat}
+              active={false}
+            >New Chat</SidebarItem>
           </ul>
         </li>
         {/*<li>*/}

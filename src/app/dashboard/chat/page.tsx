@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { pageTitle } from '@/types/PageTitle';
-import ChatView from '@/components/ChatView';
+import MultiChatsView from '@/components/MultiChatsView';
 
 export const metadata: Metadata = {
   title: pageTitle('Chat'),
 };
 
 export default function Page() {
-  return <ChatView />;
+  return <MultiChatsView />;
 }

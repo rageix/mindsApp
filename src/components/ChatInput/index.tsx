@@ -1,6 +1,6 @@
 import ChatInputController, {
   IForm,
-} from '@/components/Chat/ChatInput/ChatInputController';
+} from '@/components/ChatInput/ChatInputController';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Buttton';
 import { ArrowUpIcon } from 'lucide-react';
