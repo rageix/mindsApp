@@ -6,10 +6,9 @@ interface IProps {
   open: boolean;
   onClose: () => void;
   onOpenId: (_id: MongoId) => void;
-  onNew: () => void;
 }
 
-export default function ChatsModal({ open, onClose, onOpenId, onNew }: IProps) {
+export default function ChatsModal({ open, onClose, onOpenId }: IProps) {
   return (
     <Modal
       title="Chats"
@@ -19,7 +18,6 @@ export default function ChatsModal({ open, onClose, onOpenId, onNew }: IProps) {
     >
       <ChatsList
         onOpenId={onOpenId}
-        onNew={onNew}
       />
     </Modal>
   );

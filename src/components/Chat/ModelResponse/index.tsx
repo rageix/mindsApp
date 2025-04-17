@@ -1,10 +1,9 @@
 import { IModelResponse } from '@/types/HistoryItem';
-import { BotIcon, UserIcon } from 'lucide-react';
+import { BotIcon, Clipboard, Repeat2Icon, UserIcon } from 'lucide-react';
 import { ModelContent } from '@/components/Chat/ModelResponse/ModelContent';
 import Loading from '@/components/Loading';
-import { MenuItem } from '@headlessui/react';
-import MenuItemButton from '@/components/MenuItemButton';
-import EllipsisMenu from '@/components/EllipsisMenu';
+import Button from '@/components/Buttton';
+import ElementTooltip from '@/components/ElementTooltip';
 
 interface IProps {
   modelResponse?: IModelResponse;
@@ -25,26 +24,12 @@ export function ModelResponse({
             <UserIcon className="size-5" />
           </div>
         </div>
-        <div className="grow rounded bg-blue-50 items-center py-2 px-4 flex">
-          <div className="grow">
+        <div className="grow rounded-xl bg-blue-50 items-center py-2 px-4">
           {isLoading ? (
             <div>{inputText}</div>
           ) : (
             <ModelContent content={modelResponse?.input || []} />
           )}
-        </div>
-
-        <div className="shrink-0">
-          <EllipsisMenu>
-            <MenuItem>
-              <MenuItemButton
-                onClick={() => console.log('clicked')}
-              >
-                Submit Again
-              </MenuItemButton>
-            </MenuItem>
-          </EllipsisMenu>
-        </div>
         </div>
       </div>
       <div className="flex gap-x-3">
@@ -53,7 +38,7 @@ export function ModelResponse({
             <BotIcon className="size-5" />
           </div>
         </div>
-        <div className="grow rounded bg-blue-100 items-center py-2 px-4">
+        <div className="grow rounded items-center ">
           {isLoading ? (
             <div className="p-3 pt-4 flex justify-start">
               <Loading />
@@ -62,6 +47,28 @@ export function ModelResponse({
             <ModelContent content={modelResponse?.output || []} />
           )}
         </div>
+      </div>
+      <div className="flex justify-end gap-x-2">
+        <ElementTooltip tooltip="Repeat">
+          <Button
+            variant="link"
+            className="!text-sm"
+            isInline
+          >
+            <span className="sr-only">Repeat</span>
+            <Repeat2Icon />
+          </Button>
+        </ElementTooltip>
+        <ElementTooltip tooltip="Copy">
+          <Button
+            variant="link"
+            className="!text-sm"
+            isInline
+          >
+            <span className="sr-only">Copy To Clipboard</span>
+            <Clipboard />
+          </Button>
+        </ElementTooltip>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "next dev --experimental-https -H local.gigabrainai.com",
+    "dev": "next dev --turbopack --experimental-https -H local.gigabrainai.com",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

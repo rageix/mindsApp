@@ -1,36 +1,23 @@
 import SidebarItem from '../SidebarItem';
-import { usePathname } from 'next/navigation';
-import {
-  ArrowLeftRightIcon,
-  FileIcon, MessageSquareText,
-  SettingsIcon,
-} from 'lucide-react';
-import useTeamId from '@/hooks/UseTeamId';
-import { useMemo } from 'react';
+import { FolderUpIcon, MessageCircleIcon } from 'lucide-react';
 import { INavItem } from '@/types/NavItem';
-import useCurrentUserMember from '@/hooks/UseCurrentUserMember';
+import CurrentUserAvatar from '@/components/CurrentUserAvatar';
+import emitter from '@/util/Emitter';
+
+const mainNav: INavItem[] = [
+  {
+    name: 'New Chat',
+    icon: <MessageCircleIcon className="h-6 w-6 shrink-0 text-gray-500" />,
+    onClick: () => emitter.emitNewChat(),
+  },
+  {
+    name: 'Open Chat',
+    icon: <FolderUpIcon className="h-6 w-6 shrink-0 text-gray-500" />,
+    onClick: () => emitter.emitShowChatsModal(),
+  },
+];
 
 export default function SidebarNav() {
-  const path = usePathname();
-  const teamId = useTeamId();
-  const currentUserMember = useCurrentUserMember();
-
-  const mainNav: INavItem[] = useMemo(
-    () => [
-      {
-        name: 'Forms',
-        href: `/dashboard/${teamId}/forms`,
-        icon: FileIcon,
-      },
-      {
-        name: 'Form Responses',
-        href: `/dashboard/${teamId}/formResponses`,
-        icon: MessageSquareText,
-      },
-    ],
-    [teamId],
-  );
-
   return (
     <nav className="flex flex-1 flex-col">
       <ul
@@ -46,7 +33,7 @@ export default function SidebarNav() {
               <SidebarItem
                 key={item.name}
                 item={item}
-                active={path === item.href}
+                active={false}
               />
             ))}
           </ul>
@@ -63,23 +50,17 @@ export default function SidebarNav() {
         {/*  </ul>*/}
         {/*</li>*/}
         <div className="mt-auto">
-          {currentUserMember.isLoaded() &&
-            currentUserMember.canAccessTeamSettings() && (
-              <SidebarItem
-                item={{
-                  name: 'Team Settings',
-                  href: `/dashboard/${teamId}/settings/team`,
-                  icon: SettingsIcon,
-                }}
-              />
-            )}
-          <SidebarItem
-            item={{
-              name: 'Switch Team',
-              href: `/dashboard`,
-              icon: ArrowLeftRightIcon,
-            }}
+          <CurrentUserAvatar
+            anchor="top start"
+            menuItemsClassName="-mt-3"
           />
+          {/*<SidebarItem*/}
+          {/*  item={{*/}
+          {/*    name: 'Switch Team',*/}
+          {/*    href: `/dashboard`,*/}
+          {/*    icon: ArrowLeftRightIcon,*/}
+          {/*  }}*/}
+          {/*/>*/}
         </div>
       </ul>
     </nav>

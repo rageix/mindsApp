@@ -18,8 +18,8 @@ export default function Sidebar(props: IProps) {
     <div
       {...props}
       className={cn(
-        'flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4 border-r',
-        theme === ETheme.light ? 'bg-white border-gray-200' : null,
+        'flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4 border-r shadow-md',
+        theme === ETheme.light ? 'bg-gray-50 border-gray-100' : null,
         theme === ETheme.dark ? 'bg-gray-900 border-gray-800' : null,
         props.className,
       )}

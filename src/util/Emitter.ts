@@ -1,9 +1,10 @@
 import { EventEmitter } from 'eventemitter3';
+import { MongoId } from '@/types/MongoDocument';
 
 export enum emitterMessage {
-  resumeUpdated = 'resumeUpdated',
-  saveResume = 'saveResume',
-  inputBlur = 'saveRinputBluresume',
+  newChat= 'newChat',
+  showChatsModal= 'showChatsModal',
+  loadChatId= 'loadChatId',
 }
 
 export class Emitter {
@@ -17,17 +18,23 @@ export class Emitter {
     this.emitter.off(message, fn);
   };
 
-  emitResumeUpdated = () => {
-    this.emitter.emit(emitterMessage.resumeUpdated);
+  emitNewChat = () => {
+    console.log('emit newChat');
+    this.emitter.emit(emitterMessage.newChat);
   };
 
-  emitSaveResume = () => {
-    this.emitter.emit(emitterMessage.saveResume);
+  emitLoadChatId = (_id: MongoId) => {
+    console.log('emit loadChatId');
+
+    this.emitter.emit(emitterMessage.loadChatId, _id);
   };
 
-  emitResumeInputBlur = () => {
-    this.emitter.emit(emitterMessage.inputBlur);
+  emitShowChatsModal = () => {
+    console.log('emit emitShowChatsModal');
+
+    this.emitter.emit(emitterMessage.showChatsModal);
   };
+
 }
 
 const emitter = new Emitter();

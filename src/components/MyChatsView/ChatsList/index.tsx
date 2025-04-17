@@ -13,7 +13,7 @@ import Loading from '@/components/Loading';
 import Card from '@/components/Card';
 import CardBody from '@/components/Card/CardBody';
 import Button from '@/components/Buttton';
-import { MessageCircleIcon, PlusIcon } from 'lucide-react';
+import { MessageCircleIcon } from 'lucide-react';
 import MenuItemButton from '@/components/MenuItemButton';
 import { MongoId } from '@/types/MongoDocument';
 import { CONFIRM_DELETE_ONE, CONFIRM_DELETE_SELECTED } from '@/common/Confirm';
@@ -107,10 +107,10 @@ function getColumns(
 
 interface IProps {
   onOpenId: (_id: MongoId) => void;
-  onNew: () => void;
+  // onNew: () => void;
 }
 
-export default function ChatsList({ onOpenId, onNew }: IProps) {
+export default function ChatsList({ onOpenId }: IProps) {
   const [filterController] = useState(new IdeaBoardFilterForm());
   const [filter, setFilter] = useState<IIdeaBoardFilter>(
     filterController.defaultForm,
@@ -143,21 +143,16 @@ export default function ChatsList({ onOpenId, onNew }: IProps) {
     }
   }
 
-  async function onClickNew() {
-    onNew();
-  }
+  // async function onClickNew() {
+  //   onNew();
+  // }
 
   async function onClickOpen(_id: MongoId) {
     onOpenId(_id);
   }
 
   const columns = useMemo(
-    () =>
-      getColumns(
-        onClickDeleteOne,
-        onClickDeleteSelected,
-        onClickOpen,
-      ),
+    () => getColumns(onClickDeleteOne, onClickDeleteSelected, onClickOpen),
     [],
   );
 
@@ -194,14 +189,14 @@ export default function ChatsList({ onOpenId, onNew }: IProps) {
             }}
           />
         </FilterPopover>
-        <Button
-          variant="blue"
-          onClick={onClickNew}
-          isInline
-        >
-          <PlusIcon size={16} />
-          <span className="ms-1">New Chat</span>
-        </Button>
+        {/*<Button*/}
+        {/*  variant="blue"*/}
+        {/*  onClick={onClickNew}*/}
+        {/*  isInline*/}
+        {/*>*/}
+        {/*  <PlusIcon size={16} />*/}
+        {/*  <span className="ms-1">New Chat</span>*/}
+        {/*</Button>*/}
       </div>
       {!hasItems && (
         <Card>

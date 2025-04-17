@@ -108,7 +108,7 @@ export default function NewDashboardLayout(props: Props) {
                 {/* Profile dropdown */}
                 <div className="ml-3">
                   {!isLoggedIn && <LoginButton />}
-                  {isLoggedIn && <CurrentUserAvatar />}
+                  {isLoggedIn && <CurrentUserAvatar anchor='left' />}
                 </div>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
@@ -180,7 +180,7 @@ export default function NewDashboardLayout(props: Props) {
                 </button>
                 <div className="ml-3">
                   {!isLoggedIn && <LoginButton />}
-                  {isLoggedIn && <CurrentUserAvatar />}
+                  {isLoggedIn && <CurrentUserAvatar anchor="left" />}
                 </div>
               </div>
               <div className="mt-3 space-y-1">

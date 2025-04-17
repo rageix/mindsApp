@@ -52,7 +52,7 @@ export default class ItemsController extends BasicController<IState> {
       if (clear) {
         newItems = items.data.reverse();
       } else {
-         newItems = this.mergeItems(items.data.reverse());
+         newItems = this.mergeItems(items.data);
       }
 
       this.setState({
