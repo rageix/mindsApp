@@ -65,7 +65,9 @@ function getColumns(
     {
       id: 'name',
       header: () => 'Name',
-      cell: ({ row }) => row.original.name || 'unknown',
+      cell: ({ row }) => (
+        <div className="max-w-32 truncate">{row.original.name || 'unknown'}</div>
+      ),
       enableSorting: false,
     },
     {

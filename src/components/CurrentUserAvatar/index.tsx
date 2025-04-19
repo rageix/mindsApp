@@ -1,12 +1,12 @@
 import { Menu, MenuButton, MenuItems } from '@headlessui/react';
 import CurrentUserAvatarMenuItem from '@/components/CurrentUserAvatarMenuItem';
 import userService from '@/services/UserService';
-import { UserAvatar } from '@/components/UserAvatar';
-import useUser from '@/hooks/UseUser';
 import AboutModal from '@/components/AboutModal';
 import { useState } from 'react';
 import Link from 'next/link';
 import { cn } from '@/util/Cn';
+import SidebarItem from '@/components/Sidebar/SidebarItem';
+import { UserIcon } from 'lucide-react';
 
 type Align = 'start' | 'end';
 type Placement = 'top' | 'right' | 'bottom' | 'left';
@@ -22,7 +22,7 @@ export default function CurrentUserAvatar({
   menuItemsClassName,
 }: IProps) {
   const [about, setAbout] = useState(false);
-  const user = useUser();
+  // const user = useUser();
 
   async function onClickLogout() {
     await userService.logout();
@@ -34,13 +34,20 @@ export default function CurrentUserAvatar({
     <>
       <Menu
         as="div"
-        className="relative"
+        className="relative w-full"
       >
-        <MenuButton className="flex items-center cursor-pointer">
+        <MenuButton
+          as="div"
+          className="flex items-center cursor-pointer w-full"
+        >
           <span className="sr-only">Open user menu</span>
-          <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-500">
-            <UserAvatar value={user.data?.avatar} />
-          </div>
+          <SidebarItem
+            icon={<UserIcon className="h-6 w-6 shrink-0 text-gray-500" />}
+            onClick={() => null}
+            active={false}
+          >
+            User
+          </SidebarItem>
         </MenuButton>
         <MenuItems
           transition

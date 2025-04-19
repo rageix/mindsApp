@@ -20,6 +20,7 @@ interface IProps {
   onClickRemove: () => void;
   onClickMaximize: () => void;
   isMaximized?: boolean;
+  canRemove: boolean;
 }
 
 export default function ChatWrapper({
@@ -28,6 +29,7 @@ export default function ChatWrapper({
   onClickRemove,
   onClickMaximize,
   isMaximized,
+  canRemove,
 }: IProps) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -42,17 +44,20 @@ export default function ChatWrapper({
       <div
         ref={ref}
         className={cn(
-          'flex flex-col rounded-lg border border-gray-200 shadow-md h-full overflow-hidden',
+          'flex flex-col rounded-xl border border-gray-200 bg-white shadow-md h-full overflow-hidden',
           state.maximize ? 'absolute top-0 left-0 right-0 bottom-0' : null,
         )}
       >
         <div className="bg-100 flex px-3 py-2 bg-gray-200 items-center">
-          <div className="grow truncate">{state.name || 'Chat'}</div>
+          <div className="grow truncate text-base font-semibold text-gray-900">
+            {state.name || 'Chat'}
+          </div>
           <div className="shink-0 flex gap-x-1">
             <div>
               <Button
                 variant="link"
                 onClick={onClickMaximize}
+                className="!text-gray-500 hover:!text-gray-400"
               >
                 {!isMaximized ? (
                   <Maximize2Icon className="size-5" />
@@ -85,7 +90,12 @@ export default function ChatWrapper({
                 </MenuItemButton>
               </MenuItem>
               <MenuItem>
-                <MenuItemButton onClick={onClickRemove}>Remove</MenuItemButton>
+                <MenuItemButton
+                  onClick={onClickRemove}
+                  disabled={!canRemove}
+                >
+                  Remove
+                </MenuItemButton>
               </MenuItem>
             </EllipsisMenu>
           </div>

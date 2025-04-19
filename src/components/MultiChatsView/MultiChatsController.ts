@@ -2,6 +2,7 @@ import BasicController from '@/util/BasicController';
 import { MongoId } from '@/types/MongoDocument';
 import ChatController from '@/components/Chat/ChatController';
 import ChatInputController from '@/components/ChatInput/ChatInputController';
+import emitter from '@/util/Emitter';
 
 export interface IState {
   _id?: MongoId;
@@ -39,6 +40,9 @@ export default class MultiChatsController extends BasicController<IState> {
   };
 
   onClickRemove = (index: number) => {
+    if (this.state.controllers.length === 1) {
+      return;
+    }
     const controllers = [...this.state.controllers];
     controllers.splice(index, 1);
 
@@ -46,6 +50,7 @@ export default class MultiChatsController extends BasicController<IState> {
   };
 
   onSendInput = () => {
+    emitter.emitGlobalChatInput();
     const input = this.state.inputController.getForm();
     this.state.inputController.reset();
     for (const controller of this.state.controllers) {
@@ -71,5 +76,5 @@ export default class MultiChatsController extends BasicController<IState> {
   onReset = () => {
     console.log('onReset');
     this.setState(newIState());
-  }
+  };
 }

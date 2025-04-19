@@ -9,6 +9,7 @@ export interface IModelActionError {
 export enum EModelContentType {
   Text = 'text',
   Image = 'image',
+  File = 'file',
   Refusal = 'refusal'
 }
 

@@ -9,7 +9,7 @@ import ItemsController from '@/components/Chat/ItemsController';
 import ChatInputController, {
   IChatInput,
 } from '@/components/ChatInput/ChatInputController';
-import { postApiRequests } from '@/requests/api/responses';
+import { EModelContentType, IModelResponse } from '@/types/HistoryItem';
 
 export interface IState {
   _id?: MongoId;
@@ -70,23 +70,25 @@ export default class ChatController extends BasicController<IState> {
 
     this.state.itemsController.onItemIsLoading(input.text);
 
-    const response = await postApiRequests({
-      chatId: chatId,
-      model: this.state.model,
-      text: input.text,
-      fileId: input.fileId,
-    });
+    // const response = await postApiRequests({
+    //   chatId: chatId,
+    //   model: this.state.model,
+    //   text: input.text,
+    //   fileId: input.fileId,
+    // });
+    //
+    // if (!response) {
+    //   return;
+    // }
+    //
+    // this.state.itemsController.onAddLoadingItem(response);
 
-    if (!response) {
-      return;
-    }
-
-    this.state.itemsController.onAddLoadingItem(response);
   };
 
   onClickSendInput = async () => {
     const input = this.state.inputController.getForm();
     this.state.inputController.onResetForm();
+
 
     this.sendInput(input);
   };
@@ -138,5 +140,21 @@ export default class ChatController extends BasicController<IState> {
     this.cache();
     this.state.inputController.cache();
     this.state.itemsController.cache();
+  };
+
+  onRepeat = (response: IModelResponse) => {
+    const text = response.input
+      .filter((v) => v.type === EModelContentType.Text)
+      .map((v) => v.value)
+      .join(' ');
+    const fileId = response.input.find(
+      (v) => v.type === EModelContentType.File,
+    )?.value;
+    const input: IChatInput = {
+      text: text,
+      fileId: fileId,
+    };
+
+    this.sendInput(input);
   };
 }

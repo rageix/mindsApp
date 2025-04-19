@@ -18,7 +18,7 @@ export default function SidebarItem({
   const theme = useTheme();
 
   return (
-    <div>
+    <div className="w-full">
       <button
         className={cn(
           active

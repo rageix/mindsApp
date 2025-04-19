@@ -1,10 +1,11 @@
 import { EventEmitter } from 'eventemitter3';
-import { MongoId } from '@/types/MongoDocument';
 
 export enum emitterMessage {
-  newChat= 'newChat',
-  showChatsModal= 'showChatsModal',
-  loadChatId= 'loadChatId',
+  newChat = 'newChat',
+  globalChatInput = 'globalChatInput',
+  showChatsModal = 'showChatsModal',
+  loadChatId = 'loadChatId',
+  toggleIdeaBoard = 'toggleIdeaBoard',
 }
 
 export class Emitter {
@@ -19,22 +20,20 @@ export class Emitter {
   };
 
   emitNewChat = () => {
-    console.log('emit newChat');
     this.emitter.emit(emitterMessage.newChat);
   };
 
-  emitLoadChatId = (_id: MongoId) => {
-    console.log('emit loadChatId');
-
-    this.emitter.emit(emitterMessage.loadChatId, _id);
+  emitGlobalChatInput = () => {
+    this.emitter.emit(emitterMessage.globalChatInput);
   };
 
   emitShowChatsModal = () => {
-    console.log('emit emitShowChatsModal');
-
     this.emitter.emit(emitterMessage.showChatsModal);
   };
 
+  emitToggleIdeaBoard = () => {
+    this.emitter.emit(emitterMessage.toggleIdeaBoard);
+  };
 }
 
 const emitter = new Emitter();

@@ -1,5 +1,5 @@
 import SidebarItem from '../SidebarItem';
-import { MessageCircleIcon } from 'lucide-react';
+import { MessageCircleIcon, PanelRight } from 'lucide-react';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 import { usePathname, useRouter } from 'next/navigation';
 import emitter from '@/util/Emitter';
@@ -45,7 +45,9 @@ export default function SidebarNav() {
               }
               onClick={onClickNewChat}
               active={false}
-            >New Chat</SidebarItem>
+            >
+              New Chat
+            </SidebarItem>
           </ul>
         </li>
         {/*<li>*/}
@@ -59,11 +61,22 @@ export default function SidebarNav() {
         {/*    <SidebarProjectsList />*/}
         {/*  </ul>*/}
         {/*</li>*/}
-        <div className="mt-auto">
-          <CurrentUserAvatar
-            anchor="top start"
-            menuItemsClassName="-mt-3"
-          />
+        <div className="mt-auto flex flex-col divide-gray-300">
+          <div className="py-3 border-b border-gray-300">
+            <SidebarItem
+              icon={<PanelRight className="h-6 w-6 shrink-0 text-gray-500" />}
+              onClick={() => emitter.emitToggleIdeaBoard()}
+              active={false}
+            >
+              Toggle Idea Board
+            </SidebarItem>
+          </div>
+          <div className="py-3 w-full">
+            <CurrentUserAvatar
+              anchor="top start"
+              menuItemsClassName="-mt-3"
+            />
+          </div>
           {/*<SidebarItem*/}
           {/*  item={{*/}
           {/*    name: 'Switch Team',*/}

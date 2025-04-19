@@ -18,9 +18,7 @@ import {
 import { useState } from 'react';
 import IdeaController from '@/components/IdeaBoard/IdeaItem/IdeaController';
 import { IdeaDragOverlay } from './IdeaDragOverlay';
-import IdeaBoardsModal from '@/components/IdeaBoardsModal';
 import Button from '@/components/Buttton';
-import Input from '@/components/Input';
 import InfoAlert from '@/components/Alert/InfoAlert';
 
 const DROPPABLE_ID = 'snippetsBoard';
@@ -32,8 +30,6 @@ interface IProps {
 export function IdeaBoard({ controller }: IProps) {
   const [active, setActive] = useState<IdeaController | null>(null);
   const [isMoving, setIsMoving] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  controller.useController();
   const { state } = controller;
   const { controllers } = controller.state;
 
@@ -60,27 +56,7 @@ export function IdeaBoard({ controller }: IProps) {
   }
 
   return (
-    <div className="flex flex-col gap-y-3 overflow-y-auto grow">
-      <div className="shrink-0 flex gap-x-3">
-        <Input
-          value={state.name}
-          onChange={controller.onChangeName}
-        />
-        <Button
-          variant="green"
-          isInline
-          onClick={() => controller.onSave()}
-        >
-          Save
-        </Button>
-        <Button
-          variant="blue"
-          isInline
-          onClick={() => setShowModal(true)}
-        >
-          Open
-        </Button>
-      </div>
+    <div className="flex flex-col gap-y-3 overflow-y-auto grow h-full">
       {(controllers?.length || 0) === 0 ? (
         <div className="text text-gray-700 grow">
           <InfoAlert>Select some text to add snippets.</InfoAlert>
@@ -110,6 +86,7 @@ export function IdeaBoard({ controller }: IProps) {
                     controller={v}
                     parentController={controller}
                     isActive={isMoving && active?.id === v.id}
+                    canRemove={state.controllers.length > 1}
                   />
                 ))}
               </div>
@@ -128,18 +105,6 @@ export function IdeaBoard({ controller }: IProps) {
           Add Item
         </Button>
       </div>
-      <IdeaBoardsModal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        onOpenId={(_id) => {
-          setShowModal(false);
-          controller.loadId(_id);
-        }}
-        onNew={() => {
-          setShowModal(false);
-          controller.onNew();
-        }}
-      />
     </div>
   );
 }

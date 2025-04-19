@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { MongoId } from '@/types/MongoDocument';
 import { postApiIdeaBoardsFindOne } from '@/requests/api/ideaBoards/findOne';
 import { toast } from 'react-toastify';
-import { ChangeEvent } from 'react';
 import { IIdeaBoard } from '@/types/IdeaBoard';
 import { postApiIdeaBoards } from '@/requests/api/ideaBoards';
 
@@ -19,7 +18,7 @@ export interface IState {
 export function newIState(): IState {
   return {
     name: 'New Idea Board',
-    controllers: [],
+    controllers: [new IdeaController()],
   };
 }
 
@@ -88,6 +87,10 @@ export default class IdeaBoardController extends BasicController<IState> {
   };
 
   onRemove = (id: string) => {
+    if(this.state.controllers.length === 1) {
+      return;
+    }
+
     const index = this.state.controllers.findIndex((v) => v.id === id);
 
     if (index === -1) {
@@ -125,8 +128,8 @@ export default class IdeaBoardController extends BasicController<IState> {
     this.setState({ _id: ideaBoard._id, controllers, name: ideaBoard.name });
   };
 
-  onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ name: e.target.value });
+  onChangeName = (name: string) => {
+    this.setState({ name });
   };
 
   getValue = (): IIdeaBoard => {

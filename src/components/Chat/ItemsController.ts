@@ -7,7 +7,7 @@ import { IHasId } from '@/types/HasId';
 export interface IState {
   items: IHasId<IModelResponse>[];
   page: number;
-  isItemLoading: boolean;
+  isNewItemLoading: boolean;
   loadingItemText: string;
 }
 
@@ -15,7 +15,7 @@ export function newIState(): IState {
   return {
     items: [],
     page: 0,
-    isItemLoading: false,
+    isNewItemLoading: false,
     loadingItemText: '',
   };
 }
@@ -36,30 +36,29 @@ export default class ItemsController extends BasicController<IState> {
   loadChatId = async (chatId: MongoId) => {
     this.chatId = chatId;
     this.getPage(0, true);
-  }
+  };
 
   getPage = async (pageIndex: number, clear = false) => {
-    this.setState({ isItemLoading: true });
-
-    const items = await postApiResponsesPaginated({
+    const response = await postApiResponsesPaginated({
       chatId: this.chatId,
       pageIndex,
+      pageSize: 5,
     });
 
-    if (items) {
-      let newItems: IHasId<IModelResponse>[] = [];
-
+    if (response) {
       if (clear) {
-        newItems = items.data.reverse();
-      } else {
-         newItems = this.mergeItems(items.data);
+        this.setState({
+          items: response.data.reverse(),
+          page: 0,
+          isNewItemLoading: false,
+        });
+      } else if (response.data.length > 0) {
+        this.setState({
+          items: this.mergeItems(response.data),
+          page: pageIndex,
+          isNewItemLoading: false,
+        });
       }
-
-      this.setState({
-        items: newItems,
-        page: items.pageIndex,
-        isItemLoading: false,
-      });
     }
   };
 
@@ -73,7 +72,7 @@ export default class ItemsController extends BasicController<IState> {
     const toAdd = newItems.filter(
       (v) => this.state.items.findIndex((i) => i._id === v._id) === -1,
     );
-    return [...this.state.items, ...toAdd];
+    return [...toAdd, ...this.state.items];
   };
 
   addItems = (items: IHasId<IModelResponse>[]) => {
@@ -81,22 +80,26 @@ export default class ItemsController extends BasicController<IState> {
   };
 
   onItemIsLoading = (loadingItemText: string) => {
-    this.setState({ isItemLoading: true, loadingItemText });
+    this.setState({ isNewItemLoading: true, loadingItemText });
   };
 
   onAddLoadingItem = (item: IHasId<IModelResponse>) => {
     this.setState({
-      items: this.mergeItems([item]),
-      isItemLoading: false,
+      items: [...this.state.items, item],
+      isNewItemLoading: false,
       loadingItemText: '',
     });
   };
 
   onReset = () => {
     this.setState(newIState());
-  }
+  };
 
   onChangeItems = (items: IHasId<IModelResponse>[]) => {
-    this.setState({items})
-  }
+    this.setState({ items });
+  };
+
+  onClickLoadMore = () => {
+    this.getPage(this.state.page + 1);
+  };
 }

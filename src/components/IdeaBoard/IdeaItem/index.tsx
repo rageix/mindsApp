@@ -12,13 +12,10 @@ interface IProps {
   controller: IdeaController;
   parentController: IdeaBoardController;
   isActive: boolean;
+  canRemove: boolean;
 }
 
-export function IdeaItem({
-  controller,
-  parentController,
-  isActive,
-}: IProps) {
+export function IdeaItem({ controller, parentController, isActive, canRemove }: IProps) {
   controller.useController();
 
   const { form } = controller;
@@ -35,7 +32,7 @@ export function IdeaItem({
     <div
       ref={setNodeRef}
       className={cn(
-        'rounded-md border border-gray-200 overflow-hidden relative flex',
+        'rounded-xl border border-gray-200 overflow-hidden relative flex flex-col',
         isActive ? 'bg-gray-200' : null,
       )}
       style={style}
@@ -57,29 +54,32 @@ export function IdeaItem({
       {isActive && <div className="h-16"></div>}
       {!isActive && (
         <>
-          <div
-            className="shrink-0 bg-gray-200 text-gray-400 hover:text-gray-500 flex justify-center items-center px-3"
-            {...attributes}
-            {...listeners}
-          >
-            <GripVerticalIcon className="size-5" />
+          <div className="shrink-0 bg-gray-200 text-gray-400 hover:text-gray-500 px-3 flex items-center">
+            <div
+              {...attributes}
+              {...listeners}
+              className="grow text-center"
+            >
+              <GripVerticalIcon className="size-5" />
+            </div>
+            <div className="shrink-0">
+              <EllipsisMenu className="!w-36">
+                <MenuItemButton
+                  onClick={() => parentController.onRemove(controller.id)}
+                  disabled={!canRemove}
+                >
+                  Remove
+                </MenuItemButton>
+              </EllipsisMenu>
+            </div>
           </div>
           <div className="grow flex items-center border-r-1 border-r-gray-200">
             <TextareaAutosize
-              className="w-full focus:border-2 focus:border-blue-400 focus-visible:outline-0 h-full p-3"
+              className="w-full focus:border-2 focus:border-blue-400 focus-visible:outline-0 h-full p-3 rounded-b-xl"
               value={form.text}
               onChange={controller.onChangeText}
               placeholder="Add some text"
             />
-          </div>
-          <div className="shrink-0 p-3">
-            <EllipsisMenu className="!w-36">
-              <MenuItemButton
-                onClick={() => parentController.onRemove(controller.id)}
-              >
-                Delete
-              </MenuItemButton>
-            </EllipsisMenu>
           </div>
         </>
       )}
