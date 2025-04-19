@@ -10,6 +10,7 @@ export interface IState {
   controllers: ChatController[];
   inputController: ChatInputController;
   maximizeIndex: number | null;
+  isGlobalSearchVisible: boolean;
 }
 
 export function newIState(): IState {
@@ -18,6 +19,7 @@ export function newIState(): IState {
     controllers: [new ChatController()],
     inputController: new ChatInputController(),
     maximizeIndex: null,
+    isGlobalSearchVisible: true,
   };
 }
 
@@ -59,7 +61,6 @@ export default class MultiChatsController extends BasicController<IState> {
   };
 
   onClickMaximize = (index: number) => {
-    console.log('onClickMaximize');
     if (index === this.state.maximizeIndex) {
       this.state.controllers[index].onCache();
       this.setState({ maximizeIndex: null });
@@ -74,7 +75,11 @@ export default class MultiChatsController extends BasicController<IState> {
   };
 
   onReset = () => {
-    console.log('onReset');
     this.setState(newIState());
   };
+
+  onChangeIsGlobalSearchVisible = (isGlobalSearchVisible: boolean) => {
+    this.setState({ isGlobalSearchVisible });
+  };
+
 }

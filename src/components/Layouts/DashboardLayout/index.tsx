@@ -11,7 +11,6 @@ import Sidebar from '@/components/Sidebar';
 import subscriptionService from '@/services/SubscriptionService';
 import userService from '@/services/UserService';
 import useUser from '@/hooks/UseUser';
-import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 
 interface Props extends PropsWithChildren {}
 
@@ -85,13 +84,6 @@ export default function DashboardLayout({ children }: Props) {
             className="size-6"
           />
         </button>
-        <div className="flex-1 text-sm/6 font-semibold text-white">
-          Dashboard
-        </div>
-        <CurrentUserAvatar
-          anchor="bottom end"
-          menuItemsClassName="mt-3"
-        />
       </div>
       <div className="lg:pl-72">
         <main className="py-10">

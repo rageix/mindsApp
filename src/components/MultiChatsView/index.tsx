@@ -82,48 +82,34 @@ export default function MultiChatsView() {
       <div className="h-full">
         <div className="flex h-full">
           <div className="grow">
-            {state.maximizeIndex !== null ? (
-              <div className="p-3 h-full">
-                <ChatWrapper
-                  controller={state.controllers[state.maximizeIndex]}
-                  ideaBoardController={ideaBoardController}
-                  onClickRemove={() => {
-                    if (state.maximizeIndex !== null) {
-                      controller.onClickRemove(state.maximizeIndex);
-                    }
-                  }}
-                  onClickMaximize={() => {
-                    if (state.maximizeIndex !== null) {
-                      controller.onClickMaximize(state.maximizeIndex);
-                    }
-                  }}
-                  isMaximized
-                  canRemove={state.controllers.length > 1}
-                />
-              </div>
-            ) : (
-              <div className="grow h-full flex flex-col gap-y-3">
-                <div className="p-3 pb-0 flex items-center gap-x-3">
-                  <div className="grow">
-                    <ChatInput
-                      controller={state.inputController}
-                      onSubmit={controller.onSendInput}
-                    />
-                  </div>
-                  <div className="shrink-0">
-                    <Button
-                      variant="blue"
-                      onClick={controller.onClickNew}
-                      isInline
-                    >
-                      Add Chat
-                    </Button>
-                  </div>
+            <div className="grow h-full flex flex-col">
+              <div
+                className={cn(
+                  'p-3 pb-0 flex items-center gap-x-3',
+                  !state.isGlobalSearchVisible ? 'hidden' : null,
+                )}
+              >
+                <div className="grow">
+                  <ChatInput
+                    controller={state.inputController}
+                    onSubmit={controller.onSendInput}
+                  />
                 </div>
+                <div className="shrink-0">
+                  <Button
+                    variant="blue"
+                    onClick={controller.onClickNew}
+                    isInline
+                  >
+                    Add Chat
+                  </Button>
+                </div>
+              </div>
+              {state.maximizeIndex === null ? (
                 <div
                   ref={itemWrapperRef}
                   className={cn(
-                    'grid gap-x-3 gap-y-3 h-full overflow-y-auto p-3 pt-0',
+                    'grid gap-x-3 gap-y-3 h-full overflow-y-auto p-3',
                     maxItemWidth === 1 ? 'grid-cols-1' : null,
                     maxItemWidth === 2 ? 'grid-cols-2' : null,
                     maxItemWidth === 3 ? 'grid-cols-3' : null,
@@ -133,7 +119,7 @@ export default function MultiChatsView() {
                   {state.controllers.map((v, i) => (
                     <div
                       key={v.id}
-                      className="h-full"
+                      // className="h-full"
                       style={{
                         height:
                           count > maxItemWidth
@@ -149,12 +135,44 @@ export default function MultiChatsView() {
                         onClickRemove={() => controller.onClickRemove(i)}
                         onClickMaximize={() => controller.onClickMaximize(i)}
                         canRemove={state.controllers.length > 1}
+                        isGlobalSearchVisible={state.isGlobalSearchVisible}
+                        isMaximized={false}
+                        onClickGlobalSearchVisible={() =>
+                          controller.onChangeIsGlobalSearchVisible(
+                            !state.isGlobalSearchVisible,
+                          )
+                        }
                       />
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="p-3 h-full">
+                  <ChatWrapper
+                    controller={state.controllers[state.maximizeIndex]}
+                    ideaBoardController={ideaBoardController}
+                    onClickRemove={() => {
+                      if (state.maximizeIndex !== null) {
+                        controller.onClickRemove(state.maximizeIndex);
+                      }
+                    }}
+                    onClickMaximize={() => {
+                      if (state.maximizeIndex !== null) {
+                        controller.onClickMaximize(state.maximizeIndex);
+                      }
+                    }}
+                    isMaximized
+                    canRemove={state.controllers.length > 1}
+                    isGlobalSearchVisible={state.isGlobalSearchVisible}
+                    onClickGlobalSearchVisible={() =>
+                      controller.onChangeIsGlobalSearchVisible(
+                        !state.isGlobalSearchVisible,
+                      )
+                    }
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <IdeaBoardWrapper
             controller={ideaBoardController}

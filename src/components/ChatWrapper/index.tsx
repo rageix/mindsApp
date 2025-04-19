@@ -6,7 +6,12 @@ import { MenuItem } from '@headlessui/react';
 import MenuItemButton from '@/components/MenuItemButton';
 import EllipsisMenu from '@/components/EllipsisMenu';
 import Button from '@/components/Buttton';
-import { Maximize2Icon, Minimize2Icon } from 'lucide-react';
+import {
+  Maximize2Icon,
+  Minimize2Icon,
+  PanelTopCloseIcon,
+  PanelTopOpenIcon,
+} from 'lucide-react';
 import { cn } from '@/util/Cn';
 import ChatsModal from '@/components/ChatsModal';
 import { useRef, useState } from 'react';
@@ -21,6 +26,8 @@ interface IProps {
   onClickMaximize: () => void;
   isMaximized?: boolean;
   canRemove: boolean;
+  isGlobalSearchVisible: boolean;
+  onClickGlobalSearchVisible: () => void;
 }
 
 export default function ChatWrapper({
@@ -30,6 +37,8 @@ export default function ChatWrapper({
   onClickMaximize,
   isMaximized,
   canRemove,
+  isGlobalSearchVisible,
+  onClickGlobalSearchVisible,
 }: IProps) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -53,6 +62,19 @@ export default function ChatWrapper({
             {state.name || 'Chat'}
           </div>
           <div className="shink-0 flex gap-x-1">
+            <div>
+              <Button
+                variant="link"
+                onClick={onClickGlobalSearchVisible}
+                className="!text-gray-500 hover:!text-gray-400"
+              >
+                {isGlobalSearchVisible ? (
+                  <PanelTopCloseIcon className="size-5" />
+                ) : (
+                  <PanelTopOpenIcon className="size-5" />
+                )}
+              </Button>
+            </div>
             <div>
               <Button
                 variant="link"
