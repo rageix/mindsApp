@@ -1,5 +1,5 @@
 import SidebarItem from '../SidebarItem';
-import { MessageCircleIcon, PanelRight } from 'lucide-react';
+import { HouseIcon, MessageCircleIcon, PanelRight } from 'lucide-react';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 import { usePathname, useRouter } from 'next/navigation';
 import emitter from '@/util/Emitter';
@@ -19,7 +19,6 @@ export default function SidebarNav() {
   const router = useRouter();
 
   const onClickNewChat = () => {
-    console.log(path);
     if (path !== '/dashboard/chat') {
       router.push('/dashboard/chat');
       return;
@@ -41,7 +40,16 @@ export default function SidebarNav() {
           >
             <SidebarItem
               icon={
-                <MessageCircleIcon className="h-6 w-6 shrink-0 text-gray-500" />
+                <HouseIcon className="size-6 shrink-0" />
+              }
+              onClick={() => router.push('/dashboard')}
+              active={path === '/dashboard'}
+            >
+              Dashboard
+            </SidebarItem>
+            <SidebarItem
+              icon={
+                <MessageCircleIcon className="size-6 shrink-0" />
               }
               onClick={onClickNewChat}
               active={false}
@@ -64,7 +72,7 @@ export default function SidebarNav() {
         <div className="mt-auto flex flex-col divide-gray-300">
           <div className="py-3 border-b border-gray-300">
             <SidebarItem
-              icon={<PanelRight className="h-6 w-6 shrink-0 text-gray-500" />}
+              icon={<PanelRight className="size-6 shrink-0" />}
               onClick={() => emitter.emitToggleIdeaBoard()}
               active={false}
             >

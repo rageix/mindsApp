@@ -1,6 +1,4 @@
 'use client';
-import Card from '@/components/Card';
-import CardBody from '@/components/Card/CardBody';
 import Plans from './Plans';
 import { EPlan } from '@/types/IPlan';
 import { useRouter } from 'next/navigation';
@@ -13,14 +11,8 @@ export default function PlansView() {
   }
 
   return (
-    <>
-      <Card>
-        <CardBody>
-          <Plans
-            onClick={onClick}
-          />
-        </CardBody>
-      </Card>
-    </>
+    <div>
+      <Plans onClick={onClick} />
+    </div>
   );
 }

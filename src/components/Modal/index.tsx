@@ -4,16 +4,9 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import * as react from 'react';
-import { ForwardRefExoticComponent, PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren, ReactElement, useMemo } from 'react';
 import { TModalVariant } from '@/types/Variant';
-import {
-  CircleAlert,
-  CircleCheck,
-  CircleX,
-  LucideProps,
-  XIcon,
-} from 'lucide-react';
+import { CircleAlert, CircleCheck, CircleX, XIcon } from 'lucide-react';
 import { cn } from '@/util/Cn';
 
 export type TModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
@@ -28,9 +21,7 @@ const modalSizes: Record<TModalSize, string> = {
 };
 
 interface IIconSettings {
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & react.RefAttributes<SVGSVGElement>
-  >;
+  icon: ReactElement;
   className: string;
 }
 
@@ -56,17 +47,17 @@ export default function Modal({
     switch (variant) {
       case 'success':
         return {
-          icon: CircleCheck,
+          icon: <CircleCheck className="size-20 text-green-500" />,
           className: 'bg-green-100',
         };
       case 'warning':
         return {
-          icon: CircleAlert,
+          icon: <CircleAlert className="size-14 text-yellow-500" />,
           className: 'bg-yellow-100',
         };
       case 'danger':
         return {
-          icon: CircleX,
+          icon: <CircleX className="size-20 text-red-500" />,
           className: 'bg-red-100',
         };
     }
@@ -93,7 +84,7 @@ export default function Modal({
               modalSizes[size],
             )}
           >
-            {disableClose && (
+            {!disableClose && (
               <div className="absolute right-3 top-3 text-gray-400 hover:text-white">
                 <div
                   className="w-7 h-7 cursor-pointer"
@@ -107,16 +98,10 @@ export default function Modal({
               {iconSettings && (
                 <div
                   className={cn(
-                    'mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-3 sm:mb-5',
-                    iconSettings.className,
+                    'flex justify-center items-center mb-3 sm:mb-5',
                   )}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="h-6 w-6 text-green-600"
-                  >
-                    <iconSettings.icon />
-                  </span>
+                  {iconSettings.icon}
                 </div>
               )}
               <div>

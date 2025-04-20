@@ -8,13 +8,13 @@ const plans: IPlan[] = [
   {
     name: 'Monthly',
     id: EPlan.Monthly,
-    price: '$19.99',
+    price: '$129.99',
     suffix: '/month',
     description:
-      'Access all products for one low monthly price. Cancel anytime.',
+      'Access for one low monthly price. Cancel anytime.',
     features: [
-      'Unlimited resumes and exports',
-      'Full access to all current products',
+      'Unlimited AI Chat',
+      'Unlimited Idea Boards',
       'Priority support'
     ],
     bestValue: false
@@ -22,13 +22,13 @@ const plans: IPlan[] = [
   {
     id: EPlan.Yearly,
     name: 'Yearly',
-    price: '$199.99',
+    price: '$1299.99',
     suffix: '/year',
     description:
-      'Access all products for one low yearly price. Cancel anytime.',
+      'Access for one low yearly price. Cancel anytime.',
     features: [
-      'Unlimited resumes and exports',
-      'Full access to all current products',
+      'Unlimited AI Chat',
+      'Unlimited Idea Boards',
       'Priority support'
     ],
     bestValue: true
@@ -57,10 +57,8 @@ export default function Plans({ onClick }: IProps) {
         </div>
         <p
           className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
-          We offer 2 very straight forward plans, the only difference is the
-          length. Your subscription gives you all access to all tools currently
-          available on our platform. When we add new tools you automatically get
-          full access to them at no additional cost.
+          Your subscription gives you access to all tools currently
+          available on our platform.
         </p>
         <p
           className="mx-auto mt-6 max-w-2xl text-pretty md:text-center font-medium text-gray-700 text-md sm:text-lg md:text-xl/8">
@@ -75,7 +73,7 @@ export default function Plans({ onClick }: IProps) {
                   plan.bestValue
                     ? 'ring-2 ring-blue-600'
                     : 'ring-1 ring-gray-200',
-                  'rounded-3xl p-8 xl:p-10 max-w-sm'
+                  'rounded-3xl p-8 xl:p-10 max-w-sm shadow-xl hover:shadow-2xl'
                 )}
               >
                 <div className="flex items-center justify-between gap-x-4">

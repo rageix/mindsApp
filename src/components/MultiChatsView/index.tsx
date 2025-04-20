@@ -11,6 +11,7 @@ import emitter, { emitterMessage } from '@/util/Emitter';
 import useWindowSizes from '@/hooks/UseWindowSizes';
 import { BreakPoints } from '@/common/BreakPoints';
 import IdeaBoardWrapper from '@/components/IdeaBoardWrapper';
+import SubscriptionRequired from '@/components/SubscriptionRequired';
 
 const calcMaxWidthItems = (width: number, numItems: number): number => {
   let max = 1;
@@ -181,6 +182,7 @@ export default function MultiChatsView() {
           />
         </div>
       </div>
+      <SubscriptionRequired/>
     </div>
   );
 }

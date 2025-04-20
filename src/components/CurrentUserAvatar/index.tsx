@@ -42,7 +42,7 @@ export default function CurrentUserAvatar({
         >
           <span className="sr-only">Open user menu</span>
           <SidebarItem
-            icon={<UserIcon className="h-6 w-6 shrink-0 text-gray-500" />}
+            icon={<UserIcon className="size-6 shrink-0 " />}
             onClick={() => null}
             active={false}
           >

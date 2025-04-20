@@ -6,6 +6,8 @@ export enum emitterMessage {
   showChatsModal = 'showChatsModal',
   loadChatId = 'loadChatId',
   toggleIdeaBoard = 'toggleIdeaBoard',
+  subscriptionRequiredModalOpen = 'subscriptionRequiredModalOpen',
+  subscriptionRequiredModalClose = 'subscriptionRequiredModalClose',
 }
 
 export class Emitter {
@@ -33,6 +35,14 @@ export class Emitter {
 
   emitToggleIdeaBoard = () => {
     this.emitter.emit(emitterMessage.toggleIdeaBoard);
+  };
+
+  emitSubscriptionRequiredModalOpen = () => {
+    this.emitter.emit(emitterMessage.subscriptionRequiredModalOpen);
+  };
+
+  emitSubscriptionRequiredModalClose = () => {
+    this.emitter.emit(emitterMessage.subscriptionRequiredModalClose);
   };
 }
 
