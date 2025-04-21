@@ -91,7 +91,7 @@ export function Chat({ ideaBoardController, controller }: IProps) {
             Load more...
           </Button>
         )}
-        <div ref={responsesRef}>
+        <div ref={responsesRef} className="flex flex-col gap-y-6">
           {items.length > 0 &&
             items.map((v) => (
               <ModelResponse

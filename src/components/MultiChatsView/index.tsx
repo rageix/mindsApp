@@ -120,9 +120,9 @@ export default function MultiChatsView() {
                   {state.controllers.map((v, i) => (
                     <div
                       key={v.id}
-                      // className="h-full"
+                      className="h-full overflow-hidden"
                       style={{
-                        height:
+                        maxHeight:
                           count > maxItemWidth
                             ? itemWrapperSize?.height
                               ? (itemWrapperSize.height - 24) / 2

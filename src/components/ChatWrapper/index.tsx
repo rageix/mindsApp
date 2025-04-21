@@ -122,7 +122,7 @@ export default function ChatWrapper({
             </EllipsisMenu>
           </div>
         </div>
-        <div style={{ height: size?.height ? size.height - 49 : '100%' }}>
+        <div className="h-full" style={{ maxHeight: size?.height ? size.height - 49 : '100%' }}>
           <Chat
             controller={controller}
             ideaBoardController={ideaBoardController}

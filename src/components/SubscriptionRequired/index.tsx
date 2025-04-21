@@ -8,13 +8,15 @@ export default function SubscriptionRequired() {
   const hasSubscription = subscription.hasSubscription();
 
   useEffect(() => {
-    if (hasSubscription) {
-      setIsOpen(false);
-      return;
-    }
+    if (subscription.isLoaded()) {
+      if (hasSubscription) {
+        setIsOpen(false);
+        return;
+      }
 
-    setIsOpen(true);
-  }, [hasSubscription]);
+      setIsOpen(true);
+    }
+  }, [subscription.isLoaded(), hasSubscription]);
 
   return <SubscriptionRequiredModal open={isOpen} />;
 }
