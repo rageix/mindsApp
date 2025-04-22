@@ -125,7 +125,7 @@ export default function MultiChatsView() {
                         maxHeight:
                           count > maxItemWidth
                             ? itemWrapperSize?.height
-                              ? (itemWrapperSize.height - 24) / 2
+                              ? (itemWrapperSize.height - 24) / 2 // 24 is height of card header
                               : '100%'
                             : '100%',
                       }}

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import Alert from '@/components/Alert';
 import ProtectedImage from '@/components/ProtectedImage';
 import { cn } from '@/util/Cn';
+import Markdown from 'react-markdown';
 
 interface IProps {
   content: IModelContent[];
@@ -43,9 +44,10 @@ export function ModelContent({ content }: IProps) {
           text.length === 0 ? 'hidden' : null,
         )}
       >
-        {text.map((v, i) => (
-          <p key={i}>{v.value}</p>
-        ))}
+        <Markdown>{text.map((v) => v.value).join('')}</Markdown>
+        {/*{text.map((v, i) => (*/}
+        {/*  <p key={i}>{v.value}</p>*/}
+        {/*))}*/}
       </div>
       <div
         className={cn(

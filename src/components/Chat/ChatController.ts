@@ -10,6 +10,8 @@ import ChatInputController, {
   IChatInput,
 } from '@/components/ChatInput/ChatInputController';
 import { EModelContentType, IModelResponse } from '@/types/HistoryItem';
+import { postApiRequests } from '@/requests/api/responses';
+import { undefined } from 'zod';
 
 export interface IState {
   _id?: MongoId;
@@ -34,19 +36,20 @@ export function newIState(): IState {
 
 export default class ChatController extends BasicController<IState> {
   defaultState = newIState();
-  chatId: MongoId | undefined;
 
   constructor(chatId?: MongoId) {
     super();
 
     if (chatId) {
-      this.chatId = chatId;
+      this.defaultState._id = chatId;
       this.loadId(chatId);
     }
   }
 
   sendInput = async (input: IChatInput) => {
-    let chatId = this.state._id;
+    let chatId = this.getState()._id;
+
+    console.log('chatId');
 
     if (!chatId) {
       const value = this.getValue();
@@ -57,9 +60,9 @@ export default class ChatController extends BasicController<IState> {
 
       const response = await postApiChats(value);
 
-      if (response && !this.state._id) {
-        // this.setState({ _id: response._id });
+      if (response) {
         chatId = response._id;
+        this.setState({_id: response._id, name: value.name});
       }
 
       if (!chatId) {
@@ -70,18 +73,18 @@ export default class ChatController extends BasicController<IState> {
 
     this.state.itemsController.onItemIsLoading(input.text);
 
-    // const response = await postApiRequests({
-    //   chatId: chatId,
-    //   model: this.state.model,
-    //   text: input.text,
-    //   fileId: input.fileId,
-    // });
-    //
-    // if (!response) {
-    //   return;
-    // }
-    //
-    // this.state.itemsController.onAddLoadingItem(response);
+    const response = await postApiRequests({
+      chatId: chatId,
+      model: this.state.model,
+      text: input.text,
+      fileId: input.fileId,
+    });
+
+    if (!response) {
+      return;
+    }
+
+    this.state.itemsController.onAddLoadingItem(response);
 
   };
 
@@ -129,7 +132,9 @@ export default class ChatController extends BasicController<IState> {
   onNew = async () => {
     this.state.itemsController.onReset();
 
-    this.setState({ name: '' });
+
+    // @ts-ignore
+    this.setState({ _id: undefined, name: '' });
   };
 
   onChangeModel = (model: EModel) => {
