@@ -3,7 +3,6 @@ import Logo from '@/components/Logo';
 import { cn } from '@/util/Cn';
 import SidebarNav from '@/components/Sidebar/SidebarNav';
 import Link from 'next/link';
-import useTeamId from '@/hooks/UseTeamId';
 import useTheme from "@/hooks/UseTheme";
 import { ETheme } from "@/common/Theme";
 
@@ -11,7 +10,6 @@ interface IProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
 
 export default function Sidebar(props: IProps) {
-  const teamId = useTeamId();
   const theme = useTheme();
 
   return (
@@ -26,7 +24,7 @@ export default function Sidebar(props: IProps) {
     >
       <div className="flex h-16 shrink-0 items-center">
         <Link
-          href={`/dashboard/${teamId}`}
+          href={`/dashboard`}
           className="flex items-baseline"
         >
           <Logo className="h-8 w-auto" />

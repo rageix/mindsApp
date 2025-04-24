@@ -6,7 +6,6 @@ import FormattedDate from '@/components/FormattedDate';
 import TextBlock from '@/components/SubscriptionsView/Subscription/TextBlock';
 import Button from '@/components/Buttton';
 import { PLANS } from '@/types/IPlan';
-import { formatAsMoney } from '@/util/FormatAsMoney';
 import { TUseCurrentSubscription } from '@/hooks/UseCurrentSubscription';
 import useSubscriptionPortal from '@/hooks/UseSubscriptionPortal';
 import CardHeader from '@/components/Card/CardHeader';
@@ -48,19 +47,19 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
             </p>
           </div>
           <div>
-            {portal.data?.url &&
-            <EllipsisMenu className="!w-36">
-              <a
-                href={portal.data?.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <MenuItemButton onClick={() => null}>
-                  Update payment
-                </MenuItemButton>
-              </a>
-            </EllipsisMenu>
-            }
+            {portal.data?.url && (
+              <EllipsisMenu className="!w-36">
+                <a
+                  href={portal.data?.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MenuItemButton onClick={() => null}>
+                    Update payment
+                  </MenuItemButton>
+                </a>
+              </EllipsisMenu>
+            )}
           </div>
         </div>
       </CardHeader>
@@ -82,6 +81,7 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                 theme === ETheme.dark ? 'divide-white/10' : null,
               )}
             >
+              <TextBlock title="Plan">{PLANS[subscription.plan]}</TextBlock>
               <TextBlock title="Started On">
                 <FormattedDate
                   value={subscription.createdAt}
@@ -89,13 +89,12 @@ export default function Subscription({ useCurrentSubscription }: IProps) {
                   year={true}
                 />
               </TextBlock>
-              <TextBlock title="Plan">{PLANS[subscription.plan]}</TextBlock>
               {/*<TextBlock title="Interval">*/}
               {/*  {PLAN_INTERVALS[subscription.interval]}*/}
               {/*</TextBlock>*/}
-              <TextBlock title="Rate">
-                {formatAsMoney(subscription.subtotal / 100)}
-              </TextBlock>
+              {/*<TextBlock title="Rate">*/}
+              {/*  {formatAsMoney(subscription.subtotal / 100)}*/}
+              {/*</TextBlock>*/}
               {subscription.canceledAt && (
                 <TextBlock title="Cancled On">
                   <FormattedDate

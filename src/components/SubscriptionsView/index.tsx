@@ -1,6 +1,5 @@
 'use client';
 
-import useTeamId from '@/hooks/UseTeamId';
 import Loading from '@/components/Loading';
 import useSubscription from '@/hooks/UseCurrentSubscription';
 import Subscription from '@/components/SubscriptionsView/Subscription';
@@ -11,9 +10,7 @@ import Button from '@/components/Buttton';
 import Link from 'next/link';
 
 export default function SubscriptionsView() {
-  const teamId = useTeamId();
-
-  const subscription = useSubscription(teamId);
+  const subscription = useSubscription();
 
   if (!subscription.initLoad) {
     return (

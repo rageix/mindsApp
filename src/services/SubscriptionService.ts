@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import BasicController from '@/util/BasicController';
-import useTeamId from '@/hooks/UseTeamId';
 import subscriptionStore, {
   ISubscriptionStore,
 } from '@/stores/CurrentSubscription';
@@ -15,21 +14,24 @@ export class SubscriptionService extends BasicController<ISubscriptionStore> {
 
   useController = () => {
     // this._useController();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     [this.state, this.updateState] = useState(subscriptionStore.get());
-    const teamId = useTeamId();
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (this.updateState) {
         return subscriptionStore.subscribe(this.updateState);
       }
     }, []);
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     this.query = useQuery({
-      queryKey: ['/api/billing/subscriptions/current', teamId],
+      queryKey: ['/api/billing/subscriptions/current'],
       queryFn: () => getApiBillingSubscriptionsCurrent(),
       refetchOnWindowFocus: false,
     });
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       // console.log(
       //   'this.query?.isFetched',

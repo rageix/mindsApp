@@ -10,7 +10,6 @@ export default function MyChatsView() {
       <div className="max-w-3xl m-auto">
         <DashboardPageHeader title="My Chats" />
         <ChatsList
-          onNew={() => router.push('/chat')}
           onOpenId={(_id) => router.push('/chat/' + _id)}
         />
       </div>

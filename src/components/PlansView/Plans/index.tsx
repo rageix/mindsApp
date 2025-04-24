@@ -13,6 +13,7 @@ const plans: IPlan[] = [
     description:
       'Access for one low monthly price. Cancel anytime.',
     features: [
+      '14 Day Free Trial',
       'Unlimited AI Chat',
       'Unlimited Idea Boards',
       'Priority support'
@@ -27,6 +28,7 @@ const plans: IPlan[] = [
     description:
       'Access for one low yearly price. Cancel anytime.',
     features: [
+      '14 Day Free Trial',
       'Unlimited AI Chat',
       'Unlimited Idea Boards',
       'Priority support'
@@ -110,7 +112,7 @@ export default function Plans({ onClick }: IProps) {
                   aria-describedby={plan.id}
                   className="mt-6"
                 >
-                  Buy now
+                  Start trial
                 </Button>
                 <ul
                   role="list"

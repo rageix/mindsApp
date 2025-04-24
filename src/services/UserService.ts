@@ -14,20 +14,24 @@ export class UserService extends BasicController<IUserStore> {
 
   useController = () => {
     // this._useController();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     [this.state, this.updateState] = useState(userStore.get());
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (this.updateState) {
         return userStore.subscribe(this.updateState);
       }
     }, []);
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     this.query = useQuery({
       queryKey: ['/api/user/current'],
       queryFn: getApiUserCurrent,
       refetchOnWindowFocus: false,
     });
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       // console.log(
       //   'this.query?.isFetched',

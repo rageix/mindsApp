@@ -34,7 +34,9 @@ export default class FormController<T> extends BasicController<IHtmlForm<T>> {
 
   _useController = (onSubmit?: (form: T) => void) => {
     this.onSubmit = onSubmit;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     [this.state, this.updateState] = useState<IHtmlForm<T>>(this.defaultState);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     [this.form, this.updateForm] = useState<T>(this.defaultForm);
   };
 

@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { IHasId } from '@/types/HasId';
-import { MongoId } from '@/types/MongoDocument';
 import { ISubscription } from '@/types/Subscriptions';
 import { getApiBillingSubscriptionsCurrent } from '@/requests/api/billing/subscriptions/current';
 import { postApiBillingSubscriptionsCancel } from '@/requests/api/billing/subscriptions/cancel';
 import { postApiBillingSubscriptionsResume } from '@/requests/api/billing/subscriptions/resume';
 
-export default function useCurrentSubscription(teamId: MongoId) {
+export default function useCurrentSubscription() {
   const [data, setData] = useState<IHasId<ISubscription>>();
   const [initLoad, setInitLoad] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const query = useQuery({
-    queryKey: ['/api/teams/subscriptions/current', teamId],
+    queryKey: ['/api/teams/subscriptions/current'],
     queryFn: () => {
       setLoading(true);
       return getApiBillingSubscriptionsCurrent();

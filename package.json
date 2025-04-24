@@ -41,6 +41,7 @@
     "react-markdown": "^10.1.0",
     "react-textarea-autosize": "8.5.9",
     "react-toastify": "11.0.5",
+    "react-youtube": "^10.1.0",
     "sanitize-html": "2.15.0",
     "stripe": "17.7.0",
     "tailwindcss": "4.1.1",
