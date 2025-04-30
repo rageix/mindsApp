@@ -168,7 +168,7 @@ export default class IdeaBoardController extends BasicController<IState> {
 
     const ideas = this.state.controllers.map((v) => v.getForm().text)
       .filter((v) => v.trim() !== '')
-      .map((v,i) => `${i}. ${v}`);
+      .map((v,i) => `${i + 1}. ${v}`);
 
     const text = `rewrite the following list of ideas into a complete idea:\n\n${ideas.join("\n\n")}`;
 
