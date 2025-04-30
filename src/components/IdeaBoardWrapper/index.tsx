@@ -11,6 +11,7 @@ import useWindowSizes from '@/hooks/UseWindowSizes';
 import { MenuItem } from '@headlessui/react';
 import MenuItemButton from '@/components/MenuItemButton';
 import EllipsisMenu from '@/components/EllipsisMenu';
+import IdeaRewriteModal from '@/components/IdeaRewriteModal';
 
 interface IProps {
   controller: IdeaBoardController;
@@ -27,6 +28,7 @@ export default function IdeaBoardWrapper({
   const [isRenameModalVisible, setIsRenameModalVisible] = useState(false);
   const [isOpenModalVisible, setIsOpenModalVisible] = useState(false);
   const [renameController] = useState(new RenameFormController());
+
   controller.useController();
   const { state } = controller;
 
@@ -93,7 +95,6 @@ export default function IdeaBoardWrapper({
                               Hide
                             </MenuItemButton>
                           </MenuItem>
-
                         </EllipsisMenu>
                       </div>
                     </div>
@@ -124,6 +125,11 @@ export default function IdeaBoardWrapper({
           controller.onChangeName(name);
           setIsRenameModalVisible(false);
         }}
+      />
+      <IdeaRewriteModal
+        open={state.isIdeaRewriteModalVisible}
+        onClose={() => controller.onChangeIsIdeaRewriteModalVisible(false)}
+        controller={state.ideaRewriteController}
       />
     </>
   );

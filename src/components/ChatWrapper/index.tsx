@@ -28,6 +28,8 @@ interface IProps {
   canRemove: boolean;
   isGlobalSearchVisible: boolean;
   onClickGlobalSearchVisible: () => void;
+  onClickNext?: () => void;
+  onClickPrev?: () => void;
 }
 
 export default function ChatWrapper({
@@ -39,6 +41,8 @@ export default function ChatWrapper({
   canRemove,
   isGlobalSearchVisible,
   onClickGlobalSearchVisible,
+  onClickNext,
+  onClickPrev
 }: IProps) {
   const ref = useRef(null);
   const size = useSize(ref);
@@ -126,6 +130,9 @@ export default function ChatWrapper({
           <Chat
             controller={controller}
             ideaBoardController={ideaBoardController}
+            isMaximized={isMaximized}
+            onClickNext={onClickNext}
+            onClickPrev={onClickPrev}
           />
         </div>
       </div>

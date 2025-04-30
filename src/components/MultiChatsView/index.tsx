@@ -122,7 +122,7 @@ export default function MultiChatsView() {
                       key={v.id}
                       className="h-full overflow-hidden"
                       style={{
-                        maxHeight:
+                        height:
                           count > maxItemWidth
                             ? itemWrapperSize?.height
                               ? (itemWrapperSize.height - 24) / 2 // 24 is height of card header
@@ -143,6 +143,8 @@ export default function MultiChatsView() {
                             !state.isGlobalSearchVisible,
                           )
                         }
+                        onClickNext={controller.onClickNext}
+                        onClickPrev={controller.onClickPrev}
                       />
                     </div>
                   ))}
@@ -150,6 +152,7 @@ export default function MultiChatsView() {
               ) : (
                 <div className="p-3 h-full">
                   <ChatWrapper
+                    key={String(state.maximizeIndex)}
                     controller={state.controllers[state.maximizeIndex]}
                     ideaBoardController={ideaBoardController}
                     onClickRemove={() => {
@@ -170,6 +173,8 @@ export default function MultiChatsView() {
                         !state.isGlobalSearchVisible,
                       )
                     }
+                    onClickNext={controller.onClickNext}
+                    onClickPrev={controller.onClickPrev}
                   />
                 </div>
               )}
@@ -182,7 +187,7 @@ export default function MultiChatsView() {
           />
         </div>
       </div>
-      <SubscriptionRequired/>
+      <SubscriptionRequired />
     </div>
   );
 }

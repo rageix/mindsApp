@@ -8,7 +8,7 @@ const plans: IPlan[] = [
   {
     name: 'Monthly',
     id: EPlan.Monthly,
-    price: '$129.99',
+    price: '$59.99',
     suffix: '/month',
     description:
       'Access for one low monthly price. Cancel anytime.',
@@ -23,7 +23,7 @@ const plans: IPlan[] = [
   {
     id: EPlan.Yearly,
     name: 'Yearly',
-    price: '$1299.99',
+    price: '$599.99',
     suffix: '/year',
     description:
       'Access for one low yearly price. Cancel anytime.',
@@ -54,7 +54,7 @@ export default function Plans({ onClick }: IProps) {
               'mt-2 text-balance text-3xl sm:text-5xl font-semibold tracking-tight text-gray-900 md:text-6xl'
             }
           >
-            Straight forward pricing, no bull.
+            Straight forward pricing.
           </p>
         </div>
         <p

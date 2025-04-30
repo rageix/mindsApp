@@ -10,10 +10,14 @@ import { cn } from '@/util/Cn';
 import emitter, { emitterMessage } from '@/util/Emitter';
 import Button from '@/components/Buttton';
 import useSize from '@/hooks/UseSize';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 interface IProps {
   ideaBoardController: IdeaBoardController;
   controller: ChatController;
+  isMaximized?: boolean;
+  onClickNext?: () => void;
+  onClickPrev?: () => void;
 }
 
 enum EScrollTo {
@@ -21,7 +25,13 @@ enum EScrollTo {
   Bottom,
 }
 
-export function Chat({ ideaBoardController, controller }: IProps) {
+export function Chat({
+  ideaBoardController,
+  controller,
+  isMaximized,
+  onClickNext,
+  onClickPrev,
+}: IProps) {
   // controller.useController();
   const { state } = controller;
   state.itemsController.useController();
@@ -91,7 +101,10 @@ export function Chat({ ideaBoardController, controller }: IProps) {
             Load more...
           </Button>
         )}
-        <div ref={responsesRef} className="flex flex-col gap-y-6">
+        <div
+          ref={responsesRef}
+          className="flex flex-col gap-y-6"
+        >
           {items.length > 0 &&
             items.map((v) => (
               <ModelResponse
@@ -120,17 +133,54 @@ export function Chat({ ideaBoardController, controller }: IProps) {
         className={cn(
           'relative bg-white',
           items.length === 0 && !isNewItemLoading
-            ? 'h-full flex items-center'
+            ? 'h-full  flex items-center'
             : 'shrink-0',
         )}
       >
-        <ChatInput
-          controller={state.inputController}
-          onSubmit={() => {
-            setScrollTo(EScrollTo.Bottom);
-            controller.onClickSendInput();
-          }}
-        />
+        <div className="flex flex-col w-full justify-center">
+
+          <ChatInput
+            controller={state.inputController}
+            onSubmit={() => {
+              setScrollTo(EScrollTo.Bottom);
+              controller.onClickSendInput();
+            }}
+          />
+          {isMaximized && (
+            <div className="mt-2 flex w-full justify-end">
+              <span className="isolate flex rounded-md shadow-sm">
+                <button
+                  type="button"
+                  className={cn("relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 grow",
+                    !onClickPrev ? '!text-gray-200' : null
+                  )}
+                  onClick={onClickPrev}
+                  disabled={!onClickPrev}
+                >
+                  <span className="sr-only">Previous Chat</span>
+                  <ChevronLeftIcon
+                    aria-hidden="true"
+                    className="size-5"
+                  />
+                </button>
+                <button
+                  type="button"
+                  className={cn("relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 grow justify-end",
+                    !onClickNext ? '!text-gray-200' : null
+                  )}
+                  onClick={onClickNext}
+                  disabled={!onClickNext}
+                >
+                  <span className="sr-only">Next Chat</span>
+                  <ChevronRightIcon
+                    aria-hidden="true"
+                    className="size-5"
+                  />
+                </button>
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

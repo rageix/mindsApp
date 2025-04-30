@@ -8,17 +8,22 @@ import { postApiIdeaBoardsFindOne } from '@/requests/api/ideaBoards/findOne';
 import { toast } from 'react-toastify';
 import { IIdeaBoard } from '@/types/IdeaBoard';
 import { postApiIdeaBoards } from '@/requests/api/ideaBoards';
+import IdeaRewriteFormController from '@/components/IdeaRewriteForm/IdeaRewriteFormController';
 
 export interface IState {
   _id?: MongoId;
   name: string;
   controllers: IdeaController[];
+  isIdeaRewriteModalVisible: boolean;
+  ideaRewriteController: IdeaRewriteFormController;
 }
 
 export function newIState(): IState {
   return {
     name: 'New Idea Board',
     controllers: [new IdeaController()],
+    isIdeaRewriteModalVisible: false,
+    ideaRewriteController: new IdeaRewriteFormController(),
   };
 }
 
@@ -71,7 +76,7 @@ export default class IdeaBoardController extends BasicController<IState> {
     }
 
     const currentIndex = this.state.controllers.findIndex(
-      (v) => v.id === event.active.id,
+      (v) => v.id === event.active.id
     );
 
     if (currentIndex === -1) {
@@ -87,7 +92,7 @@ export default class IdeaBoardController extends BasicController<IState> {
   };
 
   onRemove = (id: string) => {
-    if(this.state.controllers.length === 1) {
+    if (this.state.controllers.length === 1) {
       return;
     }
 
@@ -137,7 +142,7 @@ export default class IdeaBoardController extends BasicController<IState> {
     return {
       _id: state._id,
       name: state.name,
-      items: state.controllers.map((v) => v.getValue()),
+      items: state.controllers.map((v) => v.getValue())
     };
   };
 
@@ -157,5 +162,22 @@ export default class IdeaBoardController extends BasicController<IState> {
   onNew = async () => {
     await this.onSave(false);
     this.setState(newIState());
+  };
+
+  onClickRewrite = () => {
+
+    const ideas = this.state.controllers.map((v) => v.getForm().text)
+      .filter((v) => v.trim() !== '')
+      .map((v,i) => `${i}. ${v}`);
+
+    const text = `rewrite the following list of ideas into a complete idea:\n\n${ideas.join("\n\n")}`;
+
+    this.state.ideaRewriteController.reset({text});
+    this.setState({isIdeaRewriteModalVisible: true});
+
+  };
+
+  onChangeIsIdeaRewriteModalVisible = (isIdeaRewriteModalVisible: boolean) => {
+    this.setState({ isIdeaRewriteModalVisible });
   };
 }

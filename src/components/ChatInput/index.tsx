@@ -23,7 +23,7 @@ export function ChatInput({ controller, onSubmit }: IProps) {
         value={form.text}
         onChange={controller.onChangeText}
         placeholder="Type your question here..."
-        className="!outline-blue-400 !rounded-3xl !bg-gray-100 !p-3 !outline-2 focus:!outline-blue-600"
+        className="!outline-blue-400 !rounded-xl !bg-gray-100 !p-3 !outline-2 focus:!outline-blue-600"
       ></Textarea>
       <div className="absolute right-3 bottom-3">
         <Button

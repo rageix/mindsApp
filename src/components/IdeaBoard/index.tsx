@@ -97,12 +97,18 @@ export function IdeaBoard({ controller }: IProps) {
           </DndContext>
         </div>
       )}
-      <div className="shrink-0">
+      <div className="shrink-0 flex flex-col gap-y-3">
         <Button
           variant="blue"
           onClick={() => controller.onAdd('')}
         >
           Add Item
+        </Button>
+        <Button
+          variant="green"
+          onClick={() => controller.onClickRewrite()}
+        >
+          Rewrite
         </Button>
       </div>
     </div>

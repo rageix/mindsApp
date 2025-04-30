@@ -82,4 +82,34 @@ export default class MultiChatsController extends BasicController<IState> {
     this.setState({ isGlobalSearchVisible });
   };
 
+  onClickNext = () => {
+    console.log('onClickNext');
+    if (this.state.maximizeIndex === null) {
+      return;
+    }
+
+    let maximizeIndex = this.state.maximizeIndex + 1;
+
+    if (maximizeIndex > this.state.controllers.length - 1) {
+      maximizeIndex = 0;
+    }
+
+    this.setState({ maximizeIndex });
+  };
+
+  onClickPrev = () => {
+    console.log('onClickPrev');
+
+    if (this.state.maximizeIndex === null) {
+      return;
+    }
+
+    let maximizeIndex = this.state.maximizeIndex - 1;
+
+    if (maximizeIndex < 0) {
+      maximizeIndex = this.state.controllers.length - 1;
+    }
+
+    this.setState({ maximizeIndex });
+  };
 }
