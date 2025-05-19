@@ -1,5 +1,10 @@
 import SidebarItem from '../SidebarItem';
-import { HouseIcon, MessageCircleIcon, PanelRight } from 'lucide-react';
+import {
+  HouseIcon,
+  ListIcon,
+  MessageCircleIcon,
+  PanelRight,
+} from 'lucide-react';
 import CurrentUserAvatar from '@/components/CurrentUserAvatar';
 import { usePathname, useRouter } from 'next/navigation';
 import emitter from '@/util/Emitter';
@@ -39,22 +44,25 @@ export default function SidebarNav() {
             className="-mx-2 space-y-1"
           >
             <SidebarItem
-              icon={
-                <HouseIcon className="size-6 shrink-0" />
-              }
+              icon={<HouseIcon className="size-6 shrink-0" />}
               onClick={() => router.push('/dashboard')}
               active={path === '/dashboard'}
             >
               Dashboard
             </SidebarItem>
             <SidebarItem
-              icon={
-                <MessageCircleIcon className="size-6 shrink-0" />
-              }
+              icon={<MessageCircleIcon className="size-6 shrink-0" />}
               onClick={onClickNewChat}
               active={false}
             >
               New Chat
+            </SidebarItem>
+            <SidebarItem
+              icon={<ListIcon className="size-6 shrink-0" />}
+              onClick={() => router.push('/dashboard/generators')}
+              active={path === '/dashboard/generators'}
+            >
+              Generators
             </SidebarItem>
           </ul>
         </li>

@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom';
 import SelectionController from '@/components/Chat/SelectionController';
 import { MessageCircleIcon, ScissorsIcon } from 'lucide-react';
 import useSize from '@/hooks/UseSize';
+import { cn } from '@/util/Cn';
 
 export interface IProps {
   controller: SelectionController;
@@ -65,21 +66,25 @@ export default function SelectionPopover({
 
   return (
     <Portal mount={elem}>
-      {/*<div style={style}>Selecting {(state.text || '').length} characters</div>*/}
       <div
         ref={ref}
         style={style}
         className="absolute flex text-center z-10"
       >
         <span className="isolate inline-flex rounded-md shadow-sm">
-          <button
-            type="button"
-            className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-            onClick={onClickClipLocal}
-          >
-            <span className="sr-only">Clip</span>
-            <ScissorsIcon />
-          </button>
+          {onClickClip && (
+            <button
+              type="button"
+              className={cn(
+                'relative inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
+                onClickMessage ? 'rounded-l-md' : 'rounded-md',
+              )}
+              onClick={onClickClipLocal}
+            >
+              <span className="sr-only">Clip</span>
+              <ScissorsIcon />
+            </button>
+          )}
           {/*<button*/}
           {/*  type="button"*/}
           {/*  className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"*/}
@@ -87,14 +92,16 @@ export default function SelectionPopover({
           {/*              <MessageCircleIcon/>*/}
 
           {/*</button>*/}
-          <button
-            type="button"
-            className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-            onClick={onClickMessageLocal}
-          >
-            <span className="sr-only">Message</span>
-            <MessageCircleIcon />
-          </button>
+          {onClickMessage && (
+            <button
+              type="button"
+              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              onClick={onClickMessageLocal}
+            >
+              <span className="sr-only">Message</span>
+              <MessageCircleIcon />
+            </button>
+          )}
         </span>
       </div>
     </Portal>

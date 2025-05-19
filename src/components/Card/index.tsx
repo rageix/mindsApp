@@ -13,6 +13,7 @@ export default function Card({ rounded = 'lg', className, children }: IProps) {
   const theme = useTheme();
 
   return (
+    <div className="h-full">
     <div
       className={cn(
         'divide-y overflow-hidden border border-gray-200',
@@ -25,6 +26,7 @@ export default function Card({ rounded = 'lg', className, children }: IProps) {
       )}
     >
       {children}
+    </div>
     </div>
   );
 }
