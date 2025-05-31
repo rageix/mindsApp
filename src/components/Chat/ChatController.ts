@@ -10,8 +10,7 @@ import ChatInputController, {
   IChatInput,
 } from '@/components/ChatInput/ChatInputController';
 import { EModelContentType, IModelResponse } from '@/types/HistoryItem';
-import { postApiRequests } from '@/requests/api/responses';
-import { undefined } from 'zod';
+import { postApiChatsMessage } from '@/requests/api/chats/message';
 
 export interface IState {
   _id?: MongoId;
@@ -47,37 +46,11 @@ export default class ChatController extends BasicController<IState> {
   }
 
   sendInput = async (input: IChatInput) => {
-    let chatId = this.getState()._id;
-
-    console.log('chatId');
-
-    if (!chatId) {
-      const value = this.getValue();
-
-      if (value.name.trim() === '') {
-        value.name = input.text.substring(0, 24);
-      }
-
-      const response = await postApiChats(value);
-
-      if (response) {
-        chatId = response._id;
-        this.setState({_id: response._id, name: value.name});
-      }
-
-      if (!chatId) {
-        toast.error('Failed to create chat!');
-        return;
-      }
-    }
-
     this.state.itemsController.onItemIsLoading(input.text);
 
-    const response = await postApiRequests({
-      chatId: chatId,
-      model: this.state.model,
+    const response = await postApiChatsMessage({
+      chatId: this.getState()._id,
       text: input.text,
-      fileId: input.fileId,
     });
 
     if (!response) {

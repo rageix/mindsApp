@@ -10,8 +10,6 @@ import { cn } from '@/util/Cn';
 import emitter, { emitterMessage } from '@/util/Emitter';
 import useWindowSizes from '@/hooks/UseWindowSizes';
 import { BreakPoints } from '@/common/BreakPoints';
-import IdeaBoardWrapper from '@/components/IdeaBoardWrapper';
-import SubscriptionRequired from '@/components/SubscriptionRequired';
 
 const calcMaxWidthItems = (width: number, numItems: number): number => {
   let max = 1;
@@ -73,12 +71,9 @@ export default function MultiChatsView() {
   return (
     <div
       ref={mainRef}
-      className={cn(
-        'absolute h-[calc(100%)] pt-[4.5rem] lg:pt-0 lg:pl-72 w-full top-0 left-0 right-0 z-0',
-        ideaBoardOpen && windowSizes.pageWidth > BreakPoints.md
-          ? 'pr-[448px]'
-          : null,
-      )}
+      className={
+        'absolute h-[calc(100%)] pt-[4.5rem] lg:pt-0 lg:pl-72 w-full top-0 left-0 right-0 z-0'
+      }
     >
       <div className="h-full">
         <div className="flex h-full">
@@ -180,14 +175,9 @@ export default function MultiChatsView() {
               )}
             </div>
           </div>
-          <IdeaBoardWrapper
-            controller={ideaBoardController}
-            isOpen={ideaBoardOpen}
-            onHide={() => setIdeaBoardOpen(false)}
-          />
         </div>
       </div>
-      <SubscriptionRequired />
+      {/*<SubscriptionRequired />*/}
     </div>
   );
 }

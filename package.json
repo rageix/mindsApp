@@ -1,12 +1,12 @@
 {
-  "name": "giga-brain-ai-app",
+  "name": "voices-app",
   "version": "0.1.0",
   "private": true,
   "engines": {
     "node": "22.x"
   },
   "scripts": {
-    "dev": "next dev --turbopack --experimental-https -H local.gigabrainai.com",
+    "dev": "next dev --turbopack --experimental-https -H local.minds.com",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
