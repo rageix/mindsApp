@@ -77,7 +77,7 @@ export default class ChatController extends BasicController<IState> {
       return;
     }
 
-    this.state.itemsController.loadChatId(_id);
+    await this.getState().itemsController.loadChatId(_id);
 
     this.setState({
       _id: chat._id,
