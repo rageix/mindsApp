@@ -1,22 +1,18 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
-import MultiChatsController from '@/components/MultiChatsView/MultiChatsController';
+import GroupChatController from '@/components/GroupChatView/GroupChatController';
 import ChatWrapper from '../ChatWrapper';
 import Button from '@/components/Buttton';
 import useSize from '@/hooks/UseSize';
 import { ChatInput } from '@/components/ChatInput';
 import { cn } from '@/util/Cn';
-import emitter, { emitterMessage } from '@/util/Emitter';
-import useWindowSizes from '@/hooks/UseWindowSizes';
 import { BreakPoints } from '@/common/BreakPoints';
+import { useParams } from 'next/navigation';
 
 const calcMaxWidthItems = (width: number, numItems: number): number => {
   let max = 1;
 
-  if (width >= BreakPoints.xl) {
-    max = 4;
-  } else if (width >= BreakPoints.md) {
+  if (width >= BreakPoints.md) {
     max = 3;
   } else if (width >= BreakPoints.sm) {
     max = 2;
@@ -25,17 +21,13 @@ const calcMaxWidthItems = (width: number, numItems: number): number => {
   return Math.min(max, numItems);
 };
 
-export default function MultiChatsView() {
+export default function GroupChatView() {
+  const { groupChatId } = useParams<{ groupChatId: string }>();
   const mainRef = useRef(null);
   const mainSize = useSize(mainRef);
   const itemWrapperRef = useRef(null);
   const itemWrapperSize = useSize(itemWrapperRef);
-  const windowSizes = useWindowSizes();
-  const [ideaBoardOpen, setIdeaBoardOpen] = useState(
-    windowSizes.pageWidth > BreakPoints.md,
-  );
-  const [ideaBoardController] = useState(new IdeaBoardController());
-  const [controller] = useState(new MultiChatsController());
+  const [controller] = useState(new GroupChatController(groupChatId));
   controller.useController();
   const [maxItemWidth, setMaxItemWidth] = useState(1);
 
@@ -50,23 +42,6 @@ export default function MultiChatsView() {
       setMaxItemWidth(value);
     }
   }, [mainSize?.width, count]);
-
-  const onNewChat = () => {
-    controller.onReset();
-  };
-
-  const onToggleIdeaBoard = () => {
-    setIdeaBoardOpen(!ideaBoardOpen);
-  };
-
-  useEffect(() => {
-    emitter.on(emitterMessage.newChat, onNewChat);
-    emitter.on(emitterMessage.toggleIdeaBoard, onToggleIdeaBoard);
-    return () => {
-      emitter.off(emitterMessage.newChat, onNewChat);
-      emitter.on(emitterMessage.toggleIdeaBoard, onToggleIdeaBoard);
-    };
-  }, [ideaBoardOpen]);
 
   return (
     <div
@@ -127,7 +102,6 @@ export default function MultiChatsView() {
                     >
                       <ChatWrapper
                         controller={v}
-                        ideaBoardController={ideaBoardController}
                         onClickRemove={() => controller.onClickRemove(i)}
                         onClickMaximize={() => controller.onClickMaximize(i)}
                         canRemove={state.controllers.length > 1}
@@ -149,7 +123,6 @@ export default function MultiChatsView() {
                   <ChatWrapper
                     key={String(state.maximizeIndex)}
                     controller={state.controllers[state.maximizeIndex]}
-                    ideaBoardController={ideaBoardController}
                     onClickRemove={() => {
                       if (state.maximizeIndex !== null) {
                         controller.onClickRemove(state.maximizeIndex);
@@ -177,7 +150,6 @@ export default function MultiChatsView() {
           </div>
         </div>
       </div>
-      {/*<SubscriptionRequired />*/}
     </div>
   );
 }

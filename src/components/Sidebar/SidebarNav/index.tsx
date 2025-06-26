@@ -27,10 +27,10 @@ export default function SidebarNav() {
             </SidebarItem>
             <SidebarItem
               icon={<MessageCircleIcon className="size-6 shrink-0" />}
-              onClick={() => router.push('/dashboard/chat')}
+              onClick={() => router.push('/dashboard/groupChats/new')}
               active={false}
             >
-              New Chat
+              New Group Chat
             </SidebarItem>
           </ul>
         </li>

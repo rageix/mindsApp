@@ -2,14 +2,17 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import PersonaCard from '@/components/PersonaPicker/PersonaCard';
 import { IPersona } from '@/types/Persona';
-import NewChatController from '@/components/NewChatView/NewChatController';
+import NewChatController from '@/components/NewGroupChatView/NewChatController';
 import Button from '@/components/Buttton';
 import PersonaPicker from '@/components/PersonaPicker';
 import DashboardPageHeader from '@/components/DashboardPageHeader';
+import { postApiGroupChats } from '@/requests/api/groupChats';
+import { useRouter } from 'next/navigation';
 
 interface IProps extends PropsWithChildren {}
 
-export default function NewChatView({}: IProps) {
+export default function NewGroupChatView({}: IProps) {
+  const router = useRouter();
   const [showPersonaPicker, setShowPersonaPicker] = useState(true);
   const [controller] = useState(new NewChatController());
   controller.useController();
@@ -26,6 +29,15 @@ export default function NewChatView({}: IProps) {
     setShowPersonaPicker(false);
     controller.onAdd(value);
   };
+
+  const onClickStartChat = async () => {
+    const personas = state.selected.map((v) => v.name);
+    const response = await postApiGroupChats({ personas });
+
+    if(response) {
+      router.push('/dashboard/groupChats/' + response._id);
+    }
+  }
 
   if (showPersonaPicker) {
     return (
@@ -49,6 +61,7 @@ export default function NewChatView({}: IProps) {
               variant="linkRed"
               isInline
               disabled={state.selected.length === 0}
+              onClick={() => setShowPersonaPicker(false)}
             >
               Cancel
             </Button>
@@ -95,6 +108,7 @@ export default function NewChatView({}: IProps) {
           <Button
             variant="green"
             isInline
+            onClick={onClickStartChat}
           >
             Start Chat
           </Button>

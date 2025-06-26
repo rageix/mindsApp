@@ -2,8 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChatInput } from '../ChatInput';
 import { ModelResponse } from '@/components/Chat/ModelResponse';
 import SelectionController from '@/components/Chat/SelectionController';
-import SelectionPopover from '@/components/Chat/SelectionPopover';
-import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
 import ChatController from '@/components/Chat/ChatController';
 import ModelPicker from '@/components/Chat/ModelPicker';
 import { cn } from '@/util/Cn';
@@ -13,7 +11,6 @@ import useSize from '@/hooks/UseSize';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 interface IProps {
-  ideaBoardController: IdeaBoardController;
   controller: ChatController;
   isMaximized?: boolean;
   onClickNext?: () => void;
@@ -26,7 +23,6 @@ enum EScrollTo {
 }
 
 export function Chat({
-  ideaBoardController,
   controller,
   isMaximized,
   onClickNext,
@@ -123,11 +119,6 @@ export function Chat({
             />
           )}
         </div>
-        <SelectionPopover
-          controller={selectionController}
-          onClickMessage={state.inputController.setText}
-          onClickClip={ideaBoardController.onAdd}
-        />
       </div>
       <div
         className={cn(

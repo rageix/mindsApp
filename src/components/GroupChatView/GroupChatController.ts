@@ -3,6 +3,7 @@ import { MongoId } from '@/types/MongoDocument';
 import ChatController from '@/components/Chat/ChatController';
 import ChatInputController from '@/components/ChatInput/ChatInputController';
 import emitter from '@/util/Emitter';
+import { postApiGroupChatsFindOne } from '@/requests/api/groupChats/findOne';
 
 export interface IState {
   _id?: MongoId;
@@ -10,6 +11,7 @@ export interface IState {
   controllers: ChatController[];
   inputController: ChatInputController;
   maximizeIndex: number | null;
+  startIndex: number;
   isGlobalSearchVisible: boolean;
 }
 
@@ -19,20 +21,21 @@ export function newIState(): IState {
     controllers: [new ChatController()],
     inputController: new ChatInputController(),
     maximizeIndex: null,
+    startIndex: 0,
     isGlobalSearchVisible: true,
   };
 }
 
-export default class MultiChatsController extends BasicController<IState> {
+export default class GroupChatController extends BasicController<IState> {
   defaultState = newIState();
-  chatId: MongoId | undefined;
+  groupChatId: MongoId | undefined;
 
-  constructor(chatId?: MongoId) {
+  constructor(groupChatId?: MongoId) {
     super();
 
-    if (chatId) {
-      this.chatId = chatId;
-      // this.loadId(chatId);
+    if (groupChatId) {
+      this.groupChatId = groupChatId;
+      this.loadId(groupChatId);
     }
   }
 
@@ -98,8 +101,6 @@ export default class MultiChatsController extends BasicController<IState> {
   };
 
   onClickPrev = () => {
-    console.log('onClickPrev');
-
     if (this.state.maximizeIndex === null) {
       return;
     }
@@ -111,5 +112,16 @@ export default class MultiChatsController extends BasicController<IState> {
     }
 
     this.setState({ maximizeIndex });
+  };
+
+  loadId = async (_id: MongoId) => {
+    const response = await postApiGroupChatsFindOne({ _id });
+
+    if (response) {
+      const chatControllers: ChatController[] = response.chatIds.map(
+        (v) => new ChatController(v),
+      );
+      this.setState({ controllers: chatControllers, startIndex: 0 });
+    }
   };
 }

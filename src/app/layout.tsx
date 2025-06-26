@@ -12,7 +12,7 @@ import { inter } from '@/util/Fonts';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'gigabrainai',
+    title: 'minds',
   };
 }
 

@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { pageTitle } from '@/types/PageTitle';
-import NewGroupChatView from '@/components/NewGroupChatView';
+import GroupChatView from '@/components/GroupChatView';
 
 export const metadata: Metadata = {
-  title: pageTitle('Chat'),
+  title: pageTitle('Group Chat'),
 };
 
 export default function Page() {
-  return <NewGroupChatView />;
+  return <GroupChatView />;
 }

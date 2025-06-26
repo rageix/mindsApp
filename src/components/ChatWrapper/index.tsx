@@ -1,6 +1,5 @@
 'use client';
 import { Chat } from '@/components/Chat';
-import IdeaBoardController from '@/components/IdeaBoard/IdeaBoardController';
 import ChatController from '@/components/Chat/ChatController';
 import { MenuItem } from '@headlessui/react';
 import MenuItemButton from '@/components/MenuItemButton';
@@ -21,7 +20,6 @@ import RenameModal from '@/components/RenameModal';
 
 interface IProps {
   controller: ChatController;
-  ideaBoardController: IdeaBoardController;
   onClickRemove: () => void;
   onClickMaximize: () => void;
   isMaximized?: boolean;
@@ -34,7 +32,6 @@ interface IProps {
 
 export default function ChatWrapper({
   controller,
-  ideaBoardController,
   onClickRemove,
   onClickMaximize,
   isMaximized,
@@ -129,7 +126,6 @@ export default function ChatWrapper({
         <div className="h-full" style={{ maxHeight: size?.height ? size.height - 49 : '100%' }}>
           <Chat
             controller={controller}
-            ideaBoardController={ideaBoardController}
             isMaximized={isMaximized}
             onClickNext={onClickNext}
             onClickPrev={onClickPrev}

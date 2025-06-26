@@ -1,5 +1,5 @@
 export function pageTitle(arg: string): string {
-  const out = 'gigabrainai';
+  const out = 'minds';
 
   if(arg) {
     return out + ' - ' + arg;

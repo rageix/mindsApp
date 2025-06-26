@@ -8,7 +8,7 @@ export default function DashboardView() {
   return (
     <Card>
       <CardBody className="space-y-6">
-        <p>Welcome to GigaBrainAi!</p>
+        <p>Welcome to Minds!</p>
         <div>
           <p>
             To get started a subscription is required. Please check out the
